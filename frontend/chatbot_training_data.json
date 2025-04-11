@@ -1,0 +1,98 @@
+[
+  {
+    "question": "hola",
+    "answer": "Hola 👋, en ¿qué le podemos ayudar?"
+  },
+  {
+    "question": "gracias",
+    "answer": "Un gusto poder ayudarte con sus dudas 😊."
+  },
+  {
+    "question": "Alexis",
+    "answer": "Hola 👋, en ¿qué le podemos ayudar?"
+  },
+  {
+    "question": "Alexis necesito de tu ayuda",
+    "answer": "Hola 👋, en ¿qué le podemos ayudar?"
+  },
+  {
+    "question": "Quién eres",
+    "answer": "Hola, soy Alexis, el asistente virtual personal de la Unidad Educativa 7 de Noviembre, mi misión es responder cualquier duda que tengas con respecto a nuestra institución educativa 😊, en ¿qué le podemos ayudar? "
+  },
+  {
+    "question": "¿Dónde está ubicada la Unidad Educativa Siete de Noviembre?",
+    "answer": "La Unidad Educativa Siete de Noviembre se encuentra ubicada en la parroquia Naranjal, cantón Naranjal, provincia del Guayas, Ecuador. Pertenecemos al Área Urbana de la Zona 5."
+  },
+  {
+    "question": "¿Cuáles son los niveles educativos que ofrece la escuela?",
+    "answer": "Ofrecemos educación de Educación General Básica (EGB) y Bachillerato. Nuestros niveles incluyen: Educación General Básica (desde primer año hasta décimo año) y Bachillerato (primero, segundo y tercer curso)."
+  },
+  {
+    "question": "¿Cuál es el régimen escolar de la institución?",
+    "answer": "Pertenecemos al Régimen Escolar Costa."
+  },
+  {
+    "question": "¿En qué jornadas brindan educación?",
+    "answer": "Brindamos servicios educativos en jornada Matutina y Vespertina."
+  },
+  {
+    "question": "¿Cuál es la modalidad de educación?",
+    "answer": "Nuestra modalidad es Presencial."
+  },
+  {
+    "question": "¿Cuántos estudiantes y docentes tiene la institución?",
+    "answer": "Contamos con un total de 1,143 estudiantes: 629 mujeres y 514 varones. Nuestro equipo docente está compuesto por 40 profesores: 31 mujeres y 9 varones."
+  },
+  {
+    "question": "¿Cuál es la misión de la Unidad Educativa?",
+    "answer": "Nuestra misión es formar estudiantes íntegros, críticos y competentes, capaces de contribuir al desarrollo de la comunidad de Naranjal. Nos enfocamos en el desarrollo académico, personal y social de nuestros estudiantes."
+  },
+  {
+    "question": "¿Cómo puedo inscribir a mi hijo/a en la escuela?",
+    "answer": "Para inscribir a su hijo/a, debe acercarse a la secretaría de la institución con los siguientes documentos: partida de nacimiento, cédula de identidad, certificado del último año aprobado, y fotografías. También puede contactarnos por teléfono o correo electrónico para más información."
+  },
+  {
+    "question": "¿Cuáles son los horarios de clase?",
+    "answer": "Nuestra jornada escolar es de lunes a viernes. El horario para Educación Inicial y Básica Elemental es de 07:30 a 12:30. Para Básica Superior y Bachillerato, el horario es de 07:30 a 14:30."
+  },
+  {
+    "question": "¿Qué servicios adicionales ofrece la escuela?",
+    "answer": "Ofrecemos varios servicios: biblioteca, laboratorio de computación, sala de música, programa de alimentación escolar, orientación vocacional, atención psicológica, y diversos talleres extracurriculares como deportes, arte y música."
+  },
+  {
+    "question": "¿Cómo puedo comunicarme con las autoridades?",
+    "answer": "Puede comunicarse con nosotros a través de: Teléfono: (593) XXX-XXX-XXX, Correo electrónico: contacto@uesietedenoviembre.edu.ec, o presencialmente en nuestra dirección en el cantón Naranjal."
+  },
+  {
+    "question": "¿Cuenta la escuela con transporte escolar?",
+    "answer": "Actualmente no ofrecemos un servicio de transporte escolar directo, pero trabajamos con transportistas locales que pueden brindar este servicio. Consulte en secretaría para más detalles."
+  },
+  {
+    "question": "¿Cuáles son los valores que promueve la institución?",
+    "answer": "Promovemos valores fundamentales como: respeto, responsabilidad, honestidad, solidaridad, trabajo en equipo, y compromiso con el desarrollo personal y comunitario."
+  },
+  {
+    "question": "¿Ofrecen becas o ayudas económicas?",
+    "answer": "Sí, contamos con un programa de becas y ayudas económicas para estudiantes con buen rendimiento académico y situaciones socioeconómicas especiales. Los requisitos y proceso se pueden consultar directamente en la secretaría de la institución."
+  },
+  {
+    "question": "¿Qué actividades extracurriculares tienen?",
+    "answer": "Ofrecemos diversas actividades extracurriculares como: fútbol, básquet, danza, música, teatro, clubes de ciencia, robótica, agricultura, y grupos de voluntariado comunitario."
+  },
+  {
+    "question": "¿A qué zona pertenece la institución?",
+    "answer": "Pertenecemos a la Zona 5 de Ecuador."
+  },
+  {
+    "question": "¿Cuál es el código de institución educativa?",
+    "answer": "Nuestro código de institución educativa es 09H04308."
+  },
+  {
+    "question": "¿Cuál es el tipo de sostenimiento de la escuela?",
+    "answer": "Somos una institución educativa de sostenimiento Fiscal."
+  },
+  {
+    "question": "¿Cuál es el tipo de educación?",
+    "answer": "Ofrecemos Educación Regular."
+  }
+]
