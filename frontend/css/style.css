@@ -1,0 +1,422 @@
+@import url('https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@300;400;500;600&display=swap');
+
+.font-display {
+    font-family: 'Italiana', serif;
+}
+
+.font-body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.animate-fade-up {
+    animation: fadeUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#dropdownDefaultButton {
+    animation: pulse 2s infinite;
+    position: fixed;
+    bottom: 140px;
+    /* Movido más arriba */
+    left: 32px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#dropdown {
+    position: fixed;
+    bottom: 200px;
+    /* Posicionado encima del botón */
+    left: 32px;
+    transform: translateY(10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.3s ease, opacity 0s ease, visibility 0.3s;
+}
+
+#dropdown.show {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+@keyframes slide-in-bottom {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-out-bottom {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+.light-container {
+    position: relative;
+}
+
+.light-follow {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(241, 99, 217, 0.15) 0%, rgba(232, 99, 241, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.custom-rounded {
+    border-bottom-left-radius: 3rem;
+    border-bottom-right-radius: 3rem;
+}
+
+.path-0 {
+    animation: pathAnim-0 4s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes pathAnim-0 {
+    0% {
+        d: path("M 0,500 C 0,500 0,166 0,166 C 107.2153110047847,190.9665071770335 214.4306220095694,215.93301435406698 317,210 C 419.5693779904306,204.06698564593302 517.4928229665072,167.23444976076556 606,157 C 694.5071770334928,146.76555023923444 773.598086124402,163.12918660287082 866,164 C 958.401913875598,164.87081339712918 1064.1148325358852,150.2488038277512 1162,148 C 1259.8851674641148,145.7511961722488 1349.9425837320573,155.8755980861244 1440,166 C 1440,166 1440,500 1440,500 Z");
+    }
+
+    25% {
+        d: path("M 0,500 C 0,500 0,166 0,166 C 96.3732057416268,163.07177033492823 192.7464114832536,160.14354066985646 289,171 C 385.2535885167464,181.85645933014354 481.38755980861254,206.4976076555024 570,219 C 658.6124401913875,231.5023923444976 739.7033492822965,231.86602870813397 840,204 C 940.2966507177035,176.13397129186603 1059.799043062201,120.03827751196172 1163,109 C 1266.200956937799,97.96172248803828 1353.1004784688994,131.98086124401914 1440,166 C 1440,166 1440,500 1440,500 Z");
+    }
+
+    50% {
+        d: path("M 0,500 C 0,500 0,166 0,166 C 101.93301435406698,175.21531100478467 203.86602870813397,184.43062200956936 305,186 C 406.13397129186603,187.56937799043064 506.46889952153117,181.4928229665072 611,194 C 715.5311004784688,206.5071770334928 824.2583732057416,237.59808612440193 911,226 C 997.7416267942584,214.40191387559807 1062.4976076555024,160.11483253588517 1147,143 C 1231.5023923444976,125.88516746411484 1335.751196172249,145.94258373205741 1440,166 C 1440,166 1440,500 1440,500 Z");
+    }
+
+    75% {
+        d: path("M 0,500 C 0,500 0,166 0,166 C 109.39712918660285,193.55023923444975 218.7942583732057,221.10047846889952 300,202 C 381.2057416267943,182.89952153110048 434.22009569377997,117.14832535885166 537,108 C 639.77990430622,98.85167464114834 792.3253588516748,146.30622009569382 899,163 C 1005.6746411483252,179.69377990430618 1066.4784688995217,165.6267942583732 1149,161 C 1231.5215311004783,156.3732057416268 1335.7607655502393,161.1866028708134 1440,166 C 1440,166 1440,500 1440,500 Z");
+    }
+
+    100% {
+        d: path("M 0,500 C 0,500 0,166 0,166 C 107.2153110047847,190.9665071770335 214.4306220095694,215.93301435406698 317,210 C 419.5693779904306,204.06698564593302 517.4928229665072,167.23444976076556 606,157 C 694.5071770334928,146.76555023923444 773.598086124402,163.12918660287082 866,164 C 958.401913875598,164.87081339712918 1064.1148325358852,150.2488038277512 1162,148 C 1259.8851674641148,145.7511961722488 1349.9425837320573,155.8755980861244 1440,166 C 1440,166 1440,500 1440,500 Z");
+    }
+}
+
+.path-1 {
+    animation: pathAnim-1 4s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes pathAnim-1 {
+    0% {
+        d: path("M 0,500 C 0,500 0,333 0,333 C 77.34928229665073,329.6794258373206 154.69856459330146,326.3588516746412 247,319 C 339.30143540669854,311.6411483253588 446.555023923445,300.24401913875596 540,316 C 633.444976076555,331.75598086124404 713.0813397129187,374.6650717703349 820,394 C 926.9186602870813,413.3349282296651 1061.1196172248804,409.0956937799043 1169,395 C 1276.8803827751196,380.9043062200957 1358.44019138756,356.95215311004785 1440,333 C 1440,333 1440,500 1440,500 Z");
+    }
+
+    25% {
+        d: path("M 0,500 C 0,500 0,333 0,333 C 119.46411483253587,327.5454545454545 238.92822966507174,322.09090909090907 324,320 C 409.07177033492826,317.90909090909093 459.7511961722488,319.1818181818182 534,328 C 608.2488038277512,336.8181818181818 706.066985645933,353.1818181818182 815,347 C 923.933014354067,340.8181818181818 1043.9808612440193,312.09090909090907 1150,306 C 1256.0191387559807,299.90909090909093 1348.0095693779904,316.4545454545455 1440,333 C 1440,333 1440,500 1440,500 Z");
+    }
+
+    50% {
+        d: path("M 0,500 C 0,500 0,333 0,333 C 65.98086124401917,360.3875598086124 131.96172248803833,387.77511961722485 245,391 C 358.03827751196167,394.22488038277515 518.1339712918659,373.2870813397129 624,359 C 729.8660287081341,344.7129186602871 781.5023923444976,337.07655502392345 856,321 C 930.4976076555024,304.92344497607655 1027.8564593301435,280.40669856459334 1129,281 C 1230.1435406698565,281.59330143540666 1335.0717703349283,307.2966507177033 1440,333 C 1440,333 1440,500 1440,500 Z");
+    }
+
+    75% {
+        d: path("M 0,500 C 0,500 0,333 0,333 C 96.22009569377991,307.2105263157895 192.44019138755982,281.4210526315789 293,276 C 393.5598086124402,270.5789473684211 498.4593301435407,285.52631578947376 596,311 C 693.5406698564593,336.47368421052624 783.7224880382776,372.4736842105263 885,382 C 986.2775119617224,391.5263157894737 1098.6507177033493,374.5789473684211 1193,362 C 1287.3492822966507,349.4210526315789 1363.6746411483255,341.2105263157895 1440,333 C 1440,333 1440,500 1440,500 Z");
+    }
+
+    100% {
+        d: path("M 0,500 C 0,500 0,333 0,333 C 77.34928229665073,329.6794258373206 154.69856459330146,326.3588516746412 247,319 C 339.30143540669854,311.6411483253588 446.555023923445,300.24401913875596 540,316 C 633.444976076555,331.75598086124404 713.0813397129187,374.6650717703349 820,394 C 926.9186602870813,413.3349282296651 1061.1196172248804,409.0956937799043 1169,395 C 1276.8803827751196,380.9043062200957 1358.44019138756,356.95215311004785 1440,333 C 1440,333 1440,500 1440,500 Z");
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutLeft {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    animation: slideInRight 0.5s ease-out;
+}
+
+.notification.hide {
+    animation: slideOutLeft 0.5s ease-out;
+}
+
+/* Estilos personalizados para las tarjetas de testimonios */
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.testimonial-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.swiper-pagination-bullet {
+    width: 12px;
+    height: 12px;
+    background-color: #cbd5e0;
+    opacity: 1;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: #9333ea;
+    /* Color morado */
+}
+
+/* Estilos para el contenedor de Swiper */
+.swiper-container {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+}
+
+/* Estilos para las tarjetas de testimonios */
+.testimonial-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin: 0 auto;
+    /* Centrar la tarjeta */
+    max-width: 100%;
+    /* Evitar que las tarjetas se desborden */
+}
+
+.testimonial-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos para la paginación */
+.swiper-pagination {
+    position: relative;
+    margin-top: 20px;
+}
+
+.swiper-pagination-bullet {
+    width: 12px;
+    height: 12px;
+    background-color: #cbd5e0;
+    opacity: 1;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: #9333ea;
+    /* Color morado */
+}
+
+/* Agrega esto a tu archivo CSS o en un tag <style> */
+.testimonials-swiper .swiper-slide {
+    height: auto;
+    display: flex;
+}
+
+.bg-white.dark\:bg-gray-800 {
+    transition: all 0.3s ease;
+}
+
+.bg-white.dark\:bg-gray-800:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Para el modo oscuro */
+@media (prefers-color-scheme: dark) {
+    .bg-white.dark\:bg-gray-800:hover {
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* Animaciones y estilos personalizados */
+.modal-enter {
+    animation: modalEnter 0.3s ease-out forwards;
+}
+
+@keyframes modalEnter {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.dark select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+}
+
+/* Animaciones para el modal */
+@keyframes scaleUp {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes scaleDown {
+    from {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    to {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+}
+
+.modal-enter {
+    animation: scaleUp 0.3s ease-out forwards;
+}
+
+.modal-exit {
+    animation: scaleDown 0.3s ease-in forwards;
+}
+
+/* Posicionamiento inicial del modal (relativo al botón) */
+.modal-origin {
+    position: fixed;
+    transform-origin: center;
+    z-index: 9999;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes slide-in-bottom {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-out-bottom {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+.animate-slide-in-bottom {
+    animation: slide-in-bottom 0.5s ease-out forwards;
+}
+
+.animate-slide-out-bottom {
+    animation: slide-out-bottom 0.5s ease-in forwards;
+}
