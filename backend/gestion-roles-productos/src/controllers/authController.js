@@ -43,7 +43,7 @@ exports.login = async (req, res) => {
       { expiresIn: '1d' }
     );
     res.json({ token, user: { name: user.name, email: user.email, role: user.role, profileImage: user.profileImage } });
-  catch (err) {
+  } catch (err) {
     res.status(500).json({ error: 'Error al registrar usuario.', details: err.message });
   }
 };
