@@ -81,6 +81,23 @@
                         </a>
                     </div>
                 </div>
+                <!-- Agrega esto donde quieras mostrar la foto y menú de usuario, por ejemplo en el header -->
+<div id="user-profile" class="flex items-center space-x-3 ml-4 hidden">
+  <img id="profile-img" src="" alt="Perfil" class="w-10 h-10 rounded-full border-2 border-purple-500 object-cover">
+  <span id="profile-name" class="font-semibold text-gray-700"></span>
+  <button id="logout-btn" class="ml-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs">Salir</button>
+</div>
+
+<!-- Botón para login/registro si no hay sesión -->
+<div id="login-register-links" class="ml-4">
+  <a href="login.html" class="text-purple-600 hover:underline mr-2">Iniciar sesión</a>
+  <a href="register.html" class="text-purple-600 hover:underline">Registrarse</a>
+</div>
+
+<!-- Opciones de administrador (solo visible si es admin) -->
+<div id="admin-panel" class="ml-4 hidden">
+  <a href="admin-productos.html" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-xs">Panel Admin</a>
+</div>
             </div>
 
             <!-- Main Navigation -->
@@ -2880,6 +2897,39 @@
     <script src="../backend/server.js"></script>
     <script src="js/main.js"></script>
 
+    <script>
+    // Simulación: obtén el usuario desde localStorage (debería venir del login real)
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    const userProfile = document.getElementById('user-profile');
+    const profileImg = document.getElementById('profile-img');
+    const profileName = document.getElementById('profile-name');
+    const adminPanel = document.getElementById('admin-panel');
+    const loginRegisterLinks = document.getElementById('login-register-links');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    if (user) {
+        userProfile.classList.remove('hidden');
+        loginRegisterLinks.classList.add('hidden');
+        profileImg.src = user.profileImage || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name);
+        profileName.textContent = user.name;
+
+        if (user.role === 'admin') {
+        adminPanel.classList.remove('hidden');
+        }
+    } else {
+        userProfile.classList.add('hidden');
+        loginRegisterLinks.classList.remove('hidden');
+        adminPanel.classList.add('hidden');
+    }
+
+    if (logoutBtn) {
+        logoutBtn.onclick = () => {
+        localStorage.removeItem('user');
+        location.reload();
+        };
+    }
+    </script>
 </body>
 
 </html>

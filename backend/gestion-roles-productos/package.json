@@ -1,0 +1,22 @@
+{
+  "name": "gestion-roles-productos",
+  "version": "1.0.0",
+  "description": "Sistema de gestión de roles y productos con Node.js y MongoDB.",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.10.9",
+    "dotenv": "^8.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "bcryptjs": "^2.4.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "author": "Tu Nombre",
+  "license": "MIT"
+}
