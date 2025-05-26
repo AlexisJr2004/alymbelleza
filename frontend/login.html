@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Iniciar Sesión - Bella Beauty</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+    <h2 class="text-2xl font-bold mb-6 text-center text-purple-700">Iniciar Sesión</h2>
+    <form id="loginForm" class="space-y-5">
+      <div>
+        <label class="block mb-1 text-gray-700">Correo electrónico</label>
+        <input type="email" name="email" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+      </div>
+      <div>
+        <label class="block mb-1 text-gray-700">Contraseña</label>
+        <input type="password" name="password" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+      </div>
+      <button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700">Entrar</button>
+      <p class="text-center text-sm mt-4">¿No tienes cuenta? <a href="register.html" class="text-purple-600 hover:underline">Regístrate</a></p>
+    </form>
+    <div id="loginError" class="text-red-500 text-sm mt-2 text-center"></div>
+  </div>
+  <script>
+    document.getElementById('loginForm').onsubmit = async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        email: form.email.value,
+        password: form.password.value
+      };
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        if (res.ok) {
+          localStorage.setItem('user', JSON.stringify(result.user));
+          window.location.href = 'index.html';
+        } else {
+          document.getElementById('loginError').textContent = result.error || 'Error al iniciar sesión';
+        }
+      } catch (err) {
+        document.getElementById('loginError').textContent = 'Error de conexión';
+      }
+    };
+  </script>
+</body>
+</html>
