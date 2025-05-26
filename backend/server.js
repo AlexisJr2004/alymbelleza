@@ -95,7 +95,6 @@ app.use(
 app.use('/api/auth', authRoutes);
 
 // 6. Resto de middlewares y rutas (testimonios, email, etc.)
-
 // Modelo de Testimonio
 const testimonialSchema = new mongoose.Schema(
   {
