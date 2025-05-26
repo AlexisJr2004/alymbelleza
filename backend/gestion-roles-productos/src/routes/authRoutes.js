@@ -6,7 +6,7 @@ const authController = require('../controllers/authController');
 
 // Configuración de Multer para imagen de perfil
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, path.join(__dirname, '../../uploads')),
+  destination: (req, file, cb) => cb(null, path.join(__dirname, '../../../uploads')),
   filename: (req, file, cb) => cb(null, `profile-${Date.now()}${path.extname(file.originalname)}`)
 });
 const upload = multer({ storage });
