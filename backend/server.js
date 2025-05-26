@@ -25,9 +25,8 @@ app.use(
 );
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-app.use('/api/auth', authRoutes);
 
-// 2. Conexión a MongoDB con manejo robusto de errores
+// 2. Conexión a MongoDB
 const DB_URI =
   process.env.MONGODB_URI ||
   "mongodb+srv://snietod:kLSSYgP2D4wmS59m@bellabeauty.y61attk.mongodb.net/bellaBeauty?retryWrites=true&w=majority&appName=bellaBeauty";
@@ -35,11 +34,11 @@ const DB_URI =
 const mongooseOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 30000, // 30 segundos
-  socketTimeoutMS: 45000, // 45 segundos
+  serverSelectionTimeoutMS: 30000,
+  socketTimeoutMS: 45000,
   retryWrites: true,
   w: "majority",
-  authSource: "admin", // Agrega esto si es necesario
+  authSource: "admin",
 };
 
 mongoose
@@ -47,59 +46,57 @@ mongoose
   .then(() => console.log("✅ MongoDB conectado exitosamente"))
   .catch((err) => {
     console.error("❌ Error de conexión a MongoDB:", err.message);
-    console.error(
-      "ℹ️ Cadena de conexión usada:",
-      DB_URI.replace(/:\/\/.*@/, "://<usuario>:<contraseña>@")
-    );
-    process.exit(1); // Salir si no hay conexión
+    process.exit(1);
   });
 
-// Manejo de reconexión mejorado
 mongoose.connection.on("disconnected", () => {
-  console.log(
-    "⚠️ MongoDB desconectado. Intentando reconectar en 5 segundos..."
-  );
+  console.log("⚠️ MongoDB desconectado. Intentando reconectar en 5 segundos...");
   setTimeout(() => mongoose.connect(DB_URI, mongooseOptions), 5000);
 });
 
-// 3. Configuración avanzada de Multer para subida de archivos
+// 3. Carpeta de uploads y configuración de Multer
 const uploadDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true, mode: 0o755 });
 }
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    const filename = `testimonial-${Date.now()}${ext}`;
-    cb(null, filename);
-  },
-});
-
-const fileFilter = (req, file, cb) => {
-  const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
-  if (allowedTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(
-      new Error(
-        "Tipo de archivo no permitido. Solo se aceptan imágenes (JPEG, PNG, GIF, WEBP)"
-      ),
-      false
-    );
+function getContentType(filePath) {
+  const ext = path.extname(filePath).toLowerCase();
+  switch (ext) {
+    case '.jpg':
+    case '.jpeg':
+      return 'image/jpeg';
+    case '.png':
+      return 'image/png';
+    case '.gif':
+      return 'image/gif';
+    case '.webp':
+      return 'image/webp';
+    default:
+      return 'application/octet-stream';
   }
-};
+}
 
-const upload = multer({
-  storage,
-  limits: { fileSize: 15 * 1024 * 1024 }, // 15MB
-  fileFilter,
-});
+// 4. Servir archivos estáticos de uploads (¡esto debe ir antes del frontend!)
+app.use(
+  "/uploads",
+  express.static(uploadDir, {
+    maxAge: "1y",
+    immutable: true,
+    setHeaders: (res, filePath) => {
+      if (filePath.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+        res.setHeader("Content-Type", getContentType(filePath));
+      }
+    },
+  })
+);
 
-// 4. Modelo mejorado de Testimonio
+// 5. Rutas de autenticación y API
+app.use('/api/auth', authRoutes);
+
+// 6. Resto de middlewares y rutas (testimonios, email, etc.)
+
+// Modelo de Testimonio
 const testimonialSchema = new mongoose.Schema(
   {
     name: {
@@ -142,39 +139,23 @@ const testimonialSchema = new mongoose.Schema(
 
 const Testimonial = mongoose.model("Testimonial", testimonialSchema);
 
-// Middleware para servir archivos estáticos
-app.use(
-  "/uploads",
-  express.static(uploadDir, {
-    maxAge: "1y",
-    immutable: true,
-    setHeaders: (res, path) => {
-      if (path.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
-        res.setHeader("Content-Type", getContentType(path));
-      }
-    },
-  })
-);
-
-function getContentType(filePath) {
-  const ext = path.extname(filePath).toLowerCase();
-  switch (ext) {
-    case '.jpg':
-    case '.jpeg':
-      return 'image/jpeg';
-    case '.png':
-      return 'image/png';
-    case '.gif':
-      return 'image/gif';
-    case '.webp':
-      return 'image/webp';
-    default:
-      return 'application/octet-stream';
+// Multer para testimonios (usa el mismo uploadDir y configuración)
+const testimonialStorage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, uploadDir),
+  filename: (req, file, cb) => cb(null, `testimonial-${Date.now()}${path.extname(file.originalname)}`)
+});
+const testimonialUpload = multer({
+  storage: testimonialStorage,
+  limits: { fileSize: 15 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+    if (allowedTypes.includes(file.mimetype)) cb(null, true);
+    else cb(new Error("Tipo de archivo no permitido. Solo imágenes."), false);
   }
-}
+});
 
 // Ruta para subir testimonios
-app.post("/api/testimonials", upload.single("avatar"), async (req, res) => {
+app.post("/api/testimonials", testimonialUpload.single("avatar"), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({
@@ -182,9 +163,7 @@ app.post("/api/testimonials", upload.single("avatar"), async (req, res) => {
         error: "Debe proporcionar una imagen válida",
       });
     }
-
     const { name, role, comment } = req.body;
-
     if (!name || !role || !comment) {
       fs.unlinkSync(req.file.path);
       return res.status(400).json({
@@ -192,19 +171,14 @@ app.post("/api/testimonials", upload.single("avatar"), async (req, res) => {
         error: "Todos los campos son requeridos",
       });
     }
-
-    // URL absoluta para la imagen
     const avatarUrl = `/uploads/${req.file.filename}`;
-
     const newTestimonial = new Testimonial({
       name,
       role,
       comment,
-      avatar: avatarUrl, // Usamos la URL completa
+      avatar: avatarUrl,
     });
-
     await newTestimonial.save();
-
     res.status(201).json({
       success: true,
       message: "Testimonio agregado exitosamente",
@@ -219,18 +193,16 @@ app.post("/api/testimonials", upload.single("avatar"), async (req, res) => {
   }
 });
 
-// Ruta para obtener testimonios
+// Ruta para obtener testimonios (paginada)
 app.get("/api/testimonials", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
-
     const [testimonials, total] = await Promise.all([
       Testimonial.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
       Testimonial.countDocuments(),
     ]);
-
     res.json({
       success: true,
       count: testimonials.length,
@@ -240,7 +212,6 @@ app.get("/api/testimonials", async (req, res) => {
       data: testimonials,
     });
   } catch (error) {
-    console.error("Error al obtener testimonios:", error);
     res.status(500).json({
       success: false,
       error: "Error al obtener testimonios",
@@ -248,73 +219,7 @@ app.get("/api/testimonials", async (req, res) => {
   }
 });
 
-// Agrega este middleware al inicio, antes de las rutas
-app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // Para parsear form-data
-
-// Usa este middleware en tu ruta
-app.post("/api/send-email", multer().none(), async (req, res) => {
-  console.log("Datos recibidos:", req.body);
-
-  try {
-    const { name, email, message } = req.body;
-
-    // Validación mejorada
-    if (!name?.trim() || !email?.trim() || !message?.trim()) {
-      return res.status(400).json({
-        success: false,
-        error: "Todos los campos son requeridos",
-        received: req.body,
-      });
-    }
-
-    // Validación de email
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return res.status(400).json({
-        success: false,
-        error: "El email no es válido",
-      });
-    }
-
-    const mailOptions = {
-      from: `"${name}" <${
-        process.env.EMAIL_USER || "duranalexis879@gmail.com"
-      }>`,
-      to: process.env.EMAIL_USER || "duranalexis879@gmail.com",
-      replyTo: email,
-      subject: `Nuevo mensaje de contacto: ${name}`,
-      text: message,
-      html: `
-        <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-          <h2 style="color: #4a5568;">Nuevo mensaje de contacto</h2>
-          <p><strong>Nombre:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Mensaje:</strong></p>
-          <p style="background: #f7fafc; padding: 15px; border-radius: 5px;">${message}</p>
-        </div>
-      `,
-    };
-
-    const info = await transporter.sendMail(mailOptions);
-    console.log("Email enviado:", info.messageId);
-
-    res.json({
-      success: true,
-      message: "Correo enviado exitosamente",
-      messageId: info.messageId,
-    });
-  } catch (error) {
-    console.error("Error al enviar email:", error);
-    res.status(500).json({
-      success: false,
-      error: "Error al enviar el mensaje",
-      details:
-        process.env.NODE_ENV === "development" ? error.message : undefined,
-    });
-  }
-});
-
-// Configuración de Nodemailer (sin cambios)
+// Configuración de Nodemailer
 const mailConfig = {
   service: "gmail",
   host: "smtp.gmail.com",
@@ -328,29 +233,24 @@ const mailConfig = {
     rejectUnauthorized: false,
   },
 };
-
 const transporter = nodemailer.createTransport(mailConfig);
 
-// Endpoint actualizado para coincidir con el frontend
-app.post("/api/send-email", async (req, res) => {
+// Ruta para enviar emails de contacto
+app.post("/api/send-email", express.json(), async (req, res) => {
   try {
     const { name, email, message } = req.body;
-
     if (!name || !email || !message) {
       return res.status(400).json({
         success: false,
         error: "Todos los campos son requeridos",
       });
     }
-
-    // Validación básica de email
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({
         success: false,
         error: "El email no es válido",
       });
     }
-
     const mailOptions = {
       from: `"${name}" <${mailConfig.auth.user}>`,
       to: mailConfig.auth.user,
@@ -367,17 +267,13 @@ app.post("/api/send-email", async (req, res) => {
         </div>
       `,
     };
-
     const info = await transporter.sendMail(mailOptions);
-    console.log("Email enviado:", info.messageId);
-
     res.json({
       success: true,
       message: "Correo enviado exitosamente",
       messageId: info.messageId,
     });
   } catch (error) {
-    console.error("Error al enviar email:", error);
     res.status(500).json({
       success: false,
       error: "Error al enviar el mensaje",
@@ -386,20 +282,7 @@ app.post("/api/send-email", async (req, res) => {
   }
 });
 
-// 7. Manejo de archivos estáticos y rutas frontend
-app.use(
-  "/uploads",
-  express.static(uploadDir, {
-    maxAge: "1y",
-    immutable: true,
-    setHeaders: (res, path) => {
-      if (path.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
-        res.setHeader("Content-Type", getContentType(path));
-      }
-    },
-  })
-);
-
+// 7. Servir el frontend
 app.use(
   express.static(path.join(__dirname, "../frontend"), {
     extensions: ["html", "htm"],
@@ -407,15 +290,15 @@ app.use(
   })
 );
 
+// 8. Catch-all para SPA (debe ir al final)
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/login.html"));
 });
 
-// 8. Manejo centralizado de errores
+// 9. Manejo centralizado de errores
 app.use((err, req, res, next) => {
   console.error("🔥 Error:", err.stack);
 
-  // Errores de Multer
   if (err instanceof multer.MulterError) {
     return res.status(400).json({
       success: false,
@@ -427,7 +310,6 @@ app.use((err, req, res, next) => {
     });
   }
 
-  // Errores de validación de Mongoose
   if (err.name === "ValidationError") {
     const errors = Object.values(err.errors).map((el) => el.message);
     return res.status(400).json({
@@ -437,7 +319,6 @@ app.use((err, req, res, next) => {
     });
   }
 
-  // Error genérico
   res.status(500).json({
     success: false,
     error: "Error interno del servidor",
@@ -445,14 +326,13 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 9. Inicio del servidor con manejo de cierre
+// 10. Inicio del servidor
 const server = app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
   console.log(`📌 Entorno: ${process.env.NODE_ENV || "development"}`);
   console.log(`🗄️  Base de datos: ${mongoose.connection.host}`);
 });
 
-// Manejo de cierre adecuado
 process.on("SIGTERM", () => {
   console.log("🛑 Recibido SIGTERM. Cerrando servidor...");
   server.close(() => {
