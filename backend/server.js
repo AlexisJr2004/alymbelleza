@@ -405,12 +405,12 @@ app.use(
 app.use(
   express.static(path.join(__dirname, "../frontend"), {
     extensions: ["html", "htm"],
-    index: "index.html",
+    index: "login.html",
   })
 );
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/index.html"));
+  res.sendFile(path.join(__dirname, "../frontend/login.html"));
 });
 
 // 8. Manejo centralizado de errores
