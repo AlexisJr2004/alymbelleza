@@ -63,7 +63,7 @@ mongoose.connection.on("disconnected", () => {
 });
 
 // 3. Configuración avanzada de Multer para subida de archivos
-const uploadDir = path.join(__dirname, "public", "uploads");
+const uploadDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true, mode: 0o755 });
 }
@@ -388,15 +388,13 @@ app.post("/api/send-email", async (req, res) => {
 
 // 7. Manejo de archivos estáticos y rutas frontend
 app.use(
-  "/api/uploads",
+  "/uploads",
   express.static(uploadDir, {
+    maxAge: "1y",
+    immutable: true,
     setHeaders: (res, path) => {
-      if (
-        path.endsWith(".jpg") ||
-        path.endsWith(".png") ||
-        path.endsWith(".webp")
-      ) {
-        res.setHeader("Cache-Control", "public, max-age=86400");
+      if (path.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+        res.setHeader("Content-Type", getContentType(path));
       }
     },
   })
