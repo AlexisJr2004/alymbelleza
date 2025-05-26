@@ -915,3 +915,47 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("file-name").textContent = fileName;
   });
 });
+
+// filepath: frontend/index.html
+document.addEventListener('DOMContentLoaded', () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  const userProfile = document.getElementById('user-profile');
+  const profileImg = document.getElementById('profile-img');
+  const profileName = document.getElementById('profile-name');
+  const adminPanel = document.getElementById('admin-panel');
+  const loginRegisterLinks = document.getElementById('login-register-links');
+  const logoutBtn = document.getElementById('logout-btn');
+
+  if (user) {
+    userProfile.classList.remove('hidden');
+    loginRegisterLinks.classList.add('hidden');
+    profileName.textContent = user.name;
+
+    // Si el usuario tiene imagen de perfil, muestra la URL absoluta
+    if (user.profileImage) {
+      // Cambia la URL base según tu dominio de Render
+      profileImg.src = 'https://aly-mbelleza-backend.onrender.com' + user.profileImage;
+    } else {
+      // Si no tiene imagen, usa avatar por defecto
+      profileImg.src = '/img/mujer-con-pelo-largo.pn' + encodeURIComponent(user.name);
+    }
+
+    // Mostrar panel admin si el usuario es admin
+    if (user.role === 'admin') {
+      adminPanel.classList.remove('hidden');
+    } else {
+      adminPanel.classList.add('hidden');
+    }
+  } else {
+    userProfile.classList.add('hidden');
+    loginRegisterLinks.classList.remove('hidden');
+    adminPanel.classList.add('hidden');
+  }
+
+  if (logoutBtn) {
+    logoutBtn.onclick = () => {
+      localStorage.removeItem('user');
+      location.reload();
+    };
+  }
+});
