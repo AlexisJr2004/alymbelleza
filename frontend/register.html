@@ -1,47 +1,108 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Registro - Bella Beauty</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="/img/mujer-con-pelo-largo.png" type="image/x-icon">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    .register-card {
+      box-shadow: 0 10px 30px -10px rgba(124, 58, 237, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .btn-gradient {
+      background-image: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+    }
+
+    .btn-gradient:hover {
+      background-image: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+      transform: translateY(-1px);
+    }
+
+    .input-focus:focus {
+      box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.45);
+    }
+  </style>
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen">
-  <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-    <h2 class="text-2xl font-bold mb-6 text-center text-purple-700">Crear Cuenta</h2>
-    <form id="registerForm" class="space-y-5" enctype="multipart/form-data">
-      <div>
-        <label class="block mb-1 text-gray-700">Nombre</label>
-        <input type="text" name="name" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+
+<body class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+  <div class="register-card bg-white rounded-2xl w-full max-w-md overflow-hidden">
+    <div class="h-1 bg-gradient-to-r from-purple-600 to-pink-500"></div>
+
+    <div class="p-8">
+      <div class="text-center mb-6">
+        <img src="https://i.ibb.co/zhpcw3df/mujer-con-pelo-largo.png" alt="mujer"
+          class="mx-auto w-20 h-20 object-cover mb-4">
+        <h2 class="text-2xl font-semibold text-gray-800">Bella Beauty</h2>
+        <p class="text-sm text-gray-500 mt-1">Crea una cuenta nueva</p>
       </div>
-      <div>
-        <label class="block mb-1 text-gray-700">Correo electrónico</label>
-        <input type="email" name="email" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
-      </div>
-      <div>
-        <label class="block mb-1 text-gray-700">Contraseña</label>
-        <input type="password" name="password" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
-      </div>
-      <div>
-        <label class="block mb-1 text-gray-700">Foto de perfil</label>
-        <input type="file" name="profileImage" accept="image/*" class="w-full">
-      </div>
-      <button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700">Registrarse</button>
-      <p class="text-center text-sm mt-4">¿Ya tienes cuenta? <a href="login.html" class="text-purple-600 hover:underline">Inicia sesión</a></p>
-    </form>
-    <div id="registerError" class="text-red-500 text-sm mt-2 text-center"></div>
+
+      <form id="registerForm" class="space-y-5" enctype="multipart/form-data">
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Nombre</label>
+          <input type="text" name="name" required
+            class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none input-focus"
+            placeholder="Tu nombre completo" />
+        </div>
+
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Correo electrónico</label>
+          <input type="email" name="email" required
+            class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none input-focus"
+            placeholder="correo@ejemplo.com" />
+        </div>
+
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Contraseña</label>
+          <input type="password" name="password" required
+            class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none input-focus"
+            placeholder="••••••••" />
+        </div>
+
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Foto de perfil</label>
+          <input type="file" name="profileImage" accept="image/*"
+            class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-white file:bg-purple-500 hover:file:bg-purple-600 transition duration-150" />
+        </div>
+
+        <button type="submit"
+          class="w-full btn-gradient text-white py-2.5 rounded-lg font-medium shadow-sm transition-all">
+          Registrarse
+        </button>
+
+        <p class="text-center text-sm text-gray-500">
+          ¿Ya tienes cuenta?
+          <a href="login.html" class="text-purple-600 font-medium hover:underline">Inicia sesión</a>
+        </p>
+      </form>
+
+      <div id="registerError" class="mt-4 text-sm text-center text-red-600 font-medium"></div>
+    </div>
   </div>
+
   <script>
-    document.getElementById('registerForm').onsubmit = async function(e) {
+    document.getElementById('registerForm').onsubmit = async function (e) {
       e.preventDefault();
       const form = e.target;
       const formData = new FormData(form);
+
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Enviando...';
+      submitBtn.disabled = true;
+
       try {
         const res = await fetch('/api/auth/register', {
           method: 'POST',
           body: formData
         });
+
         const result = await res.json();
+
         if (res.ok) {
           window.location.href = 'login.html';
         } else {
@@ -49,8 +110,12 @@
         }
       } catch (err) {
         document.getElementById('registerError').textContent = 'Error de conexión';
+      } finally {
+        submitBtn.innerHTML = originalBtnText;
+        submitBtn.disabled = false;
       }
     };
   </script>
 </body>
+
 </html>
