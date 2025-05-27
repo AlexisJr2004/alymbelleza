@@ -248,8 +248,8 @@
                 </div>
             </div>
 
-            <!-- Sección de Perfil (solo visible con sesión activa) -->
-            <div id="mobile-profile-section" class="hidden px-4 py-4 mb-4 border-b border-purple-100">
+            <!-- Sección de Perfil Mejorada -->
+            <div class="px-4 py-4 mb-4 border-b border-purple-100">
                 <div class="flex items-center space-x-4">
                     <!-- Foto de perfil con indicador de estado -->
                     <div class="relative">
@@ -296,22 +296,21 @@
                     </a>
                 </div>
             </div>
-
-            <!-- Botones de Login/Registro (solo visible SIN sesión activa) -->
-            <div id="mobile-login-register-section" class="px-4 py-4 mb-4 border-b border-purple-100">
-                <div class="flex flex-col space-y-3">
+            <!-- Botones de Login/Registro (solo visible sin sesión) -->
+            <div id="mobile-login-section" class="px-4 py-4 mb-4 border-b border-purple-100">
+                <div class="space-y-3">
                     <a href="login.html"
-                        class="w-full text-center px-4 py-2.5 text-sm font-medium text-purple-700 hover:text-purple-900 transition-colors duration-300 hover:bg-purple-50 rounded-lg border border-purple-200">
+                        class="block w-full text-center py-2.5 text-sm font-medium text-purple-700 border border-purple-300 rounded-lg hover:bg-purple-50 transition-colors duration-200">
                         Iniciar sesión
                     </a>
                     <a href="register.html"
-                        class="w-full text-center px-4 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg shadow hover:from-purple-700 hover:to-indigo-700 transition-all duration-300">
+                        class="block w-full text-center py-2.5 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-sm">
                         Registrarse
                     </a>
                 </div>
             </div>
 
-            <!-- Resto del menú (se muestra siempre) -->
+            <!-- Top Information Section -->
             <div class="px-4 mb-6 space-y-4 border-b border-purple-100 pb-4">
                 <div class="flex items-center space-x-3">
                     <i class="fas fa-map-marker-alt text-purple-600"></i>

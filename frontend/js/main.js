@@ -22,84 +22,84 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+// Función para mostrar/ocultar el submenú de servicios
+function toggleServicesMenu() {
+  const submenu = document.getElementById("services-submenu");
+  submenu.classList.toggle("hidden");
+}
+
+// Cargar datos del usuario
 document.addEventListener("DOMContentLoaded", () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  // Elementos del menú móvil
-  const mobileProfileImg = document.getElementById("mobile-profile-img");
-  const mobileProfileName = document.getElementById("mobile-profile-name");
-  const mobileProfileEmail = document.getElementById("mobile-profile-email");
-  const mobileProfileRole = document.getElementById("mobile-profile-role");
-  const mobileLogoutBtn = document.getElementById("mobile-logout-btn");
-  const mobileAdminLink = document.getElementById(
+  const userProfileSection = document.getElementById(
+    "mobile-user-profile-section"
+  );
+  const loginSection = document.getElementById("mobile-login-section");
+  const profileImg = document.getElementById("mobile-profile-img");
+  const profileName = document.getElementById("mobile-profile-name");
+  const profileEmail = document.getElementById("mobile-profile-email");
+  const profileRole = document.getElementById("mobile-profile-role");
+  const statusIndicator = document.getElementById("mobile-status-indicator");
+  const logoutBtn = document.getElementById("mobile-logout-btn");
+  const adminLinkContainer = document.getElementById(
     "mobile-admin-link-container"
   );
 
   if (user) {
-    mobileProfileName.textContent = user.name || "Usuario";
-    mobileProfileEmail.textContent = user.email || "";
-    mobileProfileRole.textContent =
-      user.role === "admin" ? "Administrador" : "Cliente";
+    // Mostrar sección de perfil y ocultar login
+    userProfileSection.classList.remove("hidden");
+    loginSection.classList.add("hidden");
+
+    // Configurar datos del usuario
+    profileName.textContent = user.name || "Usuario";
+    profileEmail.textContent = user.email || "";
+
+    // Establecer rol y color del indicador
+    if (user.role === "admin") {
+      profileRole.textContent = "Administrador";
+      statusIndicator.classList.remove("bg-green-500");
+      statusIndicator.classList.add("bg-purple-500");
+      adminLinkContainer.classList.remove("hidden");
+    } else {
+      profileRole.textContent = "Cliente";
+    }
 
     // Imagen de perfil
-    if (user.profileImage && user.profileImage.startsWith("http")) {
-      mobileProfileImg.src = user.profileImage;
-    } else if (user.profileImage && user.profileImage.startsWith("/uploads/")) {
-      mobileProfileImg.src =
-        "https://aly-mbelleza-backend.onrender.com" + user.profileImage;
-    } else {
-      mobileProfileImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
-        user.name || "U"
-      )}&background=random&length=1`;
-    }
+    const profileImageUrl =
+      user.profileImage && user.profileImage.startsWith("http")
+        ? user.profileImage
+        : user.profileImage && user.profileImage.startsWith("/uploads/")
+        ? "https://aly-mbelleza-backend.onrender.com" + user.profileImage
+        : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+            user.name || "U"
+          )}&background=random&length=1`;
 
-    // Mostrar enlace admin si es admin
-    if (user.role === "admin") {
-      mobileAdminLink.classList.remove("hidden");
-    }
+    profileImg.src = profileImageUrl;
 
-    // Logout
-    mobileLogoutBtn.onclick = () => {
-      localStorage.removeItem("user");
-      window.location.href = "index.html";
-    };
+    // Logout con SweetAlert
+    logoutBtn.addEventListener("click", () => {
+      Swal.fire({
+        title: "¿Cerrar sesión?",
+        text: "¿Estás seguro de que deseas salir de tu cuenta?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#7e22ce",
+        cancelButtonColor: "#6b7280",
+        confirmButtonText: "Sí, cerrar sesión",
+        cancelButtonText: "Cancelar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          localStorage.removeItem("user");
+          window.location.href = "index.html";
+        }
+      });
+    });
   } else {
-    // Si no hay usuario, puedes ocultar el bloque o mostrar login/register
-    mobileProfileName.textContent = "";
-    mobileProfileEmail.textContent = "";
-    mobileProfileRole.textContent = "";
-    mobileProfileImg.src = "https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png";
-    mobileLogoutBtn.style.display = "none";
-    mobileAdminLink.classList.add("hidden");
+    // Mostrar sección de login y ocultar perfil
+    loginSection.classList.remove("hidden");
+    userProfileSection.classList.add("hidden");
   }
 });
-
-// Función para verificar el estado de autenticación
-function checkAuthState() {
-  // Aquí debes implementar tu lógica para verificar si hay un usuario logueado
-  const isLoggedIn = /* tu lógica para verificar sesión */ false;
-
-  if (isLoggedIn) {
-    document
-      .getElementById("mobile-profile-section")
-      .classList.remove("hidden");
-    document
-      .getElementById("mobile-login-register-section")
-      .classList.add("hidden");
-
-    // Aquí llenarías los datos del usuario:
-    // document.getElementById('mobile-profile-name').textContent = user.name;
-    // document.getElementById('mobile-profile-email').textContent = user.email;
-    // etc.
-  } else {
-    document.getElementById("mobile-profile-section").classList.add("hidden");
-    document
-      .getElementById("mobile-login-register-section")
-      .classList.remove("hidden");
-  }
-}
-
-// Llamar a esta función cuando se cargue la página y cuando cambie el estado de autenticación
-document.addEventListener("DOMContentLoaded", checkAuthState);
 
 //Script para el botón de la pantalla completa
 document.addEventListener("DOMContentLoaded", () => {
