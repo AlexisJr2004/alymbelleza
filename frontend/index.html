@@ -81,15 +81,31 @@
                         </a>
                     </div>
                 </div>
-                <!-- Agrega esto donde quieras mostrar la foto y menú de usuario, por ejemplo en el header -->
-<div id="user-profile" class="flex items-center space-x-3 ml-4 hidden">
-  <img id="profile-img"
-       src=""
-       alt="Perfil"
-       class="w-10 h-10 rounded-full border-2 border-purple-500 object-cover"
-       onerror="this.onerror=null;this.src='https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';">
-  <span id="profile-name" class="font-semibold text-gray-700"></span>
-  <button id="logout-btn" class="ml-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs">Salir</button>
+<!-- Menú de usuario con dropdown -->
+<div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+  <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+    <span class="sr-only">Abrir menú de usuario</span>
+    <img id="profile-img" class="w-8 h-8 rounded-full border-2 border-purple-500 object-cover"
+         src=""
+         alt="user photo"
+         onerror="this.onerror=null;this.src='https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';">
+  </button>
+  <!-- Dropdown menu -->
+  <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm" id="user-dropdown">
+    <div class="px-4 py-3">
+      <span id="profile-name" class="block text-sm text-gray-900"></span>
+      <span id="profile-email" class="block text-sm text-gray-500 truncate"></span>
+      <span id="profile-role" class="block text-xs text-purple-600 font-semibold"></span>
+    </div>
+    <ul class="py-2" aria-labelledby="user-menu-button">
+      <li>
+        <a href="admin-productos.html" id="admin-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hidden">Panel Admin</a>
+      </li>
+      <li>
+        <button id="logout-btn" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Cerrar sesión</button>
+      </li>
+    </ul>
+  </div>
 </div>
 
 <!-- Botón para login/registro si no hay sesión -->
@@ -2896,22 +2912,25 @@
         });
     </script>
 
-    <script>
+<script>
 document.addEventListener('DOMContentLoaded', () => {
   const user = JSON.parse(localStorage.getItem('user'));
-  const userProfile = document.getElementById('user-profile');
   const profileImg = document.getElementById('profile-img');
   const profileName = document.getElementById('profile-name');
-  const adminPanel = document.getElementById('admin-panel');
-  const loginRegisterLinks = document.getElementById('login-register-links');
+  const profileEmail = document.getElementById('profile-email');
+  const profileRole = document.getElementById('profile-role');
   const logoutBtn = document.getElementById('logout-btn');
+  const userMenuBtn = document.getElementById('user-menu-button');
+  const userDropdown = document.getElementById('user-dropdown');
+  const adminLink = document.getElementById('admin-link');
 
   if (user) {
-    userProfile.classList.remove('hidden');
-    loginRegisterLinks.classList.add('hidden');
+    // Mostrar datos
     profileName.textContent = user.name;
+    profileEmail.textContent = user.email;
+    profileRole.textContent = user.role === 'admin' ? 'Administrador' : 'Cliente';
 
-    // Mostrar imagen de perfil de Cloudinary o fallback
+    // Imagen de perfil
     if (user.profileImage && user.profileImage.startsWith('http')) {
       profileImg.src = user.profileImage;
     } else if (user.profileImage && user.profileImage.startsWith('/uploads/')) {
@@ -2920,22 +2939,32 @@ document.addEventListener('DOMContentLoaded', () => {
       profileImg.src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name);
     }
 
+    // Mostrar link admin solo si es admin
     if (user.role === 'admin') {
-      adminPanel.classList.remove('hidden');
-    } else {
-      adminPanel.classList.add('hidden');
+      adminLink.classList.remove('hidden');
     }
-  } else {
-    userProfile.classList.add('hidden');
-    loginRegisterLinks.classList.remove('hidden');
-    adminPanel.classList.add('hidden');
-  }
 
-  if (logoutBtn) {
+    // Dropdown toggle
+    userMenuBtn.addEventListener('click', () => {
+      userDropdown.classList.toggle('hidden');
+    });
+
+    // Cerrar dropdown al hacer click fuera
+    document.addEventListener('click', (e) => {
+      if (!userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+        userDropdown.classList.add('hidden');
+      }
+    });
+
+    // Logout
     logoutBtn.onclick = () => {
       localStorage.removeItem('user');
       location.reload();
     };
+  } else {
+    // Si no hay usuario, oculta el menú
+    document.getElementById('user-profile').style.display = 'none';
+    // Aquí puedes mostrar el login/register si lo deseas
   }
 });
 </script>
