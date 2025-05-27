@@ -7,7 +7,6 @@ const nodemailer = require("nodemailer");
 const fs = require("fs");
 const cors = require("cors");
 const authRoutes = require("./gestion-roles-productos/src/routes/authRoutes");
-const testimonialUpload = multer();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
