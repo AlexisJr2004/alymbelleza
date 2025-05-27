@@ -7,6 +7,7 @@ const nodemailer = require("nodemailer");
 const fs = require("fs");
 const cors = require("cors");
 const authRoutes = require("./gestion-roles-productos/src/routes/authRoutes");
+const testimonialUpload = multer();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -157,7 +158,7 @@ const testimonialUpload = multer({
 });
 
 // Ruta para subir testimonios (ahora acepta avatar como URL)
-app.post("/api/testimonials", async (req, res) => {
+app.post("/api/testimonials", testimonialUpload.none(), async (req, res) => {
   try {
     const { name, role, comment, avatar } = req.body;
     if (!name || !role || !comment || !avatar) {
@@ -170,7 +171,7 @@ app.post("/api/testimonials", async (req, res) => {
       name,
       role,
       comment,
-      avatar, // Puede ser una URL de Cloudinary o similar
+      avatar,
     });
     await newTestimonial.save();
     res.status(201).json({
