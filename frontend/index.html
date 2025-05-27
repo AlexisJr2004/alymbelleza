@@ -82,29 +82,31 @@
                     </div>
                 </div>
 <!-- Menú de usuario con dropdown -->
-<div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-  <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+<div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">
+  <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" id="user-menu-button" aria-expanded="false">
     <span class="sr-only">Abrir menú de usuario</span>
     <img id="profile-img" class="w-8 h-8 rounded-full border-2 border-purple-500 object-cover"
          src=""
          alt="user photo"
          onerror="this.onerror=null;this.src='https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';">
   </button>
-  <!-- Dropdown menu -->
-  <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm" id="user-dropdown">
-    <div class="px-4 py-3">
-      <span id="profile-name" class="block text-sm text-gray-900"></span>
-      <span id="profile-email" class="block text-sm text-gray-500 truncate"></span>
-      <span id="profile-role" class="block text-xs text-purple-600 font-semibold"></span>
+  <!-- Dropdown menu con animación -->
+  <div class="absolute top-full right-0 mt-2 w-48 origin-top-right transition-all duration-200 ease-in-out transform opacity-0 scale-95" id="user-dropdown">
+    <div class="z-50 my-1 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+      <div class="px-4 py-3">
+        <span id="profile-name" class="block text-sm text-gray-900"></span>
+        <span id="profile-email" class="block text-sm text-gray-500 truncate"></span>
+        <span id="profile-role" class="block text-xs text-purple-600 font-semibold"></span>
+      </div>
+      <ul class="py-1" aria-labelledby="user-menu-button">
+        <li>
+          <a href="admin-productos.html" id="admin-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hidden">Panel Admin</a>
+        </li>
+        <li>
+          <button id="logout-btn" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50">Cerrar sesión</button>
+        </li>
+      </ul>
     </div>
-    <ul class="py-2" aria-labelledby="user-menu-button">
-      <li>
-        <a href="admin-productos.html" id="admin-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hidden">Panel Admin</a>
-      </li>
-      <li>
-        <button id="logout-btn" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Cerrar sesión</button>
-      </li>
-    </ul>
   </div>
 </div>
 
@@ -2923,6 +2925,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const userMenuBtn = document.getElementById('user-menu-button');
   const userDropdown = document.getElementById('user-dropdown');
   const adminLink = document.getElementById('admin-link');
+  const loginRegisterLinks = document.getElementById('login-register-links');
+  const adminPanel = document.getElementById('admin-panel');
 
   if (user) {
     // Mostrar datos
@@ -2942,29 +2946,46 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mostrar link admin solo si es admin
     if (user.role === 'admin') {
       adminLink.classList.remove('hidden');
+      adminPanel.classList.remove('hidden');
     }
 
-    // Dropdown toggle
-    userMenuBtn.addEventListener('click', () => {
-      userDropdown.classList.toggle('hidden');
+    // Ocultar login/register links
+    loginRegisterLinks.classList.add('hidden');
+
+    // Dropdown toggle con animación
+    userMenuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isExpanded = userMenuBtn.getAttribute('aria-expanded') === 'true';
+      userMenuBtn.setAttribute('aria-expanded', !isExpanded);
+      
+      if (!isExpanded) {
+        userDropdown.classList.remove('opacity-0', 'scale-95');
+        userDropdown.classList.add('opacity-100', 'scale-100');
+      } else {
+        userDropdown.classList.remove('opacity-100', 'scale-100');
+        userDropdown.classList.add('opacity-0', 'scale-95');
+      }
     });
 
     // Cerrar dropdown al hacer click fuera
     document.addEventListener('click', (e) => {
       if (!userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) {
-        userDropdown.classList.add('hidden');
+        userMenuBtn.setAttribute('aria-expanded', 'false');
+        userDropdown.classList.remove('opacity-100', 'scale-100');
+        userDropdown.classList.add('opacity-0', 'scale-95');
       }
     });
 
     // Logout
     logoutBtn.onclick = () => {
       localStorage.removeItem('user');
-      location.reload();
+      window.location.href = 'index.html'; // Redirige a la página principal
     };
   } else {
-    // Si no hay usuario, oculta el menú
-    document.getElementById('user-profile').style.display = 'none';
-    // Aquí puedes mostrar el login/register si lo deseas
+    // Si no hay usuario, oculta el menú de usuario
+    userMenuBtn.parentElement.style.display = 'none';
+    // Muestra los links de login/register
+    loginRegisterLinks.classList.remove('hidden');
   }
 });
 </script>
