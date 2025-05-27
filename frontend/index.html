@@ -2896,11 +2896,6 @@
         });
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script src="../backend/server.js"></script>
-    <script src="js/main.js"></script>
-
     <script>
 document.addEventListener('DOMContentLoaded', () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -2916,8 +2911,10 @@ document.addEventListener('DOMContentLoaded', () => {
     loginRegisterLinks.classList.add('hidden');
     profileName.textContent = user.name;
 
-    // Mostrar imagen de perfil si existe y es válida
-    if (user.profileImage && user.profileImage.startsWith('/uploads/')) {
+    // Mostrar imagen de perfil de Cloudinary o fallback
+    if (user.profileImage && user.profileImage.startsWith('http')) {
+      profileImg.src = user.profileImage;
+    } else if (user.profileImage && user.profileImage.startsWith('/uploads/')) {
       profileImg.src = 'https://aly-mbelleza-backend.onrender.com' + user.profileImage;
     } else {
       profileImg.src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name);
@@ -2942,6 +2939,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="../backend/server.js"></script>
+    <script src="js/main.js"></script>
+
 
     
 </body>
