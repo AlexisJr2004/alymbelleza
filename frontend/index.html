@@ -1446,23 +1446,6 @@
 
                 <!-- Contenido del formulario -->
                 <form id="testimonialForm" class="p-6 space-y-5">
-                    <!-- Campo Nombre -->
-                    <div class="space-y-2">
-                        <label for="name" class="block text-sm font-medium text-gray-700">Tu nombre</label>
-                        <div class="relative">
-                            <input type="text" id="name" name="name" required
-                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                                placeholder="Ej: María González">
-                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Campo Categoría -->
                     <div class="space-y-2">
                         <label for="role" class="block text-sm font-medium text-gray-700">Tipo de testimonio</label>
@@ -1481,28 +1464,6 @@
                         <textarea id="comment" name="comment" rows="4" required
                             class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                             placeholder="Cuéntanos tu experiencia..."></textarea>
-                    </div>
-
-                    <!-- Campo Imagen -->
-                    <div class="space-y-2">
-                        <label for="avatar" class="block text-sm font-medium text-gray-700">Foto</label>
-                        <div class="relative">
-                            <input type="file" id="avatar" name="avatar" accept="image/*" capture="environment"
-                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                            <div
-                                class="flex items-center justify-between px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl hover:bg-gray-100 transition-colors">
-                                <div class="flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                    <span class="text-sm text-gray-500" id="file-name">Seleccionar imagen</span>
-                                </div>
-                                <span class="text-sm text-purple-600">Subir</span>
-                            </div>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-1">Puedes seleccionar una imagen o tomar una foto</p>
                     </div>
 
                     <!-- Botones -->

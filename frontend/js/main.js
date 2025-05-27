@@ -621,6 +621,7 @@ if (closeModalBtn && testimonialModal) {
 }
 
 if (testimonialForm) {
+  // ...dentro del eventListener del formulario de testimonios:
   testimonialForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     e.stopImmediatePropagation();
@@ -633,16 +634,30 @@ if (testimonialForm) {
       submitBtn.textContent = "Enviando...";
 
       const formData = new FormData(testimonialForm);
+
+      // Tomar datos del usuario logueado
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user) {
+        showNotification(
+          "Debes iniciar sesión para dejar un testimonio.",
+          "error"
+        );
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+        return;
+      }
+
+      formData.append("name", user.name);
+      formData.append("avatar", user.profileImage);
+
       const response = await fetch(
         "https://aly-mbelleza-backend.onrender.com/api/testimonials",
         {
           method: "POST",
           body: formData,
-          // No necesitas headers para FormData, el navegador los establece automáticamente
         }
       );
 
-      // Verificación mejorada de la respuesta
       if (!response.ok) {
         let errorMessage = "Error al enviar testimonio";
         try {
@@ -655,7 +670,6 @@ if (testimonialForm) {
         throw new Error(errorMessage);
       }
 
-      // Intentar parsear como JSON
       const result = await response.json().catch(() => ({}));
 
       testimonialModal.classList.add("hidden");
@@ -663,17 +677,16 @@ if (testimonialForm) {
 
       setTimeout(loadTestimonials, 500);
 
-      // Mostrar notificación de éxito con más detalles
       showNotification(
-        "success",
         "¡Éxito!",
+        "success",
         result.message || "Testimonio agregado correctamente"
       );
     } catch (error) {
       console.error("Error en el envío:", error);
       showNotification(
-        "error",
         "Error",
+        "error",
         typeof error === "object" ? error.message : "Error al enviar testimonio"
       );
     } finally {

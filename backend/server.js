@@ -6,7 +6,7 @@ const path = require("path");
 const nodemailer = require("nodemailer");
 const fs = require("fs");
 const cors = require("cors");
-const authRoutes = require('./gestion-roles-productos/src/routes/authRoutes');
+const authRoutes = require("./gestion-roles-productos/src/routes/authRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -50,7 +50,9 @@ mongoose
   });
 
 mongoose.connection.on("disconnected", () => {
-  console.log("⚠️ MongoDB desconectado. Intentando reconectar en 5 segundos...");
+  console.log(
+    "⚠️ MongoDB desconectado. Intentando reconectar en 5 segundos..."
+  );
   setTimeout(() => mongoose.connect(DB_URI, mongooseOptions), 5000);
 });
 
@@ -63,17 +65,17 @@ if (!fs.existsSync(uploadDir)) {
 function getContentType(filePath) {
   const ext = path.extname(filePath).toLowerCase();
   switch (ext) {
-    case '.jpg':
-    case '.jpeg':
-      return 'image/jpeg';
-    case '.png':
-      return 'image/png';
-    case '.gif':
-      return 'image/gif';
-    case '.webp':
-      return 'image/webp';
+    case ".jpg":
+    case ".jpeg":
+      return "image/jpeg";
+    case ".png":
+      return "image/png";
+    case ".gif":
+      return "image/gif";
+    case ".webp":
+      return "image/webp";
     default:
-      return 'application/octet-stream';
+      return "application/octet-stream";
   }
 }
 
@@ -92,7 +94,7 @@ app.use(
 );
 
 // 5. Rutas de autenticación y API
-app.use('/api/auth', authRoutes);
+app.use("/api/auth", authRoutes);
 
 // 6. Resto de middlewares y rutas (testimonios, email, etc.)
 // Modelo de Testimonio
@@ -141,7 +143,8 @@ const Testimonial = mongoose.model("Testimonial", testimonialSchema);
 // Multer para testimonios (usa el mismo uploadDir y configuración)
 const testimonialStorage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
-  filename: (req, file, cb) => cb(null, `testimonial-${Date.now()}${path.extname(file.originalname)}`)
+  filename: (req, file, cb) =>
+    cb(null, `testimonial-${Date.now()}${path.extname(file.originalname)}`),
 });
 const testimonialUpload = multer({
   storage: testimonialStorage,
@@ -150,32 +153,24 @@ const testimonialUpload = multer({
     const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
     if (allowedTypes.includes(file.mimetype)) cb(null, true);
     else cb(new Error("Tipo de archivo no permitido. Solo imágenes."), false);
-  }
+  },
 });
 
-// Ruta para subir testimonios
-app.post("/api/testimonials", testimonialUpload.single("avatar"), async (req, res) => {
+// Ruta para subir testimonios (ahora acepta avatar como URL)
+app.post("/api/testimonials", async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({
-        success: false,
-        error: "Debe proporcionar una imagen válida",
-      });
-    }
-    const { name, role, comment } = req.body;
-    if (!name || !role || !comment) {
-      fs.unlinkSync(req.file.path);
+    const { name, role, comment, avatar } = req.body;
+    if (!name || !role || !comment || !avatar) {
       return res.status(400).json({
         success: false,
         error: "Todos los campos son requeridos",
       });
     }
-    const avatarUrl = `/uploads/${req.file.filename}`;
     const newTestimonial = new Testimonial({
       name,
       role,
       comment,
-      avatar: avatarUrl,
+      avatar, // Puede ser una URL de Cloudinary o similar
     });
     await newTestimonial.save();
     res.status(201).json({
@@ -184,7 +179,6 @@ app.post("/api/testimonials", testimonialUpload.single("avatar"), async (req, re
       data: newTestimonial,
     });
   } catch (error) {
-    if (req.file?.path) fs.unlinkSync(req.file.path);
     res.status(500).json({
       success: false,
       error: "Error al procesar el testimonio",
