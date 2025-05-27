@@ -18,7 +18,7 @@ exports.register = async (req, res) => {
       email,
       password: hashedPassword,
       profileImage,
-      role: role || 'admin'
+      role: role || 'cliente'
     });
     await user.save();
 

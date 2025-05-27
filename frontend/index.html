@@ -11,56 +11,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
     <link rel="icon" href="/img/mujer-con-pelo-largo.png" type="image/x-icon">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-    <style>
-        /* Animaciones personalizadas */
-        .dropdown-enter {
-            animation: dropdownEnter 0.2s ease-out forwards;
-        }
-        
-        .dropdown-exit {
-            animation: dropdownExit 0.15s ease-in forwards;
-        }
-        
-        @keyframes dropdownEnter {
-            from {
-                opacity: 0;
-                transform: scale(0.95) translateY(-8px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-        
-        @keyframes dropdownExit {
-            from {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-            to {
-                opacity: 0;
-                transform: scale(0.95) translateY(-8px);
-            }
-        }
-        
-        /* Efectos de hover más suaves */
-        .menu-item {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .menu-item:hover {
-            background: linear-gradient(90deg, #f8fafc 0%, #f1f5f9 100%);
-            transform: translateX(2px);
-        }
-        
-        /* Sombras mejoradas */
-        .dropdown-shadow {
-            box-shadow: 
-                0 10px 25px -5px rgba(0, 0, 0, 0.1),
-                0 10px 10px -5px rgba(0, 0, 0, 0.04),
-                0 0 0 1px rgba(0, 0, 0, 0.05);
-        }
-    </style>
 </head>
 </head>
 
@@ -132,78 +82,89 @@
                         </a>
                     </div>
                 </div>
-<!-- Menú de usuario minimalista -->
-<div class="flex items-center relative">
-  <button type="button" 
-          class="flex rounded-full focus:outline-none"
-          id="user-menu-button" 
-          aria-expanded="false">
-    <span class="sr-only">Abrir menú de usuario</span>
-    <img id="profile-img" 
-         class="w-9 h-9 rounded-full border border-gray-200 object-cover"
-         src=""
-         alt="Foto de perfil"
-         onerror="this.onerror=null;this.src='https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';">
-  </button>
-  
-  <!-- Dropdown menu minimalista y ancho -->
-  <div class="absolute top-full right-0 mt-2 w-80 origin-top-right transition-all duration-200 ease-out opacity-0 scale-95 translate-y-1 invisible"
-       id="user-dropdown">
-    <div class="z-50 bg-white rounded-md shadow-lg border border-gray-100">
-      <!-- Sección de perfil amplia -->
-      <div class="px-5 py-4 border-b border-gray-100">
-        <div class="flex items-center space-x-4">
-          <img id="dropdown-profile-img" 
-               class="w-12 h-12 rounded-full border border-gray-200 object-cover"
-               src=""
-               alt="Foto de perfil">
-          <div class="min-w-0">
-            <span id="profile-name" class="block text-base font-medium text-gray-900 truncate max-w-[220px]"></span>
-            <span id="profile-email" class="block text-sm text-gray-500 truncate max-w-[220px]"></span>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Opciones del menú simples -->
-      <ul class="py-1">
-        <li id="admin-link-container" class="hidden">
-          <a href="admin-productos.html" class="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50">
-            Panel Administrador
-          </a>
-        </li>
-        <li>
-          <button id="logout-btn" class="block w-full text-left px-5 py-3 text-sm text-gray-700 hover:bg-gray-50">
-            Cerrar sesión
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-</div>
+                <!-- Menú de usuario minimalista -->
+                <div class="flex items-center relative">
+                    <button type="button" class="flex rounded-full focus:outline-none" id="user-menu-button"
+                        aria-expanded="false">
+                        <span class="sr-only">Abrir menú de usuario</span>
+                        <img id="profile-img" class="w-9 h-9 rounded-full border border-gray-200 object-cover" src=""
+                            alt="Foto de perfil"
+                            onerror="this.onerror=null;this.src='https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';">
+                    </button>
 
-<!-- Botones de login/registro minimalistas -->
-<div id="login-register-links" class="ml-4 hidden">
-  <div class="flex items-center space-x-3">
-    <a href="login.html" class="text-sm text-gray-700 hover:text-gray-900">
-      Iniciar sesión
-    </a>
-    <a href="register.html" class="text-sm text-white bg-gray-800 px-3 py-1.5 rounded hover:bg-gray-700">
-      Registrarse
-    </a>
-  </div>
-</div>
+                    <!-- Dropdown menu minimalista y ancho -->
+                    <div class="absolute top-full right-0 mt-2 w-80 origin-top-right transition-all duration-200 ease-out opacity-0 scale-95 translate-y-1 invisible"
+                        id="user-dropdown">
+                        <div class="z-50 bg-white rounded-md shadow-lg border border-gray-100">
+                            <!-- Sección de perfil amplia -->
+                            <div class="px-5 py-4 border-b border-gray-100">
+                                <div class="flex items-center space-x-4">
+                                    <img id="dropdown-profile-img"
+                                        class="w-12 h-12 rounded-full border border-gray-200 object-cover" src=""
+                                        alt="Foto de perfil">
+                                    <div class="min-w-0">
+                                        <span id="profile-name"
+                                            class="block text-base font-medium text-gray-900 truncate max-w-[220px]"></span>
+                                        <span id="profile-email"
+                                            class="block text-sm text-gray-500 truncate max-w-[220px]"></span>
+                                    </div>
+                                </div>
+                            </div>
 
-<!-- Botones de login/registro mejorados -->
-<div id="login-register-links" class="ml-6 hidden">
-  <div class="flex items-center space-x-4">
-    <a href="login.html" class="px-5 py-2.5 text-sm font-medium text-purple-700 hover:text-purple-900 transition-colors duration-300 hover:bg-purple-50 rounded-lg">
-      Iniciar sesión
-    </a>
-    <a href="register.html" class="px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg shadow hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 transform hover:-translate-y-0.5">
-      Registrarse
-    </a>
-  </div>
-</div>
+                            <!-- Opciones del menú simples -->
+                            <ul class="py-1">
+                                <li id="admin-link-container" class="hidden">
+                                    <a href="admin-productos.html"
+                                        class="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50">
+                                        Panel Administrador
+                                    </a>
+                                </li>
+                                <li>
+                                    <button id="logout-btn"
+                                        class="block w-full text-left px-5 py-3 text-sm text-red-600 hover:text-white hover:bg-red-50 transition-colors duration-200">
+                                        <div class="flex items-center">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                                                </path>
+                                            </svg>
+                                            Cerrar sesión
+                                        </div>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de login/registro mejorados -->
+                <div id="login-register-links" class="ml-6 hidden">
+                    <div class="flex items-center space-x-4">
+                        <a href="login.html"
+                            class="text-sm font-medium text-purple-700 hover:text-purple-900 px-4 py-2 rounded-lg transition-colors duration-200 hover:bg-purple-50 border border-purple-200">
+                            Iniciar sesión
+                        </a>
+                        <a href="register.html"
+                            class="text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-2 rounded-lg shadow-sm hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 transform hover:-translate-y-0.5">
+                            Registrarse
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Botones de login/registro mejorados -->
+                <div id="login-register-links" class="ml-6 hidden">
+                    <div class="flex items-center space-x-4">
+                        <a href="login.html"
+                            class="px-5 py-2.5 text-sm font-medium text-purple-700 hover:text-purple-900 transition-colors duration-300 hover:bg-purple-50 rounded-lg">
+                            Iniciar sesión
+                        </a>
+                        <a href="register.html"
+                            class="px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg shadow hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 transform hover:-translate-y-0.5">
+                            Registrarse
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <!-- Main Navigation -->
@@ -2998,79 +2959,110 @@
         });
     </script>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const user = JSON.parse(localStorage.getItem('user'));
-  const profileImg = document.getElementById('profile-img');
-  const dropdownProfileImg = document.getElementById('dropdown-profile-img');
-  const profileName = document.getElementById('profile-name');
-  const profileEmail = document.getElementById('profile-email');
-  const logoutBtn = document.getElementById('logout-btn');
-  const userMenuBtn = document.getElementById('user-menu-button');
-  const userDropdown = document.getElementById('user-dropdown');
-  const adminLinkContainer = document.getElementById('admin-link-container');
-  const loginRegisterLinks = document.getElementById('login-register-links');
-  
-  // Función para abrir/cerrar el dropdown
-  const toggleDropdown = (open) => {
-    if (open) {
-      userDropdown.classList.remove('opacity-0', 'scale-95', 'translate-y-1', 'invisible');
-      userDropdown.classList.add('opacity-100', 'scale-100', 'translate-y-0', 'visible');
-      userMenuBtn.setAttribute('aria-expanded', 'true');
-    } else {
-      userDropdown.classList.remove('opacity-100', 'scale-100', 'translate-y-0', 'visible');
-      userDropdown.classList.add('opacity-0', 'scale-95', 'translate-y-1', 'invisible');
-      userMenuBtn.setAttribute('aria-expanded', 'false');
-    }
-  };
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const profileImg = document.getElementById('profile-img');
+            const dropdownProfileImg = document.getElementById('dropdown-profile-img');
+            const profileName = document.getElementById('profile-name');
+            const profileEmail = document.getElementById('profile-email');
+            const logoutBtn = document.getElementById('logout-btn');
+            const userMenuBtn = document.getElementById('user-menu-button');
+            const userDropdown = document.getElementById('user-dropdown');
+            const adminLinkContainer = document.getElementById('admin-link-container');
+            const loginRegisterLinks = document.getElementById('login-register-links');
 
-  if (user) {
-    // Mostrar datos del usuario
-    profileName.textContent = user.name || 'Usuario';
-    profileEmail.textContent = user.email || '';
-    
-    // Mostrar opción admin si corresponde
-    if (user.role === 'admin') {
-      adminLinkContainer.classList.remove('hidden');
-    }
+            // Función para abrir/cerrar el dropdown
+            const toggleDropdown = (open) => {
+                if (open) {
+                    userDropdown.classList.remove('opacity-0', 'scale-95', 'translate-y-1', 'invisible');
+                    userDropdown.classList.add('opacity-100', 'scale-100', 'translate-y-0', 'visible');
+                    userMenuBtn.setAttribute('aria-expanded', 'true');
+                } else {
+                    userDropdown.classList.remove('opacity-100', 'scale-100', 'translate-y-0', 'visible');
+                    userDropdown.classList.add('opacity-0', 'scale-95', 'translate-y-1', 'invisible');
+                    userMenuBtn.setAttribute('aria-expanded', 'false');
+                }
+            };
 
-    // Imagen de perfil
-    const profileImageUrl = user.profileImage && user.profileImage.startsWith('http') ? user.profileImage :
-                          user.profileImage && user.profileImage.startsWith('/uploads/') ? 
-                          'https://aly-mbelleza-backend.onrender.com' + user.profileImage :
-                          `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'U')}&background=random&length=1`;
-    
-    profileImg.src = profileImageUrl;
-    dropdownProfileImg.src = profileImageUrl;
+            if (user) {
+                // Mostrar datos del usuario
+                profileName.textContent = user.name || 'Usuario';
+                profileEmail.textContent = user.email || '';
 
-    // Evento para el botón de usuario
-    userMenuBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isExpanded = userMenuBtn.getAttribute('aria-expanded') === 'true';
-      toggleDropdown(!isExpanded);
-    });
+                // Mostrar opción admin si corresponde
+                if (user.role === 'admin') {
+                    adminLinkContainer.classList.remove('hidden');
+                }
 
-    // Cerrar dropdown al hacer click fuera
-    document.addEventListener('click', (e) => {
-      if (!userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) {
-        toggleDropdown(false);
-      }
-    });
+                // Imagen de perfil
+                const profileImageUrl = user.profileImage && user.profileImage.startsWith('http') ? user.profileImage :
+                    user.profileImage && user.profileImage.startsWith('/uploads/') ?
+                        'https://aly-mbelleza-backend.onrender.com' + user.profileImage :
+                        `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'U')}&background=random&length=1`;
 
-    // Logout
-    logoutBtn.addEventListener('click', () => {
-      if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-        localStorage.removeItem('user');
-        window.location.href = 'index.html';
-      }
-    });
-  } else {
-    // Mostrar opciones de login/registro
-    loginRegisterLinks.classList.remove('hidden');
-    userMenuBtn.parentElement.style.display = 'none';
-  }
-});
-</script>
+                profileImg.src = profileImageUrl;
+                dropdownProfileImg.src = profileImageUrl;
+
+                // Evento para el botón de usuario
+                userMenuBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isExpanded = userMenuBtn.getAttribute('aria-expanded') === 'true';
+                    toggleDropdown(!isExpanded);
+                });
+
+                // Cerrar dropdown al hacer click fuera
+                document.addEventListener('click', (e) => {
+                    if (!userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                        toggleDropdown(false);
+                    }
+                });
+
+                // Logout con SweetAlert
+                logoutBtn.addEventListener('click', () => {
+                    Swal.fire({
+                        title: '¿Cerrar sesión?',
+                        text: '¿Estás seguro de que deseas salir de tu cuenta?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#7e22ce', // Color morado
+                        cancelButtonColor: '#6b7280', // Color gris
+                        confirmButtonText: 'Sí, cerrar sesión',
+                        cancelButtonText: 'Cancelar',
+                        backdrop: `
+                    rgba(126,34,206,0.1)
+                    url("https://i.gifer.com/origin/b4/b4d657e7ef262b88eb5f7ac021edda87.gif")
+                    left top
+                    no-repeat
+                `,
+                        customClass: {
+                            popup: 'border border-purple-200 rounded-lg shadow-lg',
+                            confirmButton: 'bg-purple-600 hover:bg-purple-700 focus:ring-4 focus:ring-purple-300',
+                            cancelButton: 'bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:ring-gray-300'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            localStorage.removeItem('user');
+                            Swal.fire({
+                                title: 'Sesión cerrada',
+                                text: 'Has cerrado sesión correctamente',
+                                icon: 'success',
+                                confirmButtonColor: '#7e22ce',
+                                timer: 1500,
+                                timerProgressBar: true
+                            }).then(() => {
+                                window.location.href = 'index.html';
+                            });
+                        }
+                    });
+                });
+            } else {
+                // Mostrar opciones de login/registro
+                loginRegisterLinks.classList.remove('hidden');
+                userMenuBtn.parentElement.style.display = 'none';
+            }
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
@@ -3078,7 +3070,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <script src="js/main.js"></script>
 
 
-    
+
 </body>
 
 </html>
