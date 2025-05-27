@@ -608,9 +608,22 @@ const openModalBtn = document.getElementById("openTestimonialModal");
 const closeModalBtn = document.getElementById("closeTestimonialModal");
 const testimonialForm = document.getElementById("testimonialForm");
 
-if (openModalBtn && testimonialModal) {
+// Reemplazamos este bloque por uno con validación de sesión
+if (openModalBtn) {
   openModalBtn.addEventListener("click", () => {
-    testimonialModal.classList.remove("hidden");
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      Swal.fire({
+        icon: "warning",
+        title: "Inicia sesión",
+        text: "Debes iniciar sesión para dejar un testimonio.",
+        confirmButtonColor: "#7e22ce",
+      });
+      return;
+    }
+    if (testimonialModal) {
+      testimonialModal.classList.remove("hidden");
+    }
   });
 }
 
@@ -621,7 +634,6 @@ if (closeModalBtn && testimonialModal) {
 }
 
 if (testimonialForm) {
-  // ...dentro del eventListener del formulario de testimonios:
   testimonialForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     e.stopImmediatePropagation();
@@ -678,15 +690,15 @@ if (testimonialForm) {
       setTimeout(loadTestimonials, 500);
 
       showNotification(
-        "¡Éxito!",
         "success",
+        "¡Éxito!",
         result.message || "Testimonio agregado correctamente"
       );
     } catch (error) {
       console.error("Error en el envío:", error);
       showNotification(
-        "Error",
         "error",
+        "Error",
         typeof error === "object" ? error.message : "Error al enviar testimonio"
       );
     } finally {
