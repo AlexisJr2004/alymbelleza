@@ -22,6 +22,57 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  // Elementos del menú móvil
+  const mobileProfileImg = document.getElementById("mobile-profile-img");
+  const mobileProfileName = document.getElementById("mobile-profile-name");
+  const mobileProfileEmail = document.getElementById("mobile-profile-email");
+  const mobileProfileRole = document.getElementById("mobile-profile-role");
+  const mobileLogoutBtn = document.getElementById("mobile-logout-btn");
+  const mobileAdminLink = document.getElementById(
+    "mobile-admin-link-container"
+  );
+
+  if (user) {
+    mobileProfileName.textContent = user.name || "Usuario";
+    mobileProfileEmail.textContent = user.email || "";
+    mobileProfileRole.textContent =
+      user.role === "admin" ? "Administrador" : "Cliente";
+
+    // Imagen de perfil
+    if (user.profileImage && user.profileImage.startsWith("http")) {
+      mobileProfileImg.src = user.profileImage;
+    } else if (user.profileImage && user.profileImage.startsWith("/uploads/")) {
+      mobileProfileImg.src =
+        "https://aly-mbelleza-backend.onrender.com" + user.profileImage;
+    } else {
+      mobileProfileImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+        user.name || "U"
+      )}&background=random&length=1`;
+    }
+
+    // Mostrar enlace admin si es admin
+    if (user.role === "admin") {
+      mobileAdminLink.classList.remove("hidden");
+    }
+
+    // Logout
+    mobileLogoutBtn.onclick = () => {
+      localStorage.removeItem("user");
+      window.location.href = "index.html";
+    };
+  } else {
+    // Si no hay usuario, puedes ocultar el bloque o mostrar login/register
+    mobileProfileName.textContent = "";
+    mobileProfileEmail.textContent = "";
+    mobileProfileRole.textContent = "";
+    mobileProfileImg.src = "https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png";
+    mobileLogoutBtn.style.display = "none";
+    mobileAdminLink.classList.add("hidden");
+  }
+});
+
 //Script para el botón de la pantalla completa
 document.addEventListener("DOMContentLoaded", () => {
   const fullscreenToggle = document.getElementById("fullscreen-toggle");
