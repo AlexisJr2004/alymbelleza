@@ -73,6 +73,34 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+// Función para verificar el estado de autenticación
+function checkAuthState() {
+  // Aquí debes implementar tu lógica para verificar si hay un usuario logueado
+  const isLoggedIn = /* tu lógica para verificar sesión */ false;
+
+  if (isLoggedIn) {
+    document
+      .getElementById("mobile-profile-section")
+      .classList.remove("hidden");
+    document
+      .getElementById("mobile-login-register-section")
+      .classList.add("hidden");
+
+    // Aquí llenarías los datos del usuario:
+    // document.getElementById('mobile-profile-name').textContent = user.name;
+    // document.getElementById('mobile-profile-email').textContent = user.email;
+    // etc.
+  } else {
+    document.getElementById("mobile-profile-section").classList.add("hidden");
+    document
+      .getElementById("mobile-login-register-section")
+      .classList.remove("hidden");
+  }
+}
+
+// Llamar a esta función cuando se cargue la página y cuando cambie el estado de autenticación
+document.addEventListener("DOMContentLoaded", checkAuthState);
+
 //Script para el botón de la pantalla completa
 document.addEventListener("DOMContentLoaded", () => {
   const fullscreenToggle = document.getElementById("fullscreen-toggle");
