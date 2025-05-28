@@ -837,58 +837,64 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
 });
 
 function showNotification(type, title, message) {
+  // Eliminar notificaciones anteriores si existen
+  const existingNotifications = document.querySelectorAll('.notification');
+  existingNotifications.forEach(notification => {
+    notification.classList.add('notification-exit');
+    notification.addEventListener('animationend', () => notification.remove());
+  });
+
   // Crear el contenedor de la notificación
   const notification = document.createElement("div");
-  notification.className = `notification ${
+  notification.className = `notification fixed top-4 right-4 z-50 ${
     type === "success"
-      ? "bg-teal-50 border-teal-500"
-      : "bg-red-50 border-red-500"
-  } border-t-2 rounded-lg p-4`;
+      ? "bg-teal-50 border-teal-500 text-teal-800"
+      : "bg-red-50 border-red-500 text-red-800"
+  } border-t-2 rounded-lg p-4 shadow-lg max-w-xs transition-all duration-300 transform translate-x-0`;
   notification.setAttribute("role", "alert");
   notification.setAttribute("tabindex", "-1");
 
-  // Icono
-  const icon = document.createElement("span");
-  icon.className = `inline-flex justify-center items-center size-8 rounded-full border-4 ${
-    type === "success"
-      ? "border-teal-100 bg-teal-200 text-teal-800"
-      : "border-red-100 bg-red-200 text-red-800"
-  }`;
-  icon.innerHTML = `
-    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      ${
+  // Contenido con flex layout
+  notification.innerHTML = `
+    <div class="flex items-start">
+      <span class="inline-flex justify-center items-center size-8 rounded-full border-4 ${
         type === "success"
-          ? '<path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m9 12 2 2 4-4"></path>'
-          : '<path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>'
-      }
-    </svg>
+          ? "border-teal-100 bg-teal-200 text-teal-800"
+          : "border-red-100 bg-red-200 text-red-800"
+      } flex-shrink-0">
+        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          ${
+            type === "success"
+              ? '<path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m9 12 2 2 4-4"></path>'
+              : '<path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>'
+          }
+        </svg>
+      </span>
+      <div class="ms-3">
+        <h3 class="text-sm font-semibold">${title}</h3>
+        <p class="text-sm">${message}</p>
+      </div>
+      <button onclick="this.parentElement.parentElement.remove()" class="ml-4 -my-1 -mr-1 text-gray-500 hover:text-gray-700">
+        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
   `;
-
-  // Contenido
-  const content = document.createElement("div");
-  content.className = "ms-3";
-  content.innerHTML = `
-    <h3 class="text-gray-800 font-semibold">${title}</h3>
-    <p class="text-sm text-gray-700">${message}</p>
-  `;
-
-  // Agregar icono y contenido a la notificación
-  notification.appendChild(icon);
-  notification.appendChild(content);
 
   // Agregar la notificación al cuerpo del documento
   document.body.appendChild(notification);
 
+  // Animación de entrada
+  setTimeout(() => {
+    notification.classList.remove('translate-x-0');
+    notification.classList.add('translate-x-4');
+  }, 10);
+
   // Ocultar y eliminar la notificación después de 5 segundos
   setTimeout(() => {
-    notification.classList.add("hide");
-    notification.addEventListener(
-      "animationend",
-      () => {
-        notification.remove();
-      },
-      { once: true }
-    );
+    notification.classList.add('opacity-0', 'translate-x-0', 'transition-all', 'duration-300');
+    setTimeout(() => notification.remove(), 300);
   }, 5000);
 }
 
