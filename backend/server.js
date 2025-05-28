@@ -217,33 +217,41 @@ const mailConfig = {
   service: "gmail",
   host: "smtp.gmail.com",
   port: 587,
-  secure: false,
+  secure: false, // true para 465, false para otros puertos
+  requireTLS: true, // Añade esta línea
+  secureConnection: false, // Añade esta línea
   auth: {
     user: process.env.EMAIL_USER || "duranalexis879@gmail.com",
     pass: process.env.EMAIL_PASS || "yccz nfxk mtfk mhwc",
   },
   tls: {
-    rejectUnauthorized: false,
+    ciphers: 'SSLv3', // Fuerza un cipher específico
+    rejectUnauthorized: false
   },
-  logger: true, // Habilitar logging
-  debug: true, // Mostrar información de depuración
+  logger: true // Añade logging
 };
+
 const transporter = nodemailer.createTransport(mailConfig);
 
 // Ruta para enviar emails de contacto
 app.post("/api/send-email", express.json(), async (req, res) => {
   try {
     const { name, email, message } = req.body;
+    
     if (!name || !email || !message) {
-      return res.status(400).json({
-        success: false,
-        error: "Todos los campos son requeridos",
-      });
+      return res.status(400).json({ success: false, error: "Todos los campos son requeridos" });
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return res.status(400).json({
-        success: false,
-        error: "El email no es válido",
+
+    // Verifica la conexión primero
+    try {
+      await transporter.verify();
+      console.log('Servidor SMTP listo');
+    } catch (verifyError) {
+      console.error('Error verificando SMTP:', verifyError);
+      return res.status(500).json({ 
+        success: false, 
+        error: "Error de conexión con el servidor de correo",
+        details: verifyError.message 
       });
     }
     const mailOptions = {
@@ -263,16 +271,16 @@ app.post("/api/send-email", express.json(), async (req, res) => {
       `,
     };
     const info = await transporter.sendMail(mailOptions);
-    res.json({
-      success: true,
-      message: "Correo enviado exitosamente",
-      messageId: info.messageId,
-    });
+    console.log('Mensaje enviado:', info.messageId);
+    
+    res.json({ success: true, message: "Correo enviado exitosamente" });
+    
   } catch (error) {
+    console.error('Error completo:', error);
     res.status(500).json({
       success: false,
       error: "Error al enviar el mensaje",
-      details: error.message,
+      details: error.response ? error.response : error.message
     });
   }
 });
