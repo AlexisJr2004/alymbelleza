@@ -225,6 +225,8 @@ const mailConfig = {
   tls: {
     rejectUnauthorized: false,
   },
+  logger: true, // Habilitar logging
+  debug: true, // Mostrar información de depuración
 };
 const transporter = nodemailer.createTransport(mailConfig);
 
