@@ -232,45 +232,70 @@ const transporter = nodemailer.createTransport(mailConfig);
 app.post("/api/send-email", express.json(), async (req, res) => {
   try {
     const { name, email, message } = req.body;
-    if (!name || !email || !message) {
+    
+    // Validación más robusta
+    if (!name?.trim() || !email?.trim() || !message?.trim()) {
       return res.status(400).json({
         success: false,
         error: "Todos los campos son requeridos",
       });
     }
+    
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({
         success: false,
         error: "El email no es válido",
       });
     }
+
+    // Configuración más segura del correo
     const mailOptions = {
-      from: `"${name}" <${mailConfig.auth.user}>`,
+      from: `"Bella Beauty Contacto" <${mailConfig.auth.user}>`,
       to: mailConfig.auth.user,
-      replyTo: email,
-      subject: `Nuevo mensaje de contacto: ${name}`,
-      text: message,
+      replyTo: `${name} <${email}>`,
+      subject: `Nuevo mensaje de contacto de ${name}`,
+      text: `Nombre: ${name}\nEmail: ${email}\n\nMensaje:\n${message}`,
       html: `
-        <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-          <h2 style="color: #4a5568;">Nuevo mensaje de contacto</h2>
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #7e22ce;">Nuevo mensaje de contacto</h2>
           <p><strong>Nombre:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
           <p><strong>Mensaje:</strong></p>
-          <p style="background: #f7fafc; padding: 15px; border-radius: 5px;">${message}</p>
+          <div style="background: #f7f0ff; padding: 15px; border-radius: 8px; border-left: 4px solid #7e22ce;">
+            ${message.replace(/\n/g, '<br>')}
+          </div>
+          <p style="margin-top: 20px; color: #6b7280; font-size: 0.9em;">
+            Este mensaje fue enviado desde el formulario de contacto de Bella Beauty.
+          </p>
         </div>
       `,
     };
+
+    // Verificar la conexión con el servidor SMTP primero
+    await transporter.verify();
+    
+    // Enviar el correo
     const info = await transporter.sendMail(mailOptions);
+    
     res.json({
       success: true,
       message: "Correo enviado exitosamente",
       messageId: info.messageId,
     });
   } catch (error) {
+    console.error("Error al enviar correo:", error);
+    
+    let errorMessage = "Error al enviar el mensaje";
+    if (error.code === "EAUTH") {
+      errorMessage = "Error de autenticación con el servidor de correo";
+    } else if (error.code === "ECONNECTION") {
+      errorMessage = "No se pudo conectar al servidor de correo";
+    }
+    
     res.status(500).json({
       success: false,
-      error: "Error al enviar el mensaje",
-      details: error.message,
+      error: errorMessage,
+      details: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 });

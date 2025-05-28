@@ -2985,6 +2985,50 @@
     </script>
 
     <script>
+document.getElementById('contactForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const form = e.target;
+    const formData = {
+        name: form.name.value,
+        email: form.email.value,
+        message: form.message.value
+    };
+    
+    try {
+        const response = await fetch('https://aly-mbelleza-backend.onrender.com/api/send-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Mensaje enviado',
+                text: 'Tu mensaje ha sido enviado correctamente',
+                confirmButtonColor: '#7e22ce'
+            });
+            form.reset();
+        } else {
+            throw new Error(data.error || 'Error al enviar el mensaje');
+        }
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message,
+            confirmButtonColor: '#7e22ce'
+        });
+    }
+});
+</script>
+
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
             const user = JSON.parse(localStorage.getItem('user'));
             const profileImg = document.getElementById('profile-img');
