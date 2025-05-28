@@ -86,55 +86,58 @@
 
   <script>
     // Mostrar/ocultar contraseña
-    document.getElementById('togglePassword').addEventListener('click', function () {
-      const passwordInput = document.querySelector('input[name="password"]');
-      const icon = this.querySelector('i');
-      if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        icon.classList.replace('fa-eye', 'fa-eye-slash');
-      } else {
-        passwordInput.type = 'password';
-        icon.classList.replace('fa-eye-slash', 'fa-eye');
-      }
-    });
+  document.getElementById('togglePassword').addEventListener('click', function() {
+    const passwordInput = document.querySelector('input[name="password"]');
+    const icon = this.querySelector('i');
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+      passwordInput.type = 'password';
+      icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+  });
 
-    // Adaptación al backend real
-    document.getElementById('loginForm').onsubmit = async function (e) {
-      e.preventDefault();
-      const form = e.target;
-      const data = {
-        email: form.email.value,
-        password: form.password.value
-      };
-
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const originalBtnText = submitBtn.innerHTML;
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Verificando...';
+  // Manejo del formulario de contacto
+  document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault(); // Esto es lo más importante - previene la recarga
+    
+    const form = e.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.innerHTML;
+    
+    try {
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Enviando...';
       submitBtn.disabled = true;
-
-      try {
-        const res = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-
-        const result = await res.json();
-
-        if (res.ok) {
-          localStorage.setItem('user', JSON.stringify(result.user));
-          window.location.href = 'index.html';
-        } else {
-          document.getElementById('loginError').textContent = result.error || 'Error al iniciar sesión';
-        }
-      } catch (err) {
-        document.getElementById('loginError').textContent = 'Error de conexión';
-      } finally {
-        submitBtn.innerHTML = originalBtnText;
-        submitBtn.disabled = false;
+      
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      
+      const result = await response.json();
+      
+      if (response.ok) {
+        alert('Mensaje enviado con éxito');
+        form.reset();
+      } else {
+        alert('Error: ' + (result.error || 'Error al enviar el mensaje'));
       }
-    };
-  </script>
+    } catch (error) {
+      alert('Error de conexión: ' + error.message);
+      console.error('Error:', error);
+    } finally {
+      submitBtn.innerHTML = originalBtnText;
+      submitBtn.disabled = false;
+    }
+  });
+</script>
 </body>
 
 </html>
