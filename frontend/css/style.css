@@ -422,3 +422,37 @@ select {
 .animate-slide-out-bottom {
     animation: slide-out-bottom 0.5s ease-in forwards;
 }
+
+/* Animaciones para el dropdown de notificaciones */
+#notifications-dropdown {
+  transition: all 0.2s ease-out;
+  transform-origin: top right;
+}
+
+/* Estilo para las notificaciones */
+.notification-item {
+  transition: background-color 0.2s;
+}
+
+.notification-item:hover {
+  background-color: #f5f3ff;
+}
+
+/* Scroll personalizado para la lista */
+#notifications-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+#notifications-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+#notifications-list::-webkit-scrollbar-thumb {
+  background: #c4b5fd;
+  border-radius: 10px;
+}
+
+#notifications-list::-webkit-scrollbar-thumb:hover {
+  background: #a78bfa;
+}

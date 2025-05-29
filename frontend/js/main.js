@@ -1019,3 +1019,97 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("file-name").textContent = fileName;
   });
 });
+
+// Función para manejar las notificaciones de citas
+document.addEventListener('DOMContentLoaded', () => {
+  const notificationsBtn = document.getElementById('notifications-btn');
+  const notificationsDropdown = document.getElementById('notifications-dropdown');
+  const notificationsList = document.getElementById('notifications-list');
+  const notificationCount = document.getElementById('notification-count');
+  
+  if (!notificationsBtn) return;
+  
+  // Función para cargar las citas desde localStorage
+  function loadAppointments() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) return;
+    
+    const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+    const upcomingAppointments = appointments.filter(appt => {
+      return new Date(appt.date + 'T' + appt.time) > new Date();
+    });
+    
+    // Actualizar contador
+    if (upcomingAppointments.length > 0) {
+      notificationCount.textContent = upcomingAppointments.length;
+      notificationCount.classList.remove('hidden');
+    } else {
+      notificationCount.classList.add('hidden');
+    }
+    
+    // Actualizar lista
+    if (upcomingAppointments.length > 0) {
+      notificationsList.innerHTML = upcomingAppointments.map(appt => `
+        <div class="border-b border-gray-100 last:border-0">
+          <div class="px-4 py-3 hover:bg-purple-50 transition-colors">
+            <div class="flex items-start">
+              <div class="flex-shrink-0 bg-purple-100 rounded-full p-2 mr-3">
+                <i class="fas fa-calendar-alt text-purple-600"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-900 truncate">Cita agendada</p>
+                <p class="text-xs text-gray-500 mt-1">
+                  <i class="far fa-clock mr-1"></i> ${formatDate(appt.date)} a las ${appt.time}
+                </p>
+                <p class="text-xs text-gray-500 mt-1">
+                  <i class="fas fa-spa mr-1"></i> ${appt.service || 'Servicio no especificado'}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    } else {
+      notificationsList.innerHTML = `
+        <div class="px-4 py-4 text-center text-gray-500">
+          <i class="fas fa-calendar-check text-3xl mb-2 text-purple-300"></i>
+          <p>No tienes citas agendadas</p>
+        </div>
+      `;
+    }
+  }
+  
+  // Formatear fecha
+  function formatDate(dateString) {
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('es-ES', options);
+  }
+  
+  // Toggle dropdown
+  notificationsBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isExpanded = notificationsDropdown.classList.contains('opacity-100');
+    
+    if (isExpanded) {
+      notificationsDropdown.classList.remove('opacity-100', 'scale-100');
+      notificationsDropdown.classList.add('opacity-0', 'scale-95');
+      setTimeout(() => notificationsDropdown.classList.add('hidden'), 200);
+    } else {
+      loadAppointments();
+      notificationsDropdown.classList.remove('hidden', 'opacity-0', 'scale-95');
+      notificationsDropdown.classList.add('opacity-100', 'scale-100');
+    }
+  });
+  
+  // Cerrar al hacer click fuera
+  document.addEventListener('click', (e) => {
+    if (!notificationsBtn.contains(e.target) && !notificationsDropdown.contains(e.target)) {
+      notificationsDropdown.classList.remove('opacity-100', 'scale-100');
+      notificationsDropdown.classList.add('opacity-0', 'scale-95');
+      setTimeout(() => notificationsDropdown.classList.add('hidden'), 200);
+    }
+  });
+  
+  // Cargar citas al inicio
+  loadAppointments();
+});
