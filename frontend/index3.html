@@ -607,47 +607,27 @@
         }
 
         function handleDateClick(date) {
-  // Formatear fecha para mostrar
-  const formattedDate = date.toLocaleDateString('es-ES', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  });
+            // Resaltar día seleccionado
+            const allCells = document.querySelectorAll('#calendar > div');
+            allCells.forEach(cell => {
+                cell.classList.remove('bg-blue-600', 'text-white');
+                if (cell.textContent && isToday(new Date(currentDate.getFullYear(), currentDate.getMonth(), parseInt(cell.textContent)))) {
+                    cell.classList.add('bg-blue-100');
+                }
+            });
 
-  // Guardar la cita en localStorage
-  const user = JSON.parse(localStorage.getItem('user'));
-  if (user) {
-    const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
-    
-    // Crear objeto de cita
-    const newAppointment = {
-      id: Date.now(),
-      date: date.toISOString().split('T')[0], // Formato YYYY-MM-DD
-      time: '09:00', // Hora por defecto (puedes modificarlo)
-      service: 'Servicio de belleza', // Puedes personalizar esto
-      createdAt: new Date().toISOString()
-    };
-    
-    appointments.push(newAppointment);
-    localStorage.setItem('appointments', JSON.stringify(appointments));
-    
-    // Mostrar confirmación
-    Swal.fire({
-      icon: 'success',
-      title: '¡Cita agendada!',
-      html: `Has agendado una cita para el <strong>${formattedDate}</strong>.<br><br>
-             Recibirás un recordatorio cuando se acerque la fecha.`,
-      confirmButtonColor: '#7e22ce',
-    });
-  } else {
-    // Si no hay usuario logueado, solo enviar el WhatsApp
-    const message = `Hola Merly 👋, quiero agendar una cita para el ${formattedDate}, me confirmas si estarás disponible, gracias amiga ❤️, espero tu respuesta.`;
-    const phoneNumber = '593981229675';
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
-  }
-}
+            const formattedDate = date.toLocaleDateString('es-ES', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+
+            const message = `Hola Merly 👋, quiero agendar una cita para el ${formattedDate}, me confirmas si estarás disponible, gracias amiga ❤️, espero tu respuesta.`;
+            const phoneNumber = '593981229675';
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
 
         prevMonth.addEventListener('click', () => {
             currentDate.setMonth(currentDate.getMonth() - 1);
