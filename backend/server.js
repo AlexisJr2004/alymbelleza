@@ -7,7 +7,6 @@ const nodemailer = require("nodemailer");
 const fs = require("fs");
 const cors = require("cors");
 const authRoutes = require("./gestion-roles-productos/src/routes/authRoutes");
-const jwt = require("jsonwebtoken");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -332,63 +331,6 @@ app.post("/api/send-email", express.json(), async (req, res) => {
       details:
         process.env.NODE_ENV === "development" ? error.message : undefined,
     });
-  }
-});
-
-// === MODELO DE CITAS ===
-const appointmentSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true },
-  userName: { type: String, required: true },
-  date: { type: String, required: true }, // YYYY-MM-DD
-  time: { type: String, required: true }, // HH:mm
-  service: { type: String, required: true },
-  notes: { type: String, default: "" },
-  createdAt: { type: Date, default: Date.now },
-});
-const Appointment = mongoose.model("Appointment", appointmentSchema);
-
-// === MIDDLEWARE DE AUTENTICACIÓN SIMPLE JWT ===
-function verifyToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-  if (!token) return res.status(401).json({ success: false, error: "Token requerido" });
-
-  jwt.verify(token, process.env.JWT_SECRET || "supersecret", (err, user) => {
-    if (err) return res.status(403).json({ success: false, error: "Token inválido" });
-    req.user = user;
-    next();
-  });
-}
-
-// === ENDPOINT: Crear nueva cita ===
-app.post("/api/appointments", verifyToken, async (req, res) => {
-  try {
-    const { date, time, service, notes } = req.body;
-    if (!date || !time || !service) {
-      return res.status(400).json({ success: false, error: "Faltan datos obligatorios" });
-    }
-    const newAppointment = new Appointment({
-      userId: req.user.id,
-      userName: req.user.name,
-      date,
-      time,
-      service,
-      notes,
-    });
-    await newAppointment.save();
-    res.status(201).json({ success: true, data: newAppointment });
-  } catch (error) {
-    res.status(500).json({ success: false, error: "Error al registrar cita" });
-  }
-});
-
-// === ENDPOINT: Obtener citas del usuario autenticado ===
-app.get("/api/appointments/me", verifyToken, async (req, res) => {
-  try {
-    const appointments = await Appointment.find({ userId: req.user.id }).sort({ date: 1, time: 1 });
-    res.json({ success: true, data: appointments });
-  } catch (error) {
-    res.status(500).json({ success: false, error: "Error al obtener citas" });
   }
 });
 
