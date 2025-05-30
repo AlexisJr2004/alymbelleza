@@ -605,7 +605,7 @@
         <div id="productos" class="container px-5 py-20 mx-auto">
             <div class="flex flex-col items-center justify-center text-center mb-12 animate-fade-in-right">
                 <div class="mb-6 flex items-center space-x-4">
-                    <span class="bg-gray-50 text-gray-900 px-4 py-2 rounded-full text-sm font-medium">
+                    <span class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium border border-purple-200 shadow-sm hover:shadow-md transition-shadow">
                         Productos Destacados
                     </span>
                 </div>
@@ -636,22 +636,7 @@
                                 </span>
                             </div>
                         </div>
-<div id="admin-panel" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-    <div class="bg-white rounded-lg p-6 w-full max-w-md">
-        <h3 class="text-xl font-bold mb-4">Agregar Nuevo Producto</h3>
-        <form id="product-form">
-            <div class="mb-4">
-                <label class="block text-gray-700 mb-2">Nombre</label>
-                <input type="text" name="name" class="w-full p-2 border rounded" required>
-            </div>
-            <!-- Más campos del formulario -->
-            <div class="flex justify-end gap-2">
-                <button type="button" onclick="closeAdminPanel()" class="px-4 py-2 bg-gray-300 rounded">Cancelar</button>
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Guardar</button>
-            </div>
-        </form>
-    </div>
-</div>
+
                         <!-- Contenido de la tarjeta -->
                         <div class="p-6">
                             <!-- Encabezado con título y botón de favorito -->
@@ -1167,85 +1152,121 @@
     </section>
 
     <!-- Questions Section -->
-    <section
-        class="container mx-auto px-6 py-24 relative overflow-hidden before:absolute before:top-0 before:start-1/2 before:bg-no-repeat before:bg-top before:bg-cover before:size-full before:-z-[1] before:transform before:-translate-x-1/2">
+    <section class="container mx-auto px-6 py-24 relative overflow-hidden before:absolute before:top-0 before:start-1/2 before:bg-no-repeat before:bg-top before:bg-cover before:size-full before:-z-[1] before:transform before:-translate-x-1/2">
         <!-- Encabezado centrado -->
         <div class="text-center mb-6 lg:mb-16">
             <div class="mb-6 flex justify-center items-center space-x-4">
-                <span class="bg-gray-50 text-gray-900 px-4 py-2 rounded-full text-sm font-medium">
+                <span class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium border border-purple-200 shadow-sm hover:shadow-md transition-shadow">
                     Preguntas frecuentes
                 </span>
             </div>
             <h2 class="font-display text-4xl md:text-5xl mb-6 leading-tight text-gray-900">
-                Buscando ¿Respuestas? ✨
+                ¿Cómo podemos ayudarte? ✨
             </h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                Resuelve tus dudas sobre nuestros servicios, productos y políticas. Si no encuentras tu respuesta, ¡contáctanos directamente!
+            </p>
         </div>
         <div class="mx-auto max-w-7xl">
-            <div
-                class="flex flex-col justify-center items-center gap-x-16 gap-y-5 xl:gap-28 lg:flex-row lg:justify-between">
+            <div class="flex flex-col justify-center items-center gap-x-16 gap-y-5 xl:gap-28 lg:flex-row lg:justify-between">
                 <!-- Columna de Imagen -->
-                <div
-                    class="w-full lg:w-1/2 group relative overflow-hidden rounded-3xl shadow-lg perspective-1000 animate-fade-in-right">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-r from-gray-500/30 to-gray-500/30 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500 z-10">
-                    </div>
+                <div class="w-full lg:w-1/2 group relative overflow-hidden rounded-3xl shadow-lg perspective-1000 animate-fade-in-right">
+                    <div class="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-pink-500/30 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500 z-10"></div>
                     <div class="relative transform-gpu transition-all duration-500 group-hover:scale-105 z-20">
-                        <img src="https://pagedone.io/asset/uploads/1696230182.png" alt="FAQ section"
-                            class="w-full rounded-3xl object-cover">
-                        <div
-                            class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/40 to-transparent h-1/3 rounded-b-3xl">
-                        </div>
+                        <img src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                            alt="Cliente recibiendo tratamiento facial" 
+                            class="w-full h-full object-cover rounded-3xl">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-purple-900/70 to-transparent h-1/3 rounded-b-3xl"></div>
                     </div>
                 </div>
+                
                 <!-- Columna de FAQ -->
                 <div class="w-full lg:w-1/2 animate-fade-in-right" style="animation-delay: 200ms;">
                     <div class="lg:max-w-xl">
                         <!-- Acordeón -->
                         <div class="space-y-4">
                             <!-- Pregunta 1 -->
-                            <div
-                                class="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-md transition-all duration-300 hover:shadow-lg">
-                                <button class="accordion-toggle flex w-full items-center justify-between"
-                                    data-index="0">
-                                    <h5
-                                        class="text-xl font-medium text-gray-900 group-hover:text-indigo-600 transition-colors">
-                                        How to create an account?</h5>
-                                    <svg class="w-6 h-6 text-gray-900 group-hover:text-indigo-600 transition-all duration-300 transform"
+                            <div class="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-md transition-all duration-300 hover:shadow-lg hover:border-purple-100 border border-transparent">
+                                <button class="accordion-toggle flex w-full items-center justify-between" data-index="0">
+                                    <h5 class="text-xl font-medium text-gray-900 group-hover:text-purple-600 transition-colors">
+                                        ¿Cómo puedo reservar una cita?
+                                    </h5>
+                                    <svg class="w-6 h-6 text-gray-500 group-hover:text-purple-600 transition-all duration-300 transform" 
                                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </button>
-                                <div
-                                    class="accordion-content mt-4 text-gray-600 overflow-hidden max-h-0 transition-max-height duration-500">
-                                    To create an account, find the 'Sign up' or 'Create account' button, fill out the
-                                    registration form with your personal information, and click 'Create account' or
-                                    'Sign up.' Verify your email address if needed, and then log in to start using the
-                                    platform.
+                                <div class="accordion-content mt-4 text-gray-600 overflow-hidden max-h-0 transition-max-height duration-500">
+                                    Puedes reservar una cita de tres formas:<br>
+                                    1. Directamente en nuestro sitio web con el botón "Reserva Online"<br>
+                                    2. Llamando a nuestro número +1 234 567 890<br>
+                                    3. Visitándonos en nuestro local en Av. Principal 123<br><br>
+                                    Las reservas online requieren un anticipo del 20% para confirmar.
                                 </div>
                             </div>
+                            
                             <!-- Pregunta 2 -->
-                            <div
-                                class="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-md transition-all duration-300 hover:shadow-lg">
-                                <button class="accordion-toggle flex w-full items-center justify-between"
-                                    data-index="1">
-                                    <h5
-                                        class="text-xl font-medium text-gray-900 group-hover:text-indigo-600 transition-colors">
-                                        Have any trust issue?</h5>
-                                    <svg class="w-6 h-6 text-gray-900 group-hover:text-indigo-600 transition-all duration-300 transform"
+                            <div class="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-md transition-all duration-300 hover:shadow-lg hover:border-purple-100 border border-transparent">
+                                <button class="accordion-toggle flex w-full items-center justify-between" data-index="1">
+                                    <h5 class="text-xl font-medium text-gray-900 group-hover:text-purple-600 transition-colors">
+                                        ¿Qué métodos de pago aceptan?
+                                    </h5>
+                                    <svg class="w-6 h-6 text-gray-500 group-hover:text-purple-600 transition-all duration-300 transform" 
                                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </button>
-                                <div
-                                    class="accordion-content mt-4 text-gray-600 overflow-hidden max-h-0 transition-max-height duration-500">
-                                    Our focus on providing robust and user-friendly content management capabilities
-                                    ensures that you can manage your content with confidence, and achieve your content
-                                    marketing goals with ease.
+                                <div class="accordion-content mt-4 text-gray-600 overflow-hidden max-h-0 transition-max-height duration-500">
+                                    Aceptamos todos los métodos de pago para tu comodidad:<br>
+                                    - Efectivo<br>
+                                    - Tarjetas de crédito/débito (Visa, MasterCard, American Express)<br>
+                                    - Transferencias bancarias<br>
+                                    - PayPal<br>
+                                    - Mercado Pago<br><br>
+                                    ¡También tenemos planes de pago para tratamientos especiales!
                                 </div>
                             </div>
-                            <!-- Más preguntas... -->
+                            
+                            <!-- Pregunta 3 -->
+                            <div class="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-md transition-all duration-300 hover:shadow-lg hover:border-purple-100 border border-transparent">
+                                <button class="accordion-toggle flex w-full items-center justify-between" data-index="2">
+                                    <h5 class="text-xl font-medium text-gray-900 group-hover:text-purple-600 transition-colors">
+                                        ¿Tienen productos para todo tipo de piel/cabello?
+                                    </h5>
+                                    <svg class="w-6 h-6 text-gray-500 group-hover:text-purple-600 transition-all duration-300 transform" 
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                <div class="accordion-content mt-4 text-gray-600 overflow-hidden max-h-0 transition-max-height duration-500">
+                                    Sí, en Bella Beauty seleccionamos cuidadosamente productos para todo tipo de necesidades:<br><br>
+                                    - Líneas para pieles sensibles, grasas, mixtas y secas<br>
+                                    - Productos para cabello rizado, liso, teñido o con tratamientos químicos<br>
+                                    - Opciones veganas y cruelty-free<br>
+                                    - Productos orgánicos y naturales<br><br>
+                                    Nuestros especialistas pueden recomendarte los mejores productos según tus características.
+                                </div>
+                            </div>
+                            
+                            <!-- Pregunta 4 -->
+                            <div class="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-md transition-all duration-300 hover:shadow-lg hover:border-purple-100 border border-transparent">
+                                <button class="accordion-toggle flex w-full items-center justify-between" data-index="3">
+                                    <h5 class="text-xl font-medium text-gray-900 group-hover:text-purple-600 transition-colors">
+                                        ¿Cuál es su política de cancelación?
+                                    </h5>
+                                    <svg class="w-6 h-6 text-gray-500 group-hover:text-purple-600 transition-all duration-300 transform" 
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                <div class="accordion-content mt-4 text-gray-600 overflow-hidden max-h-0 transition-max-height duration-500">
+                                    Entendemos que pueden surgir imprevistos. Nuestra política es:<br><br>
+                                    ✅ Cancelación con más de 24 horas: Reembolso completo del anticipo<br>
+                                    ⏱️ Entre 6-24 horas antes: Conservamos el anticipo pero puedes reagendar<br>
+                                    ❌ Menos de 6 horas o no presentación: Perdida del anticipo<br><br>
+                                    Para emergencias, contáctenos directamente y haremos excepciones cuando sea posible.
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1295,147 +1316,165 @@
         </div>
     </section>
 
-    <!-- Features Section -->
+    <!-- Nuestros Servicios Premium -->
     <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
         <div class="relative p-6 md:p-16">
             <!-- Grid -->
             <div class="relative z-10 lg:grid lg:grid-cols-12 lg:gap-16 lg:items-center">
                 <div class="mb-10 lg:mb-0 lg:col-span-6 lg:col-start-8 lg:order-2">
                     <h2 class="text-2xl text-gray-800 font-bold sm:text-3xl">
-                        Fully customizable rules to match your unique needs
+                        Nuestros Servicios Premium
                     </h2>
+                    <p class="text-gray-600 mt-3">
+                        Descubre la excelencia en cada detalle de nuestros tratamientos de belleza
+                    </p>
 
-                    <!-- Tab Navs -->
+                    <!-- Pestañas de Servicios -->
                     <nav class="grid gap-4 mt-5 md:mt-10" aria-label="Tabs" role="tablist" aria-orientation="vertical">
+                        <!-- Pestaña 1 - Tratamientos Faciales -->
                         <button type="button"
-                            class="hs-tab-active:bg-white hs-tab-active:shadow-md hs-tab-active:hover:border-transparent text-start hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 p-4 md:p-5 rounded-xl active"
+                            class="hs-tab-active:bg-white hs-tab-active:shadow-md hs-tab-active:hover:border-transparent text-start hover:bg-purple-50 focus:outline-hidden focus:bg-purple-50 p-4 md:p-5 rounded-xl active border border-transparent hover:border-purple-100 transition-all"
                             id="tabs-with-card-item-1" aria-selected="true" data-hs-tab="#tabs-with-card-1"
                             aria-controls="tabs-with-card-1" role="tab">
                             <span class="flex gap-x-6">
-                                <svg class="shrink-0 mt-2 size-6 md:size-7 hs-tab-active:text-blue-600 text-gray-800"
+                                <svg class="shrink-0 mt-2 size-6 md:size-7 hs-tab-active:text-purple-600 text-gray-800"
                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
-                                    <path d="M5 5.5A3.5 3.5 0 0 1 8.5 2H12v7H8.5A3.5 3.5 0 0 1 5 5.5z" />
-                                    <path d="M12 2h3.5a3.5 3.5 0 1 1 0 7H12V2z" />
-                                    <path d="M12 12.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 1 1-7 0z" />
-                                    <path d="M5 19.5A3.5 3.5 0 0 1 8.5 16H12v3.5a3.5 3.5 0 1 1-7 0z" />
-                                    <path d="M5 12.5A3.5 3.5 0 0 1 8.5 9H12v7H8.5A3.5 3.5 0 0 1 5 12.5z" />
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
                                 </svg>
                                 <span class="grow">
-                                    <span
-                                        class="block text-lg font-semibold hs-tab-active:text-blue-600 text-gray-800">Advanced
-                                        tools</span>
-                                    <span class="block mt-1 text-gray-800">Use Preline thoroughly thought and automated
-                                        libraries to manage your businesses.</span>
+                                    <span class="block text-lg font-semibold hs-tab-active:text-purple-600 text-gray-800">
+                                        Tratamientos Faciales
+                                    </span>
+                                    <span class="block mt-1 text-gray-800">
+                                        Rejuvenecimiento y cuidado especializado para todo tipo de piel
+                                    </span>
                                 </span>
                             </span>
                         </button>
 
+                        <!-- Pestaña 2 - Manicure & Pedicure -->
                         <button type="button"
-                            class="hs-tab-active:bg-white hs-tab-active:shadow-md hs-tab-active:hover:border-transparent text-start hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 p-4 md:p-5 rounded-xl"
+                            class="hs-tab-active:bg-white hs-tab-active:shadow-md hs-tab-active:hover:border-transparent text-start hover:bg-purple-50 focus:outline-hidden focus:bg-purple-50 p-4 md:p-5 rounded-xl border border-transparent hover:border-purple-100 transition-all"
                             id="tabs-with-card-item-2" aria-selected="false" data-hs-tab="#tabs-with-card-2"
                             aria-controls="tabs-with-card-2" role="tab">
                             <span class="flex gap-x-6">
-                                <svg class="shrink-0 mt-2 size-6 md:size-7 hs-tab-active:text-blue-600 text-gray-800"
+                                <svg class="shrink-0 mt-2 size-6 md:size-7 hs-tab-active:text-purple-600 text-gray-800"
                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
-                                    <path d="m12 14 4-4" />
-                                    <path d="M3.34 19a10 10 0 1 1 17.32 0" />
+                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
                                 </svg>
                                 <span class="grow">
-                                    <span
-                                        class="block text-lg font-semibold hs-tab-active:text-blue-600 text-gray-800">Smart
-                                        dashboards</span>
-                                    <span class="block mt-1 text-gray-800">Quickly Preline sample components, copy-paste
-                                        codes, and start right off.</span>
+                                    <span class="block text-lg font-semibold hs-tab-active:text-purple-600 text-gray-800">
+                                        Manicure & Pedicure
+                                    </span>
+                                    <span class="block mt-1 text-gray-800">
+                                        Técnicas profesionales para manos y pies impecables
+                                    </span>
                                 </span>
                             </span>
                         </button>
 
+                        <!-- Pestaña 3 - Masajes -->
                         <button type="button"
-                            class="hs-tab-active:bg-white hs-tab-active:shadow-md hs-tab-active:hover:border-transparent text-start hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 p-4 md:p-5 rounded-xl"
+                            class="hs-tab-active:bg-white hs-tab-active:shadow-md hs-tab-active:hover:border-transparent text-start hover:bg-purple-50 focus:outline-hidden focus:bg-purple-50 p-4 md:p-5 rounded-xl border border-transparent hover:border-purple-100 transition-all"
                             id="tabs-with-card-item-3" aria-selected="false" data-hs-tab="#tabs-with-card-3"
                             aria-controls="tabs-with-card-3" role="tab">
                             <span class="flex gap-x-6">
-                                <svg class="shrink-0 mt-2 size-6 md:size-7 hs-tab-active:text-blue-600 text-gray-800"
+                                <svg class="shrink-0 mt-2 size-6 md:size-7 hs-tab-active:text-purple-600 text-gray-800"
                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
-                                    <path
-                                        d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
-                                    <path d="M5 3v4" />
-                                    <path d="M19 17v4" />
-                                    <path d="M3 5h4" />
-                                    <path d="M17 19h4" />
+                                    <path d="M4 12a8 8 0 0 1 16 0z"></path>
+                                    <path d="M12 4v16"></path>
                                 </svg>
                                 <span class="grow">
-                                    <span
-                                        class="block text-lg font-semibold hs-tab-active:text-blue-600 text-gray-800">Powerful
-                                        features</span>
-                                    <span class="block mt-1 text-gray-800">Reduce time and effort on building modern
-                                        look design with Preline only.</span>
+                                    <span class="block text-lg font-semibold hs-tab-active:text-purple-600 text-gray-800">
+                                        Terapia de Masajes
+                                    </span>
+                                    <span class="block mt-1 text-gray-800">
+                                        Relajación profunda y tratamiento para tensiones musculares
+                                    </span>
                                 </span>
                             </span>
                         </button>
                     </nav>
-                    <!-- End Tab Navs -->
+                    <!-- Fin Pestañas -->
                 </div>
                 <!-- End Col -->
 
                 <div class="lg:col-span-6">
                     <div class="relative">
-                        <!-- Tab Content -->
+                        <!-- Contenido de Pestañas -->
                         <div>
+                            <!-- Tratamientos Faciales -->
                             <div id="tabs-with-card-1" role="tabpanel" aria-labelledby="tabs-with-card-item-1">
-                                <img class="shadow-xl shadow-gray-200 rounded-xl"
-                                    src="https://images.unsplash.com/photo-1605629921711-2f6b00c6bbf4?ixlib=rb-4.0.3&auto=format&fit=crop&w=560&h=720&q=80"
-                                    alt="Features Image">
+                                <div class="relative overflow-hidden rounded-xl shadow-xl">
+                                    <img class="w-full h-auto object-cover"
+                                        src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                        alt="Tratamiento facial profesional">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-purple-900/40 to-transparent"></div>
+                                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                        <h3 class="text-xl font-bold">Faciales Personalizados</h3>
+                                        <p class="text-sm opacity-90">Desde limpieza profunda hasta tratamientos anti-age</p>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div id="tabs-with-card-2" class="hidden" role="tabpanel"
-                                aria-labelledby="tabs-with-card-item-2">
-                                <img class="shadow-xl shadow-gray-200 rounded-xl"
-                                    src="https://images.unsplash.com/photo-1665686306574-1ace09918530?ixlib=rb-4.0.3&auto=format&fit=crop&w=560&h=720&q=80"
-                                    alt="Features Image">
+                            <!-- Manicure & Pedicure -->
+                            <div id="tabs-with-card-2" class="hidden" role="tabpanel" aria-labelledby="tabs-with-card-item-2">
+                                <div class="relative overflow-hidden rounded-xl shadow-xl">
+                                    <img class="w-full h-auto object-cover"
+                                        src="https://images.unsplash.com/photo-1596704017254-975dad9a1e1b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                        alt="Manicure profesional">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-purple-900/40 to-transparent"></div>
+                                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                        <h3 class="text-xl font-bold">Cuidado Integral</h3>
+                                        <p class="text-sm opacity-90">Técnicas de esculpido, gel y acrílico</p>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div id="tabs-with-card-3" class="hidden" role="tabpanel"
-                                aria-labelledby="tabs-with-card-item-3">
-                                <img class="shadow-xl shadow-gray-200 rounded-xl"
-                                    src="https://images.unsplash.com/photo-1598929213452-52d72f63e307?ixlib=rb-4.0.3&auto=format&fit=crop&w=560&h=720&q=80"
-                                    alt="Features Image">
+                            <!-- Masajes -->
+                            <div id="tabs-with-card-3" class="hidden" role="tabpanel" aria-labelledby="tabs-with-card-item-3">
+                                <div class="relative overflow-hidden rounded-xl shadow-xl">
+                                    <img class="w-full h-auto object-cover"
+                                        src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                        alt="Masaje relajante">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-purple-900/40 to-transparent"></div>
+                                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                        <h3 class="text-xl font-bold">Masajes Especializados</h3>
+                                        <p class="text-sm opacity-90">Descontracturantes, relajantes y con piedras calientes</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <!-- End Tab Content -->
+                        <!-- Fin Contenido -->
 
-                        <!-- SVG Element -->
-                        <div class="hidden absolute top-0 end-0 translate-x-20 md:block lg:translate-x-20">
-                            <svg class="w-16 h-auto text-orange-500" width="121" height="135" viewBox="0 0 121 135"
-                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5 16.4754C11.7688 27.4499 21.2452 57.3224 5 89.0164" stroke="currentColor"
-                                    stroke-width="10" stroke-linecap="round" />
-                                <path d="M33.6761 112.104C44.6984 98.1239 74.2618 57.6776 83.4821 5"
-                                    stroke="currentColor" stroke-width="10" stroke-linecap="round" />
-                                <path d="M50.5525 130C68.2064 127.495 110.731 117.541 116 78.0874" stroke="currentColor"
-                                    stroke-width="10" stroke-linecap="round" />
-                            </svg>
+                        <!-- Elemento Decorativo -->
+                        <div class="hidden absolute -bottom-8 -left-8 md:block">
+                            <div class="relative bg-gradient-to-r from-purple-600 to-pink-600 p-3 rounded-xl shadow-lg">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            </div>
                         </div>
-                        <!-- End SVG Element -->
                     </div>
                 </div>
                 <!-- End Col -->
             </div>
             <!-- End Grid -->
 
-            <!-- Background Color -->
+            <!-- Fondo Degradado -->
             <div class="absolute inset-0 grid grid-cols-12 size-full">
-                <div
-                    class="col-span-full lg:col-span-7 lg:col-start-6 bg-gray-100 w-full h-5/6 rounded-xl sm:h-3/4 lg:h-full">
-                </div>
+                <div class="col-span-full lg:col-span-7 lg:col-start-6 bg-gradient-to-b from-purple-50 to-white w-full h-5/6 rounded-xl sm:h-3/4 lg:h-full"></div>
             </div>
-            <!-- End Background Color -->
         </div>
     </div>
 
