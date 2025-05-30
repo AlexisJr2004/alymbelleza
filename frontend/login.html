@@ -143,6 +143,20 @@
         submitBtn.disabled = false;
       }
     };
+
+    // js/auth.js (o donde manejes la autenticación)
+function checkUserRole() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user.role === 'admin') {
+        document.getElementById('admin-panel').style.display = 'block';
+        document.getElementById('add-product-btn').style.display = 'block';
+    } else {
+        document.getElementById('admin-panel').style.display = 'none';
+        document.getElementById('add-product-btn').style.display = 'none';
+    }
+}
+
+// Llamar esta función después del login
   </script>
 </body>
 

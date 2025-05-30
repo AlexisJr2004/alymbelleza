@@ -636,7 +636,22 @@
                                 </span>
                             </div>
                         </div>
-
+<div id="admin-panel" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md">
+        <h3 class="text-xl font-bold mb-4">Agregar Nuevo Producto</h3>
+        <form id="product-form">
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2">Nombre</label>
+                <input type="text" name="name" class="w-full p-2 border rounded" required>
+            </div>
+            <!-- Más campos del formulario -->
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="closeAdminPanel()" class="px-4 py-2 bg-gray-300 rounded">Cancelar</button>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
                         <!-- Contenido de la tarjeta -->
                         <div class="p-6">
                             <!-- Encabezado con título y botón de favorito -->
