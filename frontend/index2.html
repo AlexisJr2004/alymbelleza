@@ -753,6 +753,107 @@
     </section>
 
 
+        <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const profileImg = document.getElementById('profile-img');
+            const dropdownProfileImg = document.getElementById('dropdown-profile-img');
+            const profileName = document.getElementById('profile-name');
+            const profileEmail = document.getElementById('profile-email');
+            const logoutBtn = document.getElementById('logout-btn');
+            const userMenuBtn = document.getElementById('user-menu-button');
+            const userDropdown = document.getElementById('user-dropdown');
+            const adminLinkContainer = document.getElementById('admin-link-container');
+            const loginRegisterLinks = document.getElementById('login-register-links');
+
+            // Función para abrir/cerrar el dropdown
+            const toggleDropdown = (open) => {
+                if (open) {
+                    userDropdown.classList.remove('opacity-0', 'scale-95', 'translate-y-1', 'invisible');
+                    userDropdown.classList.add('opacity-100', 'scale-100', 'translate-y-0', 'visible');
+                    userMenuBtn.setAttribute('aria-expanded', 'true');
+                } else {
+                    userDropdown.classList.remove('opacity-100', 'scale-100', 'translate-y-0', 'visible');
+                    userDropdown.classList.add('opacity-0', 'scale-95', 'translate-y-1', 'invisible');
+                    userMenuBtn.setAttribute('aria-expanded', 'false');
+                }
+            };
+
+            if (user) {
+                // Mostrar datos del usuario
+                profileName.textContent = user.name || 'Usuario';
+                profileEmail.textContent = user.email || '';
+
+                // Mostrar opción admin si corresponde
+                if (user.role === 'admin') {
+                    adminLinkContainer.classList.remove('hidden');
+                }
+
+                // Imagen de perfil
+                const profileImageUrl = user.profileImage && user.profileImage.startsWith('http') ? user.profileImage :
+                    user.profileImage && user.profileImage.startsWith('/uploads/') ?
+                        'https://aly-mbelleza-backend.onrender.com' + user.profileImage :
+                        `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'U')}&background=random&length=1`;
+
+                profileImg.src = profileImageUrl;
+                dropdownProfileImg.src = profileImageUrl;
+
+                // Evento para el botón de usuario
+                userMenuBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isExpanded = userMenuBtn.getAttribute('aria-expanded') === 'true';
+                    toggleDropdown(!isExpanded);
+                });
+
+                // Cerrar dropdown al hacer click fuera
+                document.addEventListener('click', (e) => {
+                    if (!userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                        toggleDropdown(false);
+                    }
+                });
+
+                // Logout con SweetAlert
+                logoutBtn.addEventListener('click', () => {
+                    Swal.fire({
+                        title: '¿Cerrar sesión?',
+                        text: '¿Estás seguro de que deseas salir de tu cuenta?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#7e22ce', // Color morado
+                        cancelButtonColor: '#6b7280', // Color gris
+                        confirmButtonText: 'Sí, cerrar sesión',
+                        cancelButtonText: 'Cancelar',
+                        backdrop: `
+                `,
+                        customClass: {
+                            popup: 'border border-purple-200 rounded-lg shadow-lg',
+                            confirmButton: 'bg-purple-600 hover:bg-purple-700 focus:ring-4 focus:ring-purple-300',
+                            cancelButton: 'bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:ring-gray-300'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            localStorage.removeItem('user');
+                            Swal.fire({
+                                title: 'Sesión cerrada',
+                                text: 'Has cerrado sesión correctamente',
+                                icon: 'success',
+                                confirmButtonColor: '#7e22ce',
+                                timer: 1500,
+                                timerProgressBar: true
+                            }).then(() => {
+                                window.location.href = 'index.html';
+                            });
+                        }
+                    });
+                });
+            } else {
+                // Mostrar opciones de login/registro
+                loginRegisterLinks.classList.remove('hidden');
+                userMenuBtn.parentElement.style.display = 'none';
+            }
+        });
+    </script>
+    
     <script src="js/main.js"></script>
 
 
