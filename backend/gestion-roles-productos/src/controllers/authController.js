@@ -24,7 +24,7 @@ exports.forgotPassword = async (req, res) => {
   user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
   await user.save();
 
-  const resetUrl = `https://alexisjr2004.github.io/alymbelleza/reset-password.html?token=${token}`;
+  const resetUrl = `https://aly-mbelleza-frontend.onrender.com/reset-password.html?token=${token}`;
 
   const mailOptions = {
     to: user.email,
