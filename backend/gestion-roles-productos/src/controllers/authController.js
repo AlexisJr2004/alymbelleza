@@ -24,13 +24,44 @@ exports.forgotPassword = async (req, res) => {
   user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
   await user.save();
 
-  const resetUrl = `https://aly-mbelleza-backend.onrender.com/reset-password.html?token=${token}`;
+  const resetUrl = `https://aly-mbelleza-frontend.onrender.com/reset-password.html?token=${token}`;
 
   const mailOptions = {
     to: user.email,
-    from: process.env.EMAIL_USER,
-    subject: 'Recuperación de contraseña',
-    html: `<p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p><a href="${resetUrl}">${resetUrl}</a>`
+    from: `"Bella Beauty Contacto" <${process.env.EMAIL_USER}>`,
+    subject: 'Recuperación de contraseña - Bella Beauty',
+    html: `
+      <div style="font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: 0 auto; color: #333;">
+        <div style="text-align: center; padding: 20px 0; border-bottom: 1px solid #eaeaea;">
+          <img src="https://res.cloudinary.com/dokmxt0ja/image/upload/v1748585094/mujer-con-pelo-largo_ppap6w.png" alt="Bella Beauty Logo" style="max-width: 80px; height: auto;">
+          <h1 style="color: #7e22ce; font-size: 24px; margin-top: 15px; font-weight: 600;">Recuperación de Contraseña</h1>
+        </div>
+        <div style="padding: 25px 30px;">
+          <p style="font-size: 16px; color: #374151;">Hola <b>${user.name}</b>,</p>
+          <p style="font-size: 16px; color: #374151;">
+            Hemos recibido una solicitud para restablecer tu contraseña en <b>Bella Beauty</b>.
+          </p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${resetUrl}" style="display: inline-block; background-color: #7e22ce; color: white; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-weight: 500; font-size: 16px; box-shadow: 0 2px 5px rgba(126, 34, 206, 0.12);">
+              Restablecer Contraseña
+            </a>
+          </div>
+          <p style="font-size: 15px; color: #6b7280;">
+            Si no solicitaste este cambio, puedes ignorar este correo. El enlace expirará en 1 hora por seguridad.
+          </p>
+          <div style="margin-top: 30px; font-size: 13px; color: #6b7280;">
+            <p>¿Tienes problemas? Copia y pega este enlace en tu navegador:</p>
+            <a href="${resetUrl}" style="color: #7e22ce; word-break: break-all;">${resetUrl}</a>
+          </div>
+        </div>
+        <div style="padding: 20px; background-color: #f9fafb; text-align: center; border-top: 1px solid #eaeaea; font-size: 13px; color: #6b7280;">
+          <p style="margin: 0 0 10px 0;">Este mensaje fue enviado desde Bella Beauty</p>
+          <p style="margin: 0;">
+            <a href="https://aly-mbelleza-frontend.onrender.com" style="color: #7e22ce; text-decoration: none;">aly-mbelleza-frontend.onrender.com</a>
+          </p>
+        </div>
+      </div>
+    `
   };
 
   await transporter.sendMail(mailOptions);
