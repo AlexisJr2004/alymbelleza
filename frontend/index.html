@@ -120,9 +120,10 @@
                                         Panel Administrador
                                     </a>
                                 </li>
-                                <li id="admin-link-container" class="hidden">
+                                <li id="profile-link-container" class="hidden">
                                     <a href="perfil.html"
-                                        class="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50">
+                                        class="block px-5 py-3 text-sm text-purple-700 hover:bg-purple-50 hover:text-purple-900 transition-colors duration-200">
+                                        <i class="fas fa-user-circle mr-2"></i> 
                                         Perfil
                                     </a>
                                 </li>
@@ -3113,6 +3114,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const user = JSON.parse(localStorage.getItem('user'));
+            const profileLinkContainer = document.getElementById('profile-link-container');
             const profileImg = document.getElementById('profile-img');
             const dropdownProfileImg = document.getElementById('dropdown-profile-img');
             const profileName = document.getElementById('profile-name');
@@ -3138,6 +3140,7 @@
 
             if (user) {
                 // Mostrar datos del usuario
+                profileLinkContainer.classList.remove('hidden');
                 profileName.textContent = user.name || 'Usuario';
                 profileEmail.textContent = user.email || '';
 
@@ -3205,6 +3208,7 @@
                 });
             } else {
                 // Mostrar opciones de login/registro
+                rofileLinkContainer.classList.add('hidden');
                 loginRegisterLinks.classList.remove('hidden');
                 userMenuBtn.parentElement.style.display = 'none';
             }
