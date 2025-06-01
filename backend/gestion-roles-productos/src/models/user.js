@@ -4,8 +4,10 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  profileImage: { type: String }, // URL o ruta de la imagen
-  role: { type: String, enum: ['cliente', 'admin'], default: 'cliente' }
+  profileImage: { type: String },
+  role: { type: String, enum: ['cliente', 'admin'], default: 'cliente' },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);
