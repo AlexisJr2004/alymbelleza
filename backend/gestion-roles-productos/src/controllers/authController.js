@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const User = require('../models/user');
 
 // Configuración de Nodemailer (usa tu configuración existente)
 const transporter = nodemailer.createTransport({
