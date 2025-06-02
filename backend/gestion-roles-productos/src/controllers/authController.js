@@ -90,9 +90,9 @@ exports.resetPassword = async (req, res) => {
 
 exports.me = async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId).select('-password -resetPasswordToken -resetPasswordExpires');
+    const user = await User.findById(req.user.userId || req.user.id).select('-password -resetPasswordToken -resetPasswordExpires');
     if (!user) return res.status(404).json({ error: 'Usuario no encontrado.' });
-    res.json({ user }); // <-- Cambia esto
+    res.json({ user });
   } catch (err) {
     res.status(500).json({ error: 'Error al obtener el perfil.' });
   }

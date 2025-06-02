@@ -22,5 +22,7 @@ router.post('/login', authController.login);
 router.post('/forgot-password', authController.forgotPassword);
 router.post('/reset-password/:token', authController.resetPassword);
 router.put('/me', verifyToken, upload.single('profileImage'), authController.updateProfile);
+router.get('/me', verifyToken, authController.me);
+
 
 module.exports = router;
