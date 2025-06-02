@@ -447,9 +447,8 @@
 
     <main class="max-w-5xl mx-auto px-4 py-8">
 
-        <!-- Layout de dos columnas -->
+        <!-- Tarjeta de perfil -->
         <div class="flex flex-col lg:flex-row gap-8">
-            <!-- Columna izquierda - Tarjeta de perfil -->
             <div class="lg:w-1/3">
                 <div class="bg-white rounded-xl border border-gray-100 p-6 sticky top-6">
                     <div class="flex flex-col items-center mb-6">
@@ -476,7 +475,7 @@
                 </div>
             </div>
 
-            <!-- Columna derecha - Formulario de edición -->
+            <!-- Formulario de edición -->
             <div class="lg:w-2/3">
                 <div class="bg-white rounded-xl border border-gray-100 p-6 mb-6">
                     <div class="flex justify-between items-center mb-6">
@@ -852,6 +851,126 @@
         });
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userLocal = JSON.parse(localStorage.getItem('user'));
+            if (!userLocal || !userLocal.token) {
+                localStorage.removeItem('user');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Elementos de la tarjeta de perfil
+            const profileImg = document.getElementById('profile-img');
+            const profileName = document.getElementById('profile-name');
+            const profileEmail = document.getElementById('profile-email');
+            const profileRole = document.getElementById('profile-role');
+            const profileDni = document.getElementById('profile-dni');
+            const profilePhone = document.getElementById('profile-phone');
+            const profileGender = document.getElementById('profile-gender');
+            const profileBirthdate = document.getElementById('profile-birthdate');
+            const profileAddress = document.getElementById('profile-address');
+
+            // Elementos del formulario de edición
+            const editBtn = document.getElementById('edit-btn');
+            const saveBtn = document.getElementById('save-btn');
+            const form = document.getElementById('editProfileForm');
+            const msg = document.getElementById('editProfileMsg');
+            const changePhotoBtn = document.getElementById('change-photo-btn');
+            const profileImageInput = document.getElementById('edit-profileImage');
+            const editName = document.getElementById('edit-name');
+            const editDni = document.getElementById('edit-dni');
+            const editBirthdate = document.getElementById('edit-birthdate');
+            const editGender = document.getElementById('edit-gender');
+            const editPhone = document.getElementById('edit-phone');
+            const editAddress = document.getElementById('edit-address');
+
+            // Cargar datos reales del usuario
+            async function loadProfile() {
+                const res = await fetch('https://aly-mbelleza-backend.onrender.com/api/auth/me', {
+                    headers: { 'Authorization': `Bearer ${userLocal.token}` }
+                });
+                if (!res.ok) throw new Error('No autorizado');
+                const user = await res.json();
+
+                // Imagen de perfil (igual que en index.html)
+                let profileImageUrl = user.profileImage && user.profileImage.startsWith('http')
+                    ? user.profileImage
+                    : user.profileImage && user.profileImage.startsWith('/uploads/')
+                        ? 'https://aly-mbelleza-backend.onrender.com' + user.profileImage
+                        : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'U')}&background=random&length=1`;
+
+                profileImg.src = profileImageUrl;
+
+                // Tarjeta de perfil
+                profileName.textContent = user.name || 'Nombre Apellido';
+                profileEmail.textContent = user.email || 'correo@ejemplo.com';
+                profileRole.textContent = user.role === 'admin' ? 'Administrador' : 'Usuario Activo';
+                profileDni.textContent = user.dni ? `Cédula: ${user.dni}` : '';
+                profilePhone.textContent = user.phone ? ` | Tel: ${user.phone}` : '';
+                profileGender.textContent = user.gender ? ` | Género: ${user.gender}` : '';
+                profileBirthdate.textContent = user.birthdate ? ` | Nacimiento: ${user.birthdate.substr(0, 10)}` : '';
+                profileAddress.textContent = user.address ? ` | Dirección: ${user.address}` : '';
+
+                // Formulario de edición
+                editName.value = user.name || '';
+                editDni.value = user.dni || '';
+                editBirthdate.value = user.birthdate ? user.birthdate.substr(0, 10) : '';
+                editGender.value = user.gender || '';
+                editPhone.value = user.phone || '';
+                editAddress.value = user.address || '';
+            }
+
+            await loadProfile();
+
+            // Habilitar edición
+            editBtn.addEventListener('click', () => {
+                form.querySelectorAll('input, select, button').forEach(el => {
+                    if (el.type !== 'submit') el.disabled = false;
+                });
+                saveBtn.classList.remove('hidden');
+                editBtn.classList.add('hidden');
+            });
+
+            // Vista previa de imagen
+            changePhotoBtn.addEventListener('click', () => {
+                profileImageInput.click();
+            });
+            profileImageInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = ev => { profileImg.src = ev.target.result; };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Guardar cambios
+            form.onsubmit = async function (e) {
+                e.preventDefault();
+                saveBtn.disabled = true;
+                msg.textContent = "Actualizando...";
+                const formData = new FormData(form);
+                try {
+                    const res = await fetch('https://aly-mbelleza-backend.onrender.com/api/auth/me', {
+                        method: 'PUT',
+                        headers: { 'Authorization': `Bearer ${userLocal.token}` },
+                        body: formData
+                    });
+                    const data = await res.json();
+                    if (res.ok) {
+                        msg.textContent = "Perfil actualizado correctamente";
+                        setTimeout(() => window.location.reload(), 1200);
+                    } else {
+                        msg.textContent = data.error || "Error al actualizar";
+                    }
+                } catch (err) {
+                    msg.textContent = "Error al actualizar";
+                }
+                saveBtn.disabled = false;
+            };
+        });
+    </script>
 
     <script src="js/main.js"></script>
 
