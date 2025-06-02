@@ -18,7 +18,7 @@ app.use(
       "https://alexisjr2004.github.io",
       "https://aly-mbelleza-backend.onrender.com",
     ],
-    methods: ["GET", "POST", "OPTIONS"],
+    methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })

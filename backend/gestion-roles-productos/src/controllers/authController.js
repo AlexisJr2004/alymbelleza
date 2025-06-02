@@ -132,16 +132,25 @@ exports.register = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const updates = { ...req.body };
-    if (req.file) updates.profileImage = req.file.path;
-    // No permitir actualizar email ni role desde aquí por seguridad
+
+    if (req.file) {
+      updates.profileImage = req.file.path;
+    }
     delete updates.email;
     delete updates.role;
 
-    const user = await User.findByIdAndUpdate(req.user.userId, updates, { new: true, runValidators: true }).select('-password -resetPasswordToken -resetPasswordExpires');
-    if (!user) return res.status(404).json({ error: 'Usuario no encontrado.' });
-    res.json(user);
+    const user = await User.findByIdAndUpdate(req.user.userId, updates, {
+      new: true,
+      runValidators: true,
+    }).select('-password -resetPasswordToken -resetPasswordExpires');
+
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado.' });
+    }
+
+    res.json({ message: 'Perfil actualizado correctamente', user });
   } catch (err) {
-    res.status(500).json({ error: 'Error al actualizar el perfil.' });
+    res.status(500).json({ error: 'Error al actualizar perfil.', details: err.message });
   }
 };
 
