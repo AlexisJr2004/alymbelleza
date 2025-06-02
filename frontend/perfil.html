@@ -749,123 +749,106 @@
 
     <!-- Script de la logica -->
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const userLocal = JSON.parse(localStorage.getItem('user'));
-            if (!userLocal || !userLocal.token) {
-                localStorage.removeItem('user');
-                window.location.href = 'login.html';
-                return;
-            }
-
-            // Elementos de la tarjeta de perfil
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const profileLinkContainer = document.getElementById('profile-link-container');
             const profileImg = document.getElementById('profile-img');
+            const dropdownProfileImg = document.getElementById('dropdown-profile-img');
             const profileName = document.getElementById('profile-name');
             const profileEmail = document.getElementById('profile-email');
-            const profileRole = document.getElementById('profile-role');
-            const profileDni = document.getElementById('profile-dni');
-            const profilePhone = document.getElementById('profile-phone');
-            const profileGender = document.getElementById('profile-gender');
-            const profileBirthdate = document.getElementById('profile-birthdate');
-            const profileAddress = document.getElementById('profile-address');
+            const logoutBtn = document.getElementById('logout-btn');
+            const userMenuBtn = document.getElementById('user-menu-button');
+            const userDropdown = document.getElementById('user-dropdown');
+            const adminLinkContainer = document.getElementById('admin-link-container');
+            const loginRegisterLinks = document.getElementById('login-register-links');
 
-            // Elementos del formulario de edición
-            const editBtn = document.getElementById('edit-btn');
-            const saveBtn = document.getElementById('save-btn');
-            const form = document.getElementById('editProfileForm');
-            const msg = document.getElementById('editProfileMsg');
-            const changePhotoBtn = document.getElementById('change-photo-btn');
-            const profileImageInput = document.getElementById('edit-profileImage');
-            const editName = document.getElementById('edit-name');
-            const editDni = document.getElementById('edit-dni');
-            const editBirthdate = document.getElementById('edit-birthdate');
-            const editGender = document.getElementById('edit-gender');
-            const editPhone = document.getElementById('edit-phone');
-            const editAddress = document.getElementById('edit-address');
+            // Función para abrir/cerrar el dropdown
+            const toggleDropdown = (open) => {
+                if (open) {
+                    userDropdown.classList.remove('opacity-0', 'scale-95', 'translate-y-1', 'invisible');
+                    userDropdown.classList.add('opacity-100', 'scale-100', 'translate-y-0', 'visible');
+                    userMenuBtn.setAttribute('aria-expanded', 'true');
+                } else {
+                    userDropdown.classList.remove('opacity-100', 'scale-100', 'translate-y-0', 'visible');
+                    userDropdown.classList.add('opacity-0', 'scale-95', 'translate-y-1', 'invisible');
+                    userMenuBtn.setAttribute('aria-expanded', 'false');
+                }
+            };
 
-            // Cargar datos reales del usuario
-            async function loadProfile() {
-                const res = await fetch('https://aly-mbelleza-backend.onrender.com/api/auth/me', {
-                    headers: { 'Authorization': `Bearer ${userLocal.token}` }
-                });
-                if (!res.ok) throw new Error('No autorizado');
-                const user = await res.json();
+            if (user) {
+                // Mostrar datos del usuario
+                profileLinkContainer.classList.remove('hidden');
+                profileName.textContent = user.name || 'Usuario';
+                profileEmail.textContent = user.email || '';
 
-                // Imagen de perfil (igual que en index.html)
-                let profileImageUrl = user.profileImage && user.profileImage.startsWith('http')
-                    ? user.profileImage
-                    : user.profileImage && user.profileImage.startsWith('/uploads/')
-                        ? 'https://aly-mbelleza-backend.onrender.com' + user.profileImage
-                        : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'U')}&background=random&length=1`;
+                // Mostrar opción admin si corresponde
+                if (user.role === 'admin') {
+                    adminLinkContainer.classList.remove('hidden');
+                }
+
+                // Imagen de perfil
+                const profileImageUrl = user.profileImage && user.profileImage.startsWith('http') ? user.profileImage :
+                    user.profileImage && user.profileImage.startsWith('/uploads/') ?
+                        'https://aly-mbelleza-backend.onrender.com' + user.profileImage :
+                        `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'U')}&background=random&length=1`;
 
                 profileImg.src = profileImageUrl;
+                dropdownProfileImg.src = profileImageUrl;
 
-                // Tarjeta de perfil
-                profileName.textContent = user.name || 'Nombre Apellido';
-                profileEmail.textContent = user.email || 'correo@ejemplo.com';
-                profileRole.textContent = user.role === 'admin' ? 'Administrador' : 'Usuario Activo';
-                profileDni.textContent = user.dni ? `Cédula: ${user.dni}` : '';
-                profilePhone.textContent = user.phone ? ` | Tel: ${user.phone}` : '';
-                profileGender.textContent = user.gender ? ` | Género: ${user.gender}` : '';
-                profileBirthdate.textContent = user.birthdate ? ` | Nacimiento: ${user.birthdate.substr(0, 10)}` : '';
-                profileAddress.textContent = user.address ? ` | Dirección: ${user.address}` : '';
-
-                // Formulario de edición
-                editName.value = user.name || '';
-                editDni.value = user.dni || '';
-                editBirthdate.value = user.birthdate ? user.birthdate.substr(0, 10) : '';
-                editGender.value = user.gender || '';
-                editPhone.value = user.phone || '';
-                editAddress.value = user.address || '';
-            }
-
-            await loadProfile();
-
-            // Habilitar edición
-            editBtn.addEventListener('click', () => {
-                form.querySelectorAll('input, select, button').forEach(el => {
-                    if (el.type !== 'submit') el.disabled = false;
+                // Evento para el botón de usuario
+                userMenuBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isExpanded = userMenuBtn.getAttribute('aria-expanded') === 'true';
+                    toggleDropdown(!isExpanded);
                 });
-                saveBtn.classList.remove('hidden');
-                editBtn.classList.add('hidden');
-            });
 
-            // Vista previa de imagen
-            changePhotoBtn.addEventListener('click', () => {
-                profileImageInput.click();
-            });
-            profileImageInput.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = ev => { profileImg.src = ev.target.result; };
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            // Guardar cambios
-            form.onsubmit = async function (e) {
-                e.preventDefault();
-                saveBtn.disabled = true;
-                msg.textContent = "Actualizando...";
-                const formData = new FormData(form);
-                try {
-                    const res = await fetch('https://aly-mbelleza-backend.onrender.com/api/auth/me', {
-                        method: 'PUT',
-                        headers: { 'Authorization': `Bearer ${userLocal.token}` },
-                        body: formData
-                    });
-                    const data = await res.json();
-                    if (res.ok) {
-                        msg.textContent = "Perfil actualizado correctamente";
-                        setTimeout(() => window.location.reload(), 1200);
-                    } else {
-                        msg.textContent = data.error || "Error al actualizar";
+                // Cerrar dropdown al hacer click fuera
+                document.addEventListener('click', (e) => {
+                    if (!userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                        toggleDropdown(false);
                     }
-                } catch (err) {
-                    msg.textContent = "Error al actualizar";
-                }
-                saveBtn.disabled = false;
-            };
+                });
+
+                // Logout con SweetAlert
+                logoutBtn.addEventListener('click', () => {
+                    Swal.fire({
+                        title: '¿Cerrar sesión?',
+                        text: '¿Estás seguro de que deseas salir de tu cuenta?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#7e22ce', // Color morado
+                        cancelButtonColor: '#6b7280', // Color gris
+                        confirmButtonText: 'Sí, cerrar sesión',
+                        cancelButtonText: 'Cancelar',
+                        backdrop: `
+                `,
+                        customClass: {
+                            popup: 'border border-purple-200 rounded-lg shadow-lg',
+                            confirmButton: 'bg-purple-600 hover:bg-purple-700 focus:ring-4 focus:ring-purple-300',
+                            cancelButton: 'bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:ring-gray-300'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            localStorage.removeItem('user');
+                            Swal.fire({
+                                title: 'Sesión cerrada',
+                                text: 'Has cerrado sesión correctamente',
+                                icon: 'success',
+                                confirmButtonColor: '#7e22ce',
+                                timer: 1500,
+                                timerProgressBar: true
+                            }).then(() => {
+                                window.location.href = 'index.html';
+                            });
+                        }
+                    });
+                });
+            } else {
+                // Mostrar opciones de login/registro
+                profileLinkContainer.classList.add('hidden');
+                loginRegisterLinks.classList.remove('hidden');
+                userMenuBtn.parentElement.style.display = 'none';
+            }
         });
     </script>
 
