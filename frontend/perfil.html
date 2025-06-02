@@ -452,8 +452,8 @@
                     <img id="profile-img-card" src="" alt="Foto de perfil"
                         class="w-32 h-32 rounded-full object-cover border-4 border-purple-100 shadow"
                         onerror="this.onerror=null;this.src='https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';">
-                    <h2 id="profile-name-card" class="text-xl font-bold text-gray-800 text-center">Nombre Apellido</h2>
-                    <p id="profile-email-card" class="text-gray-500 text-sm mt-1">correo@ejemplo.com</p>
+                    <h2 id="profile-name" class="text-xl font-bold text-gray-800 text-center">Nombre Apellido</h2>
+                    <p id="profile-email" class="text-gray-500 text-sm mt-1">correo@ejemplo.com</p>
                     <div
                         class="mt-4 flex items-center px-4 py-1 rounded-full bg-green-50 text-green-700 text-sm font-medium">
                         <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
@@ -870,59 +870,59 @@
 
             // Cargar datos del usuario
             async function loadProfile() {
-    try {
-        const res = await fetch('https://aly-mbelleza-backend.onrender.com/api/auth/me', {
-            headers: {
-                'Authorization': `Bearer ${userLocal.token}`,
-                'Content-Type': 'application/json'
+                try {
+                    const res = await fetch('https://aly-mbelleza-backend.onrender.com/api/auth/me', {
+                        headers: {
+                            'Authorization': `Bearer ${userLocal.token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (!res.ok) {
+                        if (res.status === 401) {
+                            localStorage.removeItem('user');
+                            window.location.href = 'login.html';
+                            return;
+                        }
+                        throw new Error('Error al cargar perfil');
+                    }
+
+                    // Aquí el backend responde con el usuario directamente, no como { user: ... }
+                    const user = await res.json();
+
+                    // Actualizar imagen de perfil
+                    let profileImageUrl = user.profileImage && user.profileImage.startsWith('http')
+                        ? user.profileImage
+                        : user.profileImage && user.profileImage.startsWith('/uploads/')
+                            ? 'https://aly-mbelleza-backend.onrender.com' + user.profileImage
+                            : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'U')}&background=random&length=1`;
+
+                    profileImg.src = profileImageUrl;
+
+                    // Actualizar tarjeta de perfil
+                    profileName.textContent = user.name || 'Nombre Apellido';
+                    profileEmail.textContent = user.email || 'correo@ejemplo.com';
+                    profileRole.textContent = user.role === 'admin' ? 'Administrador' : 'Usuario Activo';
+                    profileDni.textContent = user.dni ? `Cédula: ${user.dni}` : '';
+                    profilePhone.textContent = user.phone ? ` | Tel: ${user.phone}` : '';
+                    profileGender.textContent = user.gender ? ` | Género: ${user.gender}` : '';
+                    profileBirthdate.textContent = user.birthdate ? ` | Nacimiento: ${new Date(user.birthdate).toLocaleDateString()}` : '';
+                    profileAddress.textContent = user.address ? ` | Dirección: ${user.address}` : '';
+
+                    // Actualizar formulario de edición
+                    editName.value = user.name || '';
+                    editDni.value = user.dni || '';
+                    editBirthdate.value = user.birthdate ? user.birthdate.substr(0, 10) : '';
+                    editGender.value = user.gender || '';
+                    editPhone.value = user.phone || '';
+                    editAddress.value = user.address || '';
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    msg.textContent = "Error al cargar el perfil";
+                    msg.className = "text-red-500";
+                }
             }
-        });
-
-        if (!res.ok) {
-            if (res.status === 401) {
-                localStorage.removeItem('user');
-                window.location.href = 'login.html';
-                return;
-            }
-            throw new Error('Error al cargar perfil');
-        }
-
-        // Aquí el backend responde con el usuario directamente, no como { user: ... }
-        const user = await res.json();
-
-        // Actualizar imagen de perfil
-        let profileImageUrl = user.profileImage && user.profileImage.startsWith('http')
-            ? user.profileImage
-            : user.profileImage && user.profileImage.startsWith('/uploads/')
-                ? 'https://aly-mbelleza-backend.onrender.com' + user.profileImage
-                : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'U')}&background=random&length=1`;
-
-        profileImg.src = profileImageUrl;
-
-        // Actualizar tarjeta de perfil
-        profileName.textContent = user.name || 'Nombre Apellido';
-        profileEmail.textContent = user.email || 'correo@ejemplo.com';
-        profileRole.textContent = user.role === 'admin' ? 'Administrador' : 'Usuario Activo';
-        profileDni.textContent = user.dni ? `Cédula: ${user.dni}` : '';
-        profilePhone.textContent = user.phone ? ` | Tel: ${user.phone}` : '';
-        profileGender.textContent = user.gender ? ` | Género: ${user.gender}` : '';
-        profileBirthdate.textContent = user.birthdate ? ` | Nacimiento: ${new Date(user.birthdate).toLocaleDateString()}` : '';
-        profileAddress.textContent = user.address ? ` | Dirección: ${user.address}` : '';
-
-        // Actualizar formulario de edición
-        editName.value = user.name || '';
-        editDni.value = user.dni || '';
-        editBirthdate.value = user.birthdate ? user.birthdate.substr(0, 10) : '';
-        editGender.value = user.gender || '';
-        editPhone.value = user.phone || '';
-        editAddress.value = user.address || '';
-
-    } catch (error) {
-        console.error('Error:', error);
-        msg.textContent = "Error al cargar el perfil";
-        msg.className = "text-red-500";
-    }
-}
 
             await loadProfile();
 
@@ -986,19 +986,19 @@
 
                     const data = await res.json();
 
-if (!res.ok) {
-    throw new Error(data.message || data.error || "Error al actualizar");
-}
+                    if (!res.ok) {
+                        throw new Error(data.message || data.error || "Error al actualizar");
+                    }
 
-msg.textContent = "Perfil actualizado correctamente";
-msg.className = "text-green-500";
+                    msg.textContent = "Perfil actualizado correctamente";
+                    msg.className = "text-green-500";
 
-// Actualizar datos en localStorage
-if (userLocal && data.user) {
-    userLocal.name = data.user.name || userLocal.name;
-    userLocal.profileImage = data.user.profileImage || userLocal.profileImage;
-    localStorage.setItem('user', JSON.stringify(userLocal));
-}
+                    // Actualizar datos en localStorage
+                    if (userLocal && data.user) {
+                        userLocal.name = data.user.name || userLocal.name;
+                        userLocal.profileImage = data.user.profileImage || userLocal.profileImage;
+                        localStorage.setItem('user', JSON.stringify(userLocal));
+                    }
 
                     // Deshabilitar campos nuevamente
                     form.querySelectorAll('input, select, button').forEach(el => {
