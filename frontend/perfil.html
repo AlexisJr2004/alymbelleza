@@ -452,8 +452,8 @@
                     <img id="profile-img-card" src="" alt="Foto de perfil"
                         class="w-32 h-32 rounded-full object-cover border-4 border-purple-100 shadow"
                         onerror="this.onerror=null;this.src='https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';">
-                    <h2 id="profile-name" class="text-xl font-bold text-gray-800 text-center">Nombre Apellido</h2>
-                    <p id="profile-email" class="text-gray-500 text-sm mt-1">correo@ejemplo.com</p>
+                    <h2 id="profile-name-card" class="text-xl font-bold text-gray-800 text-center">Nombre Apellido</h2>
+                    <p id="profile-email-card" class="text-gray-500 text-sm mt-1">correo@ejemplo.com</p>
                     <div
                         class="mt-4 flex items-center px-4 py-1 rounded-full bg-green-50 text-green-700 text-sm font-medium">
                         <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
@@ -888,7 +888,7 @@
                     }
 
                     // Aquí el backend responde con el usuario directamente, no como { user: ... }
-                    const user = await res.json();
+                    const user = data.user;
 
                     // Actualizar imagen de perfil
                     let profileImageUrl = user.profileImage && user.profileImage.startsWith('http')
