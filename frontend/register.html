@@ -9,9 +9,57 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
   <style>
+    
+    .floating-shapes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .shape {
+      position: absolute;
+      opacity: 0.1;
+      animation: float 20s infinite linear;
+    }
+
+    .shape:nth-child(1) {
+      top: 20%;
+      left: 10%;
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #8b5cf6, #ec4899);
+      border-radius: 50%;
+      animation-delay: 0s;
+    }
+
+    .shape:nth-child(2) {
+      top: 60%;
+      right: 10%;
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      border-radius: 30%;
+      animation-delay: -10s;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-20px) rotate(180deg);
+      }
+    }
+
     .register-card {
-      box-shadow: 0 10px 30px -10px rgba(124, 58, 237, 0.1);
-      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px -5px rgba(124, 58, 237, 0.1);
     }
 
     .btn-gradient {
@@ -20,71 +68,196 @@
 
     .btn-gradient:hover {
       background-image: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
-      transform: translateY(-1px);
     }
 
     .input-focus:focus {
-      box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.45);
+      box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.45);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    .image-preview {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #f3e8ff;
+      display: none;
+    }
+
+    @media (max-width: 767px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 
-<body class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-  <div class="register-card bg-white rounded-2xl w-full max-w-md overflow-hidden">
-    <div class="h-1 bg-gradient-to-r from-purple-600 to-pink-500"></div>
+<body class="min-h-screen flex items-center justify-center bg-gray-50 p-2">
 
-    <div class="p-8">
-      <div class="text-center mb-6">
-        <img src="https://i.ibb.co/zhpcw3df/mujer-con-pelo-largo.png" alt="mujer"
-          class="mx-auto w-20 h-20 object-cover mb-4">
-        <h2 class="text-2xl font-semibold text-gray-800">Bella Beauty</h2>
-        <p class="text-sm text-gray-500 mt-1">Crea una cuenta nueva</p>
+  <div class="floating-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+
+  <div class="register-card bg-white rounded-xl w-full max-w-3xl overflow-hidden">
+    <div class="h-1.5 bg-gradient-to-r from-purple-600 to-pink-500"></div>
+
+    <div class="p-6">
+      <div class="text-center mb-4">
+        <div class="relative mx-auto w-20 h-20 mb-2">
+          <img id="imagePreview" class="image-preview absolute inset-0" />
+          <img src="https://i.ibb.co/zhpcw3df/mujer-con-pelo-largo.png" alt="mujer"
+            class="w-full h-full object-cover rounded-full" id="defaultAvatar">
+        </div>
+        <h2 class="text-2xl font-bold text-gray-800">Bella Beauty</h2>
+        <p class="text-gray-500 text-sm mt-1">Completa tu registro</p>
       </div>
 
-      <form id="registerForm" class="space-y-5" enctype="multipart/form-data">
-        <div>
-          <label class="block text-sm text-gray-600 mb-1">Nombre</label>
-          <input type="text" name="name" required
-            class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none input-focus"
-            placeholder="Tu nombre completo" />
+      <form id="registerForm" class="space-y-4" enctype="multipart/form-data">
+        <div class="space-y-4">
+          <!-- Información básica -->
+          <div>
+            <h3 class="text-base font-semibold text-gray-800 mb-2 pb-1 border-b border-gray-100">Información básica</h3>
+            <div class="form-grid">
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Nombre completo*</label>
+                <input type="text" name="name" required
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none input-focus transition duration-150"
+                  placeholder="Ej: María González" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Correo electrónico*</label>
+                <input type="email" name="email" required
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none input-focus transition duration-150"
+                  placeholder="correo@ejemplo.com" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Contraseña*</label>
+                <input type="password" name="password" required
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none input-focus transition duration-150"
+                  placeholder="••••••••" />
+                <p class="text-xs text-gray-400 mt-1">Mínimo 8 caracteres</p>
+              </div>
+
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Foto de perfil</label>
+                <div class="flex items-center gap-2">
+                  <label class="cursor-pointer">
+                    <span
+                      class="text-xs text-white py-1.5 px-3 rounded-md bg-purple-500 hover:bg-purple-600 transition duration-150 inline-block">Seleccionar</span>
+                    <input type="file" name="profileImage" accept="image/*" class="hidden" id="fileInput">
+                  </label>
+                  <span class="text-xs text-gray-500 truncate max-w-[120px]" id="fileName">Ningún archivo</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Información personal -->
+          <div>
+            <h3 class="text-base font-semibold text-gray-800 mb-2 pb-1 border-b border-gray-100">Información personal
+            </h3>
+            <div class="form-grid">
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Fecha de nacimiento</label>
+                <input type="date" name="birthdate"
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none input-focus transition duration-150" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Género</label>
+                <select name="gender"
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none input-focus transition duration-150">
+                  <option value="">Selecciona</option>
+                  <option value="masculino">Masculino</option>
+                  <option value="femenino">Femenino</option>
+                  <option value="otro">Otro</option>
+                  <option value="prefiero-no-decir">Prefiero no decir</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Información de contacto -->
+          <div>
+            <h3 class="text-base font-semibold text-gray-800 mb-2 pb-1 border-b border-gray-100">Información de contacto
+            </h3>
+            <div class="form-grid">
+              <div class="md:col-span-2">
+                <label class="block text-xs font-medium text-gray-700 mb-1">Dirección</label>
+                <input type="text" name="address"
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none input-focus transition duration-150"
+                  placeholder="Calle, número, ciudad" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Cédula</label>
+                <input type="text" name="dni"
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none input-focus transition duration-150"
+                  placeholder="Número de identificación" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Teléfono</label>
+                <input type="tel" name="phone"
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none input-focus transition duration-150"
+                  placeholder="Número de contacto" />
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div>
-          <label class="block text-sm text-gray-600 mb-1">Correo electrónico</label>
-          <input type="email" name="email" required
-            class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none input-focus"
-            placeholder="correo@ejemplo.com" />
+        <div class="pt-2">
+          <button type="submit"
+            class="w-full btn-gradient text-white py-2.5 text-sm rounded-md font-medium transition-all">
+            Registrarse
+          </button>
+
+          <p class="text-center text-xs text-gray-500 mt-3">
+            ¿Ya tienes cuenta?
+            <a href="login.html" class="text-purple-600 font-medium hover:underline ml-1">Inicia sesión</a>
+          </p>
         </div>
-
-        <div>
-          <label class="block text-sm text-gray-600 mb-1">Contraseña</label>
-          <input type="password" name="password" required
-            class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none input-focus"
-            placeholder="••••••••" />
-        </div>
-
-        <div>
-          <label class="block text-sm text-gray-600 mb-1">Foto de perfil</label>
-          <input type="file" name="profileImage" accept="image/*"
-            class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-white file:bg-purple-500 hover:file:bg-purple-600 transition duration-150" />
-        </div>
-
-        <button type="submit"
-          class="w-full btn-gradient text-white py-2.5 rounded-lg font-medium shadow-sm transition-all">
-          Registrarse
-        </button>
-
-        <p class="text-center text-sm text-gray-500">
-          ¿Ya tienes cuenta?
-          <a href="login.html" class="text-purple-600 font-medium hover:underline">Inicia sesión</a>
-        </p>
       </form>
 
-      <div id="registerError" class="mt-4 text-sm text-center text-red-600 font-medium"></div>
+      <div id="registerError" class="mt-3 text-xs text-center text-red-600 font-medium"></div>
     </div>
   </div>
 
   <script>
+    // Vista previa de la imagen
+    document.getElementById('fileInput').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      const preview = document.getElementById('imagePreview');
+      const defaultAvatar = document.getElementById('defaultAvatar');
+      const fileName = document.getElementById('fileName');
+
+      if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+          preview.src = event.target.result;
+          preview.style.display = 'block';
+          defaultAvatar.style.display = 'none';
+          fileName.textContent = file.name;
+        }
+
+        reader.readAsDataURL(file);
+      } else {
+        preview.style.display = 'none';
+        defaultAvatar.style.display = 'block';
+        fileName.textContent = 'Ningún archivo';
+      }
+    });
+
+    // Envío del formulario
     document.getElementById('registerForm').onsubmit = async function (e) {
       e.preventDefault();
       const form = e.target;
@@ -92,7 +265,7 @@
 
       const submitBtn = form.querySelector('button[type="submit"]');
       const originalBtnText = submitBtn.innerHTML;
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Enviando...';
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Registrando...';
       submitBtn.disabled = true;
 
       try {
@@ -107,9 +280,11 @@
           window.location.href = 'login.html';
         } else {
           document.getElementById('registerError').textContent = result.error || 'Error al registrarse';
+          document.getElementById('registerError').scrollIntoView({ behavior: 'smooth' });
         }
       } catch (err) {
         document.getElementById('registerError').textContent = 'Error de conexión';
+        document.getElementById('registerError').scrollIntoView({ behavior: 'smooth' });
       } finally {
         submitBtn.innerHTML = originalBtnText;
         submitBtn.disabled = false;

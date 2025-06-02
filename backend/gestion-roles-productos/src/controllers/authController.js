@@ -101,10 +101,9 @@ exports.me = async (req, res) => {
 
 exports.register = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, birthdate, gender, address, dni, phone } = req.body;
     let profileImage = req.file ? req.file.path : undefined;
 
-    // Validar si el usuario ya existe
     if (await User.findOne({ email })) {
       return res.status(400).json({ error: 'El correo ya está registrado.' });
     }
@@ -115,13 +114,34 @@ exports.register = async (req, res) => {
       email,
       password: hashedPassword,
       profileImage,
-      role: role || 'cliente'
+      role: role || 'cliente',
+      birthdate,
+      gender,
+      address,
+      dni,
+      phone
     });
     await user.save();
 
     res.status(201).json({ message: 'Usuario registrado correctamente.' });
   } catch (err) {
     res.status(500).json({ error: 'Error al registrar usuario.' });
+  }
+};
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const updates = { ...req.body };
+    if (req.file) updates.profileImage = req.file.path;
+    // No permitir actualizar email ni role desde aquí por seguridad
+    delete updates.email;
+    delete updates.role;
+
+    const user = await User.findByIdAndUpdate(req.user.userId, updates, { new: true, runValidators: true }).select('-password -resetPasswordToken -resetPasswordExpires');
+    if (!user) return res.status(404).json({ error: 'Usuario no encontrado.' });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al actualizar el perfil.' });
   }
 };
 

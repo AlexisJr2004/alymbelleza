@@ -21,6 +21,6 @@ router.post('/register', upload.single('profileImage'), authController.register)
 router.post('/login', authController.login);
 router.post('/forgot-password', authController.forgotPassword);
 router.post('/reset-password/:token', authController.resetPassword);
-router.get('/me', verifyToken, authController.me);
+router.put('/me', verifyToken, upload.single('profileImage'), authController.updateProfile);
 
 module.exports = router;
