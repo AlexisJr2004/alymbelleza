@@ -940,80 +940,87 @@
                 return;
             }
 
-            // Elementos
-            const editBtn = document.getElementById('edit-btn');
-            const saveBtn = document.getElementById('save-btn');
-            const form = document.getElementById('editProfileForm');
-            const msg = document.getElementById('editProfileMsg');
-            const changePhotoBtn = document.getElementById('change-photo-btn');
+            // Elementos de la tarjeta de perfil
             const profileImg = document.getElementById('profile-img');
-            const profileImageInput = document.getElementById('edit-profileImage');
+            const profileName = document.getElementById('profile-name');
+            const profileEmail = document.getElementById('profile-email');
+            const profileRole = document.getElementById('profile-role');
+            const profileDni = document.getElementById('profile-dni');
+            const profilePhone = document.getElementById('profile-phone');
+            const profileGender = document.getElementById('profile-gender');
+            const profileBirthdate = document.getElementById('profile-birthdate');
+            const profileAddress = document.getElementById('profile-address');
+            const profileDate = document.getElementById('profile-date');
+            const dropdownProfileImg = document.getElementById('dropdown-profile-img');
 
-            // Rellenar datos desde la base de datos
-            async function loadProfile() {
+            // Elementos del formulario de edición
+            const editName = document.getElementById('edit-name');
+            const editDni = document.getElementById('edit-dni');
+            const editBirthdate = document.getElementById('edit-birthdate');
+            const editGender = document.getElementById('edit-gender');
+            const editPhone = document.getElementById('edit-phone');
+            const editAddress = document.getElementById('edit-address');
+            const editProfileImage = document.getElementById('edit-profileImage');
+
+            // Cargar datos reales del usuario
+            try {
                 const res = await fetch('https://aly-mbelleza-backend.onrender.com/api/auth/me', {
                     headers: { 'Authorization': `Bearer ${userLocal.token}` }
                 });
-                if (!res.ok) return;
+                if (!res.ok) throw new Error('No autorizado');
                 const user = await res.json();
-                document.getElementById('edit-name').value = user.name || '';
-                document.getElementById('edit-dni').value = user.dni || '';
-                document.getElementById('edit-birthdate').value = user.birthdate ? user.birthdate.substr(0, 10) : '';
-                document.getElementById('edit-gender').value = user.gender || '';
-                document.getElementById('edit-phone').value = user.phone || '';
-                document.getElementById('edit-address').value = user.address || '';
-                profileImg.src = user.profileImage
-                    ? (user.profileImage.startsWith('http') ? user.profileImage : 'https://aly-mbelleza-backend.onrender.com' + user.profileImage)
-                    : 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
-            }
-            await loadProfile();
 
-            // Habilitar edición
-            editBtn.addEventListener('click', () => {
-                form.querySelectorAll('input, select, button').forEach(el => {
-                    if (el.type !== 'submit') el.disabled = false;
-                });
-                saveBtn.classList.remove('hidden');
-                editBtn.classList.add('hidden');
-            });
+                // Imagen de perfil (igual que en index.html)
+                let profileImageUrl = user.profileImage && user.profileImage.startsWith('http')
+                    ? user.profileImage
+                    : user.profileImage && user.profileImage.startsWith('/uploads/')
+                        ? 'https://aly-mbelleza-backend.onrender.com' + user.profileImage
+                        : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'U')}&background=random&length=1`;
 
-            // Vista previa de imagen
-            changePhotoBtn.addEventListener('click', () => {
-                profileImageInput.click();
-            });
-            profileImageInput.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = ev => { profileImg.src = ev.target.result; };
-                    reader.readAsDataURL(file);
-                }
-            });
+                profileImg.src = profileImageUrl;
+                if (dropdownProfileImg) dropdownProfileImg.src = profileImageUrl;
 
-            // Guardar cambios
-            form.onsubmit = async function (e) {
-                e.preventDefault();
-                saveBtn.disabled = true;
-                msg.textContent = "Actualizando...";
-                const formData = new FormData(form);
-                try {
-                    const res = await fetch('https://aly-mbelleza-backend.onrender.com/api/auth/me', {
-                        method: 'PUT',
-                        headers: { 'Authorization': `Bearer ${userLocal.token}` },
-                        body: formData
-                    });
-                    const data = await res.json();
-                    if (res.ok) {
-                        msg.textContent = "Perfil actualizado correctamente";
-                        setTimeout(() => window.location.reload(), 1200);
-                    } else {
-                        msg.textContent = data.error || "Error al actualizar";
+                // Tarjeta de perfil
+                profileName.textContent = user.name || 'Nombre Apellido';
+                profileEmail.textContent = user.email || 'correo@ejemplo.com';
+                profileRole.textContent = user.role === 'admin' ? 'Administrador' : 'Usuario Activo';
+                if (profileDni) profileDni.textContent = user.dni || 'No Registrado';
+                if (profilePhone) profilePhone.textContent = user.phone || 'No Registrado';
+                if (profileGender) profileGender.textContent = user.gender || 'No Registrado';
+                if (profileBirthdate) profileBirthdate.textContent = user.birthdate ? user.birthdate.substr(0, 10) : 'No registrado';
+                if (profileAddress) profileAddress.textContent = user.address || 'No registrada';
+                if (profileDate) profileDate.textContent = user.createdAt ? new Date(user.createdAt).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }) : '2024';
+
+                // Formulario de edición
+                editName.value = user.name || '';
+                editDni.value = user.dni || '';
+                editBirthdate.value = user.birthdate ? user.birthdate.substr(0, 10) : '';
+                editGender.value = user.gender || '';
+                editPhone.value = user.phone || '';
+                editAddress.value = user.address || '';
+
+                // Vista previa de imagen al seleccionar archivo
+                editProfileImage.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = ev => { profileImg.src = ev.target.result; };
+                        reader.readAsDataURL(file);
                     }
-                } catch (err) {
-                    msg.textContent = "Error al actualizar";
-                }
-                saveBtn.disabled = false;
-            };
+                });
+
+            } catch (err) {
+                console.error(err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo cargar tu perfil. Inicia sesión de nuevo.',
+                    confirmButtonColor: '#7e22ce'
+                }).then(() => {
+                    localStorage.removeItem('user');
+                    window.location.href = 'login.html';
+                });
+            }
         });
     </script>
 
