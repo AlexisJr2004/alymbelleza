@@ -454,57 +454,57 @@
         </aside>
     </header>
 
-<!-- admin-productos.html -->
-<section id="admin-productos" class="max-w-3xl mx-auto my-10 p-6 bg-white rounded-xl shadow">
-    <h2 class="text-2xl font-bold mb-4">Gestión de Productos</h2>
-    <form id="form-producto" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <input type="hidden" id="producto-id">
-        <div>
-            <label class="block text-sm font-medium">Nombre</label>
-            <input type="text" id="nombre" required class="w-full border rounded px-3 py-2">
-        </div>
-        <div>
-            <label class="block text-sm font-medium">Descripción</label>
-            <input type="text" id="descripcion" required class="w-full border rounded px-3 py-2">
-        </div>
-        <div>
-            <label class="block text-sm font-medium">Precio</label>
-            <input type="number" id="precio" required min="0" step="0.01" class="w-full border rounded px-3 py-2">
-        </div>
-        <div>
-            <label class="block text-sm font-medium">Calificación</label>
-            <input type="number" id="calificacion" min="0" max="5" step="0.1"
-                class="w-full border rounded px-3 py-2">
-        </div>
-        <div>
-            <label class="block text-sm font-medium">Disponible</label>
-            <select id="disponible" class="w-full border rounded px-3 py-2">
-                <option value="true">Sí</option>
-                <option value="false">No</option>
-            </select>
-        </div>
-        <div class="md:col-span-2">
-            <label class="block text-sm font-medium">Imagen</label>
-            <input type="file" id="imagen" name="image" accept="image/*" class="w-full border rounded px-3 py-2">
-        </div>
-        <div class="md:col-span-2 flex gap-2">
-            <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded">Guardar</button>
-            <button type="button" id="cancelar-edicion"
-                class="bg-gray-400 text-white px-4 py-2 rounded hidden">Cancelar</button>
-        </div>
-    </form>
-    <table class="w-full text-left border">
-        <thead>
-            <tr>
-                <th class="p-2">Nombre</th>
-                <th class="p-2">Precio</th>
-                <th class="p-2">Disponible</th>
-                <th class="p-2">Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="tabla-productos"></tbody>
-    </table>
-</section>
+    <!-- admin-productos.html -->
+    <section id="admin-productos" class="max-w-3xl mx-auto my-10 p-6 bg-white rounded-xl shadow">
+        <h2 class="text-2xl font-bold mb-4">Gestión de Productos</h2>
+        <form id="form-producto" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <input type="hidden" id="producto-id">
+            <div>
+                <label class="block text-sm font-medium">Nombre</label>
+                <input type="text" id="nombre" required class="w-full border rounded px-3 py-2">
+            </div>
+            <div>
+                <label class="block text-sm font-medium">Descripción</label>
+                <input type="text" id="descripcion" required class="w-full border rounded px-3 py-2">
+            </div>
+            <div>
+                <label class="block text-sm font-medium">Precio</label>
+                <input type="number" id="precio" required min="0" step="0.01" class="w-full border rounded px-3 py-2">
+            </div>
+            <div>
+                <label class="block text-sm font-medium">Calificación</label>
+                <input type="number" id="calificacion" min="0" max="5" step="0.1"
+                    class="w-full border rounded px-3 py-2">
+            </div>
+            <div>
+                <label class="block text-sm font-medium">Disponible</label>
+                <select id="disponible" class="w-full border rounded px-3 py-2">
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium">Imagen</label>
+                <input type="file" id="imagen" name="image" accept="image/*" class="w-full border rounded px-3 py-2">
+            </div>
+            <div class="md:col-span-2 flex gap-2">
+                <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded">Guardar</button>
+                <button type="button" id="cancelar-edicion"
+                    class="bg-gray-400 text-white px-4 py-2 rounded hidden">Cancelar</button>
+            </div>
+        </form>
+        <table class="w-full text-left border">
+            <thead>
+                <tr>
+                    <th class="p-2">Nombre</th>
+                    <th class="p-2">Precio</th>
+                    <th class="p-2">Disponible</th>
+                    <th class="p-2">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-productos"></tbody>
+        </table>
+    </section>
 
     <!-- Boton Ir Arriba -->
     <div class="z-50 fixed bottom-36 right-4 flex flex-col space-y-6 items-center">
@@ -754,22 +754,13 @@
         };
         form.onsubmit = async e => {
             e.preventDefault();
-            const producto = {
-                name: form.nombre.value,
-                description: form.descripcion.value,
-                price: form.precio.value,
-                rating: form.calificacion.value,
-                availability: form.disponible.value === "true"
-            };
+            const formData = new FormData(form);
             const method = editandoId ? "PUT" : "POST";
             const url = editandoId ? `${API_URL}/${editandoId}` : API_URL;
             await fetch(url, {
                 method,
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${user.token}`
-                },
-                body: JSON.stringify(producto)
+                headers: { Authorization: `Bearer ${user.token}` },
+                body: formData
             });
             form.reset();
             cancelarBtn.classList.add('hidden');
