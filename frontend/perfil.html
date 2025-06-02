@@ -887,8 +887,8 @@
                         throw new Error('Error al cargar perfil');
                     }
 
-                    // Aquí el backend responde con el usuario directamente, no como { user: ... }
-                    const user = data.user;
+                    const data = await res.json();
+                    const user = data.user; // <--- ESTA ES LA CLAVE
 
                     // Actualizar imagen de perfil
                     let profileImageUrl = user.profileImage && user.profileImage.startsWith('http')
