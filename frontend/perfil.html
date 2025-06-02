@@ -453,23 +453,24 @@
                 <div class="bg-white rounded-xl border border-gray-100 p-6 sticky top-6">
                     <div class="flex flex-col items-center mb-6">
                         <div class="relative mb-4">
-                            <img id="profile-img" src="" alt="Foto de perfil"
+                            <img id="profile-img-card" src="" alt="Foto de perfil"
                                 class="w-32 h-32 rounded-full object-cover border-4 border-purple-100 shadow"
                                 onerror="this.onerror=null;this.src='https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';">
                         </div>
-                        <h2 id="profile-name" class="text-xl font-bold text-gray-800 text-center">Nombre Apellido</h2>
-                        <p id="profile-email" class="text-gray-500 text-sm mt-1">correo@ejemplo.com</p>
+                        <h2 id="profile-name-card" class="text-xl font-bold text-gray-800 text-center">Nombre Apellido
+                        </h2>
+                        <p id="profile-email-card" class="text-gray-500 text-sm mt-1">correo@ejemplo.com</p>
                         <div
                             class="mt-4 flex items-center px-4 py-1 rounded-full bg-green-50 text-green-700 text-sm font-medium">
                             <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                            <span id="profile-role">Usuario Activo</span>
+                            <span id="profile-role-card">Usuario Activo</span>
                         </div>
                         <div class="mt-2 text-sm text-gray-500">
-                            <span id="profile-dni"></span>
-                            <span id="profile-phone"></span>
-                            <span id="profile-gender"></span>
-                            <span id="profile-birthdate"></span>
-                            <span id="profile-address"></span>
+                            <span id="profile-dni-card"></span>
+                            <span id="profile-phone-card"></span>
+                            <span id="profile-gender-card"></span>
+                            <span id="profile-birthdate-card"></span>
+                            <span id="profile-address-card"></span>
                         </div>
                     </div>
                 </div>
@@ -860,16 +861,16 @@
                 return;
             }
 
-            // Elementos de la tarjeta de perfil
-            const profileImg = document.getElementById('profile-img');
-            const profileName = document.getElementById('profile-name');
-            const profileEmail = document.getElementById('profile-email');
-            const profileRole = document.getElementById('profile-role');
-            const profileDni = document.getElementById('profile-dni');
-            const profilePhone = document.getElementById('profile-phone');
-            const profileGender = document.getElementById('profile-gender');
-            const profileBirthdate = document.getElementById('profile-birthdate');
-            const profileAddress = document.getElementById('profile-address');
+            // Elementos de la tarjeta de perfil (¡usa los nuevos IDs!)
+            const profileImg = document.getElementById('profile-img-card');
+            const profileName = document.getElementById('profile-name-card');
+            const profileEmail = document.getElementById('profile-email-card');
+            const profileRole = document.getElementById('profile-role-card');
+            const profileDni = document.getElementById('profile-dni-card');
+            const profilePhone = document.getElementById('profile-phone-card');
+            const profileGender = document.getElementById('profile-gender-card');
+            const profileBirthdate = document.getElementById('profile-birthdate-card');
+            const profileAddress = document.getElementById('profile-address-card');
 
             // Elementos del formulario de edición
             const editBtn = document.getElementById('edit-btn');
