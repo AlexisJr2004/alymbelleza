@@ -4,6 +4,7 @@ const authController = require('../controllers/authController');
 const cloudinary = require('../utils/cloudinary');
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const { verifyToken } = require('../middlewares/authMiddleware');
 
 // Configuración de Multer con Cloudinary
 const storage = new CloudinaryStorage({
@@ -20,5 +21,6 @@ router.post('/register', upload.single('profileImage'), authController.register)
 router.post('/login', authController.login);
 router.post('/forgot-password', authController.forgotPassword);
 router.post('/reset-password/:token', authController.resetPassword);
+router.get('/me', verifyToken, authController.me);
 
 module.exports = router;

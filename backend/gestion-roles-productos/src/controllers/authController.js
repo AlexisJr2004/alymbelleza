@@ -88,6 +88,17 @@ exports.resetPassword = async (req, res) => {
   res.json({ message: 'Contraseña actualizada correctamente.' });
 };
 
+exports.me = async (req, res) => {
+  try {
+    // req.user viene del middleware verifyToken
+    const user = await User.findById(req.user.userId).select('-password -resetPasswordToken -resetPasswordExpires');
+    if (!user) return res.status(404).json({ error: 'Usuario no encontrado.' });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener el perfil.' });
+  }
+};
+
 exports.register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
