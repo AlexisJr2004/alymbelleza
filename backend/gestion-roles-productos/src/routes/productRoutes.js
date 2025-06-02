@@ -1,15 +1,14 @@
-import express from 'express';
-import { ProductController } from '../controllers/productController';
-import { authMiddleware } from '../middlewares/authMiddleware';
-import { roleMiddleware } from '../middlewares/roleMiddleware';
-
+const express = require('express');
 const router = express.Router();
-const productController = new ProductController();
+const productController = require('../controllers/productController');
+const { verifyToken, isAdmin } = require('../middlewares/authMiddleware');
 
-// Rutas para productos
-router.post('/', authMiddleware, roleMiddleware('admin'), productController.createProduct);
+// Solo admin puede crear, editar y eliminar
+router.post('/', verifyToken, isAdmin, productController.createProduct);
+router.put('/:id', verifyToken, isAdmin, productController.updateProduct);
+router.delete('/:id', verifyToken, isAdmin, productController.deleteProduct);
+
+// Todos pueden ver productos
 router.get('/', productController.getProducts);
-router.put('/:id', authMiddleware, roleMiddleware('admin'), productController.updateProduct);
-router.delete('/:id', authMiddleware, roleMiddleware('admin'), productController.deleteProduct);
 
-export default router;
+module.exports = router;
