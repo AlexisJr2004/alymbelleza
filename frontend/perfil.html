@@ -1097,6 +1097,9 @@
                     saveBtn.classList.add('hidden');
                     editBtn.classList.remove('hidden');
 
+                    // Recargar la página para mostrar los nuevos datos
+                    window.location.reload();
+
                     // Recargar datos
                     setTimeout(() => loadProfile(), 1000);
 
