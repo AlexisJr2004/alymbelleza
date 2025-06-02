@@ -1028,11 +1028,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         const { data } = await res.json();
         const destacados = data.slice(0, 8); // Solo 8 productos
 
-        contenedor.innerHTML = destacados.map(p => `
+        contenedor.innerHTML = destacados.map(p => {
+            // Asegura que la imagen sea una URL válida
+            let imageUrl = p.image;
+            if (!imageUrl) {
+                imageUrl = './img/default.jpg';
+            } else if (!/^https?:\/\//.test(imageUrl)) {
+                // Si es una ruta relativa, la convierte a absoluta (ajusta si usas otro dominio)
+                imageUrl = `https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/${imageUrl}`;
+            }
+            return `
             <div class="xl:w-1/4 md:w-1/2 p-4">
                 <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <div class="relative">
-                        <img class="h-48 w-full object-cover object-center" src="${p.image || './img/default.jpg'}" alt="${p.name}">
+                        <img class="h-48 w-full object-cover object-center" src="${imageUrl}" alt="${p.name}">
                         <div class="absolute top-4 left-4">
                             <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-semibold tracking-wide">
                                 DESTACADO
@@ -1063,7 +1072,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                 </div>
             </div>
-        `).join('');
+            `;
+        }).join('');
     } catch (err) {
         contenedor.innerHTML = `<div class="w-full text-center text-red-500 py-8">No se pudieron cargar los productos destacados.</div>`;
     }

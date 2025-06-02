@@ -4,7 +4,11 @@ class ProductController {
     async createProduct(req, res) {
         try {
             const { name, description, rating, availability, price } = req.body;
-            const newProduct = new Product({ name, description, rating, availability, price });
+            let image = '';
+            if (req.file && req.file.path) {
+                image = req.file.path; // URL de Cloudinary
+            }
+            const newProduct = new Product({ name, description, rating, availability, price, image });
             await newProduct.save();
             res.status(201).json({ success: true, data: newProduct });
         } catch (error) {
@@ -25,6 +29,9 @@ class ProductController {
         try {
             const { id } = req.params;
             const updates = req.body;
+            if (req.file && req.file.path) {
+                updates.image = req.file.path; // Actualiza la imagen si se sube una nueva
+            }
             const updatedProduct = await Product.findByIdAndUpdate(id, updates, { new: true });
             if (!updatedProduct) {
                 return res.status(404).json({ success: false, error: 'Producto no encontrado' });

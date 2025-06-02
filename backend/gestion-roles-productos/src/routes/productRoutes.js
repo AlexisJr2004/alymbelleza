@@ -2,13 +2,24 @@ const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
 const { verifyToken, isAdmin } = require('../middlewares/authMiddleware');
+const cloudinary = require('../utils/cloudinary');
+const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-// Solo admin puede crear, editar y eliminar
-router.post('/', verifyToken, isAdmin, productController.createProduct);
-router.put('/:id', verifyToken, isAdmin, productController.updateProduct);
+// Configuración de Multer con Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'productos_bellabeauty',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+    transformation: [{ width: 600, height: 600, crop: 'limit' }],
+  },
+});
+const upload = multer({ storage });
+
+router.post('/', verifyToken, isAdmin, upload.single('image'), productController.createProduct);
+router.put('/:id', verifyToken, isAdmin, upload.single('image'), productController.updateProduct);
 router.delete('/:id', verifyToken, isAdmin, productController.deleteProduct);
-
-// Todos pueden ver productos
 router.get('/', productController.getProducts);
 
 module.exports = router;
