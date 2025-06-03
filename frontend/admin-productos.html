@@ -466,15 +466,18 @@
             </div>
             <div>
                 <label class="block text-sm font-medium">Precio</label>
-                <input type="number" id="precio" name="price" required min="0" step="0.01" class="w-full border rounded px-3 py-2">
+                <input type="number" id="precio" name="price" required min="0" step="0.01"
+                    class="w-full border rounded px-3 py-2">
             </div>
             <div class="md:col-span-2">
                 <label class="block text-sm font-medium">Descripción</label>
-                <textarea id="descripcion" name="description" required class="w-full border rounded px-3 py-2"></textarea>
+                <textarea id="descripcion" name="description" required
+                    class="w-full border rounded px-3 py-2"></textarea>
             </div>
             <div>
                 <label class="block text-sm font-medium">Calificación</label>
-                <input type="number" id="calificacion" name="rating" min="0" max="5" step="0.1" class="w-full border rounded px-3 py-2">
+                <input type="number" id="calificacion" name="rating" min="0" max="5" step="0.1"
+                    class="w-full border rounded px-3 py-2">
             </div>
             <div>
                 <label class="block text-sm font-medium">Disponible</label>
@@ -489,7 +492,8 @@
             </div>
             <div class="md:col-span-2 flex gap-2">
                 <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded">Guardar</button>
-                <button type="button" id="cancelar-edicion" class="bg-gray-400 text-white px-4 py-2 rounded hidden">Cancelar</button>
+                <button type="button" id="cancelar-edicion"
+                    class="bg-gray-400 text-white px-4 py-2 rounded hidden">Cancelar</button>
             </div>
         </form>
         <table class="w-full text-left border">
@@ -716,38 +720,43 @@
         const cancelarBtn = document.getElementById('cancelar-edicion');
         let editandoId = null;
 
+        // Cargar todos los productos en la tabla
         async function cargarProductos() {
             const res = await fetch(API_URL);
             const { data } = await res.json();
             tabla.innerHTML = data.map(p => `
-                <tr>
-                    <td class="p-2 font-semibold">${p.name}</td>
-                    <td class="p-2">$${p.price}</td>
-                    <td class="p-2">${p.description}</td>
-                    <td class="p-2">${p.rating ?? 0}</td>
-                    <td class="p-2">
-                        <img src="${p.image || './img/default.jpg'}" alt="${p.name}" class="w-16 h-16 object-cover rounded">
-                    </td>
-                    <td class="p-2">${p.availability ? 'Sí' : 'No'}</td>
-                    <td class="p-2">
-                        <button onclick="editarProducto('${p._id}')" class="text-blue-600">Editar</button>
-                        <button onclick="eliminarProducto('${p._id}')" class="text-red-600">Eliminar</button>
-                    </td>
-                </tr>
-            `).join('');
+        <tr>
+            <td class="p-2 font-semibold">${p.name}</td>
+            <td class="p-2">$${p.price}</td>
+            <td class="p-2">${p.description}</td>
+            <td class="p-2">${p.rating ?? 0}</td>
+            <td class="p-2">
+                <img src="${p.image || './img/default.jpg'}" alt="${p.name}" class="w-16 h-16 object-cover rounded">
+            </td>
+            <td class="p-2">${p.availability ? 'Sí' : 'No'}</td>
+            <td class="p-2">
+                <button onclick="editarProducto('${p._id}')" class="text-blue-600">Editar</button>
+                <button onclick="eliminarProducto('${p._id}')" class="text-red-600">Eliminar</button>
+            </td>
+        </tr>
+    `).join('');
         }
-        window.editarProducto = (id) => {
-            fetch(`${API_URL}/${id}`).then(r => r.json()).then(({ data }) => {
-                document.getElementById('producto-id').value = data._id;
-                document.getElementById('nombre').value = data.name;
-                document.getElementById('descripcion').value = data.description;
-                document.getElementById('precio').value = data.price;
-                document.getElementById('calificacion').value = data.rating;
-                document.getElementById('disponible').value = data.availability;
-                cancelarBtn.classList.remove('hidden');
-                editandoId = data._id;
-            });
+
+        // Editar producto: llena el formulario con los datos del producto seleccionado
+        window.editarProducto = async (id) => {
+            const res = await fetch(`${API_URL}/${id}`);
+            const { data } = await res.json();
+            document.getElementById('producto-id').value = data._id;
+            document.getElementById('nombre').value = data.name;
+            document.getElementById('descripcion').value = data.description;
+            document.getElementById('precio').value = data.price;
+            document.getElementById('calificacion').value = data.rating;
+            document.getElementById('disponible').value = data.availability ? "true" : "false";
+            cancelarBtn.classList.remove('hidden');
+            editandoId = data._id;
         };
+
+        // Eliminar producto
         window.eliminarProducto = async (id) => {
             if (!confirm("¿Eliminar producto?")) return;
             await fetch(`${API_URL}/${id}`, {
@@ -756,15 +765,13 @@
             });
             cargarProductos();
         };
+
+        // Guardar producto (crear o editar)
         form.onsubmit = async e => {
             e.preventDefault();
             const formData = new FormData(form);
             // Convierte availability a booleano
-            if (formData.get('availability') === 'true') {
-                formData.set('availability', true);
-            } else {
-                formData.set('availability', false);
-            }
+            formData.set('availability', formData.get('availability') === 'true');
             const method = editandoId ? "PUT" : "POST";
             const url = editandoId ? `${API_URL}/${editandoId}` : API_URL;
             await fetch(url, {
@@ -777,11 +784,14 @@
             editandoId = null;
             cargarProductos();
         };
+
+        // Cancelar edición
         cancelarBtn.onclick = () => {
             form.reset();
             cancelarBtn.classList.add('hidden');
             editandoId = null;
         };
+
         cargarProductos();
     </script>
 

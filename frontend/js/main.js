@@ -1023,10 +1023,9 @@ document.addEventListener("DOMContentLoaded", function () {
 // Mostrar productos destacados dinámicamente
 document.addEventListener("DOMContentLoaded", async () => {
   const contenedor = document.getElementById("productos-destacados");
+  if (!contenedor) return;
   try {
-    const res = await fetch(
-      "https://aly-mbelleza-backend.onrender.com/api/products"
-    );
+    const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/products");
     const { data } = await res.json();
     const destacados = data.slice(0, 8); // Solo 8 productos
 
@@ -1036,7 +1035,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         return `
           <div class="xl:w-1/4 md:w-1/2 p-4">
             <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              <!-- Contenedor de la imagen -->
               <div class="relative">
                 <img class="h-48 w-full object-cover object-center" src="${imageUrl}" alt="${p.name}">
                 <div class="absolute top-4 left-4">
@@ -1045,9 +1043,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                   </span>
                 </div>
               </div>
-              <!-- Contenido de la tarjeta -->
               <div class="p-6">
-                <!-- Encabezado con título y botón de favorito -->
                 <div class="flex items-center justify-between mb-3">
                   <h3 class="text-blue-600 text-sm font-medium tracking-wider">
                     ${p.category || "Producto"}
@@ -1059,17 +1055,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                     </path>
                   </svg>
                 </div>
-                <!-- Título principal -->
                 <h2 class="text-xl font-bold text-gray-900 mb-3 hover:text-blue-600 transition-colors duration-200">
                   ${p.name}
                 </h2>
-                <!-- Descripción -->
                 <p class="text-gray-600 leading-relaxed mb-4">
                   ${p.description}
                 </p>
-                <!-- Pie de la tarjeta -->
                 <div class="flex items-center justify-between pt-4 border-t border-gray-100">
-                  <!-- Calificación -->
                   <div class="flex items-center space-x-2">
                     <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
                       <path
@@ -1078,7 +1070,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                     </svg>
                     <span class="text-gray-600 text-sm">${p.rating || 0}</span>
                   </div>
-                  <!-- Botón de más información -->
                   <a href="https://wa.me/593981229675" target="_blank" rel="noopener noreferrer">
                     <button
                       class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
