@@ -887,11 +887,15 @@
         form.onsubmit = async e => {
             e.preventDefault();
             const formData = new FormData(form);
+
             // Corrige los campos booleanos
             formData.set('availability', formData.get('availability') === 'true');
             formData.set('featured', document.getElementById('destacado').checked);
-            // category debe ser 'capilar' o 'facial'
-            // originalPrice puede ser vacío, pero si es así, elimínalo
+
+            // Forzar el valor seleccionado de categoría
+            const categoria = document.getElementById('categoria').value;
+            formData.set('category', categoria);
+
             if (!formData.get('originalPrice')) formData.delete('originalPrice');
 
             const method = editandoId ? "PUT" : "POST";
@@ -904,6 +908,8 @@
             form.reset();
             cancelarBtn.classList.add('hidden');
             editandoId = null;
+            // Guarda la página actual antes de recargar productos
+            localStorage.setItem('paginaProductos', paginaActual);
             cargarProductos();
         };
 
@@ -1038,9 +1044,8 @@
     </script>
 
     <script>
-        // ...después de let editandoId = null;
         let productosData = [];
-        let paginaActual = 1;
+        let paginaActual = Number(localStorage.getItem('paginaProductos')) || 1;
         const productosPorPagina = 5;
 
         async function cargarProductos() {
@@ -1053,6 +1058,7 @@
 
         function mostrarPagina(pagina) {
             paginaActual = pagina;
+            localStorage.setItem('paginaProductos', paginaActual); // Guarda la página actual
             const inicio = (pagina - 1) * productosPorPagina;
             const fin = inicio + productosPorPagina;
             const productosPagina = productosData.slice(inicio, fin);
@@ -1082,6 +1088,12 @@
             }
             document.getElementById('paginacion-productos').innerHTML = html;
         }
+
+        // Al cargar la página, recupera la página actual de localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            paginaActual = Number(localStorage.getItem('paginaProductos')) || 1;
+            cargarProductos();
+        });
     </script>
 
     <script src="js/main.js"></script>
