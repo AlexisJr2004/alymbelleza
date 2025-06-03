@@ -7,6 +7,7 @@ const nodemailer = require("nodemailer");
 const fs = require("fs");
 const cors = require("cors");
 const authRoutes = require("./gestion-roles-productos/src/routes/authRoutes");
+const productRoutes = require("./gestion-roles-productos/src/routes/productRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -95,6 +96,7 @@ app.use(
 
 // 5. Rutas de autenticación y API
 app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
 
 // 6. Resto de middlewares y rutas (testimonios, email, etc.)
 // Modelo de Testimonio
