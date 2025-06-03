@@ -637,6 +637,7 @@
             `;
                 }).join("");
 
+                // Agrega el evento a todos los botones de comprar
                 document.querySelectorAll('.comprar-btn').forEach(btn => {
                     btn.addEventListener('click', function (e) {
                         const user = JSON.parse(localStorage.getItem('user'));
