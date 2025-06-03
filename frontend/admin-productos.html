@@ -887,10 +887,12 @@
         form.onsubmit = async e => {
             e.preventDefault();
             const formData = new FormData(form);
-            // Convierte availability a booleano
+            // Corrige los campos booleanos
             formData.set('availability', formData.get('availability') === 'true');
-            // Convierte featured a booleano
             formData.set('featured', document.getElementById('destacado').checked);
+            // category debe ser 'capilar' o 'facial'
+            // originalPrice puede ser vacío, pero si es así, elimínalo
+            if (!formData.get('originalPrice')) formData.delete('originalPrice');
 
             const method = editandoId ? "PUT" : "POST";
             const url = editandoId ? `${API_URL}/${editandoId}` : API_URL;
