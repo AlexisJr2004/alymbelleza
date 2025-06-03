@@ -504,16 +504,31 @@
                     <label class="block text-sm font-medium text-gray-700">Categoría</label>
                     <div class="relative">
                         <i class="fas fa-list-alt absolute left-3 top-3 text-gray-400"></i>
-                        <select id="categoria" name="category"
+                        <select id="categoria" name="category" required
                             class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
                             <option value="">Seleccione categoría</option>
-                            <option value="electronica">Electrónica</option>
-                            <option value="ropa">Ropa</option>
-                            <option value="hogar">Hogar</option>
-                            <option value="deportes">Deportes</option>
+                            <option value="capilar">Productos Capilares</option>
+                            <option value="facial">Productos Faciales</option>
                         </select>
                         <i class="fas fa-chevron-down absolute right-3 top-3 text-gray-400"></i>
                     </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">¿Producto Destacado?</label>
+                    <div>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" id="destacado" name="featured" value="true" class="text-blue-600 focus:ring-blue-500">
+                            <span class="ml-2">Marcar como destacado</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Precio Anterior (opcional)</label>
+                    <input type="number" id="precio-anterior" name="originalPrice" min="0" step="0.01"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        placeholder="Precio anterior si está en oferta">
                 </div>
 
                 <div class="space-y-2">
@@ -652,25 +667,6 @@
             </div>
         </div>
     </section>
-
-    <script>
-        // Script para vista previa de imagen
-        document.getElementById('imagen').addEventListener('change', function (e) {
-            const preview = document.getElementById('imagen-preview');
-            const previewImg = document.getElementById('preview-img');
-
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-
-                reader.onload = function (e) {
-                    previewImg.src = e.target.result;
-                    preview.classList.remove('hidden');
-                }
-
-                reader.readAsDataURL(this.files[0]);
-            }
-        });
-    </script>
 
     <!-- Boton Ir Arriba -->
     <div class="z-50 fixed bottom-36 right-4 flex flex-col space-y-6 items-center">
@@ -913,8 +909,11 @@
             document.getElementById('nombre').value = data.name;
             document.getElementById('descripcion').value = data.description;
             document.getElementById('precio').value = data.price;
+            document.getElementById('precio-anterior').value = data.originalPrice || '';
             document.getElementById('calificacion').value = data.rating;
-            document.getElementById('disponible').value = data.availability ? "true" : "false";
+            document.getElementById('categoria').value = data.category;
+            document.getElementById('destacado').checked = !!data.featured;
+            document.querySelector(`input[name="availability"][value="${data.availability ? 'true' : 'false'}"]`).checked = true;
             cancelarBtn.classList.remove('hidden');
             editandoId = data._id;
         };
@@ -935,6 +934,9 @@
             const formData = new FormData(form);
             // Convierte availability a booleano
             formData.set('availability', formData.get('availability') === 'true');
+            // Convierte featured a booleano
+            formData.set('featured', document.getElementById('destacado').checked);
+
             const method = editandoId ? "PUT" : "POST";
             const url = editandoId ? `${API_URL}/${editandoId}` : API_URL;
             await fetch(url, {
@@ -1058,6 +1060,26 @@
             }
         });
     </script>
+
+    <script>
+        // Script para vista previa de imagen
+        document.getElementById('imagen').addEventListener('change', function (e) {
+            const preview = document.getElementById('imagen-preview');
+            const previewImg = document.getElementById('preview-img');
+
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    previewImg.src = e.target.result;
+                    preview.classList.remove('hidden');
+                }
+
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    </script>
+
 
     <script src="js/main.js"></script>
 

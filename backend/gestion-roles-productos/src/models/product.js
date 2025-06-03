@@ -6,7 +6,10 @@ const productSchema = new mongoose.Schema({
     rating: { type: Number, min: 0, max: 5, default: 0 },
     availability: { type: Boolean, default: true },
     price: { type: Number, required: true, min: 0 },
+    originalPrice: { type: Number },
     image: { type: String },
+    category: { type: String, enum: ['capilar', 'facial'], required: true },
+    featured: { type: Boolean, default: false },
 }, { timestamps: true });
 
 const Product = mongoose.model('Product', productSchema);

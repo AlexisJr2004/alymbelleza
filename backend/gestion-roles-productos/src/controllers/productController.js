@@ -2,12 +2,22 @@ const Product = require('../models/product');
 
 exports.createProduct = async (req, res) => {
     try {
-        const { name, description, rating, availability, price } = req.body;
+        const { name, description, rating, availability, price, category, featured, originalPrice } = req.body;
         let image = '';
         if (req.file && req.file.path) {
-            image = req.file.path; // URL de Cloudinary
+            image = req.file.path;
         }
-        const newProduct = new Product({ name, description, rating, availability, price, image });
+        const newProduct = new Product({
+            name,
+            description,
+            rating,
+            availability,
+            price,
+            category,
+            featured: featured === 'true' || featured === true,
+            originalPrice,
+            image
+        });
         await newProduct.save();
         res.status(201).json({ success: true, data: newProduct });
     } catch (error) {
@@ -27,9 +37,12 @@ exports.getProducts = async (req, res) => {
 exports.updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        const updates = req.body;
+        const updates = { ...req.body };
         if (req.file && req.file.path) {
-            updates.image = req.file.path; // Actualiza la imagen si se sube una nueva
+            updates.image = req.file.path;
+        }
+        if (typeof updates.featured !== "undefined") {
+            updates.featured = updates.featured === 'true' || updates.featured === true;
         }
         const updatedProduct = await Product.findByIdAndUpdate(id, updates, { new: true });
         if (!updatedProduct) {
