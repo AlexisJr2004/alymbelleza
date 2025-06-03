@@ -2699,6 +2699,61 @@
         });
     </script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+        const contenedor = document.getElementById("productos-destacados");
+        if (!contenedor) return;
+        try {
+            const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/products");
+            const { data } = await res.json();
+            const destacados = data.slice(0, 8); // Solo 8 productos
+
+            contenedor.innerHTML = destacados
+            .map((p) => {
+                let imageUrl = p.image || "./img/default.jpg";
+                return `
+                <div class="xl:w-1/4 md:w-1/2 p-4">
+                    <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                    <div class="relative">
+                        <img class="h-48 w-full object-cover object-center" src="${imageUrl}" alt="${p.name}">
+                        <div class="absolute top-4 left-4">
+                        <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-semibold tracking-wide">
+                            DESTACADO
+                        </span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h2 class="text-lg font-bold text-gray-800 mb-2">${p.name}</h2>
+                        <p class="text-gray-600 mb-2">${p.description}</p>
+                        <div class="flex items-center mb-2">
+                        <span class="text-yellow-400 mr-2">★</span>
+                        <span class="text-gray-700">${p.rating || 0}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                        <span class="text-purple-700 font-bold text-xl">$${p.price}</span>
+                        <span class="text-xs ${p.availability ? 'text-green-600' : 'text-red-500'} font-semibold">
+                            ${p.availability ? 'Disponible' : 'No disponible'}
+                        </span>
+                        </div>
+                        <a href="https://wa.me/593981229675?text=Estoy interesado en el producto: ${encodeURIComponent(p.name)}" 
+                        target="_blank" 
+                        rel="noopener noreferrer">
+                        <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 mt-4">
+                            Comprar
+                        </button>
+                        </a>
+                    </div>
+                    </div>
+                </div>
+                `;
+            })
+            .join("");
+        } catch (err) {
+            contenedor.innerHTML = `<div class="w-full text-center text-red-500 py-8">No se pudieron cargar los productos destacados.</div>`;
+        }
+        });
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script src="../backend/server.js"></script>
