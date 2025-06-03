@@ -636,6 +636,21 @@
             </div>
             `;
                 }).join("");
+
+                document.querySelectorAll('.comprar-btn').forEach(btn => {
+                    btn.addEventListener('click', function (e) {
+                        const user = JSON.parse(localStorage.getItem('user'));
+                        if (!user) {
+                            window.location.href = 'login.html';
+                            e.preventDefault();
+                            return false;
+                        }
+                        // Si hay usuario, redirige a WhatsApp
+                        const producto = btn.getAttribute('data-producto');
+                        window.open(`https://wa.me/593981229675?text=Estoy interesado en el producto: ${producto}`, '_blank');
+                    });
+                });
+
             } catch (err) {
                 contenedor.innerHTML = `<div class="w-full text-center text-red-500 py-8">No se pudieron cargar los productos.</div>`;
             }
