@@ -465,12 +465,12 @@
                 <input type="text" id="nombre" name="name" required class="w-full border rounded px-3 py-2">
             </div>
             <div>
-                <label class="block text-sm font-medium">Descripción</label>
-                <input type="text" id="descripcion" name="description" required class="w-full border rounded px-3 py-2">
-            </div>
-            <div>
                 <label class="block text-sm font-medium">Precio</label>
                 <input type="number" id="precio" name="price" required min="0" step="0.01" class="w-full border rounded px-3 py-2">
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium">Descripción</label>
+                <textarea id="descripcion" name="description" required class="w-full border rounded px-3 py-2"></textarea>
             </div>
             <div>
                 <label class="block text-sm font-medium">Calificación</label>
@@ -720,16 +720,21 @@
             const res = await fetch(API_URL);
             const { data } = await res.json();
             tabla.innerHTML = data.map(p => `
-    <tr>
-      <td class="p-2">${p.name}</td>
-      <td class="p-2">$${p.price}</td>
-      <td class="p-2">${p.availability ? 'Sí' : 'No'}</td>
-      <td class="p-2">
-        <button onclick="editarProducto('${p._id}')" class="text-blue-600">Editar</button>
-        <button onclick="eliminarProducto('${p._id}')" class="text-red-600">Eliminar</button>
-      </td>
-    </tr>
-  `).join('');
+                <tr>
+                    <td class="p-2 font-semibold">${p.name}</td>
+                    <td class="p-2">$${p.price}</td>
+                    <td class="p-2">${p.description}</td>
+                    <td class="p-2">${p.rating ?? 0}</td>
+                    <td class="p-2">
+                        <img src="${p.image || './img/default.jpg'}" alt="${p.name}" class="w-16 h-16 object-cover rounded">
+                    </td>
+                    <td class="p-2">${p.availability ? 'Sí' : 'No'}</td>
+                    <td class="p-2">
+                        <button onclick="editarProducto('${p._id}')" class="text-blue-600">Editar</button>
+                        <button onclick="eliminarProducto('${p._id}')" class="text-red-600">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
         }
         window.editarProducto = (id) => {
             fetch(`${API_URL}/${id}`).then(r => r.json()).then(({ data }) => {
