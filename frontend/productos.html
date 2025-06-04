@@ -462,6 +462,24 @@
         <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mt-4"></div>
     </div>
 
+    <!-- Filtros -->
+    <div class="container mx-auto px-5 mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <!-- Buscador -->
+        <input
+            id="buscador-productos"
+            type="text"
+            placeholder="Buscar producto por nombre..."
+            class="w-full md:w-1/2 px-4 py-2 border border-purple-200 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-400 focus:outline-none transition"
+        />
+        <!-- Filtros de categoría -->
+        <div class="flex gap-2 mt-2 md:mt-0">
+            <button class="filtro-categoria px-4 py-2 rounded-lg text-sm font-semibold bg-purple-100 text-purple-700 hover:bg-purple-200 transition" data-categoria="all">Todos</button>
+            <button class="filtro-categoria px-4 py-2 rounded-lg text-sm font-semibold bg-blue-100 text-blue-700 hover:bg-blue-200 transition" data-categoria="DESTACADO">Destacado</button>
+            <button class="filtro-categoria px-4 py-2 rounded-lg text-sm font-semibold bg-pink-100 text-pink-700 hover:bg-pink-200 transition" data-categoria="FACIAL">Facial</button>
+            <button class="filtro-categoria px-4 py-2 rounded-lg text-sm font-semibold bg-yellow-100 text-yellow-700 hover:bg-yellow-200 transition" data-categoria="CAPILAR">Capilar</button>
+        </div>
+    </div>
+
     <div id="productos-lista" class="container px-5 py-20 mx-auto flex flex-wrap -m-4"></div>
 
     <!-- Boton Ir Arriba -->
@@ -848,6 +866,134 @@
 
             } catch (err) {
                 contenedor.innerHTML = `<div class="w-full text-center text-red-500 py-8">No se pudieron cargar los productos.</div>`;
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const contenedor = document.getElementById("productos-lista");
+            const buscador = document.getElementById("buscador-productos");
+            const filtroBtns = document.querySelectorAll(".filtro-categoria");
+            let productos = [];
+
+            // Renderiza productos según filtro y búsqueda
+            function renderProductos(lista) {
+                if (!lista.length) {
+                    contenedor.innerHTML = `<div class="w-full text-center text-red-500 py-8">No se encontraron productos.</div>`;
+                    return;
+                }
+                contenedor.innerHTML = lista.map((p, idx) => {
+                    let imageUrl = p.image || "./img/default.jpg";
+                    let categoriaTag = p.featured ? 'DESTACADO' : (p.category === 'capilar' ? 'CAPILAR' : 'FACIAL');
+                    let categoriaColor = p.featured ? 'bg-blue-500' : (p.category === 'capilar' ? 'bg-yellow-500' : 'bg-pink-500');
+                    return `
+                        <div class="xl:w-1/4 md:w-1/2 p-4">
+                            <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-gray-100">
+                                <div class="relative">
+                                    <img class="h-48 w-full object-cover object-center" src="${imageUrl}" alt="${p.name}">
+                                    <div class="absolute top-4 left-4">
+                                        <span class="${categoriaColor} text-white px-3 py-1 rounded-full text-xs font-semibold tracking-wide">
+                                            ${categoriaTag}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="p-5">
+                                    <h3 class="text-blue-600 text-xs font-medium tracking-wider uppercase mb-1">
+                                        ${p.category === 'capilar' ? 'Productos Capilares' : 'Productos Faciales'}
+                                    </h3>
+                                    <h2 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 hover:text-blue-600 transition-colors duration-200">
+                                        ${p.name}
+                                    </h2>
+                                    <p class="text-gray-500 text-sm mb-4 line-clamp-2">
+                                        ${p.description}
+                                    </p>
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="flex items-center space-x-1">
+                                            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                            </svg>
+                                            <span class="text-gray-600 text-sm">${p.rating || 'N/A'}</span>
+                                        </div>
+                                        <span class="text-xs ${p.availability ? 'text-green-600' : 'text-red-500'} font-medium">
+                                            ${p.availability ? 'Disponible' : 'Agotado'}
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+                                        <div>
+                                            <span class="text-gray-900 font-bold text-lg">$${p.price}</span>
+                                            ${p.originalPrice ? `<span class="text-gray-400 text-sm line-through ml-2">$${p.originalPrice}</span>` : ''}
+                                        </div>
+                                        ${p.availability ? `
+                                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center comprar-btn" data-producto="${encodeURIComponent(p.name)}">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                                </svg>
+                                                Comprar
+                                            </button>
+                                        ` : `
+                                            <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded-lg text-sm font-medium cursor-not-allowed" disabled>
+                                                Agotado
+                                            </button>
+                                        `}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+
+                // Eventos para los botones de comprar
+                document.querySelectorAll('.comprar-btn').forEach(btn => {
+                    btn.addEventListener('click', function (e) {
+                        const user = JSON.parse(localStorage.getItem('user'));
+                        if (!user) {
+                            window.location.href = 'login.html';
+                            e.preventDefault();
+                            return false;
+                        }
+                        const producto = btn.getAttribute('data-producto');
+                        window.open(`https://wa.me/593981229675?text=Estoy interesado en el producto: ${producto}`, '_blank');
+                    });
+                });
+            }
+
+            // Cargar productos
+            try {
+                const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/products");
+                const { data } = await res.json();
+                productos = data;
+                renderProductos(productos);
+            } catch (err) {
+                contenedor.innerHTML = `<div class="w-full text-center text-red-500 py-8">No se pudieron cargar los productos.</div>`;
+            }
+
+            // Filtrado en tiempo real por nombre y categoría
+            let categoriaActual = "all";
+            buscador.addEventListener("input", () => {
+                filtrarYRenderizar();
+            });
+            filtroBtns.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    categoriaActual = btn.getAttribute("data-categoria");
+                    filtroBtns.forEach(b => b.classList.remove("ring-2", "ring-purple-400"));
+                    btn.classList.add("ring-2", "ring-purple-400");
+                    filtrarYRenderizar();
+                });
+            });
+
+            function filtrarYRenderizar() {
+                const texto = buscador.value.trim().toLowerCase();
+                let filtrados = productos.filter(p => p.name.toLowerCase().includes(texto));
+                if (categoriaActual !== "all") {
+                    filtrados = filtrados.filter(p => {
+                        if (categoriaActual === "DESTACADO") return p.featured;
+                        if (categoriaActual === "FACIAL") return p.category === "facial";
+                        if (categoriaActual === "CAPILAR") return p.category === "capilar";
+                        return true;
+                    });
+                }
+                renderProductos(filtrados);
             }
         });
     </script>
