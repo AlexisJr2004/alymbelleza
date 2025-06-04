@@ -87,6 +87,7 @@
                             <i class="fab fa-facebook-f"></i>
                         </a>
                         <a href="index3.html"
+                            id="reserva-btn"
                             class="text-sm text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition duration-300 px-4 py-2 rounded-full shadow-md hover:shadow-lg">
                             Reserva Online
                         </a>
@@ -163,20 +164,6 @@
                         </a>
                         <a href="register.html"
                             class="text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-2 rounded-lg shadow-sm hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 transform hover:-translate-y-0.5">
-                            Registrarse
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Botones de login/registro mejorados -->
-                <div id="login-register-links" class="ml-6 hidden">
-                    <div class="flex items-center space-x-4">
-                        <a href="login.html"
-                            class="px-5 py-2.5 text-sm font-medium text-purple-700 hover:text-purple-900 transition-colors duration-300 hover:bg-purple-50 rounded-lg">
-                            Iniciar sesión
-                        </a>
-                        <a href="register.html"
-                            class="px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg shadow hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 transform hover:-translate-y-0.5">
                             Registrarse
                         </a>
                     </div>
@@ -438,6 +425,7 @@
                 </div>
                 <!-- Reservation Button -->
                 <a href="index3.html"
+                    id="reserva-btn"
                     class="block w-full text-center py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-full transition duration-300 shadow-md hover:shadow-lg">
                     Reserva Online
                 </a>
@@ -692,8 +680,10 @@
 
             // --- Lógica para el botón de Reserva Online ---
             const reservaBtn = document.getElementById('reserva-btn');
-            // Para el botón en el menú móvil (ajusta el selector si tu HTML cambia)
-            const mobileReservaBtn = document.querySelector('aside a[href="index3.html"].block, aside a[href="index3.html"].w-full');
+            // Selecciona el botón de reserva en el menú móvil por el texto y href
+            const mobileReservaBtn = Array.from(document.querySelectorAll('aside a')).find(
+                a => a.href && a.href.includes('index3.html') && a.textContent.trim().toLowerCase().includes('reserva online')
+            );
 
             if (reservaBtn) {
                 if (!user) {
@@ -781,12 +771,11 @@
                         text: '¿Estás seguro de que deseas salir de tu cuenta?',
                         icon: 'question',
                         showCancelButton: true,
-                        confirmButtonColor: '#7e22ce', // Color morado
-                        cancelButtonColor: '#6b7280', // Color gris
+                        confirmButtonColor: '#7e22ce',
+                        cancelButtonColor: '#6b7280',
                         confirmButtonText: 'Sí, cerrar sesión',
                         cancelButtonText: 'Cancelar',
-                        backdrop: `
-                    `,
+                        backdrop: ``,
                         customClass: {
                             popup: 'border border-purple-200 rounded-lg shadow-lg',
                             confirmButton: 'bg-purple-600 hover:bg-purple-700 focus:ring-4 focus:ring-purple-300',
