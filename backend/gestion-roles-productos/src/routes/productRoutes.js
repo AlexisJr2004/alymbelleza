@@ -21,5 +21,6 @@ router.post('/', verifyToken, isAdmin, upload.single('image'), productController
 router.put('/:id', verifyToken, isAdmin, upload.single('image'), productController.updateProduct);
 router.delete('/:id', verifyToken, isAdmin, productController.deleteProduct);
 router.get('/', productController.getProducts);
+router.get('/:id', productController.getProductById);
 
 module.exports = router;

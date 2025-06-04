@@ -898,6 +898,7 @@
         async function editarProducto(id) {
             const res = await fetch(`${API_URL}/${id}`);
             const { data } = await res.json();
+            console.log(data);
             document.getElementById('producto-id').value = data._id;
             document.getElementById('nombre').value = data.name;
             document.getElementById('descripcion').value = data.description;

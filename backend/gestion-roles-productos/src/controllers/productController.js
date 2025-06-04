@@ -25,12 +25,15 @@ exports.createProduct = async (req, res) => {
     }
 };
 
-exports.getProducts = async (req, res) => {
+exports.getProductById = async (req, res) => {
     try {
-        const products = await Product.find();
-        res.status(200).json({ success: true, data: products });
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).json({ success: false, error: 'Producto no encontrado' });
+        }
+        res.status(200).json({ success: true, data: product });
     } catch (error) {
-        res.status(500).json({ success: false, error: 'Error al obtener los productos', details: error.message });
+        res.status(500).json({ success: false, error: 'Error al obtener el producto', details: error.message });
     }
 };
 
