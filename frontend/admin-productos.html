@@ -86,8 +86,7 @@
                             class="text-purple-600 hover:text-purple-700 transition duration-300 p-2 rounded-full hover:bg-purple-50">
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a href="index3.html"
-                            id="reserva-btn"
+                        <a href="index3.html" id="reserva-btn"
                             class="text-sm text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition duration-300 px-4 py-2 rounded-full shadow-md hover:shadow-lg">
                             Reserva Online
                         </a>
@@ -424,8 +423,7 @@
                     </a>
                 </div>
                 <!-- Reservation Button -->
-                <a href="index3.html"
-                    id="reserva-btn"
+                <a href="index3.html" id="reserva-btn"
                     class="block w-full text-center py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-full transition duration-300 shadow-md hover:shadow-lg">
                     Reserva Online
                 </a>
@@ -443,7 +441,7 @@
     </header>
 
     <!-- admin-productos.html -->
-    <section id="admin-productos" class="max-w-5xl mx-auto my-10 p-8 bg-white rounded-xl shadow-lg">
+    <section id="admin-productos" class="max-w-7xl mx-auto my-10 p-8 bg-white rounded-xl shadow-lg">
         <div class="flex justify-between items-center mb-8">
             <h2 class="text-3xl font-bold text-gray-800">
                 <i class="fas fa-box-open mr-2 text-purple-600"></i> Gestión de Productos
@@ -822,30 +820,80 @@
         const cancelarBtn = document.getElementById('cancelar-edicion');
         let editandoId = null;
 
+        let productosData = [];
+        let paginaActual = Number(localStorage.getItem('paginaProductos')) || 1;
+        const productosPorPagina = 5;
+
         // Cargar todos los productos en la tabla
         async function cargarProductos() {
             const res = await fetch(API_URL);
             const { data } = await res.json();
-            tabla.innerHTML = data.map(p => `
-        <tr>
-            <td class="p-2 font-semibold">${p.name}</td>
-            <td class="p-2">$${p.price}</td>
-            <td class="p-2">${p.description}</td>
-            <td class="p-2">${p.rating ?? 0}</td>
-            <td class="p-2">
-                <img src="${p.image || './img/default.jpg'}" alt="${p.name}" class="w-16 h-16 object-cover rounded">
-            </td>
-            <td class="p-2">${p.availability ? 'Sí' : 'No'}</td>
-            <td class="p-2">
-                <button onclick="editarProducto('${p._id}')" class="text-blue-600">Editar</button>
-                <button onclick="eliminarProducto('${p._id}')" class="text-red-600">Eliminar</button>
-            </td>
-        </tr>
-    `).join('');
+            productosData = data;
+            mostrarPagina(paginaActual);
+            renderizarPaginacion();
+        }
+
+        // Mostrar productos de la página seleccionada
+        function mostrarPagina(pagina) {
+            paginaActual = pagina;
+            localStorage.setItem('paginaProductos', paginaActual);
+            const inicio = (pagina - 1) * productosPorPagina;
+            const fin = inicio + productosPorPagina;
+            const productosPagina = productosData.slice(inicio, fin);
+            tabla.innerHTML = productosPagina.map(p => `
+                <tr>
+                    <td class="p-2 font-semibold">${p.name}</td>
+                    <td class="p-2">$${p.price}</td>
+                    <td class="p-2">${p.description}</td>
+                    <td class="p-2">${p.rating ?? 0}</td>
+                    <td class="p-2">
+                        <img src="${p.image || './img/default.jpg'}" alt="${p.name}" class="w-16 h-16 object-cover rounded">
+                    </td>
+                    <td class="p-2">${p.availability ? 'Sí' : 'No'}</td>
+                    <td class="p-2">
+                        <div class="flex items-center gap-2 justify-end">
+                            <button type="button" title="Editar" class="btn-editar text-blue-600 hover:text-blue-800 p-2 rounded-full bg-blue-50 hover:bg-blue-100 transition" data-id="${p._id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button type="button" title="Eliminar" class="btn-eliminar text-red-600 hover:text-red-800 p-2 rounded-full bg-red-50 hover:bg-red-100 transition" data-id="${p._id}">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            renderizarPaginacion();
+            // Asignar eventos a los botones de editar/eliminar
+            document.querySelectorAll('.btn-editar').forEach(btn => {
+                btn.addEventListener('click', async function () {
+                    await editarProducto(this.dataset.id);
+                });
+            });
+            document.querySelectorAll('.btn-eliminar').forEach(btn => {
+                btn.addEventListener('click', async function () {
+                    await eliminarProducto(this.dataset.id);
+                });
+            });
+        }
+
+        // Paginación
+        function renderizarPaginacion() {
+            const totalPaginas = Math.ceil(productosData.length / productosPorPagina);
+            const paginacion = document.getElementById('paginacion-productos');
+            paginacion.innerHTML = '';
+            for (let i = 1; i <= totalPaginas; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                btn.className = `mx-1 px-3 py-1 rounded ${i === paginaActual ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'} transition`;
+                btn.addEventListener('click', () => {
+                    mostrarPagina(i);
+                });
+                paginacion.appendChild(btn);
+            }
         }
 
         // Editar producto: llena el formulario con los datos del producto seleccionado
-        window.editarProducto = async (id) => {
+        async function editarProducto(id) {
             const res = await fetch(`${API_URL}/${id}`);
             const { data } = await res.json();
             document.getElementById('producto-id').value = data._id;
@@ -859,17 +907,17 @@
             document.querySelector(`input[name="availability"][value="${data.availability ? 'true' : 'false'}"]`).checked = true;
             cancelarBtn.classList.remove('hidden');
             editandoId = data._id;
-        };
+        }
 
         // Eliminar producto
-        window.eliminarProducto = async (id) => {
+        async function eliminarProducto(id) {
             if (!confirm("¿Eliminar producto?")) return;
             await fetch(`${API_URL}/${id}`, {
                 method: "DELETE",
                 headers: { Authorization: `Bearer ${user.token}` }
             });
             cargarProductos();
-        };
+        }
 
         // Guardar producto (crear o editar)
         form.onsubmit = async e => {
@@ -896,7 +944,6 @@
             form.reset();
             cancelarBtn.classList.add('hidden');
             editandoId = null;
-            // Guarda la página actual antes de recargar productos
             localStorage.setItem('paginaProductos', paginaActual);
             cargarProductos();
         };
@@ -908,7 +955,11 @@
             editandoId = null;
         };
 
-        cargarProductos();
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            paginaActual = Number(localStorage.getItem('paginaProductos')) || 1;
+            cargarProductos();
+        });
     </script>
 
     <script>
@@ -937,7 +988,7 @@
                     reservaBtn.classList.add('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
                     reservaBtn.setAttribute('title', 'Debes iniciar sesión para reservar');
                     reservaBtn.href = "login.html";
-                    reservaBtn.addEventListener('click', function(e) {
+                    reservaBtn.addEventListener('click', function (e) {
                         e.preventDefault();
                         window.location.href = "login.html";
                     });
@@ -952,7 +1003,7 @@
                     mobileReservaBtn.classList.add('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
                     mobileReservaBtn.setAttribute('title', 'Debes iniciar sesión para reservar');
                     mobileReservaBtn.href = "login.html";
-                    mobileReservaBtn.addEventListener('click', function(e) {
+                    mobileReservaBtn.addEventListener('click', function (e) {
                         e.preventDefault();
                         window.location.href = "login.html";
                     });
@@ -1069,59 +1120,6 @@
 
                 reader.readAsDataURL(this.files[0]);
             }
-        });
-    </script>
-
-    <script>
-        let productosData = [];
-        let paginaActual = Number(localStorage.getItem('paginaProductos')) || 1;
-        const productosPorPagina = 5;
-
-        async function cargarProductos() {
-            const res = await fetch(API_URL);
-            const { data } = await res.json();
-            productosData = data;
-            mostrarPagina(paginaActual);
-            renderizarPaginacion();
-        }
-
-        function mostrarPagina(pagina) {
-            paginaActual = pagina;
-            localStorage.setItem('paginaProductos', paginaActual); // Guarda la página actual
-            const inicio = (pagina - 1) * productosPorPagina;
-            const fin = inicio + productosPorPagina;
-            const productosPagina = productosData.slice(inicio, fin);
-            tabla.innerHTML = productosPagina.map(p => `
-        <tr>
-            <td class="p-2 font-semibold">${p.name}</td>
-            <td class="p-2">$${p.price}</td>
-            <td class="p-2">${p.description}</td>
-            <td class="p-2">${p.rating ?? 0}</td>
-            <td class="p-2">
-                <img src="${p.image || './img/default.jpg'}" alt="${p.name}" class="w-16 h-16 object-cover rounded">
-            </td>
-            <td class="p-2">${p.availability ? 'Sí' : 'No'}</td>
-            <td class="p-2">
-                <button onclick="editarProducto('${p._id}')" class="text-blue-600">Editar</button>
-                <button onclick="eliminarProducto('${p._id}')" class="text-red-600">Eliminar</button>
-            </td>
-        </tr>
-    `).join('');
-        }
-
-        function renderizarPaginacion() {
-            const totalPaginas = Math.ceil(productosData.length / productosPorPagina);
-            let html = '';
-            for (let i = 1; i <= totalPaginas; i++) {
-                html += `<button onclick="mostrarPagina(${i})" class="mx-1 px-3 py-1 rounded ${i === paginaActual ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'}">${i}</button>`;
-            }
-            document.getElementById('paginacion-productos').innerHTML = html;
-        }
-
-        // Al cargar la página, recupera la página actual de localStorage
-        document.addEventListener('DOMContentLoaded', () => {
-            paginaActual = Number(localStorage.getItem('paginaProductos')) || 1;
-            cargarProductos();
         });
     </script>
 

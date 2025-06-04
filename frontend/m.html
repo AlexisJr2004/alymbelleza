@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+        <script src="https://cdn.tailwindcss.com"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <button title="Editar" onclick="editarProducto('${p._id}')" class="text-blue-600 hover:text-blue-800 p-2 rounded-full bg-blue-50 hover:bg-blue-100 transition">
+    <i class="fas fa-edit"></i>
+</button>
+<button title="Eliminar" onclick="eliminarProducto('${p._id}')" class="text-red-600 hover:text-red-800 p-2 rounded-full bg-red-50 hover:bg-red-100 transition">
+    <i class="fas fa-trash-alt"></i>
+</button>
+</body>
+</html>
