@@ -840,6 +840,43 @@
             const adminLinkContainer = document.getElementById('admin-link-container');
             const loginRegisterLinks = document.getElementById('login-register-links');
 
+            // --- Lógica para el botón de Reserva Online ---
+            const reservaBtn = document.getElementById('reserva-btn');
+            // Para el botón en el menú móvil (ajusta el selector si tu HTML cambia)
+            const mobileReservaBtn = document.querySelector('aside a[href="index3.html"].block, aside a[href="index3.html"].w-full');
+
+            if (reservaBtn) {
+                if (!user) {
+                    reservaBtn.classList.add('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
+                    reservaBtn.setAttribute('title', 'Debes iniciar sesión para reservar');
+                    reservaBtn.href = "login.html";
+                    reservaBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        window.location.href = "login.html";
+                    });
+                } else {
+                    reservaBtn.classList.remove('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
+                    reservaBtn.removeAttribute('title');
+                    reservaBtn.href = "index3.html";
+                }
+            }
+            if (mobileReservaBtn) {
+                if (!user) {
+                    mobileReservaBtn.classList.add('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
+                    mobileReservaBtn.setAttribute('title', 'Debes iniciar sesión para reservar');
+                    mobileReservaBtn.href = "login.html";
+                    mobileReservaBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        window.location.href = "login.html";
+                    });
+                } else {
+                    mobileReservaBtn.classList.remove('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
+                    mobileReservaBtn.removeAttribute('title');
+                    mobileReservaBtn.href = "index3.html";
+                }
+            }
+            // --- Fin lógica Reserva Online ---
+
             // Función para abrir/cerrar el dropdown
             const toggleDropdown = (open) => {
                 if (open) {
@@ -899,7 +936,7 @@
                         confirmButtonText: 'Sí, cerrar sesión',
                         cancelButtonText: 'Cancelar',
                         backdrop: `
-                `,
+                    `,
                         customClass: {
                             popup: 'border border-purple-200 rounded-lg shadow-lg',
                             confirmButton: 'bg-purple-600 hover:bg-purple-700 focus:ring-4 focus:ring-purple-300',

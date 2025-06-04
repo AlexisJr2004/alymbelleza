@@ -87,6 +87,7 @@
                             <i class="fab fa-facebook-f"></i>
                         </a>
                         <a href="index3.html"
+                            id="reserva-btn"
                             class="text-sm text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition duration-300 px-4 py-2 rounded-full shadow-md hover:shadow-lg">
                             Reserva Online
                         </a>
@@ -635,7 +636,7 @@
                     <div class="h-1 w-20 bg-purple-500 rounded"></div>
                 </div>
                 <p class="lg:w-1/2 w-full leading-relaxed text-gray-500">
-                    Descubre nuestra selección premium de productos para el cuidado y belleza. ¡Solo lo mejor para ti!
+                    Explora nuestra exclusiva línea de productos de belleza y cuidado personal, formulados con ingredientes de alta calidad y tecnología innovadora. Cada artículo ha sido cuidadosamente seleccionado para ofrecerte resultados visibles y una experiencia de lujo en tu rutina diaria.
                 </p>
             </div>
 
@@ -2661,6 +2662,43 @@
             const adminLinkContainer = document.getElementById('admin-link-container');
             const loginRegisterLinks = document.getElementById('login-register-links');
 
+            // --- Lógica para el botón de Reserva Online ---
+            const reservaBtn = document.getElementById('reserva-btn');
+            // Para el botón en el menú móvil (ajusta el selector si tu HTML cambia)
+            const mobileReservaBtn = document.querySelector('aside a[href="index3.html"].block, aside a[href="index3.html"].w-full');
+
+            if (reservaBtn) {
+                if (!user) {
+                    reservaBtn.classList.add('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
+                    reservaBtn.setAttribute('title', 'Debes iniciar sesión para reservar');
+                    reservaBtn.href = "login.html";
+                    reservaBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        window.location.href = "login.html";
+                    });
+                } else {
+                    reservaBtn.classList.remove('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
+                    reservaBtn.removeAttribute('title');
+                    reservaBtn.href = "index3.html";
+                }
+            }
+            if (mobileReservaBtn) {
+                if (!user) {
+                    mobileReservaBtn.classList.add('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
+                    mobileReservaBtn.setAttribute('title', 'Debes iniciar sesión para reservar');
+                    mobileReservaBtn.href = "login.html";
+                    mobileReservaBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        window.location.href = "login.html";
+                    });
+                } else {
+                    mobileReservaBtn.classList.remove('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
+                    mobileReservaBtn.removeAttribute('title');
+                    mobileReservaBtn.href = "index3.html";
+                }
+            }
+            // --- Fin lógica Reserva Online ---
+
             // Función para abrir/cerrar el dropdown
             const toggleDropdown = (open) => {
                 if (open) {
@@ -2720,7 +2758,7 @@
                         confirmButtonText: 'Sí, cerrar sesión',
                         cancelButtonText: 'Cancelar',
                         backdrop: `
-                `,
+                    `,
                         customClass: {
                             popup: 'border border-purple-200 rounded-lg shadow-lg',
                             confirmButton: 'bg-purple-600 hover:bg-purple-700 focus:ring-4 focus:ring-purple-300',
