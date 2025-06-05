@@ -448,11 +448,6 @@
             <h2 class="text-3xl font-bold text-gray-800">
                 <i class="fas fa-box-open mr-2 text-purple-600"></i> Gestión de Productos
             </h2>
-            <div class="relative">
-                <input type="text" placeholder="Buscar producto..."
-                    class="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-            </div>
         </div>
 
         <!-- Formulario mejorado -->
@@ -587,6 +582,13 @@
         <!-- Tabla mejorada -->
         <div class="overflow-x-auto rounded-xl border border-gray-200 shadow">
             <table class="min-w-full divide-y divide-gray-200">
+                <div class="mb-4">
+                    <div class="relative">
+                        <input type="text" id="buscador-productos" placeholder="Buscar producto..."
+                            class="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full max-w-md">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+                </div>
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -836,12 +838,12 @@
         }
 
         // Mostrar productos de la página seleccionada
-        function mostrarPagina(pagina) {
+        function mostrarPagina(pagina, productos = productosData) {
             paginaActual = pagina;
             localStorage.setItem('paginaProductos', paginaActual);
             const inicio = (pagina - 1) * productosPorPagina;
             const fin = inicio + productosPorPagina;
-            const productosPagina = productosData.slice(inicio, fin);
+            const productosPagina = productos.slice(inicio, fin);
             tabla.innerHTML = productosPagina.map(p => `
                 <tr>
                     <td class="p-2 font-semibold">${p.name}</td>
@@ -864,7 +866,7 @@
                     </td>
                 </tr>
             `).join('');
-            renderizarPaginacion();
+            renderizarPaginacion(productos);
             // Asignar eventos a los botones de editar/eliminar
             document.querySelectorAll('.btn-editar').forEach(btn => {
                 btn.addEventListener('click', async function () {
@@ -879,8 +881,8 @@
         }
 
         // Paginación
-        function renderizarPaginacion() {
-            const totalPaginas = Math.ceil(productosData.length / productosPorPagina);
+        function renderizarPaginacion(productos = productosData) {
+            const totalPaginas = Math.ceil(productos.length / productosPorPagina);
             const paginacion = document.getElementById('paginacion-productos');
             paginacion.innerHTML = '';
             for (let i = 1; i <= totalPaginas; i++) {
@@ -888,7 +890,7 @@
                 btn.textContent = i;
                 btn.className = `mx-1 px-3 py-1 rounded ${i === paginaActual ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'} transition`;
                 btn.addEventListener('click', () => {
-                    mostrarPagina(i);
+                    mostrarPagina(i, productos);
                 });
                 paginacion.appendChild(btn);
             }
@@ -913,12 +915,31 @@
 
         // Eliminar producto
         async function eliminarProducto(id) {
-            if (!confirm("¿Eliminar producto?")) return;
-            await fetch(`${API_URL}/${id}`, {
-                method: "DELETE",
-                headers: { Authorization: `Bearer ${user.token}` }
+            Swal.fire({
+                title: '¿Eliminar producto?',
+                text: 'Esta acción no se puede deshacer.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e11d48',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    await fetch(`${API_URL}/${id}`, {
+                        method: "DELETE",
+                        headers: { Authorization: `Bearer ${user.token}` }
+                    });
+                    Swal.fire({
+                        title: 'Eliminado',
+                        text: 'El producto ha sido eliminado.',
+                        icon: 'success',
+                        timer: 1200,
+                        showConfirmButton: false
+                    });
+                    cargarProductos();
+                }
             });
-            cargarProductos();
         }
 
         // Guardar producto (crear o editar)
@@ -961,6 +982,16 @@
         document.addEventListener('DOMContentLoaded', () => {
             paginaActual = Number(localStorage.getItem('paginaProductos')) || 1;
             cargarProductos();
+        });
+
+        // Cargar productos y DOMContentLoaded
+        document.getElementById('buscador-productos').addEventListener('input', function () {
+            const texto = this.value.toLowerCase();
+            const filtrados = productosData.filter(p =>
+                p.name.toLowerCase().includes(texto) ||
+                p.description.toLowerCase().includes(texto)
+            );
+            mostrarPagina(1, filtrados);
         });
     </script>
 
