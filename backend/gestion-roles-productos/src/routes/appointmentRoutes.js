@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Appointment = require('../models/appointment');
-const { authMiddleware } = require('../middleware/auth');
+const { authMiddleware } = require('../middlewares/auth');
 
 // Crear cita
 router.post('/', authMiddleware, async (req, res) => {
