@@ -876,7 +876,7 @@
         function renderNotifications(appointments) {
             console.log("Voy a renderizar estas citas:", appointments);
             const count = document.getElementById('notification-count');
-            const list = document.getElementById('notification-list');
+            const list = document.getElementById('appointments-list');
             count.textContent = appointments.length;
             if (appointments.length > 0) {
                 count.classList.remove('hidden');
