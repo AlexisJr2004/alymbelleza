@@ -14,7 +14,7 @@ router.post('/', authMiddleware, async (req, res) => {
 
 // Listar citas del usuario
 router.get('/', authMiddleware, async (req, res) => {
-  const appointments = await Appointment.find({ user: req.user._id, status: 'pendiente' }).sort({ date: 1 });
+  const appointments = await Appointment.find({ user: req.user._id }).sort({ date: 1 });
   res.json({ success: true, appointments });
 });
 

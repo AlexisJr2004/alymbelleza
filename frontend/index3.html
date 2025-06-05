@@ -781,6 +781,7 @@
                     headers: { "Authorization": `Bearer ${user.token}` }
                 });
                 const data = await res.json();
+                console.log("CITAS QUE LLEGAN DEL BACKEND:", data);
                 if (data.success) {
                     renderAppointments(data.appointments);
                     renderNotifications(data.appointments);
