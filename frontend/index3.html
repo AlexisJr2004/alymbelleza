@@ -882,14 +882,6 @@
             await updateAppointmentStatus(id, 'cancelada');
         }
 
-        // Mostrar/ocultar modal de notificaciones
-        document.getElementById('notification-btn').onclick = () => {
-            document.getElementById('notification-modal').classList.remove('hidden');
-        };
-        window.closeNotificationModal = function () {
-            document.getElementById('notification-modal').classList.add('hidden');
-        };
-
         // Cargar citas al iniciar
         document.addEventListener('DOMContentLoaded', loadAppointments);
 
@@ -1120,7 +1112,12 @@
     <script>
         document.getElementById('notification-btn').onclick = function (e) {
             e.stopPropagation();
-            document.getElementById('notification-dropdown').classList.toggle('hidden');
+            const dropdown = document.getElementById('notification-dropdown');
+            dropdown.classList.toggle('hidden');
+            if (!dropdown.classList.contains('hidden')) {
+                // Cargar notificaciones cada vez que se abre el dropdown
+                loadAppointments();
+            }
         };
         function closeNotifications() {
             document.getElementById('notification-dropdown').classList.add('hidden');
