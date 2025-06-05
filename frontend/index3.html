@@ -1178,20 +1178,34 @@
         document.getElementById('notification-btn').onclick = function (e) {
             e.stopPropagation();
             const dropdown = document.getElementById('notification-dropdown');
-            dropdown.classList.toggle('hidden');
+            const isHidden = dropdown.classList.contains('hidden');
+            if (isHidden) {
+                dropdown.classList.remove('hidden', 'opacity-0', 'scale-95');
+                dropdown.classList.add('opacity-100', 'scale-100');
+            } else {
+                dropdown.classList.remove('opacity-100', 'scale-100');
+                dropdown.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => dropdown.classList.add('hidden'), 200);
+            }
             if (!dropdown.classList.contains('hidden')) {
-                // Cargar notificaciones cada vez que se abre el dropdown
                 loadAppointments();
             }
         };
+
         function closeNotifications() {
-            document.getElementById('notification-dropdown').classList.add('hidden');
+            const dropdown = document.getElementById('notification-dropdown');
+            dropdown.classList.remove('opacity-100', 'scale-100');
+            dropdown.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => dropdown.classList.add('hidden'), 200);
         }
+
         document.addEventListener('click', function (event) {
             const dropdown = document.getElementById('notification-dropdown');
             const btn = document.getElementById('notification-btn');
             if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
-                dropdown.classList.add('hidden');
+                dropdown.classList.remove('opacity-100', 'scale-100');
+                dropdown.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => dropdown.classList.add('hidden'), 200);
             }
         });
     </script>
