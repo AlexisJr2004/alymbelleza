@@ -13,6 +13,7 @@ exports.authMiddleware = async (req, res, next) => {
     if (!req.user) throw new Error('Usuario no encontrado');
     next();
   } catch (err) {
+    console.error("JWT ERROR:", err);
     return res.status(401).json({ success: false, message: 'Token inválido' });
   }
 };
