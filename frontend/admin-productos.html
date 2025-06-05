@@ -813,7 +813,7 @@
     </section>
 
     <script>
-        const API_URL = "https://aly-mbelleza-backend.onrender.com/api/products";
+        const PRODUCTS_API_URL = "https://aly-mbelleza-backend.onrender.com/api/products";
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user || user.role !== 'admin') {
             window.location.href = "index.html";
@@ -830,7 +830,7 @@
 
         // Cargar todos los productos en la tabla
         async function cargarProductos() {
-            const res = await fetch(API_URL);
+            const res = await fetch(PRODUCTS_API_URL);
             const { data } = await res.json();
             productosData = data;
             mostrarPagina(paginaActual);
@@ -898,7 +898,7 @@
 
         // Editar producto: llena el formulario con los datos del producto seleccionado
         async function editarProducto(id) {
-            const res = await fetch(`${API_URL}/${id}`);
+            const res = await fetch(`${PRODUCTS_API_URL}/${id}`);
             const { data } = await res.json();
             document.getElementById('producto-id').value = data._id;
             document.getElementById('nombre').value = data.name;
@@ -926,7 +926,7 @@
                 cancelButtonText: 'Cancelar'
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    await fetch(`${API_URL}/${id}`, {
+                    await fetch(`${PRODUCTS_API_URL}/${id}`, {
                         method: "DELETE",
                         headers: { Authorization: `Bearer ${user.token}` }
                     });
@@ -958,7 +958,7 @@
             if (!formData.get('originalPrice')) formData.delete('originalPrice');
 
             const method = editandoId ? "PUT" : "POST";
-            const url = editandoId ? `${API_URL}/${editandoId}` : API_URL;
+            const url = editandoId ? `${PRODUCTS_API_URL}/${editandoId}` : PRODUCTS_API_URL;
             await fetch(url, {
                 method,
                 headers: { Authorization: `Bearer ${user.token}` },
