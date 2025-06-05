@@ -68,29 +68,84 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="flex items-center space-x-3">
+                        <!-- Icono de notificaciones minimalista -->
+                        <div class="relative">
+                            <button id="notification-btn"
+                                class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50 relative"
+                                title="Notificaciones">
+                                <i class="fas fa-bell"></i>
+                                <span id="notification-count"
+                                    class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold hidden">0</span>
+                            </button>
+
+                            <!-- Dropdown minimalista -->
+                            <div id="notification-dropdown" 
+                                class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden transition-all duration-200 origin-top-right transform opacity-0 scale-95 hidden">
+                                
+                                <!-- Header con gradiente -->
+                                <div class="px-5 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 flex justify-between items-center">
+                                    <div class="flex items-center gap-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                        </svg>
+                                        <h4 class="font-semibold text-white text-lg">Notificaciones</h4>
+                                    </div>
+                                    <button onclick="closeNotifications()" class="text-blue-100 hover:text-white transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <!-- Lista de notificaciones -->
+                                <ul id="appointments-list" class="divide-y divide-gray-100 max-h-96 overflow-y-auto">
+                                    <!-- Estado vacío -->
+                                    <li class="empty-state hidden px-5 py-8 text-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <p class="mt-3 text-gray-500 font-medium">No hay notificaciones</p>
+                                        <p class="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán aquí</p>
+                                    </li>
+                                    
+                                    <!-- Las notificaciones se insertarán aquí -->
+                                </ul>
+
+                                <!-- Footer con acción -->
+                                <div class="px-4 py-3 bg-gray-50 border-t border-gray-100 text-right">
+                                    <button class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center justify-end gap-1 w-full">
+                                        <span>Marcar todas como leídas</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Resto de iconos -->
                         <a href="carrito.html"
-                            class="text-purple-600 hover:text-purple-700 transition duration-300 p-2 rounded-full hover:bg-purple-50 relative"
+                            class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50 relative"
                             title="Ver carrito">
                             <i class="fas fa-shopping-cart"></i>
-                            <!-- Badge de cantidad (opcional) -->
                             <span id="cart-count"
-                                class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full px-1.5 py-0.5 font-bold hidden">0</span>
+                                class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold hidden">0</span>
                         </a>
                         <a href="https://www.tiktok.com/@merly_macias?lang=es" target="_blank"
-                            class="text-purple-600 hover:text-purple-700 transition duration-300 p-2 rounded-full hover:bg-purple-50">
+                            class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50">
                             <i class="fab fa-tiktok"></i>
                         </a>
                         <a href="https://www.facebook.com/HairdresserandSpa?mibextid=LQQJ4d" target="_blank"
-                            class="text-purple-600 hover:text-purple-700 transition duration-300 p-2 rounded-full hover:bg-purple-50">
+                            class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50">
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a href="index3.html"
-                            id="reserva-btn"
-                            class="text-sm text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition duration-300 px-4 py-2 rounded-full shadow-md hover:shadow-lg">
+                        <a href="index3.html" id="reserva-btn"
+                            class="text-sm text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition duration-200 px-4 py-2 rounded-full shadow hover:shadow-md">
                             Reserva Online
                         </a>
                     </div>
                 </div>
+
                 <!-- Menú de usuario minimalista -->
                 <div class="flex items-center relative">
                     <button type="button" class="flex rounded-full focus:outline-none" id="user-menu-button"
@@ -422,8 +477,7 @@
                     </a>
                 </div>
                 <!-- Reservation Button -->
-                <a href="index3.html"
-                    id="reserva-btn"
+                <a href="index3.html" id="reserva-btn"
                     class="block w-full text-center py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-full transition duration-300 shadow-md hover:shadow-lg">
                     Reserva Online
                 </a>

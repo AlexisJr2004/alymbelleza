@@ -1019,3 +1019,300 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("file-name").textContent = fileName;
   });
 });
+
+
+
+
+
+        const NOTIFICATION_API_URL = "https://aly-mbelleza-backend.onrender.com/api/appointments";
+
+        // Función para guardar la cita y abrir WhatsApp
+        async function handleDateClick(date) {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || !user.token) {
+                Swal.fire('Debes iniciar sesión para agendar una cita');
+                return;
+            }
+
+            // Resaltar día seleccionado
+            const allCells = document.querySelectorAll('#calendar > div');
+            allCells.forEach(cell => {
+                cell.classList.remove('bg-blue-600', 'text-white');
+                if (cell.textContent && isToday(new Date(currentDate.getFullYear(), currentDate.getMonth(), parseInt(cell.textContent)))) {
+                    cell.classList.add('bg-blue-100');
+                }
+            });
+
+            // Guardar cita en backend
+            try {
+                const res = await fetch(NOTIFICATION_API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${user.token}`
+                    },
+                    body: JSON.stringify({ date })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    Swal.fire('¡Cita agendada!', 'Tu cita ha sido registrada.', 'success');
+                    loadAppointments(); // Actualiza el panel y notificaciones
+                } else {
+                    Swal.fire('Error', data.message || 'No se pudo agendar la cita', 'error');
+                }
+            } catch (err) {
+                Swal.fire('Error', 'No se pudo conectar con el servidor', 'error');
+            }
+
+            // WhatsApp
+            const formattedDate = date.toLocaleDateString('es-ES', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            const message = `Hola Merly 👋, quiero agendar una cita para el ${formattedDate}, me confirmas si estarás disponible, gracias amiga ❤️, espero tu respuesta.`;
+            const phoneNumber = '593981229675';
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Cargar citas del usuario y mostrarlas en el panel y notificaciones
+        async function loadAppointments() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || !user.token) return;
+            try {
+                const res = await fetch(NOTIFICATION_API_URL, {
+                    headers: { "Authorization": `Bearer ${user.token}` }
+                });
+                const data = await res.json();
+                console.log("CITAS QUE LLEGAN DEL BACKEND:", data);
+                if (data.success) {
+                    renderAppointments(data.appointments);
+                    renderNotifications(data.appointments);
+                }
+            } catch (err) {
+                // Puedes mostrar un error si quieres
+            }
+        }
+
+        // Renderizar citas en el panel
+        function renderAppointments(appointments) {
+            const list = document.getElementById('appointments-list');
+            list.innerHTML = '';
+            if (!appointments.length) {
+                list.innerHTML = '<li class="text-gray-500">No tienes citas pendientes.</li>';
+                return;
+            }
+            appointments.forEach(app => {
+                const li = document.createElement('li');
+                li.className = "flex justify-between items-center bg-purple-50 rounded-lg px-4 py-2";
+                li.innerHTML = `
+                    <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-200">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-blue-100 p-2 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            </div>
+                            <span class="font-medium text-gray-700">
+                            ${new Date(app.date).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}
+                            </span>
+                        </div>
+                        
+                        <div class="flex gap-2">
+                            <button class="realizada-btn px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-md text-sm font-medium flex items-center gap-1 transition-colors" data-id="${app._id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            Realizada
+                            </button>
+                            <button class="cancelar-btn px-3 py-1.5 bg-rose-500 hover:bg-rose-600 text-white rounded-md text-sm font-medium flex items-center gap-1 transition-colors" data-id="${app._id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Cancelar
+                            </button>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(li);
+            });
+
+            // Eventos para los botones
+            document.querySelectorAll('.realizada-btn').forEach(btn => {
+                btn.onclick = () => updateAppointmentStatus(btn.dataset.id, 'realizada');
+            });
+            document.querySelectorAll('.cancelar-btn').forEach(btn => {
+                btn.onclick = () => cancelAppointment(btn.dataset.id);
+            });
+        }
+
+        // Renderizar notificaciones
+        function renderNotifications(appointments) {
+            const count = document.getElementById('notification-count');
+            const list = document.getElementById('appointments-list');
+            count.textContent = appointments.length;
+            if (appointments.length > 0) {
+                count.classList.remove('hidden');
+            } else {
+                count.classList.add('hidden');
+            }
+            list.innerHTML = '';
+            if (!appointments.length) {
+                list.innerHTML = `
+                    <li class="px-5 py-8 text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p class="mt-3 text-gray-500 font-medium">No hay notificaciones</p>
+                        <p class="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán aquí</p>
+                    </li>
+                `;
+                return;
+            }
+            appointments.forEach(app => {
+                // Estado visual
+                let estado = app.status || 'pendiente';
+                let estadoColor = 'text-yellow-500';
+                let estadoIcon = `<i class="fas fa-clock"></i>`;
+                let estadoText = 'Pendiente';
+                if (estado === 'realizada') {
+                    estadoColor = 'text-emerald-500';
+                    estadoIcon = `<i class="fas fa-check-circle"></i>`;
+                    estadoText = 'Realizada';
+                } else if (estado === 'cancelada') {
+                    estadoColor = 'text-rose-500';
+                    estadoIcon = `<i class="fas fa-times-circle"></i>`;
+                    estadoText = 'Cancelada';
+                }
+                // Fecha y hora
+                const fecha = new Date(app.date);
+                const fechaStr = fecha.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                const horaStr = fecha.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+
+                // Mensaje
+                const mensaje = `Tienes una reservación con tu estilista el <span class="font-semibold">${fechaStr}`;
+
+                // Botones solo si está pendiente
+                let botones = '';
+                if (estado === 'pendiente') {
+                    botones = `
+                        <div class="flex gap-2 mt-3">
+                            <button class="cancelar-btn px-3 py-1.5 bg-rose-500 hover:bg-rose-600 text-white rounded-md text-xs font-medium flex items-center gap-1 transition-colors" data-id="${app._id}">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                            <button class="realizada-btn px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-md text-xs font-medium flex items-center gap-1 transition-colors" data-id="${app._id}">
+                                <i class="fas fa-check"></i> Realizada
+                            </button>
+                        </div>
+                    `;
+                }
+
+                const li = document.createElement('li');
+                li.className = "px-5 py-4 flex flex-col gap-1 bg-white hover:bg-purple-50 rounded-xl mb-2 shadow-sm border border-gray-100";
+                li.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="text-xl ${estadoColor}">${estadoIcon}</span>
+                        <span class="text-sm font-semibold ${estadoColor}">${estadoText}</span>
+                    </div>
+                    <div class="text-gray-700 text-sm mt-1">${mensaje}</div>
+                    ${botones}
+                `;
+                list.appendChild(li);
+            });
+
+            // Eventos para los botones
+            document.querySelectorAll('.realizada-btn').forEach(btn => {
+                btn.onclick = () => updateAppointmentStatus(btn.dataset.id, 'realizada');
+            });
+            document.querySelectorAll('.cancelar-btn').forEach(btn => {
+                btn.onclick = () => cancelAppointment(btn.dataset.id);
+            });
+        }
+
+        // Cambiar estado de cita
+        async function updateAppointmentStatus(id, status) {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || !user.token) return;
+            // Actualiza en la base de datos
+            await fetch(`${NOTIFICATION_API_URL}/${id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${user.token}`
+                },
+                body: JSON.stringify({ status })
+            });
+            // Quita la notificación del DOM
+            const li = document.querySelector(`.realizada-btn[data-id="${id}"]`)?.closest('li') ||
+                    document.querySelector(`.cancelar-btn[data-id="${id}"]`)?.closest('li');
+            if (li) li.remove();
+            // Actualiza el contador
+            const count = document.getElementById('notification-count');
+            const list = document.getElementById('appointments-list');
+            count.textContent = list.children.length;
+            if (list.children.length === 0) {
+                list.innerHTML = '<li class="text-gray-500 px-4 py-2">Sin notificaciones.</li>';
+                count.classList.add('hidden');
+            }
+        }
+
+        // Cancelar cita y abrir WhatsApp
+        async function cancelAppointment(id) {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || !user.token) return;
+            // Buscar la cita para obtener la fecha
+            const res = await fetch(NOTIFICATION_API_URL, { headers: { "Authorization": `Bearer ${user.token}` } });
+            const data = await res.json();
+            const cita = data.appointments.find(a => a._id === id);
+            if (cita) {
+                const formattedDate = new Date(cita.date).toLocaleDateString('es-ES', {
+                    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+                });
+                const message = `Hola Merly, lamentablemente debo cancelar mi cita para el ${formattedDate}. Disculpa las molestias.`;
+                const phoneNumber = '593981229675';
+                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+            }
+            // Cambiar estado en backend
+            await updateAppointmentStatus(id, 'cancelada');
+        }
+
+        // Cargar citas al iniciar
+        document.addEventListener('DOMContentLoaded', loadAppointments);
+
+
+        document.getElementById('notification-btn').onclick = function (e) {
+            e.stopPropagation();
+            const dropdown = document.getElementById('notification-dropdown');
+            const isHidden = dropdown.classList.contains('hidden');
+            if (isHidden) {
+                dropdown.classList.remove('hidden', 'opacity-0', 'scale-95');
+                dropdown.classList.add('opacity-100', 'scale-100');
+            } else {
+                dropdown.classList.remove('opacity-100', 'scale-100');
+                dropdown.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => dropdown.classList.add('hidden'), 200);
+            }
+            if (!dropdown.classList.contains('hidden')) {
+                loadAppointments();
+            }
+        };
+
+        function closeNotifications() {
+            const dropdown = document.getElementById('notification-dropdown');
+            dropdown.classList.remove('opacity-100', 'scale-100');
+            dropdown.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => dropdown.classList.add('hidden'), 200);
+        }
+
+        document.addEventListener('click', function (event) {
+            const dropdown = document.getElementById('notification-dropdown');
+            const btn = document.getElementById('notification-btn');
+            if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
+                dropdown.classList.remove('opacity-100', 'scale-100');
+                dropdown.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => dropdown.classList.add('hidden'), 200);
+            }
+        });
