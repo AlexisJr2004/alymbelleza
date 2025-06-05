@@ -874,7 +874,6 @@
 
         // Renderizar notificaciones
         function renderNotifications(appointments) {
-            console.log("Voy a renderizar estas citas:", appointments);
             const count = document.getElementById('notification-count');
             const list = document.getElementById('appointments-list');
             count.textContent = appointments.length;
@@ -885,17 +884,74 @@
             }
             list.innerHTML = '';
             if (!appointments.length) {
-                list.innerHTML = '<li class="text-gray-500 px-4 py-2">Sin notificaciones.</li>';
+                list.innerHTML = `
+                    <li class="px-5 py-8 text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p class="mt-3 text-gray-500 font-medium">No hay notificaciones</p>
+                        <p class="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán aquí</p>
+                    </li>
+                `;
                 return;
             }
             appointments.forEach(app => {
+                // Estado visual
+                let estado = app.status || 'pendiente';
+                let estadoColor = 'text-yellow-500';
+                let estadoIcon = `<i class="fas fa-clock"></i>`;
+                let estadoText = 'Pendiente';
+                if (estado === 'realizada') {
+                    estadoColor = 'text-emerald-500';
+                    estadoIcon = `<i class="fas fa-check-circle"></i>`;
+                    estadoText = 'Realizada';
+                } else if (estado === 'cancelada') {
+                    estadoColor = 'text-rose-500';
+                    estadoIcon = `<i class="fas fa-times-circle"></i>`;
+                    estadoText = 'Cancelada';
+                }
+                // Fecha y hora
+                const fecha = new Date(app.date);
+                const fechaStr = fecha.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                const horaStr = fecha.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+
+                // Mensaje
+                const mensaje = `Tienes una reservación con tu estilista el <span class="font-semibold">${fechaStr}</span> a las <span class="font-semibold">${horaStr}</span>.`;
+
+                // Botones solo si está pendiente
+                let botones = '';
+                if (estado === 'pendiente') {
+                    botones = `
+                        <div class="flex gap-2 mt-3">
+                            <button class="cancelar-btn px-3 py-1.5 bg-rose-500 hover:bg-rose-600 text-white rounded-md text-xs font-medium flex items-center gap-1 transition-colors" data-id="${app._id}">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                            <button class="realizada-btn px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-md text-xs font-medium flex items-center gap-1 transition-colors" data-id="${app._id}">
+                                <i class="fas fa-check"></i> Realizada
+                            </button>
+                        </div>
+                    `;
+                }
+
                 const li = document.createElement('li');
-                li.className = "flex justify-between items-center bg-purple-50 rounded-lg px-3 py-2 mb-1";
+                li.className = "px-5 py-4 flex flex-col gap-1 bg-white hover:bg-purple-50 rounded-xl mb-2 shadow-sm border border-gray-100";
                 li.innerHTML = `
-                    <span>${new Date(app.date).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                    <span class="text-xs text-purple-600 capitalize">${app.status || 'Pendiente'}</span>
+                    <div class="flex items-center gap-3">
+                        <span class="text-xl ${estadoColor}">${estadoIcon}</span>
+                        <span class="text-sm font-semibold ${estadoColor}">${estadoText}</span>
+                    </div>
+                    <div class="text-gray-700 text-sm mt-1">${mensaje}</div>
+                    ${botones}
                 `;
                 list.appendChild(li);
+            });
+
+            // Eventos para los botones
+            document.querySelectorAll('.realizada-btn').forEach(btn => {
+                btn.onclick = () => updateAppointmentStatus(btn.dataset.id, 'realizada');
+            });
+            document.querySelectorAll('.cancelar-btn').forEach(btn => {
+                btn.onclick = () => cancelAppointment(btn.dataset.id);
             });
         }
 
