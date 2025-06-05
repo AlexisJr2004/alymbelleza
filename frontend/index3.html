@@ -14,7 +14,7 @@
 </head>
 
 <body class="bg-white font-body">
-    
+
     <!-- Section Menu -->
     <header class="bg-white/95 backdrop-blur-lg sticky top-0 z-[1000] border-b border-purple-100 ">
         <div class="container mx-auto px-4 lg:px-8">
@@ -67,47 +67,59 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="flex items-center space-x-3">
-                        <!-- Panel de Citas -->
-                        <div id="appointments-panel" class="w-full md:w-1/3 ml-0 md:ml-8 mt-8 md:mt-0">
-                            <h3 class="text-lg font-semibold mb-4">Tus Citas</h3>
-                            <ul id="appointments-list" class="space-y-4"></ul>
-                        </div>
-                        <!-- Icono de notificaciones -->
-                        <button id="notification-btn" class="fixed top-6 right-6 z-50 bg-purple-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg">
-                            <i class="fas fa-bell"></i>
-                            <span id="notification-count" class="absolute top-0 right-0 bg-pink-600 text-xs rounded-full px-2 py-0.5 font-bold">0</span>
-                        </button>
-                        <!-- Modal de notificaciones -->
-                        <div id="notification-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-                            <div class="bg-white rounded-xl p-6 w-80 shadow-lg">
-                                <h4 class="text-lg font-semibold mb-4">Notificaciones de Citas</h4>
-                                <ul id="notification-list" class="space-y-2"></ul>
-                                <button onclick="closeNotificationModal()" class="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg">Cerrar</button>
+                        <!-- Icono de notificaciones minimalista -->
+                        <div class="relative">
+                            <button id="notification-btn"
+                                class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50 relative"
+                                title="Notificaciones">
+                                <i class="fas fa-bell"></i>
+                                <span id="notification-count"
+                                    class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold hidden">0</span>
+                            </button>
+
+                            <!-- Dropdown minimalista -->
+                            <div id="notification-dropdown"
+                                class="hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-md z-50 border border-gray-100 divide-y divide-gray-100">
+                                <div class="px-4 py-3 flex justify-between items-center">
+                                    <h4 class="font-medium text-gray-900">Notificaciones</h4>
+                                    <button onclick="closeNotifications()" class="text-gray-400 hover:text-gray-600">
+                                        <i class="fas fa-times text-sm"></i>
+                                    </button>
+                                </div>
+
+                                <ul id="notification-list" class="max-h-72 overflow-y-auto">
+                                    <!-- Ejemplo de notificación minimalista -->
+                                    <li class="px-4 py-3 hover:bg-gray-50 transition-colors">
+                                        <p class="text-sm font-medium text-gray-800">Cita confirmada</p>
+                                        <p class="text-xs text-gray-500 mt-1">15 Junio · 14:00</p>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
+
+                        <!-- Resto de iconos -->
                         <a href="carrito.html"
-                            class="text-purple-600 hover:text-purple-700 transition duration-300 p-2 rounded-full hover:bg-purple-50 relative"
+                            class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50 relative"
                             title="Ver carrito">
                             <i class="fas fa-shopping-cart"></i>
-                            <!-- Badge de cantidad (opcional) -->
                             <span id="cart-count"
-                                class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full px-1.5 py-0.5 font-bold hidden">0</span>
+                                class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold hidden">0</span>
                         </a>
                         <a href="https://www.tiktok.com/@merly_macias?lang=es" target="_blank"
-                            class="text-purple-600 hover:text-purple-700 transition duration-300 p-2 rounded-full hover:bg-purple-50">
+                            class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50">
                             <i class="fab fa-tiktok"></i>
                         </a>
                         <a href="https://www.facebook.com/HairdresserandSpa?mibextid=LQQJ4d" target="_blank"
-                            class="text-purple-600 hover:text-purple-700 transition duration-300 p-2 rounded-full hover:bg-purple-50">
+                            class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50">
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a href="index3.html"
-                            id="reserva-btn"
-                            class="text-sm text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition duration-300 px-4 py-2 rounded-full shadow-md hover:shadow-lg">
+                        <a href="index3.html" id="reserva-btn"
+                            class="text-sm text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition duration-200 px-4 py-2 rounded-full shadow hover:shadow-md">
                             Reserva Online
                         </a>
                     </div>
                 </div>
+
                 <!-- Menú de usuario minimalista -->
                 <div class="flex items-center relative">
                     <button type="button" class="flex rounded-full focus:outline-none" id="user-menu-button"
@@ -439,8 +451,7 @@
                     </a>
                 </div>
                 <!-- Reservation Button -->
-                <a href="index3.html"
-                    id="reserva-btn"
+                <a href="index3.html" id="reserva-btn"
                     class="block w-full text-center py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-full transition duration-300 shadow-md hover:shadow-lg">
                     Reserva Online
                 </a>
@@ -509,7 +520,7 @@
                     HOY
                 </button>
             </div>
-    </div>
+        </div>
     </div>
 
     <!-- Boton Ir Arriba -->
@@ -722,7 +733,7 @@
                 return;
             }
 
-            // Resaltar día seleccionado (igual que antes)
+            // Resaltar día seleccionado
             const allCells = document.querySelectorAll('#calendar > div');
             allCells.forEach(cell => {
                 cell.classList.remove('bg-blue-600', 'text-white');
@@ -874,7 +885,7 @@
         document.getElementById('notification-btn').onclick = () => {
             document.getElementById('notification-modal').classList.remove('hidden');
         };
-        window.closeNotificationModal = function() {
+        window.closeNotificationModal = function () {
             document.getElementById('notification-modal').classList.add('hidden');
         };
 
@@ -945,29 +956,6 @@
             return date.getDay() === 0 || date.getDay() === 6;
         }
 
-        function handleDateClick(date) {
-            // Resaltar día seleccionado
-            const allCells = document.querySelectorAll('#calendar > div');
-            allCells.forEach(cell => {
-                cell.classList.remove('bg-blue-600', 'text-white');
-                if (cell.textContent && isToday(new Date(currentDate.getFullYear(), currentDate.getMonth(), parseInt(cell.textContent)))) {
-                    cell.classList.add('bg-blue-100');
-                }
-            });
-
-            const formattedDate = date.toLocaleDateString('es-ES', {
-                weekday: 'long',
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
-            });
-
-            const message = `Hola Merly 👋, quiero agendar una cita para el ${formattedDate}, me confirmas si estarás disponible, gracias amiga ❤️, espero tu respuesta.`;
-            const phoneNumber = '593981229675';
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
-        }
-
         prevMonth.addEventListener('click', () => {
             currentDate.setMonth(currentDate.getMonth() - 1);
             generateCalendar(currentDate);
@@ -1012,7 +1000,7 @@
                     reservaBtn.classList.add('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
                     reservaBtn.setAttribute('title', 'Debes iniciar sesión para reservar');
                     reservaBtn.href = "login.html";
-                    reservaBtn.addEventListener('click', function(e) {
+                    reservaBtn.addEventListener('click', function (e) {
                         e.preventDefault();
                         window.location.href = "login.html";
                     });
@@ -1027,7 +1015,7 @@
                     mobileReservaBtn.classList.add('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
                     mobileReservaBtn.setAttribute('title', 'Debes iniciar sesión para reservar');
                     mobileReservaBtn.href = "login.html";
-                    mobileReservaBtn.addEventListener('click', function(e) {
+                    mobileReservaBtn.addEventListener('click', function (e) {
                         e.preventDefault();
                         window.location.href = "login.html";
                     });
@@ -1127,7 +1115,30 @@
             }
         });
     </script>
-    
+
+    <script>
+        // Función para mostrar/ocultar el dropdown
+        document.getElementById('notification-btn').addEventListener('click', function (e) {
+            e.stopPropagation();
+            document.getElementById('notification-dropdown').classList.toggle('hidden');
+        });
+
+        // Función para cerrar notificaciones
+        function closeNotifications() {
+            document.getElementById('notification-dropdown').classList.add('hidden');
+        }
+
+        // Cerrar al hacer clic fuera
+        document.addEventListener('click', function (event) {
+            const dropdown = document.getElementById('notification-dropdown');
+            const btn = document.getElementById('notification-btn');
+
+            if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/main.js"></script>
 
