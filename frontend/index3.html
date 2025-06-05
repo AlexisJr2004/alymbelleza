@@ -825,17 +825,22 @@
             const count = document.getElementById('notification-count');
             const list = document.getElementById('notification-list');
             count.textContent = appointments.length;
+            if (appointments.length > 0) {
+                count.classList.remove('hidden');
+            } else {
+                count.classList.add('hidden');
+            }
             list.innerHTML = '';
             if (!appointments.length) {
-                list.innerHTML = '<li class="text-gray-500">Sin notificaciones.</li>';
+                list.innerHTML = '<li class="text-gray-500 px-4 py-2">Sin notificaciones.</li>';
                 return;
             }
             appointments.forEach(app => {
                 const li = document.createElement('li');
-                li.className = "flex justify-between items-center bg-purple-50 rounded-lg px-3 py-2";
+                li.className = "flex justify-between items-center bg-purple-50 rounded-lg px-3 py-2 mb-1";
                 li.innerHTML = `
                     <span>${new Date(app.date).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                    <span class="text-xs text-purple-600">Pendiente</span>
+                    <span class="text-xs text-purple-600 capitalize">${app.status || 'Pendiente'}</span>
                 `;
                 list.appendChild(li);
             });
@@ -1113,22 +1118,16 @@
     </script>
 
     <script>
-        // Función para mostrar/ocultar el dropdown
-        document.getElementById('notification-btn').addEventListener('click', function (e) {
+        document.getElementById('notification-btn').onclick = function (e) {
             e.stopPropagation();
             document.getElementById('notification-dropdown').classList.toggle('hidden');
-        });
-
-        // Función para cerrar notificaciones
+        };
         function closeNotifications() {
             document.getElementById('notification-dropdown').classList.add('hidden');
         }
-
-        // Cerrar al hacer clic fuera
         document.addEventListener('click', function (event) {
             const dropdown = document.getElementById('notification-dropdown');
             const btn = document.getElementById('notification-btn');
-
             if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
                 dropdown.classList.add('hidden');
             }
