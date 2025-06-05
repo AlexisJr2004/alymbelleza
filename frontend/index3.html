@@ -67,6 +67,24 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="flex items-center space-x-3">
+                        <!-- Panel de Citas -->
+                        <div id="appointments-panel" class="w-full md:w-1/3 ml-0 md:ml-8 mt-8 md:mt-0">
+                            <h3 class="text-lg font-semibold mb-4">Tus Citas</h3>
+                            <ul id="appointments-list" class="space-y-4"></ul>
+                        </div>
+                        <!-- Icono de notificaciones -->
+                        <button id="notification-btn" class="fixed top-6 right-6 z-50 bg-purple-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg">
+                            <i class="fas fa-bell"></i>
+                            <span id="notification-count" class="absolute top-0 right-0 bg-pink-600 text-xs rounded-full px-2 py-0.5 font-bold">0</span>
+                        </button>
+                        <!-- Modal de notificaciones -->
+                        <div id="notification-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+                            <div class="bg-white rounded-xl p-6 w-80 shadow-lg">
+                                <h4 class="text-lg font-semibold mb-4">Notificaciones de Citas</h4>
+                                <ul id="notification-list" class="space-y-2"></ul>
+                                <button onclick="closeNotificationModal()" class="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg">Cerrar</button>
+                            </div>
+                        </div>
                         <a href="carrito.html"
                             class="text-purple-600 hover:text-purple-700 transition duration-300 p-2 rounded-full hover:bg-purple-50 relative"
                             title="Ver carrito">
@@ -692,6 +710,178 @@
                 class="transition-all duration-300 ease-in-out delay-150 path-1"></path>
         </svg>
     </section>
+
+    <script>
+        const NOTIFICATION_API_URL = "https://aly-mbelleza-backend.onrender.com/api/appointments";
+
+        // Función para guardar la cita y abrir WhatsApp
+        async function handleDateClick(date) {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || !user.token) {
+                Swal.fire('Debes iniciar sesión para agendar una cita');
+                return;
+            }
+
+            // Resaltar día seleccionado (igual que antes)
+            const allCells = document.querySelectorAll('#calendar > div');
+            allCells.forEach(cell => {
+                cell.classList.remove('bg-blue-600', 'text-white');
+                if (cell.textContent && isToday(new Date(currentDate.getFullYear(), currentDate.getMonth(), parseInt(cell.textContent)))) {
+                    cell.classList.add('bg-blue-100');
+                }
+            });
+
+            // Guardar cita en backend
+            try {
+                const res = await fetch(NOTIFICATION_API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${user.token}`
+                    },
+                    body: JSON.stringify({ date })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    Swal.fire('¡Cita agendada!', 'Tu cita ha sido registrada.', 'success');
+                    loadAppointments(); // Actualiza el panel y notificaciones
+                } else {
+                    Swal.fire('Error', data.message || 'No se pudo agendar la cita', 'error');
+                }
+            } catch (err) {
+                Swal.fire('Error', 'No se pudo conectar con el servidor', 'error');
+            }
+
+            // WhatsApp
+            const formattedDate = date.toLocaleDateString('es-ES', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            const message = `Hola Merly 👋, quiero agendar una cita para el ${formattedDate}, me confirmas si estarás disponible, gracias amiga ❤️, espero tu respuesta.`;
+            const phoneNumber = '593981229675';
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Cargar citas del usuario y mostrarlas en el panel y notificaciones
+        async function loadAppointments() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || !user.token) return;
+            try {
+                const res = await fetch(NOTIFICATION_API_URL, {
+                    headers: { "Authorization": `Bearer ${user.token}` }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    renderAppointments(data.appointments);
+                    renderNotifications(data.appointments);
+                }
+            } catch (err) {
+                // Puedes mostrar un error si quieres
+            }
+        }
+
+        // Renderizar citas en el panel lateral
+        function renderAppointments(appointments) {
+            const list = document.getElementById('appointments-list');
+            list.innerHTML = '';
+            if (!appointments.length) {
+                list.innerHTML = '<li class="text-gray-500">No tienes citas pendientes.</li>';
+                return;
+            }
+            appointments.forEach(app => {
+                const li = document.createElement('li');
+                li.className = "flex justify-between items-center bg-purple-50 rounded-lg px-4 py-2";
+                li.innerHTML = `
+                    <span>${new Date(app.date).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                    <div class="flex gap-2">
+                        <button class="realizada-btn px-2 py-1 bg-green-500 text-white rounded text-xs" data-id="${app._id}">Realizada</button>
+                        <button class="cancelar-btn px-2 py-1 bg-red-500 text-white rounded text-xs" data-id="${app._id}">Cancelar</button>
+                    </div>
+                `;
+                list.appendChild(li);
+            });
+
+            // Eventos para los botones
+            document.querySelectorAll('.realizada-btn').forEach(btn => {
+                btn.onclick = () => updateAppointmentStatus(btn.dataset.id, 'realizada');
+            });
+            document.querySelectorAll('.cancelar-btn').forEach(btn => {
+                btn.onclick = () => cancelAppointment(btn.dataset.id);
+            });
+        }
+
+        // Renderizar notificaciones
+        function renderNotifications(appointments) {
+            const count = document.getElementById('notification-count');
+            const list = document.getElementById('notification-list');
+            count.textContent = appointments.length;
+            list.innerHTML = '';
+            if (!appointments.length) {
+                list.innerHTML = '<li class="text-gray-500">Sin notificaciones.</li>';
+                return;
+            }
+            appointments.forEach(app => {
+                const li = document.createElement('li');
+                li.className = "flex justify-between items-center bg-purple-50 rounded-lg px-3 py-2";
+                li.innerHTML = `
+                    <span>${new Date(app.date).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                    <span class="text-xs text-purple-600">Pendiente</span>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        // Cambiar estado de cita
+        async function updateAppointmentStatus(id, status) {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || !user.token) return;
+            await fetch(`${NOTIFICATION_API_URL}/${id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${user.token}`
+                },
+                body: JSON.stringify({ status })
+            });
+            loadAppointments();
+        }
+
+        // Cancelar cita y abrir WhatsApp
+        async function cancelAppointment(id) {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || !user.token) return;
+            // Buscar la cita para obtener la fecha
+            const res = await fetch(NOTIFICATION_API_URL, { headers: { "Authorization": `Bearer ${user.token}` } });
+            const data = await res.json();
+            const cita = data.appointments.find(a => a._id === id);
+            if (cita) {
+                const formattedDate = new Date(cita.date).toLocaleDateString('es-ES', {
+                    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+                });
+                const message = `Hola Merly, lamentablemente debo cancelar mi cita para el ${formattedDate}. Disculpa las molestias.`;
+                const phoneNumber = '593981229675';
+                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+            }
+            // Cambiar estado en backend
+            await updateAppointmentStatus(id, 'cancelada');
+        }
+
+        // Mostrar/ocultar modal de notificaciones
+        document.getElementById('notification-btn').onclick = () => {
+            document.getElementById('notification-modal').classList.remove('hidden');
+        };
+        window.closeNotificationModal = function() {
+            document.getElementById('notification-modal').classList.add('hidden');
+        };
+
+        // Cargar citas al iniciar
+        document.addEventListener('DOMContentLoaded', loadAppointments);
+
+    </script>
 
     <script>
         const calendar = document.getElementById('calendar');
