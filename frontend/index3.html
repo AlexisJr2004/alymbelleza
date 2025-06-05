@@ -79,7 +79,7 @@
 
                             <!-- Dropdown minimalista -->
                             <div id="notification-dropdown"
-                                class="hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-md z-50 border border-gray-100 divide-y divide-gray-100">
+                                class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-md z-50 border border-gray-100 divide-y divide-gray-100">
                                 <div class="px-4 py-3 flex justify-between items-center">
                                     <h4 class="font-medium text-gray-900">Notificaciones</h4>
                                     <button onclick="closeNotifications()" class="text-gray-400 hover:text-gray-600">
@@ -823,6 +823,7 @@
 
         // Renderizar notificaciones
         function renderNotifications(appointments) {
+            console.log("Voy a renderizar estas citas:", appointments);
             const count = document.getElementById('notification-count');
             const list = document.getElementById('notification-list');
             count.textContent = appointments.length;
