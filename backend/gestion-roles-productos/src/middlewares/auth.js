@@ -9,7 +9,7 @@ exports.authMiddleware = async (req, res, next) => {
   const token = authHeader.split(' ')[1];
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await User.findById(decoded.id).select('-password');
+    req.user = await User.findById(decoded.userId).select('-password');
     if (!req.user) throw new Error('Usuario no encontrado');
     next();
   } catch (err) {
