@@ -3173,6 +3173,19 @@
             }
         }
 
+        async function addToCart(token, productId, cantidad) {
+            const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ productId, cantidad })
+            });
+            if (!res.ok) throw new Error("No se pudo agregar al carrito");
+            return await res.json();
+        }
+
         document.addEventListener("DOMContentLoaded", async () => {
             const contenedor = document.getElementById("productos-lista");
             if (!contenedor) return;
