@@ -1200,22 +1200,33 @@
 
     <!-- Script para las funciones de mostrar, eliminar y sumar los productos del carrito -->
     <script>
-        // Obtiene el carrito del usuario autenticado
-        async function getCart(token) {
-            const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart", {
-                headers: { "Authorization": `Bearer ${token}` }
-            });
-            if (!res.ok) throw new Error("No se pudo obtener el carrito");
-            return await res.json();
+        async function actualizarContadorCarrito() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || !user.token) return;
+            try {
+                const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart", {
+                    headers: { "Authorization": `Bearer ${user.token}` }
+                });
+                const data = await res.json();
+                const count = data?.cart?.items?.length || 0;
+                const cartCount = document.getElementById('cart-count');
+                if (cartCount) {
+                    cartCount.textContent = count;
+                    if (count > 0) {
+                        cartCount.classList.remove('hidden');
+                    } else {
+                        cartCount.classList.add('hidden');
+                    }
+                }
+            } catch (err) {
+                const cartCount = document.getElementById('cart-count');
+                if (cartCount) cartCount.classList.add('hidden');
+            }
         }
-        async function removeFromCart(token, productId) {
-            await fetch(`https://aly-mbelleza-backend.onrender.com/api/cart/${productId}`, {
-                method: "DELETE",
-                headers: { "Authorization": `Bearer ${token}` }
-            });
-        }
+
         async function updateQuantity(token, productId, cantidad) {
-            await fetch(`https://aly-mbelleza-backend.onrender.com/api/cart/${productId}`, {
+            // Prueba ambos, uno debe funcionar según tu backend
+            let res = await fetch(`https://aly-mbelleza-backend.onrender.com/api/cart/${productId}`, {
                 method: "PATCH",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -1223,7 +1234,19 @@
                 },
                 body: JSON.stringify({ cantidad })
             });
+            if (!res.ok) {
+                // Si falla, prueba con quantity
+                await fetch(`https://aly-mbelleza-backend.onrender.com/api/cart/${productId}`, {
+                    method: "PATCH",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ quantity: cantidad })
+                });
+            }
         }
+
         document.addEventListener("DOMContentLoaded", async function () {
             const user = JSON.parse(localStorage.getItem("user"));
             if (!user || !user.token) {
@@ -1246,29 +1269,30 @@
                     subtotalElem.textContent = "$0";
                     descuentoElem.textContent = "$0";
                     totalElem.textContent = "$0";
+                    actualizarContadorCarrito();
                     return;
                 }
 
                 contenedor.innerHTML = items.map(item => `
-            <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
-                <img class="h-20 w-20 object-cover rounded" src="${item.product.image || './img/default.jpg'}" alt="${item.product.name}" />
-                <div class="flex-1 min-w-0">
-                    <h3 class="font-bold text-gray-900 mb-1">${item.product.name}</h3>
-                    <p class="text-gray-500 text-sm mb-2">${item.product.description || ''}</p>
-                    <div class="flex items-center gap-2">
-                        <button class="decrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${item.product._id}">-</button>
-                        <span class="mx-2">${item.cantidad}</span>
-                        <button class="incrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${item.product._id}">+</button>
+                    <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                        <img class="h-20 w-20 object-cover rounded" src="${item.product.image || './img/default.jpg'}" alt="${item.product.name}" />
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-bold text-gray-900 mb-1">${item.product.name}</h3>
+                            <p class="text-gray-500 text-sm mb-2">${item.product.description || ''}</p>
+                            <div class="flex items-center gap-2">
+                                <button class="decrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${item.product._id}">-</button>
+                                <span class="mx-2">${item.cantidad}</span>
+                                <button class="incrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${item.product._id}">+</button>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end gap-2">
+                            <span class="text-lg font-bold text-purple-700">$${(item.product.price * item.cantidad).toFixed(2)}</span>
+                            <button class="eliminar-item-carrito text-red-600 text-sm flex items-center gap-1" data-id="${item.product._id}">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="flex flex-col items-end gap-2">
-                    <span class="text-lg font-bold text-purple-700">$${(item.product.price * item.cantidad).toFixed(2)}</span>
-                    <button class="eliminar-item-carrito text-red-600 text-sm flex items-center gap-1" data-id="${item.product._id}">
-                        <i class="fas fa-trash"></i> Eliminar
-                    </button>
-                </div>
-            </div>
-        `).join("");
+                `).join("");
 
                 // Calcular resumen
                 const subtotal = items.reduce((sum, item) => sum + item.product.price * item.cantidad, 0);
@@ -1284,6 +1308,7 @@
                     btn.onclick = async function () {
                         await removeFromCart(user.token, btn.getAttribute("data-id"));
                         renderizarCarrito();
+                        actualizarContadorCarrito();
                     };
                 });
                 contenedor.querySelectorAll(".incrementar-cantidad").forEach(btn => {
@@ -1292,6 +1317,7 @@
                         const item = items.find(i => i.product._id === id);
                         await updateQuantity(user.token, id, item.cantidad + 1);
                         renderizarCarrito();
+                        actualizarContadorCarrito();
                     };
                 });
                 contenedor.querySelectorAll(".decrementar-cantidad").forEach(btn => {
@@ -1301,9 +1327,11 @@
                         if (item.cantidad > 1) {
                             await updateQuantity(user.token, id, item.cantidad - 1);
                             renderizarCarrito();
+                            actualizarContadorCarrito();
                         }
                     };
                 });
+                actualizarContadorCarrito();
             }
 
             renderizarCarrito();
