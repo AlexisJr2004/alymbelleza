@@ -1199,150 +1199,156 @@
     </script>
 
     <!-- Script para las funciones de mostrar, eliminar y sumar los productos del carrito -->
-    <script>
-        async function getCart(token) {
-            const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart", {
-                headers: { "Authorization": `Bearer ${token}` }
-            });
-            if (!res.ok) return { items: [] };
-            const data = await res.json();
-            // Ajusta según la estructura real de tu backend
-            return data.cart || { items: [] };
-        }
+<script>
+async function getCart(token) {
+    const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart", {
+        headers: { "Authorization": `Bearer ${token}` }
+    });
+    if (!res.ok) return { items: [] };
+    const data = await res.json();
+    // Intenta varias estructuras posibles
+    if (data.cart && Array.isArray(data.cart.items)) return data.cart;
+    if (Array.isArray(data.items)) return { items: data.items };
+    if (Array.isArray(data.cart)) return { items: data.cart };
+    return { items: [] };
+}
 
-        async function removeFromCart(token, productId) {
-            await fetch(`https://aly-mbelleza-backend.onrender.com/api/cart/${productId}`, {
-                method: "DELETE",
-                headers: { "Authorization": `Bearer ${token}` }
-            });
-        }
+async function removeFromCart(token, productId) {
+    await fetch(`https://aly-mbelleza-backend.onrender.com/api/cart/${productId}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
+    });
+}
 
-        async function updateQuantity(token, productId, cantidad) {
-            // Usa el campo que tu backend espera, normalmente "cantidad"
-            await fetch(`https://aly-mbelleza-backend.onrender.com/api/cart/${productId}`, {
-                method: "PATCH",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ cantidad })
-            });
-        }
+async function updateQuantity(token, productId, cantidad) {
+    await fetch(`https://aly-mbelleza-backend.onrender.com/api/cart/${productId}`, {
+        method: "PATCH",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ cantidad })
+    });
+}
 
-        async function actualizarContadorCarrito() {
-            const user = JSON.parse(localStorage.getItem('user'));
-            if (!user || !user.token) return;
-            try {
-                const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart", {
-                    headers: { "Authorization": `Bearer ${user.token}` }
-                });
-                const data = await res.json();
-                const count = data?.cart?.items?.reduce((acc, item) => acc + (item.cantidad || 1), 0) || 0;
-                const cartCount = document.getElementById('cart-count');
-                if (cartCount) {
-                    cartCount.textContent = count;
-                    if (count > 0) {
-                        cartCount.classList.remove('hidden');
-                    } else {
-                        cartCount.classList.add('hidden');
-                    }
-                }
-            } catch (err) {
-                const cartCount = document.getElementById('cart-count');
-                if (cartCount) cartCount.classList.add('hidden');
+async function actualizarContadorCarrito() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || !user.token) return;
+    try {
+        const carrito = await getCart(user.token);
+        const count = carrito.items.reduce((acc, item) => acc + (item.cantidad || 1), 0);
+        const cartCount = document.getElementById('cart-count');
+        if (cartCount) {
+            cartCount.textContent = count;
+            if (count > 0) {
+                cartCount.classList.remove('hidden');
+            } else {
+                cartCount.classList.add('hidden');
             }
         }
+    } catch (err) {
+        const cartCount = document.getElementById('cart-count');
+        if (cartCount) cartCount.classList.add('hidden');
+    }
+}
 
-        document.addEventListener("DOMContentLoaded", async function () {
-            const user = JSON.parse(localStorage.getItem("user"));
-            if (!user || !user.token) {
-                document.getElementById("carrito-lista").innerHTML = '<div class="text-center text-gray-500 py-8">Debes iniciar sesión para ver tu carrito.</div>';
-                return;
-            }
+document.addEventListener("DOMContentLoaded", async function () {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user || !user.token) {
+        document.getElementById("carrito-lista").innerHTML = '<div class="text-center text-gray-500 py-8">Debes iniciar sesión para ver tu carrito.</div>';
+        return;
+    }
 
-            async function renderizarCarrito() {
-                const carrito = await getCart(user.token);
-                const items = carrito.items || [];
-                const contenedor = document.getElementById("carrito-lista");
-                const subtotalElem = document.getElementById("carrito-subtotal");
-                const descuentoElem = document.getElementById("carrito-descuento");
-                const totalElem = document.getElementById("carrito-total");
+    async function renderizarCarrito() {
+        const carrito = await getCart(user.token);
+        const items = carrito.items || [];
+        const contenedor = document.getElementById("carrito-lista");
+        const subtotalElem = document.getElementById("carrito-subtotal");
+        const descuentoElem = document.getElementById("carrito-descuento");
+        const totalElem = document.getElementById("carrito-total");
 
-                if (!contenedor) return;
+        if (!contenedor) return;
 
-                if (items.length === 0) {
-                    contenedor.innerHTML = `<div class="text-center text-gray-500 py-8">Tu carrito está vacío.</div>`;
-                    subtotalElem.textContent = "$0";
-                    descuentoElem.textContent = "$0";
-                    totalElem.textContent = "$0";
-                    actualizarContadorCarrito();
-                    return;
-                }
+        if (items.length === 0) {
+            contenedor.innerHTML = `<div class="text-center text-gray-500 py-8">Tu carrito está vacío.</div>`;
+            subtotalElem.textContent = "$0";
+            descuentoElem.textContent = "$0";
+            totalElem.textContent = "$0";
+            actualizarContadorCarrito();
+            return;
+        }
 
-                contenedor.innerHTML = items.map(item => `
-                    <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
-                        <img class="h-20 w-20 object-cover rounded" src="${item.product.image || './img/default.jpg'}" alt="${item.product.name}" />
-                        <div class="flex-1 min-w-0">
-                            <h3 class="font-bold text-gray-900 mb-1">${item.product.name}</h3>
-                            <p class="text-gray-500 text-sm mb-2">${item.product.description || ''}</p>
-                            <div class="flex items-center gap-2">
-                                <button class="decrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${item.product._id}">-</button>
-                                <span class="mx-2">${item.cantidad}</span>
-                                <button class="incrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${item.product._id}">+</button>
-                            </div>
-                        </div>
-                        <div class="flex flex-col items-end gap-2">
-                            <span class="text-lg font-bold text-purple-700">$${(item.product.price * item.cantidad).toFixed(2)}</span>
-                            <button class="eliminar-item-carrito text-red-600 text-sm flex items-center gap-1" data-id="${item.product._id}">
-                                <i class="fas fa-trash"></i> Eliminar
-                            </button>
+        contenedor.innerHTML = items.map(item => {
+            // Soporta ambas estructuras: item.product o item directo
+            const prod = item.product || item;
+            return `
+                <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                    <img class="h-20 w-20 object-cover rounded" src="${prod.image || './img/default.jpg'}" alt="${prod.name}" />
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-bold text-gray-900 mb-1">${prod.name}</h3>
+                        <p class="text-gray-500 text-sm mb-2">${prod.description || ''}</p>
+                        <div class="flex items-center gap-2">
+                            <button class="decrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${prod._id}">-</button>
+                            <span class="mx-2">${item.cantidad}</span>
+                            <button class="incrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${prod._id}">+</button>
                         </div>
                     </div>
-                `).join("");
+                    <div class="flex flex-col items-end gap-2">
+                        <span class="text-lg font-bold text-purple-700">$${(prod.price * item.cantidad).toFixed(2)}</span>
+                        <button class="eliminar-item-carrito text-red-600 text-sm flex items-center gap-1" data-id="${prod._id}">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join("");
 
-                // Calcular resumen
-                const subtotal = items.reduce((sum, item) => sum + item.product.price * item.cantidad, 0);
-                const descuento = 0;
-                const total = subtotal - descuento;
+        // Calcular resumen
+        const subtotal = items.reduce((sum, item) => {
+            const prod = item.product || item;
+            return sum + (prod.price * item.cantidad);
+        }, 0);
+        const descuento = 0;
+        const total = subtotal - descuento;
 
-                subtotalElem.textContent = `$${subtotal.toFixed(2)}`;
-                descuentoElem.textContent = `-$${descuento.toFixed(2)}`;
-                totalElem.textContent = `$${total.toFixed(2)}`;
+        subtotalElem.textContent = `$${subtotal.toFixed(2)}`;
+        descuentoElem.textContent = `-$${descuento.toFixed(2)}`;
+        totalElem.textContent = `$${total.toFixed(2)}`;
 
-                // Eventos para eliminar y modificar cantidad
-                contenedor.querySelectorAll(".eliminar-item-carrito").forEach(btn => {
-                    btn.onclick = async function () {
-                        await removeFromCart(user.token, btn.getAttribute("data-id"));
-                        await renderizarCarrito();
-                        await actualizarContadorCarrito();
-                    };
-                });
-                contenedor.querySelectorAll(".incrementar-cantidad").forEach(btn => {
-                    btn.onclick = async function () {
-                        const id = btn.getAttribute("data-id");
-                        const item = items.find(i => i.product._id === id);
-                        await updateQuantity(user.token, id, item.cantidad + 1);
-                        await renderizarCarrito();
-                        await actualizarContadorCarrito();
-                    };
-                });
-                contenedor.querySelectorAll(".decrementar-cantidad").forEach(btn => {
-                    btn.onclick = async function () {
-                        const id = btn.getAttribute("data-id");
-                        const item = items.find(i => i.product._id === id);
-                        if (item.cantidad > 1) {
-                            await updateQuantity(user.token, id, item.cantidad - 1);
-                            await renderizarCarrito();
-                            await actualizarContadorCarrito();
-                        }
-                    };
-                });
+        // Eventos para eliminar y modificar cantidad
+        contenedor.querySelectorAll(".eliminar-item-carrito").forEach(btn => {
+            btn.onclick = async function () {
+                await removeFromCart(user.token, btn.getAttribute("data-id"));
+                await renderizarCarrito();
                 await actualizarContadorCarrito();
-            }
-
-            await renderizarCarrito();
+            };
         });
-    </script>
+        contenedor.querySelectorAll(".incrementar-cantidad").forEach(btn => {
+            btn.onclick = async function () {
+                const id = btn.getAttribute("data-id");
+                const itemSel = items.find(i => (i.product ? i.product._id : i._id) === id);
+                await updateQuantity(user.token, id, itemSel.cantidad + 1);
+                await renderizarCarrito();
+                await actualizarContadorCarrito();
+            };
+        });
+        contenedor.querySelectorAll(".decrementar-cantidad").forEach(btn => {
+            btn.onclick = async function () {
+                const id = btn.getAttribute("data-id");
+                const itemSel = items.find(i => (i.product ? i.product._id : i._id) === id);
+                if (itemSel.cantidad > 1) {
+                    await updateQuantity(user.token, id, itemSel.cantidad - 1);
+                    await renderizarCarrito();
+                    await actualizarContadorCarrito();
+                }
+            };
+        });
+        await actualizarContadorCarrito();
+    }
+
+    await renderizarCarrito();
+});
+</script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
