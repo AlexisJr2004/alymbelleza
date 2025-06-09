@@ -1200,6 +1200,35 @@
 
     <!-- Script para las funciones de mostrar, eliminar y sumar los productos del carrito -->
     <script>
+        async function getCart(token) {
+            const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart", {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            if (!res.ok) return { items: [] };
+            const data = await res.json();
+            // Ajusta según la estructura real de tu backend
+            return data.cart || { items: [] };
+        }
+
+        async function removeFromCart(token, productId) {
+            await fetch(`https://aly-mbelleza-backend.onrender.com/api/cart/${productId}`, {
+                method: "DELETE",
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+        }
+
+        async function updateQuantity(token, productId, cantidad) {
+            // Usa el campo que tu backend espera, normalmente "cantidad"
+            await fetch(`https://aly-mbelleza-backend.onrender.com/api/cart/${productId}`, {
+                method: "PATCH",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ cantidad })
+            });
+        }
+
         async function actualizarContadorCarrito() {
             const user = JSON.parse(localStorage.getItem('user'));
             if (!user || !user.token) return;
@@ -1208,7 +1237,7 @@
                     headers: { "Authorization": `Bearer ${user.token}` }
                 });
                 const data = await res.json();
-                const count = data?.cart?.items?.length || 0;
+                const count = data?.cart?.items?.reduce((acc, item) => acc + (item.cantidad || 1), 0) || 0;
                 const cartCount = document.getElementById('cart-count');
                 if (cartCount) {
                     cartCount.textContent = count;
@@ -1221,29 +1250,6 @@
             } catch (err) {
                 const cartCount = document.getElementById('cart-count');
                 if (cartCount) cartCount.classList.add('hidden');
-            }
-        }
-
-        async function updateQuantity(token, productId, cantidad) {
-            // Prueba ambos, uno debe funcionar según tu backend
-            let res = await fetch(`https://aly-mbelleza-backend.onrender.com/api/cart/${productId}`, {
-                method: "PATCH",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ cantidad })
-            });
-            if (!res.ok) {
-                // Si falla, prueba con quantity
-                await fetch(`https://aly-mbelleza-backend.onrender.com/api/cart/${productId}`, {
-                    method: "PATCH",
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ quantity: cantidad })
-                });
             }
         }
 
@@ -1307,8 +1313,8 @@
                 contenedor.querySelectorAll(".eliminar-item-carrito").forEach(btn => {
                     btn.onclick = async function () {
                         await removeFromCart(user.token, btn.getAttribute("data-id"));
-                        renderizarCarrito();
-                        actualizarContadorCarrito();
+                        await renderizarCarrito();
+                        await actualizarContadorCarrito();
                     };
                 });
                 contenedor.querySelectorAll(".incrementar-cantidad").forEach(btn => {
@@ -1316,8 +1322,8 @@
                         const id = btn.getAttribute("data-id");
                         const item = items.find(i => i.product._id === id);
                         await updateQuantity(user.token, id, item.cantidad + 1);
-                        renderizarCarrito();
-                        actualizarContadorCarrito();
+                        await renderizarCarrito();
+                        await actualizarContadorCarrito();
                     };
                 });
                 contenedor.querySelectorAll(".decrementar-cantidad").forEach(btn => {
@@ -1326,15 +1332,15 @@
                         const item = items.find(i => i.product._id === id);
                         if (item.cantidad > 1) {
                             await updateQuantity(user.token, id, item.cantidad - 1);
-                            renderizarCarrito();
-                            actualizarContadorCarrito();
+                            await renderizarCarrito();
+                            await actualizarContadorCarrito();
                         }
                     };
                 });
-                actualizarContadorCarrito();
+                await actualizarContadorCarrito();
             }
 
-            renderizarCarrito();
+            await renderizarCarrito();
         });
     </script>
 
