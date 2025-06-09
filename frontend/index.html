@@ -3141,16 +3141,15 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
-            const contenedor = document.getElementById("productos-lista");
-            if (!contenedor) return;
-            try {
-                const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/products");
-                const { data } = await res.json();
+    const contenedor = document.getElementById("productos-lista");
+    if (!contenedor) return;
+    try {
+        const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/products");
+        const { data } = await res.json();
 
-                contenedor.innerHTML = data.slice(0, 8).map((p, idx) => {
-                    let imageUrl = p.image || "./img/default.jpg";
-                    // Usamos un id único para cada botón
-                    return `
+        contenedor.innerHTML = data.slice(0, 8).map((p, idx) => {
+            let imageUrl = p.image || "./img/default.jpg";
+            return `
                 <div class="xl:w-1/4 md:w-1/2 p-4">
                     <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-gray-100">
                         <div class="relative">
@@ -3188,11 +3187,12 @@
                                     ${p.originalPrice ? `<span class="text-gray-400 text-sm line-through ml-2">$${p.originalPrice}</span>` : ''}
                                 </div>
                                 ${p.availability ? `
-                                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center comprar-btn" data-producto="${encodeURIComponent(p.name)}" id="comprar-btn-${idx}">
+                                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center agregar-carrito-btn" 
+                                        data-producto='${JSON.stringify(p)}'>
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                         </svg>
-                                        Comprar
+                                        Agregar al carrito
                                     </button>
                                 ` : `
                                     <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded-lg text-sm font-medium cursor-not-allowed" disabled>
@@ -3204,27 +3204,30 @@
                     </div>
                 </div>
             `;
-                }).join("");
+        }).join("");
 
-                // Agrega el evento a todos los botones de comprar
-                document.querySelectorAll('.comprar-btn').forEach(btn => {
-                    btn.addEventListener('click', function (e) {
-                        const user = JSON.parse(localStorage.getItem('user'));
-                        if (!user) {
-                            window.location.href = 'login.html';
-                            e.preventDefault();
-                            return false;
-                        }
-                        // Si hay usuario, redirige a WhatsApp
-                        const producto = btn.getAttribute('data-producto');
-                        window.open(`https://wa.me/593981229675?text=Estoy interesado en el producto: ${producto}`, '_blank');
-                    });
-                });
-
-            } catch (err) {
-                contenedor.innerHTML = `<div class="w-full text-center text-red-500 py-8">No se pudieron cargar los productos.</div>`;
-            }
+        // Evento para agregar al carrito
+        document.querySelectorAll('.agregar-carrito-btn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                const user = JSON.parse(localStorage.getItem('user'));
+                if (!user) {
+                    window.location.href = 'login.html';
+                    e.preventDefault();
+                    return false;
+                }
+                const producto = JSON.parse(btn.getAttribute('data-producto'));
+                agregarAlCarrito(producto, user);
+            });
         });
+
+        // Actualiza el contador del carrito al cargar
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) actualizarContadorCarrito(user);
+
+    } catch (err) {
+        contenedor.innerHTML = `<div class="w-full text-center text-red-500 py-8">No se pudieron cargar los productos.</div>`;
+    }
+});
     </script>
 
     <script>

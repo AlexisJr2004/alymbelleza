@@ -1019,3 +1019,40 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("file-name").textContent = fileName;
   });
 });
+
+function agregarAlCarrito(producto, user) {
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    let item = carrito.find(p => p.id === producto._id && p.userId === user._id);
+    if (item) {
+        item.cantidad += 1;
+    } else {
+        carrito.push({
+            id: producto._id,
+            nombre: producto.name,
+            precio: producto.price,
+            imagen: producto.image,
+            cantidad: 1,
+            userId: user._id
+        });
+    }
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    actualizarContadorCarrito(user);
+    Swal.fire({
+        icon: 'success',
+        title: '¡Agregado!',
+        text: 'Producto agregado al carrito',
+        timer: 1200,
+        showConfirmButton: false
+    });
+}
+
+function actualizarContadorCarrito(user) {
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    const carritoUsuario = carrito.filter(p => p.userId === user._id);
+    const count = carritoUsuario.reduce((sum, item) => sum + item.cantidad, 0);
+    const badge = document.getElementById("cart-count");
+    if (badge) {
+        badge.textContent = count;
+        badge.classList.toggle("hidden", count === 0);
+    }
+}

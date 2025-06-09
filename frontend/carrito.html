@@ -517,87 +517,44 @@
     </div>
 
     <!-- Section Shopping Cart -->
-    <section class="bg-white py-8 antialiased md:py-16">
-        <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
-            <h2 class="text-xl font-semibold text-gray-900 sm:text-2xl">Carrito de Compras</h2>
+<section class="bg-white py-8 antialiased md:py-16">
+    <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+        <h2 class="text-xl font-semibold text-gray-900 sm:text-2xl">Carrito de Compras</h2>
 
-            <div class="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
+        <div class="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
+            <!-- Lista de productos del carrito -->
             <div class="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
-                <div class="space-y-6">
-                <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:p-6">
-                    <div class="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
-                    <a href="#" class="shrink-0 md:order-1">
-                        <img class="h-20 w-20" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg" alt="imac image" />
-                    </a>
-
-                    <label for="counter-input" class="sr-only">Choose quantity:</label>
-                    <div class="flex items-center justify-between md:order-3 md:justify-end">
-                        <div class="flex items-center">
-                        <button type="button" id="decrement-button" data-input-counter-decrement="counter-input" class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100">
-                            <svg class="h-2.5 w-2.5 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
-                            </svg>
-                        </button>
-                        <input type="text" id="counter-input" data-input-counter class="w-10 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0" placeholder="" value="2" required />
-                        <button type="button" id="increment-button" data-input-counter-increment="counter-input" class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100">
-                            <svg class="h-2.5 w-2.5 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-                            </svg>
-                        </button>
-                        </div>
-                        <div class="text-end md:order-4 md:w-32">
-                        <p class="text-base font-bold text-gray-900">$1,499</p>
-                        </div>
-                    </div>
-
-                    <div class="w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md">
-                        <a href="#" class="text-base font-medium text-gray-900">PC system All in One APPLE iMac (2023) mqrq3ro/a, Apple M3, 24" Retina 4.5K, 8GB, SSD 256GB, 10-core GPU, Keyboard layout INT</a>
-
-                        <div class="flex items-center gap-4">
-                        <button type="button" class="inline-flex items-center text-sm font-medium text-red-600">
-                            <i class="fas fa-trash m-5"></i>
-                            <span>Eliminar</span>
-                        </button>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                </div>
+                <div id="carrito-lista" class="space-y-6"></div>
             </div>
 
+            <!-- Resumen del pedido -->
             <div class="mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full">
                 <div class="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-6">
-                <p class="text-xl font-semibold text-gray-900">Resumen del pedido</p>
-
-                <div class="space-y-4">
-                    <div class="space-y-2">
-                    <dl class="flex items-center justify-between gap-4">
-                        <dt class="text-base font-normal text-gray-500">Precio original</dt>
-                        <dd class="text-base font-medium text-gray-900">$7,592.00</dd>
-                    </dl>
-
-                    <dl class="flex items-center justify-between gap-4">
-                        <dt class="text-base font-normal text-gray-500">Ahorros</dt>
-                        <dd class="text-base font-medium text-green-600">-$299.00</dd>
-                    </dl>
+                    <p class="text-xl font-semibold text-gray-900">Resumen del pedido</p>
+                    <div class="space-y-4">
+                        <dl class="flex items-center justify-between gap-4">
+                            <dt class="text-base font-normal text-gray-500">Subtotal</dt>
+                            <dd id="carrito-subtotal" class="text-base font-medium text-gray-900">$0</dd>
+                        </dl>
+                        <dl class="flex items-center justify-between gap-4">
+                            <dt class="text-base font-normal text-gray-500">Descuentos</dt>
+                            <dd id="carrito-descuento" class="text-base font-medium text-green-600">$0</dd>
+                        </dl>
+                        <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2">
+                            <dt class="text-base font-bold text-gray-900">Total</dt>
+                            <dd id="carrito-total" class="text-base font-bold text-gray-900">$0</dd>
+                        </dl>
                     </div>
-
-                    <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2">
-                    <dt class="text-base font-bold text-gray-900">Total</dt>
-                    <dd class="text-base font-bold text-gray-900">$8,191.00</dd>
-                    </dl>
+                    <div class="flex items-center justify-center gap-2">
+                        <a href="pagos.html" class="inline-flex items-center gap-2 text-sm font-medium text-primary-700 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-full shadow hover:from-purple-700 hover:to-pink-700 transition">
+                            Continuar con la compra
+                        </a>
+                    </div>
                 </div>
-
-                <div class="flex items-center justify-center gap-2">
-                    <a href="pagos.html" title="" class="inline-flex items-center gap-2 text-sm font-medium text-primary-700">
-                    Continuar con la compra
-                    </a>
-                </div>
-                </div>
-            </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Boton Ir Arriba -->
     <div class="z-50 fixed bottom-36 right-4 flex flex-col space-y-6 items-center">
@@ -1454,6 +1411,192 @@
             }
         });
     </script>
+
+<script>
+    function renderizarCarrito(user) {
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    const carritoUsuario = carrito.filter(p => p.userId === user._id);
+    const contenedor = document.getElementById("carrito-lista"); // Debes tener un div con este id
+    const resumenTotal = document.getElementById("carrito-total"); // Debes tener un span con este id
+
+    if (!contenedor || !resumenTotal) return;
+
+    if (carritoUsuario.length === 0) {
+        contenedor.innerHTML = `<div class="text-center text-gray-500 py-8">Tu carrito está vacío.</div>`;
+        resumenTotal.textContent = "$0";
+        return;
+    }
+
+    contenedor.innerHTML = carritoUsuario.map(item => `
+        <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm flex items-center justify-between mb-4">
+            <img class="h-20 w-20" src="${item.imagen}" alt="${item.nombre}" />
+            <div class="flex-1 ml-4">
+                <h3 class="font-bold text-gray-900">${item.nombre}</h3>
+                <div class="flex items-center gap-2 mt-2">
+                    <button class="decrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${item.id}">-</button>
+                    <span class="mx-2">${item.cantidad}</span>
+                    <button class="incrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${item.id}">+</button>
+                </div>
+                <p class="text-gray-900 font-bold mt-2">$${item.precio * item.cantidad}</p>
+            </div>
+            <button class="eliminar-item-carrito text-red-600 ml-4" data-id="${item.id}">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    `).join("");
+
+    // Total
+    const total = carritoUsuario.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
+    resumenTotal.textContent = `$${total}`;
+
+    // Eventos para eliminar y modificar cantidad
+    contenedor.querySelectorAll(".eliminar-item-carrito").forEach(btn => {
+        btn.onclick = function() {
+            eliminarDelCarrito(btn.getAttribute("data-id"), user);
+        };
+    });
+    contenedor.querySelectorAll(".incrementar-cantidad").forEach(btn => {
+        btn.onclick = function() {
+            modificarCantidad(btn.getAttribute("data-id"), user, 1);
+        };
+    });
+    contenedor.querySelectorAll(".decrementar-cantidad").forEach(btn => {
+        btn.onclick = function() {
+            modificarCantidad(btn.getAttribute("data-id"), user, -1);
+        };
+    });
+}
+
+function eliminarDelCarrito(id, user) {
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    carrito = carrito.filter(item => !(item.id === id && item.userId === user._id));
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    renderizarCarrito(user);
+    actualizarContadorCarrito(user);
+}
+
+function modificarCantidad(id, user, cambio) {
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    let item = carrito.find(p => p.id === id && p.userId === user._id);
+    if (item) {
+        item.cantidad += cambio;
+        if (item.cantidad <= 0) {
+            carrito = carrito.filter(i => !(i.id === id && i.userId === user._id));
+        }
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+        renderizarCarrito(user);
+        actualizarContadorCarrito(user);
+    }
+}
+
+// Renderiza el carrito al cargar la página si hay usuario
+document.addEventListener("DOMContentLoaded", () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) renderizarCarrito(user);
+});
+</script>
+    
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+        document.getElementById("carrito-lista").innerHTML = '<div class="text-center text-gray-500 py-8">Debes iniciar sesión para ver tu carrito.</div>';
+        return;
+    }
+
+    function renderizarCarrito() {
+        const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+        const carritoUsuario = carrito.filter(p => p.userId === user._id);
+        const contenedor = document.getElementById("carrito-lista");
+        const subtotalElem = document.getElementById("carrito-subtotal");
+        const descuentoElem = document.getElementById("carrito-descuento");
+        const totalElem = document.getElementById("carrito-total");
+
+        if (!contenedor) return;
+
+        if (carritoUsuario.length === 0) {
+            contenedor.innerHTML = `<div class="text-center text-gray-500 py-8">Tu carrito está vacío.</div>`;
+            subtotalElem.textContent = "$0";
+            descuentoElem.textContent = "$0";
+            totalElem.textContent = "$0";
+            return;
+        }
+
+        contenedor.innerHTML = carritoUsuario.map(item => `
+            <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                <img class="h-20 w-20 object-cover rounded" src="${item.imagen || './img/default.jpg'}" alt="${item.nombre}" />
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-bold text-gray-900 mb-1">${item.nombre}</h3>
+                    <p class="text-gray-500 text-sm mb-2">${item.descripcion || ''}</p>
+                    <div class="flex items-center gap-2">
+                        <button class="decrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${item.id}">-</button>
+                        <span class="mx-2">${item.cantidad}</span>
+                        <button class="incrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${item.id}">+</button>
+                    </div>
+                </div>
+                <div class="flex flex-col items-end gap-2">
+                    <span class="text-lg font-bold text-purple-700">$${(item.precio * item.cantidad).toFixed(2)}</span>
+                    <button class="eliminar-item-carrito text-red-600 text-sm flex items-center gap-1" data-id="${item.id}">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </div>
+            </div>
+        `).join("");
+
+        // Calcular resumen
+        const subtotal = carritoUsuario.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
+        // Si tienes descuentos, cámbialo aquí. Por ahora, 0.
+        const descuento = 0;
+        const total = subtotal - descuento;
+
+        subtotalElem.textContent = `$${subtotal.toFixed(2)}`;
+        descuentoElem.textContent = `-$${descuento.toFixed(2)}`;
+        totalElem.textContent = `$${total.toFixed(2)}`;
+
+        // Eventos para eliminar y modificar cantidad
+        contenedor.querySelectorAll(".eliminar-item-carrito").forEach(btn => {
+            btn.onclick = function() {
+                eliminarDelCarrito(btn.getAttribute("data-id"));
+            };
+        });
+        contenedor.querySelectorAll(".incrementar-cantidad").forEach(btn => {
+            btn.onclick = function() {
+                modificarCantidad(btn.getAttribute("data-id"), 1);
+            };
+        });
+        contenedor.querySelectorAll(".decrementar-cantidad").forEach(btn => {
+            btn.onclick = function() {
+                modificarCantidad(btn.getAttribute("data-id"), -1);
+            };
+        });
+    }
+
+    function eliminarDelCarrito(id) {
+        let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+        carrito = carrito.filter(item => !(item.id === id && item.userId === user._id));
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+        renderizarCarrito();
+        // Si tienes contador de carrito en el header, llama aquí a actualizarContadorCarrito(user);
+    }
+
+    function modificarCantidad(id, cambio) {
+        let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+        let item = carrito.find(p => p.id === id && p.userId === user._id);
+        if (item) {
+            item.cantidad += cambio;
+            if (item.cantidad <= 0) {
+                carrito = carrito.filter(i => !(i.id === id && i.userId === user._id));
+            }
+            localStorage.setItem("carrito", JSON.stringify(carrito));
+            renderizarCarrito();
+            // Si tienes contador de carrito en el header, llama aquí a actualizarContadorCarrito(user);
+        }
+    }
+
+    renderizarCarrito();
+});
+</script>
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/main.js"></script>
