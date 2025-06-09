@@ -10,15 +10,18 @@ exports.getCart = async (req, res) => {
 // Agregar producto al carrito
 exports.addToCart = async (req, res) => {
   const { productId, cantidad } = req.body;
+  if (!cantidad || cantidad < 1) {
+    return res.status(400).json({ message: 'La cantidad debe ser al menos 1' });
+  }
   let cart = await Cart.findOne({ user: req.user.id });
   if (!cart) {
     cart = new Cart({ user: req.user.id, items: [] });
   }
   const item = cart.items.find(i => i.product.toString() === productId);
   if (item) {
-    item.cantidad += cantidad || 1;
+    item.cantidad += cantidad;
   } else {
-    cart.items.push({ product: productId, cantidad: cantidad || 1 });
+    cart.items.push({ product: productId, cantidad });
   }
   await cart.save();
   res.json(cart);
@@ -27,14 +30,20 @@ exports.addToCart = async (req, res) => {
 // Modificar cantidad
 exports.updateQuantity = async (req, res) => {
   const { productId, cantidad } = req.body;
+  if (cantidad < 1) {
+    // Eliminar el producto si la cantidad es menor a 1
+    const cart = await Cart.findOne({ user: req.user.id });
+    if (!cart) return res.status(404).json({ message: 'Carrito no encontrado' });
+    cart.items = cart.items.filter(i => i.product.toString() !== productId);
+    await cart.save();
+    return res.json(cart);
+  }
+  // Si la cantidad es válida, actualizar
   const cart = await Cart.findOne({ user: req.user.id });
   if (!cart) return res.status(404).json({ message: 'Carrito no encontrado' });
   const item = cart.items.find(i => i.product.toString() === productId);
   if (item) {
     item.cantidad = cantidad;
-    if (item.cantidad <= 0) {
-      cart.items = cart.items.filter(i => i.product.toString() !== productId);
-    }
     await cart.save();
     return res.json(cart);
   }
