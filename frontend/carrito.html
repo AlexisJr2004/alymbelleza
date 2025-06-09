@@ -1497,16 +1497,63 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
     
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+    const API_URL = "https://aly-mbelleza-backend.onrender.com/api/cart";
+
+async function getCart(token) {
+    const res = await fetch(API_URL, {
+        headers: { "Authorization": `Bearer ${token}` }
+    });
+    return await res.json();
+}
+
+async function addToCart(token, productId, cantidad = 1) {
+    const res = await fetch(`${API_URL}/add`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ productId, cantidad })
+    });
+    return await res.json();
+}
+
+async function updateQuantity(token, productId, cantidad) {
+    const res = await fetch(`${API_URL}/update`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ productId, cantidad })
+    });
+    return await res.json();
+}
+
+async function removeFromCart(token, productId) {
+    const res = await fetch(`${API_URL}/remove`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ productId })
+    });
+    return await res.json();
+}
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", async function () {
     const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
+    if (!user || !user.token) {
         document.getElementById("carrito-lista").innerHTML = '<div class="text-center text-gray-500 py-8">Debes iniciar sesión para ver tu carrito.</div>';
         return;
     }
 
-    function renderizarCarrito() {
-        const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-        const carritoUsuario = carrito.filter(p => p.userId === user._id);
+    async function renderizarCarrito() {
+        const carrito = await getCart(user.token);
+        const items = carrito.items || [];
         const contenedor = document.getElementById("carrito-lista");
         const subtotalElem = document.getElementById("carrito-subtotal");
         const descuentoElem = document.getElementById("carrito-descuento");
@@ -1514,7 +1561,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!contenedor) return;
 
-        if (carritoUsuario.length === 0) {
+        if (items.length === 0) {
             contenedor.innerHTML = `<div class="text-center text-gray-500 py-8">Tu carrito está vacío.</div>`;
             subtotalElem.textContent = "$0";
             descuentoElem.textContent = "$0";
@@ -1522,21 +1569,21 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        contenedor.innerHTML = carritoUsuario.map(item => `
+        contenedor.innerHTML = items.map(item => `
             <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
-                <img class="h-20 w-20 object-cover rounded" src="${item.imagen || './img/default.jpg'}" alt="${item.nombre}" />
+                <img class="h-20 w-20 object-cover rounded" src="${item.product.image || './img/default.jpg'}" alt="${item.product.name}" />
                 <div class="flex-1 min-w-0">
-                    <h3 class="font-bold text-gray-900 mb-1">${item.nombre}</h3>
-                    <p class="text-gray-500 text-sm mb-2">${item.descripcion || ''}</p>
+                    <h3 class="font-bold text-gray-900 mb-1">${item.product.name}</h3>
+                    <p class="text-gray-500 text-sm mb-2">${item.product.description || ''}</p>
                     <div class="flex items-center gap-2">
-                        <button class="decrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${item.id}">-</button>
+                        <button class="decrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${item.product._id}">-</button>
                         <span class="mx-2">${item.cantidad}</span>
-                        <button class="incrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${item.id}">+</button>
+                        <button class="incrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${item.product._id}">+</button>
                     </div>
                 </div>
                 <div class="flex flex-col items-end gap-2">
-                    <span class="text-lg font-bold text-purple-700">$${(item.precio * item.cantidad).toFixed(2)}</span>
-                    <button class="eliminar-item-carrito text-red-600 text-sm flex items-center gap-1" data-id="${item.id}">
+                    <span class="text-lg font-bold text-purple-700">$${(item.product.price * item.cantidad).toFixed(2)}</span>
+                    <button class="eliminar-item-carrito text-red-600 text-sm flex items-center gap-1" data-id="${item.product._id}">
                         <i class="fas fa-trash"></i> Eliminar
                     </button>
                 </div>
@@ -1544,8 +1591,7 @@ document.addEventListener("DOMContentLoaded", function () {
         `).join("");
 
         // Calcular resumen
-        const subtotal = carritoUsuario.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
-        // Si tienes descuentos, cámbialo aquí. Por ahora, 0.
+        const subtotal = items.reduce((sum, item) => sum + item.product.price * item.cantidad, 0);
         const descuento = 0;
         const total = subtotal - descuento;
 
@@ -1555,43 +1601,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Eventos para eliminar y modificar cantidad
         contenedor.querySelectorAll(".eliminar-item-carrito").forEach(btn => {
-            btn.onclick = function() {
-                eliminarDelCarrito(btn.getAttribute("data-id"));
+            btn.onclick = async function() {
+                await removeFromCart(user.token, btn.getAttribute("data-id"));
+                renderizarCarrito();
             };
         });
         contenedor.querySelectorAll(".incrementar-cantidad").forEach(btn => {
-            btn.onclick = function() {
-                modificarCantidad(btn.getAttribute("data-id"), 1);
+            btn.onclick = async function() {
+                const id = btn.getAttribute("data-id");
+                const item = items.find(i => i.product._id === id);
+                await updateQuantity(user.token, id, item.cantidad + 1);
+                renderizarCarrito();
             };
         });
         contenedor.querySelectorAll(".decrementar-cantidad").forEach(btn => {
-            btn.onclick = function() {
-                modificarCantidad(btn.getAttribute("data-id"), -1);
+            btn.onclick = async function() {
+                const id = btn.getAttribute("data-id");
+                const item = items.find(i => i.product._id === id);
+                await updateQuantity(user.token, id, item.cantidad - 1);
+                renderizarCarrito();
             };
         });
     }
 
-    function eliminarDelCarrito(id) {
-        let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-        carrito = carrito.filter(item => !(item.id === id && item.userId === user._id));
-        localStorage.setItem("carrito", JSON.stringify(carrito));
-        renderizarCarrito();
-        // Si tienes contador de carrito en el header, llama aquí a actualizarContadorCarrito(user);
-    }
-
-    function modificarCantidad(id, cambio) {
-        let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-        let item = carrito.find(p => p.id === id && p.userId === user._id);
-        if (item) {
-            item.cantidad += cambio;
-            if (item.cantidad <= 0) {
-                carrito = carrito.filter(i => !(i.id === id && i.userId === user._id));
-            }
-            localStorage.setItem("carrito", JSON.stringify(carrito));
-            renderizarCarrito();
-            // Si tienes contador de carrito en el header, llama aquí a actualizarContadorCarrito(user);
-        }
-    }
+    window.getCart = getCart;
+    window.addToCart = addToCart;
+    window.updateQuantity = updateQuantity;
+    window.removeFromCart = removeFromCart;
 
     renderizarCarrito();
 });
