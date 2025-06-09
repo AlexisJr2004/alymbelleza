@@ -2638,6 +2638,7 @@
         });
     </script>
 
+    <!-- Script para el envío del Correo -->
     <script>
         document.getElementById('contactForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -2703,6 +2704,7 @@
         });
     </script>
 
+    <!-- Script para la funcionalidad del botón de Usuario y Reservas en línea -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const user = JSON.parse(localStorage.getItem('user'));
@@ -2845,110 +2847,7 @@
         });
     </script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", async () => {
-            const contenedor = document.getElementById("productos-lista");
-            if (!contenedor) return;
-            try {
-                const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/products");
-                const { data } = await res.json();
-
-                contenedor.innerHTML = data.slice(0, 8).map((p, idx) => {
-                    let imageUrl = p.image || "./img/default.jpg";
-                    return `
-                <div class="xl:w-1/4 md:w-1/2 p-4">
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-gray-100">
-                        <div class="relative">
-                            <img class="h-48 w-full object-cover object-center" src="${imageUrl}" alt="${p.name}">
-                            <div class="absolute top-4 left-4">
-                                <span class="${p.featured ? 'bg-blue-500' : 'bg-gray-500'} text-white px-3 py-1 rounded-full text-xs font-semibold tracking-wide">
-                                    ${p.featured ? 'DESTACADO' : (p.category === 'capilar' ? 'CAPILAR' : 'FACIAL')}
-                                </span>
-                            </div>
-                        </div>
-                        <div class="p-5">
-                            <h3 class="text-blue-600 text-xs font-medium tracking-wider uppercase mb-1">
-                                ${p.category === 'capilar' ? 'Productos Capilares' : 'Productos Faciales'}
-                            </h3>
-                            <h2 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 hover:text-blue-600 transition-colors duration-200">
-                                ${p.name}
-                            </h2>
-                            <p class="text-gray-500 text-sm mb-4 line-clamp-2">
-                                ${p.description}
-                            </p>
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="flex items-center space-x-1">
-                                    <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                    </svg>
-                                    <span class="text-gray-600 text-sm">${p.rating || 'N/A'}</span>
-                                </div>
-                                <span class="text-xs ${p.availability ? 'text-green-600' : 'text-red-500'} font-medium">
-                                    ${p.availability ? 'Disponible' : 'Agotado'}
-                                </span>
-                            </div>
-                            <div class="flex items-center justify-between pt-3 border-t border-gray-100">
-                                <div>
-                                    <span class="text-gray-900 font-bold text-lg">$${p.price}</span>
-                                    ${p.originalPrice ? `<span class="text-gray-400 text-sm line-through ml-2">$${p.originalPrice}</span>` : ''}
-                                </div>
-                                ${p.availability ? `
-                                    <button 
-                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center agregar-carrito-btn"
-                                        data-producto='${JSON.stringify(p)}'>
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                        </svg>
-                                        Agregar al carrito
-                                    </button>
-                                ` : `
-                                    <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded-lg text-sm font-medium cursor-not-allowed" disabled>
-                                        Agotado
-                                    </button>
-                                `}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-                }).join("");
-
-                // Evento para agregar al carrito
-                document.querySelectorAll('.agregar-carrito-btn').forEach(btn => {
-                    btn.addEventListener('click', async function (e) {
-                        const user = JSON.parse(localStorage.getItem('user'));
-                        if (!user || !user.token) {
-                            window.location.href = 'login.html';
-                            e.preventDefault();
-                            return false;
-                        }
-                        const producto = JSON.parse(btn.getAttribute('data-producto'));
-                        try {
-                            await addToCart(user.token, producto._id, 1);
-                            Swal.fire({
-                                icon: 'success',
-                                title: '¡Agregado!',
-                                text: 'Producto agregado al carrito',
-                                timer: 1200,
-                                showConfirmButton: false
-                            });
-                            // Si tienes contador de carrito, actualízalo aquí
-                        } catch (err) {
-                            Swal.fire('Error', 'No se pudo agregar al carrito', 'error');
-                        }
-                    });
-                });
-
-                // Actualiza el contador del carrito al cargar
-                const user = JSON.parse(localStorage.getItem('user'));
-                if (user) actualizarContadorCarrito(user);
-
-            } catch (err) {
-                contenedor.innerHTML = `<div class="w-full text-center text-red-500 py-8">No se pudieron cargar los productos.</div>`;
-            }
-        });
-    </script>
-
+    <!-- Script para la reserva en linea -->
     <script>
         const NOTIFICATION_API_URL = "https://aly-mbelleza-backend.onrender.com/api/appointments";
 
@@ -3210,6 +3109,7 @@
 
     </script>
 
+    <!-- Script para centro de notificaciones -->
     <script>
         document.getElementById('notification-btn').onclick = function (e) {
             e.stopPropagation();
@@ -3246,14 +3146,138 @@
         });
     </script>
 
+    <!-- Script para agregar al carrito -->
+    <script>
+        async function actualizarContadorCarrito() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || !user.token) return;
+            try {
+                const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart", {
+                    headers: { "Authorization": `Bearer ${user.token}` }
+                });
+                const data = await res.json();
+                const count = data?.cart?.items?.length || 0;
+                const cartCount = document.getElementById('cart-count');
+                if (cartCount) {
+                    cartCount.textContent = count;
+                    if (count > 0) {
+                        cartCount.classList.remove('hidden');
+                    } else {
+                        cartCount.classList.add('hidden');
+                    }
+                }
+            } catch (err) {
+                // Si hay error, oculta el contador
+                const cartCount = document.getElementById('cart-count');
+                if (cartCount) cartCount.classList.add('hidden');
+            }
+        }
 
+        document.addEventListener("DOMContentLoaded", async () => {
+            const contenedor = document.getElementById("productos-lista");
+            if (!contenedor) return;
+            try {
+                const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/products");
+                const { data } = await res.json();
+
+                contenedor.innerHTML = data.slice(0, 8).map((p) => {
+                    let imageUrl = p.image || "./img/default.jpg";
+                    return `
+                        <div class="xl:w-1/4 md:w-1/2 p-4">
+                            <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-gray-100">
+                                <div class="relative">
+                                    <img class="h-48 w-full object-cover object-center" src="${imageUrl}" alt="${p.name}">
+                                    <div class="absolute top-4 left-4">
+                                        <span class="${p.featured ? 'bg-blue-500' : 'bg-gray-500'} text-white px-3 py-1 rounded-full text-xs font-semibold tracking-wide">
+                                            ${p.featured ? 'DESTACADO' : (p.category === 'capilar' ? 'CAPILAR' : 'FACIAL')}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="p-5">
+                                    <h3 class="text-blue-600 text-xs font-medium tracking-wider uppercase mb-1">
+                                        ${p.category === 'capilar' ? 'Productos Capilares' : 'Productos Faciales'}
+                                    </h3>
+                                    <h2 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 hover:text-blue-600 transition-colors duration-200">
+                                        ${p.name}
+                                    </h2>
+                                    <p class="text-gray-500 text-sm mb-4 line-clamp-2">
+                                        ${p.description}
+                                    </p>
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="flex items-center space-x-1">
+                                            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                            </svg>
+                                            <span class="text-gray-600 text-sm">${p.rating || 'N/A'}</span>
+                                        </div>
+                                        <span class="text-xs ${p.availability ? 'text-green-600' : 'text-red-500'} font-medium">
+                                            ${p.availability ? 'Disponible' : 'Agotado'}
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+                                        <div>
+                                            <span class="text-gray-900 font-bold text-lg">$${p.price}</span>
+                                            ${p.originalPrice ? `<span class="text-gray-400 text-sm line-through ml-2">$${p.originalPrice}</span>` : ''}
+                                        </div>
+                                        ${p.availability ? `
+                                            <button 
+                                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center agregar-carrito-btn"
+                                                data-producto='${JSON.stringify(p)}'>
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                                </svg>
+                                                Agregar al carrito
+                                            </button>
+                                        ` : `
+                                            <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded-lg text-sm font-medium cursor-not-allowed" disabled>
+                                                Agotado
+                                            </button>
+                                        `}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+
+                // Evento para agregar al carrito
+                document.querySelectorAll('.agregar-carrito-btn').forEach(btn => {
+                    btn.addEventListener('click', async function (e) {
+                        const user = JSON.parse(localStorage.getItem('user'));
+                        if (!user || !user.token) {
+                            window.location.href = 'login.html';
+                            return;
+                        }
+                        const producto = JSON.parse(btn.getAttribute('data-producto'));
+                        try {
+                            await addToCart(user.token, producto._id, 1);
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Agregado!',
+                                text: 'Producto agregado al carrito',
+                                timer: 1200,
+                                showConfirmButton: false
+                            });
+                            // Actualiza el contador del carrito aquí
+                            actualizarContadorCarrito();
+                        } catch (err) {
+                            Swal.fire('Error', err.message || 'No se pudo agregar al carrito', 'error');
+                        }
+                    });
+                });
+
+                // Al cargar la página, actualiza el contador si hay usuario
+                actualizarContadorCarrito();
+
+            } catch (err) {
+                contenedor.innerHTML = `<div class="w-full text-center text-red-500 py-8">No se pudieron cargar los productos.</div>`;
+            }
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script src="../backend/server.js"></script>
     <script src="js/main.js"></script>
-
-
 
 </body>
 
