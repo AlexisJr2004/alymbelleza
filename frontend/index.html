@@ -3706,6 +3706,143 @@
         });
     </script>
 
+    <script>
+        const API_URL = "https://aly-mbelleza-backend.onrender.com/api/cart";
+
+        async function getCart(token) {
+            const res = await fetch(API_URL, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            return await res.json();
+        }
+
+        async function addToCart(token, productId, cantidad = 1) {
+            const res = await fetch(`${API_URL}/add`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ productId, cantidad })
+            });
+            return await res.json();
+        }
+
+        async function updateQuantity(token, productId, cantidad) {
+            const res = await fetch(`${API_URL}/update`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ productId, cantidad })
+            });
+            return await res.json();
+        }
+
+        async function removeFromCart(token, productId) {
+            const res = await fetch(`${API_URL}/remove`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ productId })
+            });
+            return await res.json();
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (!user || !user.token) {
+                document.getElementById("carrito-lista").innerHTML = '<div class="text-center text-gray-500 py-8">Debes iniciar sesión para ver tu carrito.</div>';
+                return;
+            }
+
+            async function renderizarCarrito() {
+                const carrito = await getCart(user.token);
+                const items = carrito.items || [];
+                const contenedor = document.getElementById("carrito-lista");
+                const subtotalElem = document.getElementById("carrito-subtotal");
+                const descuentoElem = document.getElementById("carrito-descuento");
+                const totalElem = document.getElementById("carrito-total");
+
+                if (!contenedor) return;
+
+                if (items.length === 0) {
+                    contenedor.innerHTML = `<div class="text-center text-gray-500 py-8">Tu carrito está vacío.</div>`;
+                    subtotalElem.textContent = "$0";
+                    descuentoElem.textContent = "$0";
+                    totalElem.textContent = "$0";
+                    return;
+                }
+
+                contenedor.innerHTML = items.map(item => `
+            <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                <img class="h-20 w-20 object-cover rounded" src="${item.product.image || './img/default.jpg'}" alt="${item.product.name}" />
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-bold text-gray-900 mb-1">${item.product.name}</h3>
+                    <p class="text-gray-500 text-sm mb-2">${item.product.description || ''}</p>
+                    <div class="flex items-center gap-2">
+                        <button class="decrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${item.product._id}">-</button>
+                        <span class="mx-2">${item.cantidad}</span>
+                        <button class="incrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${item.product._id}">+</button>
+                    </div>
+                </div>
+                <div class="flex flex-col items-end gap-2">
+                    <span class="text-lg font-bold text-purple-700">$${(item.product.price * item.cantidad).toFixed(2)}</span>
+                    <button class="eliminar-item-carrito text-red-600 text-sm flex items-center gap-1" data-id="${item.product._id}">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </div>
+            </div>
+        `).join("");
+
+                // Calcular resumen
+                const subtotal = items.reduce((sum, item) => sum + item.product.price * item.cantidad, 0);
+                const descuento = 0;
+                const total = subtotal - descuento;
+
+                subtotalElem.textContent = `$${subtotal.toFixed(2)}`;
+                descuentoElem.textContent = `-$${descuento.toFixed(2)}`;
+                totalElem.textContent = `$${total.toFixed(2)}`;
+
+                // Eventos para eliminar y modificar cantidad
+                contenedor.querySelectorAll(".eliminar-item-carrito").forEach(btn => {
+                    btn.onclick = async function () {
+                        await removeFromCart(user.token, btn.getAttribute("data-id"));
+                        renderizarCarrito();
+                    };
+                });
+                contenedor.querySelectorAll(".incrementar-cantidad").forEach(btn => {
+                    btn.onclick = async function () {
+                        const id = btn.getAttribute("data-id");
+                        const item = items.find(i => i.product._id === id);
+                        await updateQuantity(user.token, id, item.cantidad + 1);
+                        renderizarCarrito();
+                    };
+                });
+                contenedor.querySelectorAll(".decrementar-cantidad").forEach(btn => {
+                    btn.onclick = async function () {
+                        const id = btn.getAttribute("data-id");
+                        const item = items.find(i => i.product._id === id);
+                        await updateQuantity(user.token, id, item.cantidad - 1);
+                        renderizarCarrito();
+                    };
+                });
+            }
+
+            window.getCart = getCart;
+            window.addToCart = addToCart;
+            window.updateQuantity = updateQuantity;
+            window.removeFromCart = removeFromCart;
+
+            renderizarCarrito();
+        });
+    </script>
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script src="../backend/server.js"></script>
