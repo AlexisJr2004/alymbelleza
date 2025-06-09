@@ -1,15 +1,20 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/user');
 
-exports.verifyToken = (req, res, next) => {
+exports.verifyToken = async (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1];
-  console.log('TOKEN RECIBIDO:', token); // <-- Agrega esto
   if (!token) return res.status(401).json({ error: 'Token requerido.' });
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) return res.status(403).json({ error: 'Token inválido.' });
-    req.user = decoded;
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // Busca el usuario real en la base de datos
+    const user = await User.findById(decoded.userId || decoded._id);
+    if (!user) return res.status(401).json({ error: 'Usuario no encontrado.' });
+    req.user = user; // Ahora req.user es el usuario real de MongoDB
     next();
-  });
+  } catch (err) {
+    return res.status(403).json({ error: 'Token inválido.' });
+  }
 };
 
 exports.isAdmin = (req, res, next) => {
