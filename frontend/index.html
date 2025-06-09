@@ -3174,31 +3174,18 @@
         }
 
         async function addToCart(token, productId, cantidad) {
-            // Prueba ambos formatos, uno de los dos debe funcionar según tu backend
-            let res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart", {
+            const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart/add", {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ productId, quantity: cantidad })
+                body: JSON.stringify({ productId, cantidad })
             });
-            let data = await res.json().catch(() => ({}));
+            const data = await res.json().catch(() => ({}));
             if (!res.ok) {
-                // Si falla, prueba el otro formato
-                res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart", {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ product: productId, quantity: cantidad })
-                });
-                data = await res.json().catch(() => ({}));
-                if (!res.ok) {
-                    console.error('Error al agregar al carrito:', data);
-                    throw new Error(data.message || data.error || "No se pudo agregar al carrito");
-                }
+                console.error('Error al agregar al carrito:', data);
+                throw new Error(data.message || data.error || "No se pudo agregar al carrito");
             }
             return data;
         }
