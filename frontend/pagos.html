@@ -632,9 +632,12 @@
             </div>
           </div>
         </div>
-      </div>
+    </div>
+    <button style="border: 1px solid; border-color: red; border-radius: 50px; margin: 20px;">
+      Descargar Factura en PDF
+    </button>
+    <div id="factura-pdf" style="display:none"></div>
     </section>
-
 
 
 
@@ -1493,6 +1496,118 @@
             }
         });
     </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+<script>
+function renderFacturaHTML(usuario, items) {
+    // Calcula totales
+    let subtotal = 0;
+    items.forEach(item => {
+        const prod = item.product || item;
+        subtotal += (prod.price * item.cantidad);
+    });
+    const iva = +(subtotal * 0.12).toFixed(2);
+    const total = +(subtotal + iva).toFixed(2);
+
+    // Fecha actual
+    const fecha = new Date();
+    const fechaStr = fecha.toLocaleDateString('es-EC');
+    const fechaAnulacion = new Date(fecha);
+    fechaAnulacion.setDate(fecha.getDate() + 3);
+    const fechaAnulacionStr = fechaAnulacion.toLocaleDateString('es-EC');
+
+    // Estructura HTML adaptada de formato_factura.html
+    return `
+    <div style="max-width:700px;margin:auto;font-family:sans-serif;background:#fff;border-radius:10px;overflow:hidden;border:1px solid #eee;">
+        <div style="background:#f3f4f6;padding:24px 32px;border-bottom:2px solid #7e22ce;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div>
+                    <h1 style="font-size:2rem;color:#7e22ce;font-weight:bold;">Bella Beauty</h1>
+                    <p style="font-size:13px;color:#555;">Factura de compra</p>
+                </div>
+                <div style="text-align:right;">
+                    <p style="font-size:13px;color:#7e22ce;"><i class="fas fa-globe"></i> www.bellabeauty.com</p>
+                    <p style="font-size:13px;color:#555;"><i class="fas fa-map-marker-alt"></i> Av. Principal 123, Ciudad</p>
+                </div>
+            </div>
+        </div>
+        <div style="padding:24px 32px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:24px;font-size:14px;">
+                <div>
+                    <p><strong>Fecha de Orden:</strong> ${fechaStr}</p>
+                    <p><strong>Fecha máxima de anulación:</strong> ${fechaAnulacionStr}</p>
+                    <p><strong>ID de Orden:</strong> ${Math.floor(Math.random()*1000000)}</p>
+                    <p><strong>Método de pago:</strong> Transferencia/Depósito</p>
+                </div>
+                <div>
+                    <p><strong>Cliente:</strong> ${usuario?.name || ''}</p>
+                    <p><strong>Email:</strong> ${usuario?.email || ''}</p>
+                </div>
+            </div>
+            <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:24px;">
+                <thead>
+                    <tr style="background:#f3f4f6;">
+                        <th style="padding:8px 4px;text-align:left;">#</th>
+                        <th style="padding:8px 4px;text-align:left;">Producto</th>
+                        <th style="padding:8px 4px;text-align:right;">Cantidad</th>
+                        <th style="padding:8px 4px;text-align:right;">Precio</th>
+                        <th style="padding:8px 4px;text-align:right;">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${items.map((item, idx) => {
+                        const prod = item.product || item;
+                        return `<tr>
+                            <td style="padding:6px 4px;">${idx+1}</td>
+                            <td style="padding:6px 4px;">${prod.name}</td>
+                            <td style="padding:6px 4px;text-align:right;">${item.cantidad}</td>
+                            <td style="padding:6px 4px;text-align:right;">$${prod.price.toFixed(2)}</td>
+                            <td style="padding:6px 4px;text-align:right;">$${(prod.price*item.cantidad).toFixed(2)}</td>
+                        </tr>`;
+                    }).join('')}
+                </tbody>
+            </table>
+            <div style="display:flex;justify-content:flex-end;">
+                <div style="width:220px;">
+                    <p style="display:flex;justify-content:space-between;"><span>Sub Total</span> <span>$${subtotal.toFixed(2)}</span></p>
+                    <p style="display:flex;justify-content:space-between;"><span>IVA (12%)</span> <span>$${iva.toFixed(2)}</span></p>
+                    <p style="display:flex;justify-content:space-between;font-weight:bold;"><span>Total</span> <span>$${total.toFixed(2)}</span></p>
+                </div>
+            </div>
+        </div>
+        <div style="background:#f3f4f6;padding:18px 32px;font-size:13px;">
+            <p><strong>Términos:</strong> La compra podrá anularse hasta 3 días después de realizarla.</p>
+            <p style="margin-top:8px;">Gracias por tu compra en Bella Beauty.</p>
+        </div>
+    </div>
+    `;
+}
+
+// Evento para el botón de descargar factura
+document.addEventListener("DOMContentLoaded", function () {
+    const btnFactura = document.querySelector('button, a, input[type="button"], input[type="submit"]');
+    // Busca el botón por texto si tienes varios botones
+    const descargarBtn = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Descargar Factura"));
+    if (descargarBtn) {
+        descargarBtn.addEventListener("click", function () {
+            const items = JSON.parse(localStorage.getItem("factura_carrito") || "[]");
+            const usuario = JSON.parse(localStorage.getItem("factura_usuario") || "{}");
+            const html = renderFacturaHTML(usuario, items);
+            const facturaDiv = document.getElementById("factura-pdf");
+            facturaDiv.innerHTML = html;
+            facturaDiv.style.display = "block";
+            html2pdf().from(facturaDiv).set({
+                margin: 10,
+                filename: 'factura_bellabeauty.pdf',
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).save().then(() => {
+                facturaDiv.style.display = "none";
+            });
+        });
+    }
+});
+</script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/main.js"></script>

@@ -1385,6 +1385,26 @@
         });
     </script>
 
+    <!-- Script para guardar los datos del carrito -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const btnCompra = document.querySelector('a[href="pagos.html"]');
+        if (btnCompra) {
+            btnCompra.addEventListener("click", async function (e) {
+                e.preventDefault();
+                // Obtén los datos del carrito y usuario
+                const user = JSON.parse(localStorage.getItem("user"));
+                const carrito = await getCart(user.token);
+                // Guarda en localStorage para la factura
+                localStorage.setItem("factura_carrito", JSON.stringify(carrito.items || []));
+                localStorage.setItem("factura_usuario", JSON.stringify(user));
+                // Redirige a pagos.html
+                window.location.href = "pagos.html";
+            });
+        }
+    });
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
