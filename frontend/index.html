@@ -15,17 +15,17 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
         @media (max-width: 767px) {
-        #notification-dropdown.mobile-active {
-            position: fixed !important;
-            left: 50% !important;
-            top: 50% !important;
-            transform: translate(-50%, -50%) scale(1) !important;
-            width: 90vw !important;
-            max-width: 380px !important;
-            z-index: 9999 !important;
-            border-radius: 1.5rem !important;
-            box-shadow: 0 8px 32px rgba(80,0,120,0.18);
-        }
+            #notification-dropdown.mobile-active {
+                position: fixed !important;
+                left: 50% !important;
+                top: 20px !important;
+                transform: translateX(-50%) scale(1) !important;
+                width: 90vw !important;
+                max-width: 380px !important;
+                z-index: 9999 !important;
+                border-radius: 1.5rem !important;
+                box-shadow: 0 8px 32px rgba(80, 0, 120, 0.18);
+            }
         }
     </style>
 </head>
@@ -93,7 +93,61 @@
                                 <span id="notification-count"
                                     class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold hidden">0</span>
                             </button>
+                            <!-- Dropdown minimalista -->
+                            <div id="notification-dropdown"
+                                class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden transition-all duration-200 origin-top-right transform opacity-0 scale-95 hidden">
 
+                                <!-- Header con gradiente -->
+                                <div
+                                    class="px-5 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 flex justify-between items-center">
+                                    <div class="flex items-center gap-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                        </svg>
+                                        <h4 class="font-semibold text-white text-lg">Notificaciones</h4>
+                                    </div>
+                                    <button onclick="closeNotifications()"
+                                        class="text-blue-100 hover:text-white transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <!-- Lista de notificaciones -->
+                                <ul id="appointments-list" class="divide-y divide-gray-100 max-h-96 overflow-y-auto">
+                                    <!-- Estado vacío -->
+                                    <li class="empty-state hidden px-5 py-8 text-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <p class="mt-3 text-gray-500 font-medium">No hay notificaciones</p>
+                                        <p class="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán
+                                            aquí</p>
+                                    </li>
+
+                                    <!-- Las notificaciones se insertarán aquí -->
+                                </ul>
+
+                                <!-- Footer con acción -->
+                                <div class="px-4 py-3 bg-gray-50 border-t border-gray-100 text-right">
+                                    <button
+                                        class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center justify-end gap-1 w-full">
+                                        <span>Marcar todas como leídas</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Resto de iconos -->
@@ -279,259 +333,217 @@
             </div>
         </div>
 
-    <!-- Mobile Menu -->
-    <aside
-        class="hidden fixed left-0 top-0 z-50 h-screen w-80 bg-white/95 backdrop-blur-md rounded-r-3xl border-r border-purple-100 shadow-lg overflow-y-auto"
-        id="mobile-menu">
-        <!-- Header -->
-        <div class="p-4 mb-6 border-b border-purple-100">
-            <div class="flex items-center mb-3">
-                <div class="ml-3">
-                    <h2
-                        class="text-xl font-display bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                        Bella Beauty
-                    </h2>
-                    <p class="text-sm text-purple-600">Tu belleza, nuestra pasión</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Sección de Perfil (solo visible con sesión) -->
-        <div id="mobile-user-profile-section" class="hidden px-4 py-4 mb-4 border-b border-purple-100">
-            <div class="flex items-center space-x-4">
-                <!-- Foto de perfil con indicador de estado -->
-                <div class="relative">
-                    <img id="mobile-profile-img"
-                        class="w-14 h-14 rounded-full border-2 border-purple-100 object-cover shadow-sm" src=""
-                        alt="Foto de perfil"
-                        onerror="this.onerror=null;this.src='https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';">
-                    <span id="mobile-status-indicator"
-                        class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span>
-                </div>
-
-                <!-- Información del usuario -->
-                <div class="flex-1 min-w-0">
-                    <div class="flex items-center justify-between">
-                        <span id="mobile-profile-name"
-                            class="block text-base font-semibold text-gray-900 truncate max-w-[140px]"></span>
-                        <button id="mobile-logout-btn" class="text-red-500 hover:text-red-700 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                            </svg>
-                        </button>
+        <!-- Mobile Menu -->
+        <aside
+            class="hidden fixed left-0 top-0 z-50 h-screen w-80 bg-white/95 backdrop-blur-md rounded-r-3xl border-r border-purple-100 shadow-lg overflow-y-auto"
+            id="mobile-menu">
+            <!-- Header -->
+            <div class="p-4 mb-6 border-b border-purple-100">
+                <div class="flex items-center mb-3">
+                    <div class="ml-3">
+                        <h2
+                            class="text-xl font-display bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                            Bella Beauty
+                        </h2>
+                        <p class="text-sm text-purple-600">Tu belleza, nuestra pasión</p>
                     </div>
-                    <span id="mobile-profile-email"
-                        class="block text-sm text-gray-600 truncate max-w-[160px]"></span>
-                    <span id="mobile-profile-role"
-                        class="inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-purple-100 text-purple-800"></span>
                 </div>
             </div>
 
-            <!-- Enlace admin (solo visible para administradores) -->
-            <div id="mobile-admin-link-container" class="mt-3 hidden">
-                <a href="admin-productos.html"
-                    class="inline-flex items-center text-sm text-purple-700 hover:text-purple-900 font-medium">
-                    <i class="fa-solid fa-gear mr-1 text-sm"></i>
-                    Panel Administrador
-                </a>
-            </div>
+            <!-- Sección de Perfil (solo visible con sesión) -->
+            <div id="mobile-user-profile-section" class="hidden px-4 py-4 mb-4 border-b border-purple-100">
+                <div class="flex items-center space-x-4">
+                    <!-- Foto de perfil con indicador de estado -->
+                    <div class="relative">
+                        <img id="mobile-profile-img"
+                            class="w-14 h-14 rounded-full border-2 border-purple-100 object-cover shadow-sm" src=""
+                            alt="Foto de perfil"
+                            onerror="this.onerror=null;this.src='https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';">
+                        <span id="mobile-status-indicator"
+                            class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span>
+                    </div>
 
-            <!-- Enlace perfil (solo visible con sesión) -->
-            <div id="mobile-profile-link-container" class="mt-3 hidden">
-                <a href="perfil.html"
-                    class="inline-flex items-center text-sm text-purple-700 hover:text-purple-900 font-medium">
-                    <i class="fa-solid fa-user-circle mr-1 text-sm"></i>
-                    Perfil
-                </a>
-            </div>
-        </div>
-
-        <!-- Botones de Login/Registro (solo visible sin sesión) -->
-        <div id="mobile-login-section" class="px-4 py-4 mb-4 border-b border-purple-100">
-            <div class="space-y-3">
-                <a href="login.html"
-                    class="block w-full text-center py-2.5 text-sm font-medium text-purple-700 border border-purple-300 rounded-lg hover:bg-purple-50 transition-colors duration-200">
-                    Iniciar sesión
-                </a>
-                <a href="register.html"
-                    class="block w-full text-center py-2.5 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-sm">
-                    Registrarse
-                </a>
-            </div>
-        </div>
-
-        <!-- Top Information Section -->
-        <div class="px-4 mb-6 space-y-4 border-b border-purple-100 pb-4">
-            <div class="flex items-center space-x-3">
-                <i class="fas fa-map-marker-alt text-purple-600"></i>
-                <a href="#" class="text-sm text-gray-700 hover:text-purple-700 transition duration-300">
-                    Av. Principal 123, Ciudad
-                </a>
-            </div>
-            <div class="flex items-center space-x-3">
-                <i class="fas fa-envelope text-purple-600"></i>
-                <a href="mailto:info@bellabeauty.com"
-                    class="text-sm text-gray-700 hover:text-purple-700 transition duration-300">
-                    info@bellabeauty.com
-                </a>
-            </div>
-            <div class="flex items-center space-x-3">
-                <i class="fas fa-clock text-purple-600"></i>
-                <span class="text-sm text-gray-700">
-                    Lun - Dom: 9:00 - 20:00
-                </span>
-            </div>
-        </div>
-
-        <!-- Search Bar -->
-        <div class="px-4 mb-6">
-            <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <i class="fas fa-search text-purple-400"></i>
-                </div>
-                <input type="search" placeholder="Buscar en el sitio..."
-                    class="w-full pl-10 pr-4 py-2 text-sm text-gray-900 border-none bg-purple-50 rounded-full focus:ring-2 focus:ring-purple-500 focus:outline-none transition duration-300" />
-            </div>
-        </div>
-
-        <!-- Main Navigation -->
-        <div class="mb-6">
-            <ul class="space-y-1">
-                <li>
-                    <a href="index.html"
-                        class="flex items-center px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50">
-                        <i class="fas fa-home w-5 h-5 text-purple-500 mr-3"></i>
-                        Inicio
-                    </a>
-                </li>
-                <!-- Servicios with Dropdown -->
-                <li class="relative">
-                    <button onclick="toggleServicesMenu()"
-                        class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50">
-                        <div class="flex items-center">
-                            <i class="fas fa-spa w-5 h-5 text-purple-500 mr-3"></i>
-                            Servicios
+                    <!-- Información del usuario -->
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between">
+                            <span id="mobile-profile-name"
+                                class="block text-base font-semibold text-gray-900 truncate max-w-[140px]"></span>
+                            <button id="mobile-logout-btn" class="text-red-500 hover:text-red-700 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                </svg>
+                            </button>
                         </div>
-                        <i class="fas fa-chevron-down text-sm"></i>
-                    </button>
-                    <ul id="services-submenu" class="hidden pl-12 py-2 space-y-1">
-                        <li>
-                            <a href="#servicios" class="block py-2 text-sm text-gray-700 hover:text-purple-700">
-                                Tratamientos Faciales
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#servicios" class="block py-2 text-sm text-gray-700 hover:text-purple-700">
-                                Manicure & Pedicure
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#servicios" class="block py-2 text-sm text-gray-700 hover:text-purple-700">
-                                Masajes
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="productos.html"
-                        class="flex items-center px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50">
-                        <i class="fas fa-shopping-bag w-5 h-5 text-purple-500 mr-3"></i>
-                        Productos
-                    </a>
-                </li>
-                <li>
-                    <a href="#contacto"
-                        class="flex items-center px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50">
-                        <i class="fas fa-envelope w-5 h-5 text-purple-500 mr-3"></i>
-                        Contacto
-                    </a>
-                </li>
-                <li>
-                    <a href="index2.html"
-                        class="flex items-center px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50">
-                        <i class="fas fa-images w-5 h-5 text-purple-500 mr-3"></i>
-                        Galeria
-                    </a>
-                </li>
-            </ul>
-        </div>
+                        <span id="mobile-profile-email"
+                            class="block text-sm text-gray-600 truncate max-w-[160px]"></span>
+                        <span id="mobile-profile-role"
+                            class="inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-purple-100 text-purple-800"></span>
+                    </div>
+                </div>
 
-        <!-- Social Links and Reservation -->
-        <div class="px-4 space-y-4 mb-6">
-            <!-- Social Media Links -->
-            <div class="flex items-center justify-center space-x-4">
-                <a href="https://www.tiktok.com/@merly_macias?lang=es" target="_blank"
-                    class="text-purple-600 hover:text-purple-700 transition duration-300 p-2 rounded-full hover:bg-purple-50">
-                    <i class="fab fa-tiktok"></i>
-                </a>
-                <a href="https://www.facebook.com/HairdresserandSpa?mibextid=LQQJ4d" target="_blank"
-                    class="text-purple-600 hover:text-purple-700 transition duration-300 p-2 rounded-full hover:bg-purple-50">
-                    <i class="fab fa-facebook-f"></i>
+                <!-- Enlace admin (solo visible para administradores) -->
+                <div id="mobile-admin-link-container" class="mt-3 hidden">
+                    <a href="admin-productos.html"
+                        class="inline-flex items-center text-sm text-purple-700 hover:text-purple-900 font-medium">
+                        <i class="fa-solid fa-gear mr-1 text-sm"></i>
+                        Panel Administrador
+                    </a>
+                </div>
+
+                <!-- Enlace perfil (solo visible con sesión) -->
+                <div id="mobile-profile-link-container" class="mt-3 hidden">
+                    <a href="perfil.html"
+                        class="inline-flex items-center text-sm text-purple-700 hover:text-purple-900 font-medium">
+                        <i class="fa-solid fa-user-circle mr-1 text-sm"></i>
+                        Perfil
+                    </a>
+                </div>
+            </div>
+
+            <!-- Botones de Login/Registro (solo visible sin sesión) -->
+            <div id="mobile-login-section" class="px-4 py-4 mb-4 border-b border-purple-100">
+                <div class="space-y-3">
+                    <a href="login.html"
+                        class="block w-full text-center py-2.5 text-sm font-medium text-purple-700 border border-purple-300 rounded-lg hover:bg-purple-50 transition-colors duration-200">
+                        Iniciar sesión
+                    </a>
+                    <a href="register.html"
+                        class="block w-full text-center py-2.5 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-sm">
+                        Registrarse
+                    </a>
+                </div>
+            </div>
+
+            <!-- Top Information Section -->
+            <div class="px-4 mb-6 space-y-4 border-b border-purple-100 pb-4">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-map-marker-alt text-purple-600"></i>
+                    <a href="#" class="text-sm text-gray-700 hover:text-purple-700 transition duration-300">
+                        Av. Principal 123, Ciudad
+                    </a>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-envelope text-purple-600"></i>
+                    <a href="mailto:info@bellabeauty.com"
+                        class="text-sm text-gray-700 hover:text-purple-700 transition duration-300">
+                        info@bellabeauty.com
+                    </a>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-clock text-purple-600"></i>
+                    <span class="text-sm text-gray-700">
+                        Lun - Dom: 9:00 - 20:00
+                    </span>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="px-4 mb-6">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-purple-400"></i>
+                    </div>
+                    <input type="search" placeholder="Buscar en el sitio..."
+                        class="w-full pl-10 pr-4 py-2 text-sm text-gray-900 border-none bg-purple-50 rounded-full focus:ring-2 focus:ring-purple-500 focus:outline-none transition duration-300" />
+                </div>
+            </div>
+
+            <!-- Main Navigation -->
+            <div class="mb-6">
+                <ul class="space-y-1">
+                    <li>
+                        <a href="index.html"
+                            class="flex items-center px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50">
+                            <i class="fas fa-home w-5 h-5 text-purple-500 mr-3"></i>
+                            Inicio
+                        </a>
+                    </li>
+                    <!-- Servicios with Dropdown -->
+                    <li class="relative">
+                        <button onclick="toggleServicesMenu()"
+                            class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50">
+                            <div class="flex items-center">
+                                <i class="fas fa-spa w-5 h-5 text-purple-500 mr-3"></i>
+                                Servicios
+                            </div>
+                            <i class="fas fa-chevron-down text-sm"></i>
+                        </button>
+                        <ul id="services-submenu" class="hidden pl-12 py-2 space-y-1">
+                            <li>
+                                <a href="#servicios" class="block py-2 text-sm text-gray-700 hover:text-purple-700">
+                                    Tratamientos Faciales
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#servicios" class="block py-2 text-sm text-gray-700 hover:text-purple-700">
+                                    Manicure & Pedicure
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#servicios" class="block py-2 text-sm text-gray-700 hover:text-purple-700">
+                                    Masajes
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="productos.html"
+                            class="flex items-center px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50">
+                            <i class="fas fa-shopping-bag w-5 h-5 text-purple-500 mr-3"></i>
+                            Productos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#contacto"
+                            class="flex items-center px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50">
+                            <i class="fas fa-envelope w-5 h-5 text-purple-500 mr-3"></i>
+                            Contacto
+                        </a>
+                    </li>
+                    <li>
+                        <a href="index2.html"
+                            class="flex items-center px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50">
+                            <i class="fas fa-images w-5 h-5 text-purple-500 mr-3"></i>
+                            Galeria
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Social Links and Reservation -->
+            <div class="px-4 space-y-4 mb-6">
+                <!-- Social Media Links -->
+                <div class="flex items-center justify-center space-x-4">
+                    <a href="https://www.tiktok.com/@merly_macias?lang=es" target="_blank"
+                        class="text-purple-600 hover:text-purple-700 transition duration-300 p-2 rounded-full hover:bg-purple-50">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                    <a href="https://www.facebook.com/HairdresserandSpa?mibextid=LQQJ4d" target="_blank"
+                        class="text-purple-600 hover:text-purple-700 transition duration-300 p-2 rounded-full hover:bg-purple-50">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </div>
+                <!-- Reservation Button -->
+                <a href="index3.html" id="reserva-btn"
+                    class="block w-full text-center py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-full transition duration-300 shadow-md hover:shadow-lg">
+                    Reserva Online
                 </a>
             </div>
-            <!-- Reservation Button -->
-            <a href="index3.html" id="reserva-btn"
-                class="block w-full text-center py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-full transition duration-300 shadow-md hover:shadow-lg">
-                Reserva Online
-            </a>
-        </div>
 
-        <!-- Fullscreen Toggle -->
-        <div class="px-4">
-            <button id="mobile-fullscreen-toggle"
-                class="flex items-center space-x-2 w-full px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50 rounded-lg">
-                <i class="fas fa-expand w-5 h-5 text-purple-500"></i>
-                <span>Pantalla Completa</span>
-            </button>
-        </div>
-    </aside>
-</header>
+            <!-- Fullscreen Toggle -->
+            <div class="px-4">
+                <button id="mobile-fullscreen-toggle"
+                    class="flex items-center space-x-2 w-full px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50 rounded-lg">
+                    <i class="fas fa-expand w-5 h-5 text-purple-500"></i>
+                    <span>Pantalla Completa</span>
+                </button>
+            </div>
+        </aside>
+    </header>
 
-<!-- Dropdown minimalista -->
-                            <div id="notification-dropdown" 
-                                class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden transition-all duration-200 origin-top-right transform opacity-0 scale-95 hidden">
-                                
-                                <!-- Header con gradiente -->
-                                <div class="px-5 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 flex justify-between items-center">
-                                    <div class="flex items-center gap-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                        </svg>
-                                        <h4 class="font-semibold text-white text-lg">Notificaciones</h4>
-                                    </div>
-                                    <button onclick="closeNotifications()" class="text-blue-100 hover:text-white transition-colors">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
 
-                                <!-- Lista de notificaciones -->
-                                <ul id="appointments-list" class="divide-y divide-gray-100 max-h-96 overflow-y-auto">
-                                    <!-- Estado vacío -->
-                                    <li class="empty-state hidden px-5 py-8 text-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        <p class="mt-3 text-gray-500 font-medium">No hay notificaciones</p>
-                                        <p class="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán aquí</p>
-                                    </li>
-                                    
-                                    <!-- Las notificaciones se insertarán aquí -->
-                                </ul>
-
-                                <!-- Footer con acción -->
-                                <div class="px-4 py-3 bg-gray-50 border-t border-gray-100 text-right">
-                                    <button class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center justify-end gap-1 w-full">
-                                        <span>Marcar todas como leídas</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
 
     <!-- Hero Section -->
     <section
@@ -3219,49 +3231,49 @@
 
     <script>
         document.getElementById('mobile-notification-btn').onclick = function (e) {
-    e.stopPropagation();
-    const dropdown = document.getElementById('notification-dropdown');
-    // En móvil, mostrar como modal centrado
-    if (window.innerWidth < 768) {
-        dropdown.classList.add('mobile-active');
-        dropdown.style.display = 'block';
-    }
-    const isHidden = dropdown.classList.contains('hidden');
-    if (isHidden) {
-        dropdown.classList.remove('hidden', 'opacity-0', 'scale-95');
-        dropdown.classList.add('opacity-100', 'scale-100');
-    } else {
-        dropdown.classList.remove('opacity-100', 'scale-100');
-        dropdown.classList.add('opacity-0', 'scale-95');
-        setTimeout(() => {
-            dropdown.classList.add('hidden');
-            dropdown.classList.remove('mobile-active');
-            dropdown.style.display = '';
-        }, 200);
-    }
-    if (!dropdown.classList.contains('hidden')) {
-        loadAppointments();
-    }
-};
+            e.stopPropagation();
+            const dropdown = document.getElementById('notification-dropdown');
+            // En móvil, mostrar como modal centrado
+            if (window.innerWidth < 768) {
+                dropdown.classList.add('mobile-active');
+                dropdown.style.display = 'block';
+            }
+            const isHidden = dropdown.classList.contains('hidden');
+            if (isHidden) {
+                dropdown.classList.remove('hidden', 'opacity-0', 'scale-95');
+                dropdown.classList.add('opacity-100', 'scale-100');
+            } else {
+                dropdown.classList.remove('opacity-100', 'scale-100');
+                dropdown.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    dropdown.classList.add('hidden');
+                    dropdown.classList.remove('mobile-active');
+                    dropdown.style.display = '';
+                }, 200);
+            }
+            if (!dropdown.classList.contains('hidden')) {
+                loadAppointments();
+            }
+        };
 
-document.addEventListener('click', function (event) {
-    const dropdown = document.getElementById('notification-dropdown');
-    const btn = document.getElementById('notification-btn');
-    const mobileBtn = document.getElementById('mobile-notification-btn');
-    if (
-        !dropdown.contains(event.target) &&
-        !btn.contains(event.target) &&
-        !mobileBtn.contains(event.target)
-    ) {
-        dropdown.classList.remove('opacity-100', 'scale-100');
-        dropdown.classList.add('opacity-0', 'scale-95');
-        setTimeout(() => {
-            dropdown.classList.add('hidden');
-            dropdown.classList.remove('mobile-active');
-            dropdown.style.display = '';
-        }, 200);
-    }
-});
+        document.addEventListener('click', function (event) {
+            const dropdown = document.getElementById('notification-dropdown');
+            const btn = document.getElementById('notification-btn');
+            const mobileBtn = document.getElementById('mobile-notification-btn');
+            if (
+                !dropdown.contains(event.target) &&
+                !btn.contains(event.target) &&
+                !mobileBtn.contains(event.target)
+            ) {
+                dropdown.classList.remove('opacity-100', 'scale-100');
+                dropdown.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    dropdown.classList.add('hidden');
+                    dropdown.classList.remove('mobile-active');
+                    dropdown.style.display = '';
+                }, 200);
+            }
+        });
     </script>
 
     <!-- Script para agregar al carrito -->
