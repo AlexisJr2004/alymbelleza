@@ -82,7 +82,7 @@
 
                             <!-- Dropdown minimalista -->
                             <div id="notification-dropdown"
-                                class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden transition-all duration-200 origin-top-right transform opacity-0 scale-95 hidden">
+                                class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden transition-all duration-200 origin-top-right transform opacity-0 scale-95 hidden md:right-0 md:w-80 md:rounded-xl md:top-auto left-0 w-screen rounded-none top-14 md:top-auto">
 
                                 <!-- Header con gradiente -->
                                 <div
@@ -2876,6 +2876,49 @@
                 profileLinkContainer.classList.add('hidden');
                 loginRegisterLinks.classList.remove('hidden');
                 userMenuBtn.parentElement.style.display = 'none';
+            }
+        });
+    </script>
+
+    <!--- Elementos del perfil movil -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('user'));
+            // Elementos del perfil móvil
+            const mobileProfileSection = document.getElementById('mobile-user-profile-section');
+            const mobileProfileImg = document.getElementById('mobile-profile-img');
+            const mobileProfileName = document.getElementById('mobile-profile-name');
+            const mobileProfileEmail = document.getElementById('mobile-profile-email');
+            const mobileProfileRole = document.getElementById('mobile-profile-role');
+            const mobileAdminLink = document.getElementById('mobile-admin-link-container');
+            const mobileProfileLink = document.getElementById('mobile-profile-link-container');
+            const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
+
+            if (user) {
+                mobileProfileSection.classList.remove('hidden');
+                mobileProfileName.textContent = user.name || 'Usuario';
+                mobileProfileEmail.textContent = user.email || '';
+                mobileProfileRole.textContent = user.role === 'admin' ? 'Administrador' : '';
+                if (user.role === 'admin') {
+                    mobileAdminLink.classList.remove('hidden');
+                }
+                mobileProfileLink.classList.remove('hidden');
+                // Imagen de perfil
+                const profileImageUrl = user.profileImage && user.profileImage.startsWith('http') ? user.profileImage :
+                    user.profileImage && user.profileImage.startsWith('/uploads/') ?
+                        'https://aly-mbelleza-backend.onrender.com' + user.profileImage :
+                        `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'U')}&background=random&length=1`;
+                mobileProfileImg.src = profileImageUrl;
+
+                // Logout
+                if (mobileLogoutBtn) {
+                    mobileLogoutBtn.onclick = () => {
+                        localStorage.removeItem('user');
+                        window.location.href = 'index.html';
+                    };
+                }
+            } else {
+                mobileProfileSection.classList.add('hidden');
             }
         });
     </script>
