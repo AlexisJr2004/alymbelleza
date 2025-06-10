@@ -3382,6 +3382,68 @@
         });
     </script>
 
+<script>
+    // Función para manejar las notificaciones
+    document.addEventListener('DOMContentLoaded', function() {
+        const notificationBtn = document.getElementById('notification-btn');
+        const notificationDropdown = document.getElementById('notification-dropdown');
+        
+        // Toggle del dropdown de notificaciones
+        notificationBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isHidden = notificationDropdown.classList.contains('hidden');
+            
+            // Cerrar otros dropdowns si están abiertos
+            closeAllDropdownsExcept(notificationDropdown);
+            
+            if (isHidden) {
+                notificationDropdown.classList.remove('hidden', 'opacity-0', 'scale-95');
+                notificationDropdown.classList.add('opacity-100', 'scale-100');
+            } else {
+                closeNotifications();
+            }
+        });
+        
+        // Cerrar al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            if (!notificationDropdown.contains(e.target)) {
+                closeNotifications();
+            }
+        });
+    });
+    
+    function closeNotifications() {
+        const notificationDropdown = document.getElementById('notification-dropdown');
+        notificationDropdown.classList.add('hidden', 'opacity-0', 'scale-95');
+        notificationDropdown.classList.remove('opacity-100', 'scale-100');
+    }
+    
+    function closeAllDropdownsExcept(exceptElement = null) {
+        const dropdowns = document.querySelectorAll('[id$="-dropdown"]');
+        dropdowns.forEach(dropdown => {
+            if (dropdown !== exceptElement) {
+                dropdown.classList.add('hidden', 'opacity-0', 'scale-95', 'invisible');
+                dropdown.classList.remove('opacity-100', 'scale-100', 'visible');
+            }
+        });
+    }
+    
+    // Función para el menú móvil de servicios
+    function toggleServicesMenu() {
+        const submenu = document.getElementById('services-submenu');
+        submenu.classList.toggle('hidden');
+    }
+    
+    // Función para el menú móvil principal
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuToggle.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+    });
+</script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script src="js/main.js"></script>
