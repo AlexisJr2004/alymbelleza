@@ -276,7 +276,26 @@
                     </a>
                 </nav>
 
-                <!-- Mobile Menu Button -->
+                <!-- Solo visible en móvil, oculto en escritorio -->
+                <div class="flex items-center space-x-2 md:hidden">
+                    <!-- Notificaciones -->
+                    <button id="mobile-notification-btn"
+                        class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50 relative"
+                        title="Notificaciones">
+                        <i class="fas fa-bell"></i>
+                        <span id="mobile-notification-count"
+                            class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold hidden">0</span>
+                    </button>
+                    <!-- Carrito -->
+                    <a href="carrito.html"
+                        class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50 relative"
+                        title="Ver carrito">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count"
+                            class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold hidden">0</span>
+                    </a>
+                </div>
+                <!-- Botón menú móvil -->
                 <button id="mobile-menu-toggle"
                     class="md:hidden text-purple-600 hover:text-purple-700 focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none"
