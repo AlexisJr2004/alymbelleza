@@ -292,22 +292,14 @@
 
                 <!-- Solo visible en móvil, oculto en escritorio -->
                 <div class="flex items-center space-x-2 md:hidden">
-                    <div class="relative">
-                        <button id="notification-btn"
-                            class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50 relative"
-                            title="Notificaciones">
-                            <i class="fas fa-bell"></i>
-                            <span id="notification-count"
-                                class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold hidden">0</span>
-                        </button>
-                        <!-- Dropdown minimalista -->
-                        <div id="notification-dropdown"
-                            class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden transition-all duration-200 origin-top-right transform opacity-0 scale-95 hidden
-                                md:right-0 md:w-80 md:rounded-xl md:top-auto
-                                left-0 w-screen rounded-none top-14 md:top-auto">
-                            <!-- ...contenido... -->
-                        </div>
-                    </div>
+                    <!-- Notificaciones -->
+                    <button id="notification-btn"
+                        class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50 relative"
+                        title="Notificaciones">
+                        <i class="fas fa-bell"></i>
+                        <span id="notification-count"
+                            class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold hidden">0</span>
+                    </button>
                     <!-- Carrito -->
                     <a href="carrito.html"
                         class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50 relative"
