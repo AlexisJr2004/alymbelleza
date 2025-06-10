@@ -14,19 +14,26 @@
     <link rel="icon" href="/img/mujer-con-pelo-largo.png" type="image/x-icon">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
-        @media (max-width: 767px) {
-            #notification-dropdown.mobile-active {
-                position: fixed !important;
-                left: 50% !important;
-                top: 20px !important;
-                transform: translateX(-50%) scale(1) !important;
-                width: 90vw !important;
-                max-width: 380px !important;
-                z-index: 9999 !important;
-                border-radius: 1.5rem !important;
-                box-shadow: 0 8px 32px rgba(80, 0, 120, 0.18);
-            }
-        }
+#notification-dropdown {
+  position: fixed !important;
+  top: 70px !important;
+  right: 30px !important;
+  left: auto !important;
+  z-index: 9999 !important;
+}
+
+@media (max-width: 767px) {
+  #notification-dropdown.mobile-active {
+    left: 50% !important;
+    right: auto !important;
+    top: 45px !important;
+    transform: translateX(-50%) scale(1) !important;
+    width: 90vw !important;
+    max-width: 380px !important;
+    border-radius: 1.5rem !important;
+    box-shadow: 0 8px 32px rgba(80, 0, 120, 0.18);
+  }
+}
     </style>
 </head>
 
