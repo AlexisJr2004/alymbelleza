@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -7,16 +7,15 @@
     <meta name="keywords"
         content="Aly MBelleza, Bella Beauty, salón de belleza, estética profesional, peluquería, tratamientos faciales, spa, belleza premium, cuidado del cabello, manicure, pedicure, masajes relajantes, productos de belleza, belleza natural, bienestar, servicios de belleza, maquillaje profesional, tratamientos capilares, depilación, rejuvenecimiento facial, asesoría de imagen, salón de uñas, belleza femenina, belleza masculina, reserva online belleza, promociones belleza, estilistas profesionales, corte de cabello, tintes, coloración, alisado de cabello, peinados para eventos, tratamientos corporales, belleza integral, centro de belleza, belleza en Quito, atención personalizada">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Bella Beauty - Geestión de Productos</title>
+    <title>Bella Beauty - Experiencia de Belleza Premium</title>
     <link rel="stylesheet" href="/css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
     <link rel="icon" href="/img/mujer-con-pelo-largo.png" type="image/x-icon">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 </head>
-</head>
 
-<body class="bg-white font-body">
+<body>
 
     <!-- Section Menu -->
     <header class="bg-white/95 backdrop-blur-lg sticky top-0 z-[1000] border-b border-purple-100 ">
@@ -81,20 +80,26 @@
                             </button>
 
                             <!-- Dropdown minimalista -->
-                            <div id="notification-dropdown" 
+                            <div id="notification-dropdown"
                                 class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden transition-all duration-200 origin-top-right transform opacity-0 scale-95 hidden">
-                                
+
                                 <!-- Header con gradiente -->
-                                <div class="px-5 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 flex justify-between items-center">
+                                <div
+                                    class="px-5 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 flex justify-between items-center">
                                     <div class="flex items-center gap-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                                         </svg>
                                         <h4 class="font-semibold text-white text-lg">Notificaciones</h4>
                                     </div>
-                                    <button onclick="closeNotifications()" class="text-blue-100 hover:text-white transition-colors">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    <button onclick="closeNotifications()"
+                                        class="text-blue-100 hover:text-white transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12" />
                                         </svg>
                                     </button>
                                 </div>
@@ -103,22 +108,28 @@
                                 <ul id="appointments-list" class="divide-y divide-gray-100 max-h-96 overflow-y-auto">
                                     <!-- Estado vacío -->
                                     <li class="empty-state hidden px-5 py-8 text-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                         <p class="mt-3 text-gray-500 font-medium">No hay notificaciones</p>
-                                        <p class="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán aquí</p>
+                                        <p class="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán
+                                            aquí</p>
                                     </li>
-                                    
+
                                     <!-- Las notificaciones se insertarán aquí -->
                                 </ul>
 
                                 <!-- Footer con acción -->
                                 <div class="px-4 py-3 bg-gray-50 border-t border-gray-100 text-right">
-                                    <button class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center justify-end gap-1 w-full">
+                                    <button
+                                        class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center justify-end gap-1 w-full">
                                         <span>Marcar todas como leídas</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
                                         </svg>
                                     </button>
                                 </div>
@@ -276,7 +287,26 @@
                     </a>
                 </nav>
 
-                <!-- Mobile Menu Button -->
+                <!-- Solo visible en móvil, oculto en escritorio -->
+                <div class="flex items-center space-x-2 md:hidden">
+                    <!-- Notificaciones -->
+                    <button id="notification-btn"
+                        class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50 relative"
+                        title="Notificaciones">
+                        <i class="fas fa-bell"></i>
+                        <span id="notification-count"
+                            class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold hidden">0</span>
+                    </button>
+                    <!-- Carrito -->
+                    <a href="carrito.html"
+                        class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50 relative"
+                        title="Ver carrito">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count"
+                            class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold hidden">0</span>
+                    </a>
+                </div>
+                <!-- Botón menú móvil -->
                 <button id="mobile-menu-toggle"
                     class="md:hidden text-purple-600 hover:text-purple-700 focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none"
@@ -351,6 +381,20 @@
                                 d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                         Panel Administrador
+                    </a>
+                </div>
+                <!-- Enlace perfil (solo visible con sesión) -->
+                <div id="mobile-profile-link-container" class="mt-3 hidden">
+                    <a href="perfil.html"
+                        class="inline-flex items-center text-sm text-gray-700 hover:text-purple-700 font-medium">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5.121 17.804A9 9 0 1112 21a9 9 0 01-6.879-3.196z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        Perfil
                     </a>
                 </div>
             </div>
@@ -496,557 +540,96 @@
         </aside>
     </header>
 
-    <!-- admin-productos.html -->
-    <section id="admin-productos" class="max-w-7xl mx-auto my-10 p-8 bg-white rounded-xl shadow-lg">
-        <div class="flex justify-between items-center mb-8">
-            <h2 class="text-3xl font-bold text-gray-800">
-                <i class="fas fa-box-open mr-2 text-purple-600"></i> Gestión de Productos
-            </h2>
-        </div>
 
-        <!-- Formulario mejorado -->
-        <form id="form-producto" enctype="multipart/form-data"
-            class="mb-8 bg-gray-50 p-6 rounded-xl border border-gray-200">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <input type="hidden" id="producto-id" name="id">
 
-                <div class="space-y-2">
-                    <label class="block text-sm font-medium text-gray-700">Nombre del Producto</label>
-                    <div class="relative">
-                        <i class="fas fa-tag absolute left-3 top-3 text-gray-400"></i>
-                        <input type="text" id="nombre" name="name" required
-                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                            placeholder="Ej: Camiseta Premium">
-                    </div>
-                </div>
-
-                <div class="space-y-2">
-                    <label class="block text-sm font-medium text-gray-700">Precio</label>
-                    <div class="relative">
-                        <i class="fas fa-dollar-sign absolute left-3 top-3 text-gray-400"></i>
-                        <input type="number" id="precio" name="price" required min="0" step="0.01"
-                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                            placeholder="0.00">
-                    </div>
-                </div>
-
-                <div class="md:col-span-2 space-y-2">
-                    <label class="block text-sm font-medium text-gray-700">Descripción</label>
-                    <textarea id="descripcion" name="description" required rows="3"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                        placeholder="Descripción detallada del producto..."></textarea>
-                </div>
-
-                <div class="space-y-2">
-                    <label class="block text-sm font-medium text-gray-700">Categoría</label>
-                    <div class="relative">
-                        <i class="fas fa-list-alt absolute left-3 top-3 text-gray-400"></i>
-                        <select id="categoria" name="category" required
-                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
-                            <option value="">Seleccione categoría</option>
-                            <option value="capilar">Productos Capilares</option>
-                            <option value="facial">Productos Faciales</option>
-                        </select>
-                        <i class="fas fa-chevron-down absolute right-3 top-3 text-gray-400"></i>
-                    </div>
-                </div>
-
-                <div class="space-y-2">
-                    <label class="block text-sm font-medium text-gray-700">¿Producto Destacado?</label>
-                    <div>
-                        <label class="inline-flex items-center">
-                            <input type="checkbox" id="destacado" name="featured" value="true"
-                                class="text-blue-600 focus:ring-blue-500">
-                            <span class="ml-2">Marcar como destacado</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="space-y-2">
-                    <label class="block text-sm font-medium text-gray-700">Precio Anterior (opcional)</label>
-                    <input type="number" id="precio-anterior" name="originalPrice" min="0" step="0.01"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                        placeholder="Precio anterior si está en oferta">
-                </div>
-
-                <div class="space-y-2">
-                    <label class="block text-sm font-medium text-gray-700">Calificación</label>
-                    <div class="flex items-center">
-                        <input type="number" id="calificacion" name="rating" min="0" max="5" step="0.1"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                            placeholder="0-5">
-                        <div class="ml-2 flex text-yellow-400">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="space-y-2">
-                    <label class="block text-sm font-medium text-gray-700">Disponibilidad</label>
-                    <div class="flex items-center space-x-4">
-                        <label class="inline-flex items-center">
-                            <input type="radio" name="availability" value="true" checked
-                                class="text-purple-600 focus:ring-purple-500">
-                            <span class="ml-2">Disponible</span>
-                        </label>
-                        <label class="inline-flex items-center">
-                            <input type="radio" name="availability" value="false"
-                                class="text-purple-600 focus:ring-purple-500">
-                            <span class="ml-2">Agotado</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="md:col-span-2 space-y-2">
-                    <label class="block text-sm font-medium text-gray-700">Imagen del Producto</label>
-                    <div class="flex items-center justify-center w-full">
-                        <label for="imagen"
-                            class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
-                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
-                                <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click para
-                                        subir</span> o arrastra la imagen</p>
-                                <p class="text-xs text-gray-500">PNG, JPG o JPEG (MAX. 5MB)</p>
-                            </div>
-                            <input id="imagen" name="image" type="file" accept="image/*" class="hidden">
-                        </label>
-                    </div>
-                    <div id="imagen-preview" class="mt-2 hidden">
-                        <img id="preview-img" src="#" alt="Vista previa" class="h-24 rounded-lg border">
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
-                <button type="button" id="cancelar-edicion"
-                    class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors hidden">
-                    <i class="fas fa-times mr-2"></i> Cancelar
-                </button>
-                <button type="submit"
-                    class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center">
-                    <i class="fas fa-save mr-2"></i> Guardar Producto
-                </button>
-            </div>
-        </form>
-
-        <!-- Tabla mejorada -->
-        <div class="overflow-x-auto rounded-xl border border-gray-200 shadow">
-            <table class="min-w-full divide-y divide-gray-200">
-                <div class="mb-4">
-                    <div class="relative">
-                        <input type="text" id="buscador-productos" placeholder="Buscar producto..."
-                            class="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full max-w-md">
-                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                    </div>
-                </div>
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Producto</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Precio</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Descripción</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Calificación</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Imagen</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Estado</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla-productos" class="bg-white divide-y divide-gray-200"></tbody>
-            </table>
-        </div>
-        <div class="flex justify-center mt-4" id="paginacion-productos"></div>
-    </section>
-
-    <!-- Boton Ir Arriba -->
-    <div class="z-50 fixed bottom-36 right-4 flex flex-col space-y-6 items-center">
-        <div>
-            <button id="goTopBtn" title="Ir arriba"
-                class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition duration-300 text-white px-4 py-2 rounded-full shadow-md transform translate-y-20 opacity-0 transition-all duration-500 ease-in-out">
-                <i class="fas fa-caret-up"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- Boton de Accesibilidad -->
-    <button id="dropdownDefaultButton"
-        class="z-50 left-15 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition duration-300 w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
-        type="button">
-        <span class="fas fa-person text-lg text-white"></span>
-    </button>
-    <div id="dropdown" class="z-50 bg-white rounded-xl shadow-lg w-72 border border-gray-100">
-        <div class="px-4 py-3">
-            <ul class="space-y-4" aria-labelledby="dropdownDefaultButton">
-                <li>
-                    <h4 class="text-lg font-semibold text-gray-800 text-center pb-1.5 border-b border-gray-200">
-                        Opciones de Accesibilidad
-                    </h4>
-                </li>
-                <li>
-                    <div class="space-y-1.5">
-                        <p class="text-xs text-gray-600 mb-2">Zoom</p>
-                        <div class="flex justify-between items-center gap-2">
-                            <button onclick="changeZoom('in')"
-                                class="flex-1 p-2 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-all duration-200 group">
-                                <i
-                                    class="fas fa-search-plus text-indigo-600 group-hover:scale-110 transition-transform"></i>
-                            </button>
-                            <button onclick="changeZoom('out')"
-                                class="flex-1 p-2 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-all duration-200 group">
-                                <i
-                                    class="fas fa-search-minus text-indigo-600 group-hover:scale-110 transition-transform"></i>
-                            </button>
-                            <button onclick="resetZoom()"
-                                class="flex-1 p-2 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-all duration-200 group">
-                                <i class="fas fa-undo text-indigo-600 group-hover:scale-110 transition-transform"></i>
-                            </button>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="space-y-1.5">
-                        <p class="text-xs text-gray-600 mb-2">Tamaño de texto</p>
-                        <div class="flex justify-between items-center gap-2">
-                            <button onclick="changeFontSize('increase')"
-                                class="flex-1 p-2 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-all duration-200 group">
-                                <span
-                                    class="text-indigo-600 font-bold group-hover:scale-110 transition-transform inline-block">A+</span>
-                            </button>
-                            <button onclick="changeFontSize('decrease')"
-                                class="flex-1 p-2 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-all duration-200 group">
-                                <span
-                                    class="text-indigo-600 font-bold group-hover:scale-110 transition-transform inline-block">A-</span>
-                            </button>
-                            <button onclick="resetFontSize()"
-                                class="flex-1 p-2 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-all duration-200 group">
-                                <i class="fas fa-undo text-indigo-600 group-hover:scale-110 transition-transform"></i>
-                            </button>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="space-y-2">
-                        <button onclick="changeFont()"
-                            class="w-full p-2.5 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-all duration-200 text-indigo-600 group">
-                            <i class="fas fa-font mr-1.5 group-hover:scale-110 transition-transform inline-block"></i>
-                            <span class="font-medium text-sm current-font-name">Quicksand</span>
-                        </button>
-                        <button onclick="toggleTextToSpeech()" id="textToSpeechButton"
-                            class="w-full p-2.5 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-all duration-200 text-indigo-600 group">
-                            <i
-                                class="fas fa-volume-up mr-1.5 group-hover:scale-110 transition-transform inline-block"></i>
-                            <span class="font-medium text-sm">Lector de Página</span>
-                        </button>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Footer Section -->
-    <section
-        class="relative overflow-hidden before:absolute before:top-0 before:start-1/2 before:bg-[url('https://preline.co/assets/svg/examples/polygon-bg-element.svg')] before:bg-no-repeat before:bg-top before:bg-cover before:size-full before:-z-[1] before:transform before:-translate-x-1/2">
-        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-            <div class="space-y-8">
-                <!-- Logo and Newsletter -->
-                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-                    <div class="flex items-center space-x-3">
-                        <span
-                            class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                            Bella Beauty
-                        </span>
-                    </div>
-
-                    <div class="mt-8 lg:mt-0">
-                        <form class="flex flex-col sm:flex-row sm:gap-2">
-                            <input type="email"
-                                class="w-full rounded-full border-gray-300 bg-gray-100 px-5 py-3 placeholder-gray-500 focus:outline-none sm:max-w-xs"
-                                placeholder="Ingresa tu email para novedades">
-                            <button type="submit"
-                                class="mt-3 sm:mt-0 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition duration-300 px-4 py-2 rounded-full shadow-md hover:shadow-lg text-white">
-                                Suscribirse
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Links Section -->
-                <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
-                    <div class="space-y-3">
-                        <h3 class="text-sm font-semibold text-gray-900">Sobre Nosotros</h3>
-                        <p class="text-sm text-gray-600 leading-relaxed">
-                            Transformando la belleza en una experiencia única y personalizada.
-                        </p>
-                    </div>
-
-                    <div class="space-y-3">
-                        <h3 class="text-sm font-semibold text-gray-900">Navegación</h3>
-                        <ul class="space-y-2">
-                            <li><a href="#"
-                                    class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Inicio</a></li>
-                            <li><a href="#"
-                                    class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Servicios</a>
-                            </li>
-                            <li><a href="#"
-                                    class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Productos</a>
-                            </li>
-                            <li><a href="#"
-                                    class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Contacto</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="space-y-3">
-                        <h3 class="text-sm font-semibold text-gray-900">Servicios</h3>
-                        <ul class="space-y-2">
-                            <li><a href="#"
-                                    class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Tratamientos
-                                    Faciales</a></li>
-                            <li><a href="#" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Masajes
-                                    Terapéuticos</a></li>
-                            <li><a href="#"
-                                    class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Maquillaje
-                                    Profesional</a></li>
-                            <li><a href="#"
-                                    class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Consultoría</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="space-y-3">
-                        <h3 class="text-sm font-semibold text-gray-900">Contacto</h3>
-                        <ul class="space-y-2">
-                            <li class="text-sm text-gray-600">Av. Principal 123, Ciudad</li>
-                            <li class="text-sm text-gray-600">info@bellabeauty.com</li>
-                            <li class="text-sm text-gray-600">+1 234 567 890</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Footer Bottom -->
-                <div class="border-t border-gray-200 pt-8">
-                    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                        <p class="text-sm text-gray-500">
-                            © 2024 Bella Beauty. Todos los derechos reservados.
-                        </p>
-                        <div class="flex space-x-6 text-sm text-gray-500">
-                            <a href="#" class="hover:text-gray-900 transition-colors">Privacidad</a>
-                            <a href="#" class="hover:text-gray-900 transition-colors">Términos</a>
-                            <a href="#" class="hover:text-gray-900 transition-colors">Cookies</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <svg width="100%" height="100%" id="svg" viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg"
-            class="transition duration-300 ease-in-out delay-150">
-            <defs>
-                <linearGradient id="gradient" x1="0%" y1="50%" x2="100%" y2="50%">
-                    <stop offset="5%" stop-color="#f7affa"></stop>
-                    <stop offset="95%" stop-color="#6dd5ed"></stop>
-                </linearGradient>
-            </defs>
-            <path
-                d="M 0,500 C 0,500 0,166 0,166 C 107.2153110047847,190.9665071770335 214.4306220095694,215.93301435406698 317,210 C 419.5693779904306,204.06698564593302 517.4928229665072,167.23444976076556 606,157 C 694.5071770334928,146.76555023923444 773.598086124402,163.12918660287082 866,164 C 958.401913875598,164.87081339712918 1064.1148325358852,150.2488038277512 1162,148 C 1259.8851674641148,145.7511961722488 1349.9425837320573,155.8755980861244 1440,166 C 1440,166 1440,500 1440,500 Z"
-                stroke="none" stroke-width="0" fill="url(#gradient)" fill-opacity="0.53"
-                class="transition-all duration-300 ease-in-out delay-150 path-0"></path>
-            <path
-                d="M 0,500 C 0,500 0,333 0,333 C 77.34928229665073,329.6794258373206 154.69856459330146,326.3588516746412 247,319 C 339.30143540669854,311.6411483253588 446.555023923445,300.24401913875596 540,316 C 633.444976076555,331.75598086124404 713.0813397129187,374.6650717703349 820,394 C 926.9186602870813,413.3349282296651 1061.1196172248804,409.0956937799043 1169,395 C 1276.8803827751196,380.9043062200957 1358.44019138756,356.95215311004785 1440,333 C 1440,333 1440,500 1440,500 Z"
-                stroke="none" stroke-width="0" fill="url(#gradient)" fill-opacity="1"
-                class="transition-all duration-300 ease-in-out delay-150 path-1"></path>
-        </svg>
-    </section>
-
-    <!-- Scripts para agregar productos nuevos -->
     <script>
-        const PRODUCTS_API_URL = "https://aly-mbelleza-backend.onrender.com/api/products";
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (!user || user.role !== 'admin') {
-            window.location.href = "index.html";
-        }
-
-        const form = document.getElementById('form-producto');
-        const tabla = document.getElementById('tabla-productos');
-        const cancelarBtn = document.getElementById('cancelar-edicion');
-        let editandoId = null;
-
-        let productosData = [];
-        let paginaActual = Number(localStorage.getItem('paginaProductos')) || 1;
-        const productosPorPagina = 5;
-
-        // Cargar todos los productos en la tabla
-        async function cargarProductos() {
-            const res = await fetch(PRODUCTS_API_URL);
-            const { data } = await res.json();
-            productosData = data;
-            mostrarPagina(paginaActual);
-            renderizarPaginacion();
-        }
-
-        // Mostrar productos de la página seleccionada
-        function mostrarPagina(pagina, productos = productosData) {
-            paginaActual = pagina;
-            localStorage.setItem('paginaProductos', paginaActual);
-            const inicio = (pagina - 1) * productosPorPagina;
-            const fin = inicio + productosPorPagina;
-            const productosPagina = productos.slice(inicio, fin);
-            tabla.innerHTML = productosPagina.map(p => `
-                <tr>
-                    <td class="p-2 font-semibold">${p.name}</td>
-                    <td class="p-2">$${p.price}</td>
-                    <td class="p-2">${p.description}</td>
-                    <td class="p-2">${p.rating ?? 0}</td>
-                    <td class="p-2">
-                        <img src="${p.image || './img/default.jpg'}" alt="${p.name}" class="w-16 h-16 object-cover rounded">
-                    </td>
-                    <td class="p-2">${p.availability ? 'Sí' : 'No'}</td>
-                    <td class="p-2">
-                        <div class="flex items-center gap-2 justify-end">
-                            <button type="button" title="Editar" class="btn-editar text-blue-600 hover:text-blue-800 p-2 rounded-full bg-blue-50 hover:bg-blue-100 transition" data-id="${p._id}">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button type="button" title="Eliminar" class="btn-eliminar text-red-600 hover:text-red-800 p-2 rounded-full bg-red-50 hover:bg-red-100 transition" data-id="${p._id}">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
-            renderizarPaginacion(productos);
-            // Asignar eventos a los botones de editar/eliminar
-            document.querySelectorAll('.btn-editar').forEach(btn => {
-                btn.addEventListener('click', async function () {
-                    await editarProducto(this.dataset.id);
-                });
-            });
-            document.querySelectorAll('.btn-eliminar').forEach(btn => {
-                btn.addEventListener('click', async function () {
-                    await eliminarProducto(this.dataset.id);
-                });
-            });
-        }
-
-        // Paginación
-        function renderizarPaginacion(productos = productosData) {
-            const totalPaginas = Math.ceil(productos.length / productosPorPagina);
-            const paginacion = document.getElementById('paginacion-productos');
-            paginacion.innerHTML = '';
-            for (let i = 1; i <= totalPaginas; i++) {
-                const btn = document.createElement('button');
-                btn.textContent = i;
-                btn.className = `mx-1 px-3 py-1 rounded ${i === paginaActual ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'} transition`;
-                btn.addEventListener('click', () => {
-                    mostrarPagina(i, productos);
-                });
-                paginacion.appendChild(btn);
+        //Script para el menú del celular
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById("mobile-menu");
+            const menuIcon = document
+                .getElementById("mobile-menu-toggle")
+                .querySelector("svg");
+            mobileMenu.classList.toggle("hidden");
+            if (!mobileMenu.classList.contains("hidden")) {
+                menuIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                `;
+            } else {
+                menuIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+                `;
             }
         }
-
-        // Editar producto: llena el formulario con los datos del producto seleccionado
-        async function editarProducto(id) {
-            const res = await fetch(`${PRODUCTS_API_URL}/${id}`);
-            const { data } = await res.json();
-            document.getElementById('producto-id').value = data._id;
-            document.getElementById('nombre').value = data.name;
-            document.getElementById('descripcion').value = data.description;
-            document.getElementById('precio').value = data.price;
-            document.getElementById('precio-anterior').value = data.originalPrice || '';
-            document.getElementById('calificacion').value = data.rating;
-            document.getElementById('categoria').value = data.category;
-            document.getElementById('destacado').checked = !!data.featured;
-            document.querySelector(`input[name="availability"][value="${data.availability ? 'true' : 'false'}"]`).checked = true;
-            cancelarBtn.classList.remove('hidden');
-            editandoId = data._id;
-        }
-
-        // Eliminar producto
-        async function eliminarProducto(id) {
-            Swal.fire({
-                title: '¿Eliminar producto?',
-                text: 'Esta acción no se puede deshacer.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#e11d48',
-                cancelButtonColor: '#6b7280',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar'
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    await fetch(`${PRODUCTS_API_URL}/${id}`, {
-                        method: "DELETE",
-                        headers: { Authorization: `Bearer ${user.token}` }
-                    });
-                    Swal.fire({
-                        title: 'Eliminado',
-                        text: 'El producto ha sido eliminado.',
-                        icon: 'success',
-                        timer: 1200,
-                        showConfirmButton: false
-                    });
-                    cargarProductos();
-                }
-            });
-        }
-
-        // Guardar producto (crear o editar)
-        form.onsubmit = async e => {
-            e.preventDefault();
-            const formData = new FormData(form);
-
-            // Corrige los campos booleanos
-            formData.set('availability', formData.get('availability') === 'true');
-            formData.set('featured', document.getElementById('destacado').checked);
-
-            // Forzar el valor seleccionado de categoría
-            const categoria = document.getElementById('categoria').value;
-            formData.set('category', categoria);
-
-            if (!formData.get('originalPrice')) formData.delete('originalPrice');
-
-            const method = editandoId ? "PUT" : "POST";
-            const url = editandoId ? `${PRODUCTS_API_URL}/${editandoId}` : PRODUCTS_API_URL;
-            await fetch(url, {
-                method,
-                headers: { Authorization: `Bearer ${user.token}` },
-                body: formData
-            });
-            form.reset();
-            cancelarBtn.classList.add('hidden');
-            editandoId = null;
-            localStorage.setItem('paginaProductos', paginaActual);
-            cargarProductos();
-        };
-
-        // Cancelar edición
-        cancelarBtn.onclick = () => {
-            form.reset();
-            cancelarBtn.classList.add('hidden');
-            editandoId = null;
-        };
-
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', () => {
-            paginaActual = Number(localStorage.getItem('paginaProductos')) || 1;
-            cargarProductos();
+        document.addEventListener("DOMContentLoaded", () => {
+            const mobileMenuToggle = document.getElementById("mobile-menu-toggle");
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener("click", toggleMobileMenu);
+            }
         });
+    </script>
+    <!-- Script para el envío del Correo -->
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-        // Cargar productos y DOMContentLoaded
-        document.getElementById('buscador-productos').addEventListener('input', function () {
-            const texto = this.value.toLowerCase();
-            const filtrados = productosData.filter(p =>
-                p.name.toLowerCase().includes(texto) ||
-                p.description.toLowerCase().includes(texto)
-            );
-            mostrarPagina(1, filtrados);
+            const form = e.target;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+
+            // Mostrar estado de carga
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <span class="flex items-center justify-center">
+                    <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Enviando...
+                </span>
+            `;
+
+            try {
+                const formData = {
+                    name: form.name.value,
+                    email: form.email.value,
+                    message: form.message.value
+                };
+
+                const response = await fetch('https://aly-mbelleza-backend.onrender.com/api/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Error al enviar el mensaje');
+                }
+
+                // Mostrar notificación de éxito usando tu función
+                showNotification(
+                    'success',
+                    'Mensaje enviado',
+                    'Tu mensaje ha sido enviado correctamente'
+                );
+                form.reset();
+
+            } catch (error) {
+                // Mostrar notificación de error usando tu función
+                showNotification(
+                    'error',
+                    'Error al enviar',
+                    error.message || 'Ocurrió un error al enviar el mensaje'
+                );
+
+            } finally {
+                // Restaurar el botón
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }
         });
     </script>
 
@@ -1189,26 +772,6 @@
                 profileLinkContainer.classList.add('hidden');
                 loginRegisterLinks.classList.remove('hidden');
                 userMenuBtn.parentElement.style.display = 'none';
-            }
-        });
-    </script>
-
-    <!-- Script para vista previa de imagen -->
-    <script>
-        // Script para vista previa de imagen
-        document.getElementById('imagen').addEventListener('change', function (e) {
-            const preview = document.getElementById('imagen-preview');
-            const previewImg = document.getElementById('preview-img');
-
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-
-                reader.onload = function (e) {
-                    previewImg.src = e.target.result;
-                    preview.classList.remove('hidden');
-                }
-
-                reader.readAsDataURL(this.files[0]);
             }
         });
     </script>
@@ -1437,7 +1000,7 @@
             });
             // Quita la notificación del DOM
             const li = document.querySelector(`.realizada-btn[data-id="${id}"]`)?.closest('li') ||
-                    document.querySelector(`.cancelar-btn[data-id="${id}"]`)?.closest('li');
+                document.querySelector(`.cancelar-btn[data-id="${id}"]`)?.closest('li');
             if (li) li.remove();
             // Actualiza el contador
             const count = document.getElementById('notification-count');
@@ -1511,7 +1074,153 @@
             }
         });
     </script>
-    
+
+    <!-- Script para agregar al carrito -->
+    <script>
+        async function actualizarContadorCarrito() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || !user.token) return;
+            try {
+                const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart", {
+                    headers: { "Authorization": `Bearer ${user.token}` }
+                });
+                const data = await res.json();
+                const count = data?.cart?.items?.length || 0;
+                const cartCount = document.getElementById('cart-count');
+                if (cartCount) {
+                    cartCount.textContent = count;
+                    if (count > 0) {
+                        cartCount.classList.remove('hidden');
+                    } else {
+                        cartCount.classList.add('hidden');
+                    }
+                }
+            } catch (err) {
+                // Si hay error, oculta el contador
+                const cartCount = document.getElementById('cart-count');
+                if (cartCount) cartCount.classList.add('hidden');
+            }
+        }
+
+        async function addToCart(token, productId, cantidad) {
+            const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart/add", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ productId, cantidad })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+                console.error('Error al agregar al carrito:', data);
+                throw new Error(data.message || data.error || "No se pudo agregar al carrito");
+            }
+            return data;
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const contenedor = document.getElementById("productos-lista");
+            if (!contenedor) return;
+            try {
+                const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/products");
+                const { data } = await res.json();
+
+                contenedor.innerHTML = data.slice(0, 8).map((p) => {
+                    let imageUrl = p.image || "./img/default.jpg";
+                    return `
+                        <div class="xl:w-1/4 md:w-1/2 p-4">
+                            <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-gray-100">
+                                <div class="relative">
+                                    <img class="h-48 w-full object-cover object-center" src="${imageUrl}" alt="${p.name}">
+                                    <div class="absolute top-4 left-4">
+                                        <span class="${p.featured ? 'bg-blue-500' : 'bg-gray-500'} text-white px-3 py-1 rounded-full text-xs font-semibold tracking-wide">
+                                            ${p.featured ? 'DESTACADO' : (p.category === 'capilar' ? 'CAPILAR' : 'FACIAL')}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="p-5">
+                                    <h3 class="text-blue-600 text-xs font-medium tracking-wider uppercase mb-1">
+                                        ${p.category === 'capilar' ? 'Productos Capilares' : 'Productos Faciales'}
+                                    </h3>
+                                    <h2 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 hover:text-blue-600 transition-colors duration-200">
+                                        ${p.name}
+                                    </h2>
+                                    <p class="text-gray-500 text-sm mb-4 line-clamp-2">
+                                        ${p.description}
+                                    </p>
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="flex items-center space-x-1">
+                                            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                            </svg>
+                                            <span class="text-gray-600 text-sm">${p.rating || 'N/A'}</span>
+                                        </div>
+                                        <span class="text-xs ${p.availability ? 'text-green-600' : 'text-red-500'} font-medium">
+                                            ${p.availability ? 'Disponible' : 'Agotado'}
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+                                        <div>
+                                            <span class="text-gray-900 font-bold text-lg">$${p.price}</span>
+                                            ${p.originalPrice ? `<span class="text-gray-400 text-sm line-through ml-2">$${p.originalPrice}</span>` : ''}
+                                        </div>
+                                        ${p.availability ? `
+                                            <button 
+                                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center agregar-carrito-btn"
+                                                data-producto='${JSON.stringify(p)}'>
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                                </svg>
+                                                Agregar al carrito
+                                            </button>
+                                        ` : `
+                                            <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded-lg text-sm font-medium cursor-not-allowed" disabled>
+                                                Agotado
+                                            </button>
+                                        `}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+
+                // Evento para agregar al carrito
+                document.querySelectorAll('.agregar-carrito-btn').forEach(btn => {
+                    btn.addEventListener('click', async function (e) {
+                        const user = JSON.parse(localStorage.getItem('user'));
+                        if (!user || !user.token) {
+                            window.location.href = 'login.html';
+                            return;
+                        }
+                        const producto = JSON.parse(btn.getAttribute('data-producto'));
+                        try {
+                            await addToCart(user.token, producto._id, 1);
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Agregado!',
+                                text: 'Producto agregado al carrito',
+                                timer: 1200,
+                                showConfirmButton: false
+                            });
+                            // Actualiza el contador del carrito aquí
+                            actualizarContadorCarrito();
+                        } catch (err) {
+                            Swal.fire('Error', err.message || 'No se pudo agregar al carrito', 'error');
+                        }
+                    });
+                });
+
+                // Al cargar la página, actualiza el contador si hay usuario
+                actualizarContadorCarrito();
+
+            } catch (err) {
+                contenedor.innerHTML = `<div class="w-full text-center text-red-500 py-8">No se pudieron cargar los productos.</div>`;
+            }
+        });
+    </script>
+
     <!-- Script global para actualizar el contador del carrito en todas las páginas -->
     <script>
         window.actualizarContadorCarrito = async function () {
@@ -1552,9 +1261,8 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script src="js/main.js"></script>
-
 </body>
-
 
 </html>
