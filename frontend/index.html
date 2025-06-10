@@ -3199,6 +3199,30 @@
         });
     </script>
 
+    <script>
+        document.getElementById('mobile-notification-btn').onclick = function (e) {
+            e.stopPropagation();
+            const dropdown = document.getElementById('notification-dropdown');
+            // Opcional: cerrar el menú móvil si está abierto
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+            const isHidden = dropdown.classList.contains('hidden');
+            if (isHidden) {
+                dropdown.classList.remove('hidden', 'opacity-0', 'scale-95');
+                dropdown.classList.add('opacity-100', 'scale-100');
+            } else {
+                dropdown.classList.remove('opacity-100', 'scale-100');
+                dropdown.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => dropdown.classList.add('hidden'), 200);
+            }
+            if (!dropdown.classList.contains('hidden')) {
+                loadAppointments();
+            }
+        };
+    </script>
+
     <!-- Script para agregar al carrito -->
     <script>
         async function actualizarContadorCarrito() {
