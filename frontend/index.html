@@ -3213,6 +3213,7 @@
             setTimeout(() => {
                 dropdown.classList.add('hidden');
                 dropdown.classList.remove('mobile-active');
+                dropdown.style.display = '';
             }, 200);
         }
 
@@ -3231,26 +3232,28 @@
         document.getElementById('mobile-notification-btn').onclick = function (e) {
             e.stopPropagation();
             const dropdown = document.getElementById('notification-dropdown');
-            // En móvil, mostrar como modal centrado
             if (window.innerWidth < 768) {
                 dropdown.classList.add('mobile-active');
-                dropdown.style.display = 'block';
-            }
-            const isHidden = dropdown.classList.contains('hidden');
-            if (isHidden) {
                 dropdown.classList.remove('hidden', 'opacity-0', 'scale-95');
                 dropdown.classList.add('opacity-100', 'scale-100');
-            } else {
-                dropdown.classList.remove('opacity-100', 'scale-100');
-                dropdown.classList.add('opacity-0', 'scale-95');
-                setTimeout(() => {
-                    dropdown.classList.add('hidden');
-                    dropdown.classList.remove('mobile-active');
-                    dropdown.style.display = '';
-                }, 200);
-            }
-            if (!dropdown.classList.contains('hidden')) {
+                dropdown.style.display = 'block';
                 loadAppointments();
+            } else {
+                // fallback para escritorio
+                const isHidden = dropdown.classList.contains('hidden');
+                if (isHidden) {
+                    dropdown.classList.remove('hidden', 'opacity-0', 'scale-95');
+                    dropdown.classList.add('opacity-100', 'scale-100');
+                } else {
+                    dropdown.classList.remove('opacity-100', 'scale-100');
+                    dropdown.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => {
+                        dropdown.classList.add('hidden');
+                    }, 200);
+                }
+                if (!dropdown.classList.contains('hidden')) {
+                    loadAppointments();
+                }
             }
         };
 
