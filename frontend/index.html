@@ -13,7 +13,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
     <link rel="icon" href="/img/mujer-con-pelo-largo.png" type="image/x-icon">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-</head>
+    <style>
+        @media (max-width: 767px) {
+        #notification-dropdown.mobile-active {
+            position: fixed !important;
+            left: 50% !important;
+            top: 50% !important;
+            transform: translate(-50%, -50%) scale(1) !important;
+            width: 90vw !important;
+            max-width: 380px !important;
+            z-index: 9999 !important;
+            border-radius: 1.5rem !important;
+            box-shadow: 0 8px 32px rgba(80,0,120,0.18);
+        }
+        }
+    </style>
 </head>
 
 <body class="bg-white font-body">
@@ -3185,7 +3199,10 @@
             const dropdown = document.getElementById('notification-dropdown');
             dropdown.classList.remove('opacity-100', 'scale-100');
             dropdown.classList.add('opacity-0', 'scale-95');
-            setTimeout(() => dropdown.classList.add('hidden'), 200);
+            setTimeout(() => {
+                dropdown.classList.add('hidden');
+                dropdown.classList.remove('mobile-active');
+            }, 200);
         }
 
         document.addEventListener('click', function (event) {
@@ -3203,8 +3220,11 @@
         document.getElementById('mobile-notification-btn').onclick = function (e) {
             e.stopPropagation();
             const dropdown = document.getElementById('notification-dropdown');
-            // Opcional: cerrar el menú móvil si está abierto
             const mobileMenu = document.getElementById('mobile-menu');
+            // Solo en móvil, agrega la clase especial
+            if (window.innerWidth < 768) {
+                dropdown.classList.add('mobile-active');
+            }
             if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
                 mobileMenu.classList.add('hidden');
             }
@@ -3215,7 +3235,10 @@
             } else {
                 dropdown.classList.remove('opacity-100', 'scale-100');
                 dropdown.classList.add('opacity-0', 'scale-95');
-                setTimeout(() => dropdown.classList.add('hidden'), 200);
+                setTimeout(() => {
+                    dropdown.classList.add('hidden');
+                    dropdown.classList.remove('mobile-active');
+                }, 200);
             }
             if (!dropdown.classList.contains('hidden')) {
                 loadAppointments();
