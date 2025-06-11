@@ -581,7 +581,6 @@ const loadTestimonials = async () => {
           // Cerrar cualquier otro modo edición abierto
           document.querySelectorAll(".comment-text[contenteditable='true']").forEach(p => {
             p.removeAttribute("contenteditable");
-            p.classList.remove("border", "border-purple-400", "bg-purple-50");
             const saveBtn = p.parentNode.querySelector(".save-edit-btn");
             if (saveBtn) saveBtn.remove();
           });
@@ -592,19 +591,17 @@ const loadTestimonials = async () => {
 
           // Activar edición inline
           commentP.setAttribute("contenteditable", "true");
-          commentP.focus();
-          commentP.classList.add("border", "border-purple-400", "bg-purple-50");
 
-          // Crear botón Guardar
+          // Crear botón Guardar alineado a la derecha y con poco margen superior
           const saveBtn = document.createElement("button");
-          saveBtn.className = "save-edit-btn ml-2 bg-gray-200 hover:bg-green-500 text-gray-500 hover:text-white px-3 py-1 rounded flex items-center justify-center";
+          saveBtn.className = "save-edit-btn float-right mt-[5px] text-gray-500 rounded focus:outline-none";
           saveBtn.innerHTML = `
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 40 32" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 40 32" fill="currentColor">
               <g>
                 <!-- Triángulo principal -->
-                <path d="M2 4c0-2 2-3.2 4-2.5l30 12c2 0.8 2 3.2 0 4l-30 12C4 30.8 2 29.6 2 27.5V4z"/>
+                <path d="M2 4c0-2 2-3.2 4-2.5l30 12c2 0.8 2 3.2 0 4l-30 12C4 30.8 2 29.6 2 27.5V4z"></path>
                 <!-- Línea blanca horizontal -->
-                <rect x="7" y="14" width="13" height="4" rx="2" fill="white"/>
+                <rect x="7" y="14" width="13" height="4" rx="2" fill="white"></rect>
               </g>
             </svg>
           `;
