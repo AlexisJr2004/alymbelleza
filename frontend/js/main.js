@@ -493,44 +493,31 @@ const initTestimonialSwiper = () => {
 // Función para cargar testimonios
 const loadTestimonials = async () => {
   try {
-    console.log("Cargando testimonios...");
-
     const response = await fetch(`${API_URL}/api/testimonials`);
-
-    if (!response.ok) {
-      throw new Error(`Error HTTP ${response.status}`);
-    }
-
+    if (!response.ok) throw new Error(`Error HTTP ${response.status}`);
     const { data: testimonials } = await response.json();
-    console.log("Testimonios recibidos:", testimonials);
 
-    const swiperWrapper = document.querySelector(
-      ".testimonials-swiper .swiper-wrapper"
-    );
-    if (!swiperWrapper) {
-      throw new Error("No se encontró el contenedor de testimonios");
-    }
-
-    // Limpiar contenedor
+    const swiperWrapper = document.querySelector(".testimonials-swiper .swiper-wrapper");
+    if (!swiperWrapper) throw new Error("No se encontró el contenedor de testimonios");
     swiperWrapper.innerHTML = "";
 
+    const user = JSON.parse(localStorage.getItem("user"));
+
     if (testimonials.length === 0) {
-      // Mensaje completamente centrado (vertical y horizontalmente)
-      swiperWrapper.innerHTML = `
-        <div class="swiper-slide flex items-center justify-center h-full w-full">
-          <div class="text-center p-8 max-w-sm mx-auto">
-            <div class="inline-flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 p-4 mb-4">
-              <svg class="h-10 w-10 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">No hay testimonios aún</h3>
-            <p class="text-gray-600 dark:text-gray-400 mb-6">Parece que nadie ha compartido su experiencia todavía.</p>
+      swiperWrapper.innerHTML = `<div class="swiper-slide flex items-center justify-center h-full w-full">
+        <div class="text-center p-8 max-w-sm mx-auto">
+          <div class="inline-flex items-center justify-center rounded-full bg-gray-100 p-4 mb-4">
+            <svg class="h-10 w-10 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
           </div>
+          <h3 class="text-xl font-semibold text-gray-800 mb-2">No hay testimonios aún</h3>
+          <p class="text-gray-600 mb-6">Parece que nadie ha compartido su experiencia todavía.</p>
         </div>
-      `;
+      </div>`;
     } else {
       testimonials.forEach((testimonial) => {
+        const isOwner = user && (testimonial.userId === user._id || testimonial.email === user.email);
         const slide = document.createElement("div");
         slide.className = "swiper-slide";
         slide.innerHTML = `
@@ -543,15 +530,19 @@ const loadTestimonials = async () => {
               <p class="text-gray-600 italic mb-8">"${testimonial.comment}"</p>
             </div>
             <div class="flex items-center mt-auto">
-              <img src="${formatImageUrl(testimonial.avatar)}" 
-     alt="${testimonial.name}" 
-     class="h-12 w-12 rounded-full object-cover"
-     onerror="this.onerror=null;this.src='https://us.123rf.com/450wm/thesomeday123/thesomeday1231712/thesomeday123171200009/91087331-icono-de-perfil-de-avatar-predeterminado-para-hombre-marcador-de-posici%C3%B3n-de-foto-gris-vector-de.jpg?ver=6'">
+              <img src="${formatImageUrl(testimonial.avatar)}" alt="${testimonial.name}" class="h-12 w-12 rounded-full object-cover"
+                onerror="this.onerror=null;this.src='https://us.123rf.com/450wm/thesomeday123/thesomeday1231712/thesomeday123171200009/91087331-icono-de-perfil-de-avatar-predeterminado-para-hombre-marcador-de-posici%C3%B3n-de-foto-gris-vector-de.jpg?ver=6'">
               <div class="ml-4">
                 <h4 class="font-semibold text-gray-900">${testimonial.name}</h4>
                 <p class="text-gray-500 text-sm">${testimonial.role}</p>
               </div>
             </div>
+            ${isOwner ? `
+              <div class="flex gap-2 mt-4">
+                <button class="edit-testimonial-btn px-3 py-1 bg-blue-100 text-blue-700 rounded" data-id="${testimonial._id}" data-comment="${testimonial.comment}" data-role="${testimonial.role}">Editar</button>
+                <button class="delete-testimonial-btn px-3 py-1 bg-red-100 text-red-700 rounded" data-id="${testimonial._id}">Borrar</button>
+              </div>
+            ` : ""}
           </div>
         `;
         swiperWrapper.appendChild(slide);
@@ -561,7 +552,26 @@ const loadTestimonials = async () => {
     // Inicializar o actualizar Swiper
     initTestimonialSwiper();
 
-    console.log("Testimonios cargados y mostrados correctamente");
+    // Listeners para editar y borrar
+    document.querySelectorAll(".edit-testimonial-btn").forEach(btn => {
+      btn.addEventListener("click", function () {
+        openEditTestimonialModal(
+          btn.getAttribute("data-id"),
+          btn.getAttribute("data-comment"),
+          btn.getAttribute("data-role")
+        );
+      });
+    });
+    document.querySelectorAll(".delete-testimonial-btn").forEach(btn => {
+      btn.addEventListener("click", async function () {
+        const id = btn.getAttribute("data-id");
+        if (confirm("¿Seguro que quieres borrar este testimonio?")) {
+          await deleteTestimonial(id);
+          loadTestimonials();
+        }
+      });
+    });
+
   } catch (error) {
     console.error("Error al cargar testimonios:", error);
 
@@ -580,6 +590,61 @@ const loadTestimonials = async () => {
     }
   }
 };
+
+// 2. Modal para editar testimonio (reutiliza el modal existente)
+function openEditTestimonialModal(id, comment, role) {
+  const testimonialModal = document.getElementById("testimonialModal");
+  const testimonialForm = document.getElementById("testimonialForm");
+  testimonialModal.classList.remove("hidden");
+  testimonialForm["comment"].value = comment;
+  testimonialForm["role"].value = role;
+
+  // Cambia el submit temporalmente para editar
+  testimonialForm.onsubmit = async function (e) {
+    e.preventDefault();
+    const user = JSON.parse(localStorage.getItem("user"));
+    const formData = new FormData(testimonialForm);
+    formData.append("name", user.name);
+    formData.append("avatar", user.profileImage);
+
+    try {
+      const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${user.token}`
+        },
+        body: formData
+      });
+      if (!response.ok) throw new Error("No se pudo editar el testimonio");
+      testimonialModal.classList.add("hidden");
+      testimonialForm.reset();
+      showNotification("Testimonio editado correctamente", "success");
+      loadTestimonials();
+    } catch (err) {
+      showNotification("Error al editar testimonio", "error");
+    } finally {
+      testimonialForm.onsubmit = null; // Limpia para el siguiente uso
+    }
+  };
+}
+
+// 3. Función para borrar testimonio
+async function deleteTestimonial(id) {
+  const user = JSON.parse(localStorage.getItem("user"));
+  try {
+    const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${user.token}`
+      }
+    });
+    if (!response.ok) throw new Error("No se pudo borrar el testimonio");
+    showNotification("Testimonio eliminado", "success");
+  } catch (err) {
+    showNotification("Error al borrar testimonio", "error");
+  }
+}
+
 
 // Cargar testimonios cuando el DOM esté listo
 document.addEventListener("DOMContentLoaded", () => {
