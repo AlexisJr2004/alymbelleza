@@ -829,6 +829,8 @@
             const userDropdown = document.getElementById('user-dropdown');
             const adminLinkContainer = document.getElementById('admin-link-container');
             const loginRegisterLinks = document.getElementById('login-register-links');
+            const mobileProfileLink = document.getElementById('mobile-profile-link-container');
+
 
             // --- Lógica para el botón de Reserva Online ---
             const reservaBtn = document.getElementById('reserva-btn');
@@ -842,7 +844,7 @@
                     reservaBtn.classList.add('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
                     reservaBtn.setAttribute('title', 'Debes iniciar sesión para reservar');
                     reservaBtn.href = "login.html";
-                    reservaBtn.addEventListener('click', function(e) {
+                    reservaBtn.addEventListener('click', function (e) {
                         e.preventDefault();
                         window.location.href = "login.html";
                     });
@@ -857,7 +859,7 @@
                     mobileReservaBtn.classList.add('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
                     mobileReservaBtn.setAttribute('title', 'Debes iniciar sesión para reservar');
                     mobileReservaBtn.href = "login.html";
-                    mobileReservaBtn.addEventListener('click', function(e) {
+                    mobileReservaBtn.addEventListener('click', function (e) {
                         e.preventDefault();
                         window.location.href = "login.html";
                     });
@@ -891,6 +893,7 @@
                 // Mostrar opción admin si corresponde
                 if (user.role === 'admin') {
                     adminLinkContainer.classList.remove('hidden');
+                    mobileProfileLink.classList.remove('hidden');
                 }
 
                 // Imagen de perfil

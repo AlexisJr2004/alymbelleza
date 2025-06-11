@@ -498,7 +498,7 @@
                     Reserva Online
                 </a>
             </div>
-            
+
         </aside>
     </header>
 
@@ -2712,6 +2712,8 @@
             const userDropdown = document.getElementById('user-dropdown');
             const adminLinkContainer = document.getElementById('admin-link-container');
             const loginRegisterLinks = document.getElementById('login-register-links');
+            const mobileProfileLink = document.getElementById('mobile-profile-link-container');
+
 
             // --- Lógica para el botón de Reserva Online ---
             const reservaBtn = document.getElementById('reserva-btn');
@@ -2774,6 +2776,7 @@
                 // Mostrar opción admin si corresponde
                 if (user.role === 'admin') {
                     adminLinkContainer.classList.remove('hidden');
+                    mobileProfileLink.classList.remove('hidden');
                 }
 
                 // Imagen de perfil
