@@ -558,14 +558,6 @@ const loadTestimonials = async () => {
 
     // --- Agregar listeners después de inicializar Swiper ---
     setTimeout(() => {
-      // Cerrar cualquier otro textarea abierto
-      document.querySelectorAll(".comment-edit-box").forEach(box => {
-        const p = document.createElement("p");
-        p.className = "text-gray-600 italic mb-8 comment-text";
-        p.textContent = box.querySelector("textarea").value;
-        box.parentNode.replaceChild(p, box);
-      });
-
       // Listener para editar inline
       document.querySelectorAll(".edit-testimonial-btn").forEach(btn => {
         btn.onclick = function () {
@@ -615,36 +607,44 @@ const loadTestimonials = async () => {
 
     // Función para actualizar inline
     async function updateTestimonialInline(id, comment, role) {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const formData = new FormData();
-  formData.append("comment", comment);
-  formData.append("role", role);
-  formData.append("name", user.name);
-  formData.append("avatar", user.profileImage);
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user || !user.token) {
+        showNotification("Debes iniciar sesión para editar testimonios.", "error");
+        return;
+      }
+      const formData = new FormData();
+      formData.append("comment", comment);
+      formData.append("role", role);
+      formData.append("name", user.name);
+      formData.append("avatar", user.profileImage);
 
-  try {
-    const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
-      method: "PUT",
-      headers: {
-        "Authorization": `Bearer ${user.token}`
-      },
-      body: formData
-    });
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`No se pudo editar el testimonio: ${response.status} - ${errorText}`);
+      try {
+        const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
+          method: "PUT",
+          headers: {
+            "Authorization": `Bearer ${user.token}`
+          },
+          body: formData
+        });
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`No se pudo editar el testimonio: ${response.status} - ${errorText}`);
+        }
+        showNotification("Testimonio editado correctamente", "success");
+        loadTestimonials();
+      } catch (err) {
+        showNotification("Error al editar testimonio: " + err.message, "error");
+        console.error(err);
+      }
     }
-    showNotification("Testimonio editado correctamente", "success");
-    loadTestimonials();
-  } catch (err) {
-    showNotification("Error al editar testimonio: " + err.message, "error");
-    console.error(err);
-  }
-}
 
     // Función para eliminar
     async function deleteTestimonial(id) {
       const user = JSON.parse(localStorage.getItem("user"));
+      if (!user || !user.token) {
+        showNotification("Debes iniciar sesión para borrar testimonios.", "error");
+        return;
+      }
       try {
         const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
           method: "DELETE",
@@ -652,10 +652,14 @@ const loadTestimonials = async () => {
             "Authorization": `Bearer ${user.token}`
           }
         });
-        if (!response.ok) throw new Error("No se pudo borrar el testimonio");
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`No se pudo borrar el testimonio: ${response.status} - ${errorText}`);
+        }
         showNotification("Testimonio eliminado", "success");
       } catch (err) {
-        showNotification("Error al borrar testimonio", "error");
+        showNotification("Error al borrar testimonio: " + err.message, "error");
+        console.error(err);
       }
     }
 
