@@ -609,7 +609,7 @@ const loadTestimonials = async () => {
     async function updateTestimonialInline(id, comment, role) {
       const user = JSON.parse(localStorage.getItem("user"));
       if (!user || !user.token) {
-        showNotification("Debes iniciar sesión para editar testimonios.", "error");
+        showNotification("error", "Error", "Debes iniciar sesión para editar testimonios.");
         return;
       }
       const formData = new FormData();
@@ -626,14 +626,14 @@ const loadTestimonials = async () => {
           },
           body: formData
         });
+        const data = await response.json();
         if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`No se pudo editar el testimonio: ${response.status} - ${errorText}`);
+          throw new Error(data.error || "No se pudo editar el testimonio");
         }
-        showNotification("Testimonio editado correctamente", "success");
+        showNotification("success", "¡Éxito!", data.message || "Testimonio editado correctamente");
         loadTestimonials();
       } catch (err) {
-        showNotification("Error al editar testimonio: " + err.message, "error");
+        showNotification("error", "Error al editar testimonio", err.message || "Error desconocido");
         console.error(err);
       }
     }
@@ -642,7 +642,7 @@ const loadTestimonials = async () => {
     async function deleteTestimonial(id) {
       const user = JSON.parse(localStorage.getItem("user"));
       if (!user || !user.token) {
-        showNotification("Debes iniciar sesión para borrar testimonios.", "error");
+        showNotification("error", "Error", "Debes iniciar sesión para borrar testimonios.");
         return;
       }
       try {
@@ -652,13 +652,13 @@ const loadTestimonials = async () => {
             "Authorization": `Bearer ${user.token}`
           }
         });
+        const data = await response.json();
         if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`No se pudo borrar el testimonio: ${response.status} - ${errorText}`);
+          throw new Error(data.error || "No se pudo borrar el testimonio");
         }
-        showNotification("Testimonio eliminado", "success");
+        showNotification("success", "¡Éxito!", data.message || "Testimonio eliminado");
       } catch (err) {
-        showNotification("Error al borrar testimonio: " + err.message, "error");
+        showNotification("error", "Error al borrar testimonio", err.message || "Error desconocido");
         console.error(err);
       }
     }
