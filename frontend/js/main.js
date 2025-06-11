@@ -594,7 +594,7 @@ const loadTestimonials = async () => {
 
           // Crear botón Guardar alineado a la derecha y con poco margen superior
           const saveBtn = document.createElement("button");
-          saveBtn.className = "save-edit-btn float-right mt-[5px] text-gray-500 rounded focus:outline-none";
+          saveBtn.className = "save-edit-btn float-right mt-[5px] w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center focus:outline-none";
           saveBtn.innerHTML = `
             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 40 32" fill="currentColor">
               <g>
