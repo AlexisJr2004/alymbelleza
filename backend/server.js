@@ -217,6 +217,38 @@ app.get("/api/testimonials", async (req, res) => {
   }
 });
 
+// Editar testimonio
+app.put("/api/testimonials/:id", testimonialUpload.none(), async (req, res) => {
+  try {
+    const { name, role, comment, avatar } = req.body;
+    const testimonial = await Testimonial.findById(req.params.id);
+    if (!testimonial) {
+      return res.status(404).json({ success: false, error: "Testimonio no encontrado" });
+    }
+    testimonial.name = name || testimonial.name;
+    testimonial.role = role || testimonial.role;
+    testimonial.comment = comment || testimonial.comment;
+    testimonial.avatar = avatar || testimonial.avatar;
+    await testimonial.save();
+    res.json({ success: true, message: "Testimonio actualizado", data: testimonial });
+  } catch (error) {
+    res.status(500).json({ success: false, error: "Error al actualizar testimonio" });
+  }
+});
+
+// Eliminar testimonio
+app.delete("/api/testimonials/:id", async (req, res) => {
+  try {
+    const testimonial = await Testimonial.findByIdAndDelete(req.params.id);
+    if (!testimonial) {
+      return res.status(404).json({ success: false, error: "Testimonio no encontrado" });
+    }
+    res.json({ success: true, message: "Testimonio eliminado" });
+  } catch (error) {
+    res.status(500).json({ success: false, error: "Error al eliminar testimonio" });
+  }
+});
+
 // Configuración de Nodemailer
 const mailConfig = {
   service: "gmail",
