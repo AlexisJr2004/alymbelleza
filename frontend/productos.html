@@ -81,20 +81,26 @@
                             </button>
 
                             <!-- Dropdown minimalista -->
-                            <div id="notification-dropdown" 
+                            <div id="notification-dropdown"
                                 class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden transition-all duration-200 origin-top-right transform opacity-0 scale-95 hidden">
-                                
+
                                 <!-- Header con gradiente -->
-                                <div class="px-5 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 flex justify-between items-center">
+                                <div
+                                    class="px-5 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 flex justify-between items-center">
                                     <div class="flex items-center gap-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                                         </svg>
                                         <h4 class="font-semibold text-white text-lg">Notificaciones</h4>
                                     </div>
-                                    <button onclick="closeNotifications()" class="text-blue-100 hover:text-white transition-colors">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    <button onclick="closeNotifications()"
+                                        class="text-blue-100 hover:text-white transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12" />
                                         </svg>
                                     </button>
                                 </div>
@@ -103,22 +109,28 @@
                                 <ul id="appointments-list" class="divide-y divide-gray-100 max-h-96 overflow-y-auto">
                                     <!-- Estado vacío -->
                                     <li class="empty-state hidden px-5 py-8 text-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                         <p class="mt-3 text-gray-500 font-medium">No hay notificaciones</p>
-                                        <p class="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán aquí</p>
+                                        <p class="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán
+                                            aquí</p>
                                     </li>
-                                    
+
                                     <!-- Las notificaciones se insertarán aquí -->
                                 </ul>
 
                                 <!-- Footer con acción -->
                                 <div class="px-4 py-3 bg-gray-50 border-t border-gray-100 text-right">
-                                    <button class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center justify-end gap-1 w-full">
+                                    <button
+                                        class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center justify-end gap-1 w-full">
                                         <span>Marcar todas como leídas</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
                                         </svg>
                                     </button>
                                 </div>
@@ -343,14 +355,17 @@
                 <div id="mobile-admin-link-container" class="mt-3 hidden">
                     <a href="admin-productos.html"
                         class="inline-flex items-center text-sm text-purple-700 hover:text-purple-900 font-medium">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
+                        <i class="fa-solid fa-gear mr-1 text-sm"></i>
                         Panel Administrador
+                    </a>
+                </div>
+
+                <!-- Enlace perfil (solo visible con sesión) -->
+                <div id="mobile-profile-link-container" class="mt-3 hidden">
+                    <a href="perfil.html"
+                        class="inline-flex items-center text-sm text-purple-700 hover:text-purple-900 font-medium">
+                        <i class="fa-solid fa-user-circle mr-1 text-sm"></i>
+                        Perfil
                     </a>
                 </div>
             </div>
@@ -718,6 +733,7 @@
         </svg>
     </section>
 
+    <!-- Script para la funcionalidad del botón de Usuario y Reservas en línea -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const user = JSON.parse(localStorage.getItem('user'));
@@ -860,6 +876,7 @@
         });
     </script>
 
+    <!-- Script para cargar productos -->
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
             const contenedor = document.getElementById("productos-lista");
@@ -868,64 +885,64 @@
                 const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/products");
                 const { data } = await res.json();
 
-                contenedor.innerHTML = data.slice(0, 8).map((p, idx) => {
+                contenedor.innerHTML = data.slice(0, 8).map((p) => {
                     let imageUrl = p.image || "./img/default.jpg";
                     return `
-                <div class="xl:w-1/4 md:w-1/2 p-4">
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-gray-100">
-                        <div class="relative">
-                            <img class="h-48 w-full object-cover object-center" src="${imageUrl}" alt="${p.name}">
-                            <div class="absolute top-4 left-4">
-                                <span class="${p.featured ? 'bg-blue-500' : 'bg-gray-500'} text-white px-3 py-1 rounded-full text-xs font-semibold tracking-wide">
-                                    ${p.featured ? 'DESTACADO' : (p.category === 'capilar' ? 'CAPILAR' : 'FACIAL')}
-                                </span>
+                        <div class="xl:w-1/4 md:w-1/2 p-4">
+                            <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-gray-100">
+                                <div class="relative">
+                                    <img class="h-48 w-full object-cover object-center" src="${imageUrl}" alt="${p.name}">
+                                    <div class="absolute top-4 left-4">
+                                        <span class="${p.featured ? 'bg-blue-500' : 'bg-gray-500'} text-white px-3 py-1 rounded-full text-xs font-semibold tracking-wide">
+                                            ${p.featured ? 'DESTACADO' : (p.category === 'capilar' ? 'CAPILAR' : 'FACIAL')}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="p-5">
+                                    <h3 class="text-blue-600 text-xs font-medium tracking-wider uppercase mb-1">
+                                        ${p.category === 'capilar' ? 'Productos Capilares' : 'Productos Faciales'}
+                                    </h3>
+                                    <h2 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 hover:text-blue-600 transition-colors duration-200">
+                                        ${p.name}
+                                    </h2>
+                                    <p class="text-gray-500 text-sm mb-4 line-clamp-2">
+                                        ${p.description}
+                                    </p>
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="flex items-center space-x-1">
+                                            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                            </svg>
+                                            <span class="text-gray-600 text-sm">${p.rating || 'N/A'}</span>
+                                        </div>
+                                        <span class="text-xs ${p.availability ? 'text-green-600' : 'text-red-500'} font-medium">
+                                            ${p.availability ? 'Disponible' : 'Agotado'}
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+                                        <div>
+                                            <span class="text-gray-900 font-bold text-lg">$${p.price}</span>
+                                            ${p.originalPrice ? `<span class="text-gray-400 text-sm line-through ml-2">$${p.originalPrice}</span>` : ''}
+                                        </div>
+                                        ${p.availability ? `
+                                            <button 
+                                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center agregar-carrito-btn"
+                                                data-producto='${JSON.stringify(p)}'>
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                                </svg>
+                                                Agregar al carrito
+                                            </button>
+                                        ` : `
+                                            <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded-lg text-sm font-medium cursor-not-allowed" disabled>
+                                                Agotado
+                                            </button>
+                                        `}
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="p-5">
-                            <h3 class="text-blue-600 text-xs font-medium tracking-wider uppercase mb-1">
-                                ${p.category === 'capilar' ? 'Productos Capilares' : 'Productos Faciales'}
-                            </h3>
-                            <h2 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 hover:text-blue-600 transition-colors duration-200">
-                                ${p.name}
-                            </h2>
-                            <p class="text-gray-500 text-sm mb-4 line-clamp-2">
-                                ${p.description}
-                            </p>
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="flex items-center space-x-1">
-                                    <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                    </svg>
-                                    <span class="text-gray-600 text-sm">${p.rating || 'N/A'}</span>
-                                </div>
-                                <span class="text-xs ${p.availability ? 'text-green-600' : 'text-red-500'} font-medium">
-                                    ${p.availability ? 'Disponible' : 'Agotado'}
-                                </span>
-                            </div>
-                            <div class="flex items-center justify-between pt-3 border-t border-gray-100">
-                                <div>
-                                    <span class="text-gray-900 font-bold text-lg">$${p.price}</span>
-                                    ${p.originalPrice ? `<span class="text-gray-400 text-sm line-through ml-2">$${p.originalPrice}</span>` : ''}
-                                </div>
-                                ${p.availability ? `
-                                    <button 
-                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center agregar-carrito-btn"
-                                        data-producto='${JSON.stringify(p)}'>
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                        </svg>
-                                        Agregar al carrito
-                                    </button>
-                                ` : `
-                                    <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded-lg text-sm font-medium cursor-not-allowed" disabled>
-                                        Agotado
-                                    </button>
-                                `}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
+                    `;
                 }).join("");
 
                 // Evento para agregar al carrito
@@ -934,8 +951,7 @@
                         const user = JSON.parse(localStorage.getItem('user'));
                         if (!user || !user.token) {
                             window.location.href = 'login.html';
-                            e.preventDefault();
-                            return false;
+                            return;
                         }
                         const producto = JSON.parse(btn.getAttribute('data-producto'));
                         try {
@@ -947,16 +963,16 @@
                                 timer: 1200,
                                 showConfirmButton: false
                             });
-                            // Si tienes contador de carrito, actualízalo aquí
+                            // Actualiza el contador del carrito aquí
+                            actualizarContadorCarrito();
                         } catch (err) {
-                            Swal.fire('Error', 'No se pudo agregar al carrito', 'error');
+                            Swal.fire('Error', err.message || 'No se pudo agregar al carrito', 'error');
                         }
                     });
                 });
 
-                // Actualiza el contador del carrito al cargar
-                const user = JSON.parse(localStorage.getItem('user'));
-                if (user) actualizarContadorCarrito(user);
+                // Al cargar la página, actualiza el contador si hay usuario
+                actualizarContadorCarrito();
 
             } catch (err) {
                 contenedor.innerHTML = `<div class="w-full text-center text-red-500 py-8">No se pudieron cargar los productos.</div>`;
@@ -964,6 +980,7 @@
         });
     </script>
 
+    <!-- Script para filtrar productos -->
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
             const contenedor = document.getElementById("productos-lista");
@@ -1092,6 +1109,7 @@
         });
     </script>
 
+    <!-- Script para la reserva en linea -->
     <script>
         const NOTIFICATION_API_URL = "https://aly-mbelleza-backend.onrender.com/api/appointments";
 
@@ -1353,6 +1371,7 @@
 
     </script>
 
+    <!-- Script para centro de notificaciones -->
     <script>
         document.getElementById('notification-btn').onclick = function (e) {
             e.stopPropagation();
@@ -1389,9 +1408,47 @@
         });
     </script>
     
+    <!-- Script global para actualizar el contador del carrito en todas las páginas -->
+    <script>
+        window.actualizarContadorCarrito = async function () {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const cartCount = document.getElementById('cart-count');
+            if (!cartCount) return;
+            if (!user || !user.token) {
+                cartCount.textContent = "0";
+                cartCount.classList.add('hidden');
+                return;
+            }
+            try {
+                const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart", {
+                    headers: { "Authorization": `Bearer ${user.token}` }
+                });
+                const data = await res.json();
+                // Soporta varias estructuras de respuesta
+                const items = data?.cart?.items || data?.items || data?.cart || [];
+                const count = Array.isArray(items) ? items.reduce((acc, item) => acc + (item.cantidad || 1), 0) : 0;
+                cartCount.textContent = count;
+                if (count > 0) {
+                    cartCount.classList.remove('hidden');
+                } else {
+                    cartCount.classList.add('hidden');
+                }
+            } catch (err) {
+                cartCount.textContent = "0";
+                cartCount.classList.add('hidden');
+            }
+        };
+
+        // Llama a la función al cargar la página
+        document.addEventListener("DOMContentLoaded", () => {
+            if (document.getElementById('cart-count')) {
+                window.actualizarContadorCarrito();
+            }
+        });
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/main.js"></script>
-
 
 </body>
 

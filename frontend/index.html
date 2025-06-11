@@ -2849,49 +2849,6 @@
         });
     </script>
 
-    <!--- Elementos del perfil movil -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const user = JSON.parse(localStorage.getItem('user'));
-            // Elementos del perfil móvil
-            const mobileProfileSection = document.getElementById('mobile-user-profile-section');
-            const mobileProfileImg = document.getElementById('mobile-profile-img');
-            const mobileProfileName = document.getElementById('mobile-profile-name');
-            const mobileProfileEmail = document.getElementById('mobile-profile-email');
-            const mobileProfileRole = document.getElementById('mobile-profile-role');
-            const mobileAdminLink = document.getElementById('mobile-admin-link-container');
-            const mobileProfileLink = document.getElementById('mobile-profile-link-container');
-            const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
-
-            if (user) {
-                mobileProfileSection.classList.remove('hidden');
-                mobileProfileName.textContent = user.name || 'Usuario';
-                mobileProfileEmail.textContent = user.email || '';
-                mobileProfileRole.textContent = user.role === 'admin' ? 'Administrador' : '';
-                if (user.role === 'admin') {
-                    mobileAdminLink.classList.remove('hidden');
-                }
-                mobileProfileLink.classList.remove('hidden');
-                // Imagen de perfil
-                const profileImageUrl = user.profileImage && user.profileImage.startsWith('http') ? user.profileImage :
-                    user.profileImage && user.profileImage.startsWith('/uploads/') ?
-                        'https://aly-mbelleza-backend.onrender.com' + user.profileImage :
-                        `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'U')}&background=random&length=1`;
-                mobileProfileImg.src = profileImageUrl;
-
-                // Logout
-                if (mobileLogoutBtn) {
-                    mobileLogoutBtn.onclick = () => {
-                        localStorage.removeItem('user');
-                        window.location.href = 'index.html';
-                    };
-                }
-            } else {
-                mobileProfileSection.classList.add('hidden');
-            }
-        });
-    </script>
-
     <!-- Script para la reserva en linea -->
     <script>
         const NOTIFICATION_API_URL = "https://aly-mbelleza-backend.onrender.com/api/appointments";
@@ -3191,7 +3148,7 @@
         });
     </script>
 
-    <!-- Script para agregar al carrito -->
+    <!-- Script para cargar productos y agregar al carrito -->
     <script>
         async function actualizarContadorCarrito() {
             const user = JSON.parse(localStorage.getItem('user'));

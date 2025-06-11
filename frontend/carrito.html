@@ -355,14 +355,17 @@
                 <div id="mobile-admin-link-container" class="mt-3 hidden">
                     <a href="admin-productos.html"
                         class="inline-flex items-center text-sm text-purple-700 hover:text-purple-900 font-medium">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
+                        <i class="fa-solid fa-gear mr-1 text-sm"></i>
                         Panel Administrador
+                    </a>
+                </div>
+
+                <!-- Enlace perfil (solo visible con sesión) -->
+                <div id="mobile-profile-link-container" class="mt-3 hidden">
+                    <a href="perfil.html"
+                        class="inline-flex items-center text-sm text-purple-700 hover:text-purple-900 font-medium">
+                        <i class="fa-solid fa-user-circle mr-1 text-sm"></i>
+                        Perfil
                     </a>
                 </div>
             </div>
@@ -755,6 +758,26 @@
                 class="transition-all duration-300 ease-in-out delay-150 path-1"></path>
         </svg>
     </section>
+
+    <!-- Script para guardar los datos del carrito -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const btnCompra = document.querySelector('a[href="pagos.html"]');
+        if (btnCompra) {
+            btnCompra.addEventListener("click", async function (e) {
+                e.preventDefault();
+                // Obtén los datos del carrito y usuario
+                const user = JSON.parse(localStorage.getItem("user"));
+                const carrito = await getCart(user.token);
+                // Guarda en localStorage para la factura
+                localStorage.setItem("factura_carrito", JSON.stringify(carrito.items || []));
+                localStorage.setItem("factura_usuario", JSON.stringify(user));
+                // Redirige a pagos.html
+                window.location.href = "pagos.html";
+            });
+        }
+    });
+    </script>
 
     <!-- Script para la funcionalidad del botón de Usuario y Reservas en línea -->
     <script>
@@ -1385,24 +1408,43 @@
         });
     </script>
 
-    <!-- Script para guardar los datos del carrito -->
+    <!-- Script global para actualizar el contador del carrito en todas las páginas -->
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const btnCompra = document.querySelector('a[href="pagos.html"]');
-        if (btnCompra) {
-            btnCompra.addEventListener("click", async function (e) {
-                e.preventDefault();
-                // Obtén los datos del carrito y usuario
-                const user = JSON.parse(localStorage.getItem("user"));
-                const carrito = await getCart(user.token);
-                // Guarda en localStorage para la factura
-                localStorage.setItem("factura_carrito", JSON.stringify(carrito.items || []));
-                localStorage.setItem("factura_usuario", JSON.stringify(user));
-                // Redirige a pagos.html
-                window.location.href = "pagos.html";
-            });
-        }
-    });
+        window.actualizarContadorCarrito = async function () {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const cartCount = document.getElementById('cart-count');
+            if (!cartCount) return;
+            if (!user || !user.token) {
+                cartCount.textContent = "0";
+                cartCount.classList.add('hidden');
+                return;
+            }
+            try {
+                const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart", {
+                    headers: { "Authorization": `Bearer ${user.token}` }
+                });
+                const data = await res.json();
+                // Soporta varias estructuras de respuesta
+                const items = data?.cart?.items || data?.items || data?.cart || [];
+                const count = Array.isArray(items) ? items.reduce((acc, item) => acc + (item.cantidad || 1), 0) : 0;
+                cartCount.textContent = count;
+                if (count > 0) {
+                    cartCount.classList.remove('hidden');
+                } else {
+                    cartCount.classList.add('hidden');
+                }
+            } catch (err) {
+                cartCount.textContent = "0";
+                cartCount.classList.add('hidden');
+            }
+        };
+
+        // Llama a la función al cargar la página
+        document.addEventListener("DOMContentLoaded", () => {
+            if (document.getElementById('cart-count')) {
+                window.actualizarContadorCarrito();
+            }
+        });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
