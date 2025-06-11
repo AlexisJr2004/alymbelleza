@@ -578,33 +578,40 @@ const loadTestimonials = async () => {
       // Listener para editar inline
       document.querySelectorAll(".edit-testimonial-btn").forEach(btn => {
         btn.onclick = function () {
-          // Cerrar cualquier otro textarea abierto antes de abrir uno nuevo
-          document.querySelectorAll(".comment-edit-box").forEach(box => {
-            const p = document.createElement("p");
-            p.className = "text-gray-600 italic mb-8 comment-text";
-            p.textContent = box.querySelector("textarea").value;
-            box.parentNode.replaceChild(p, box);
+          // Cerrar cualquier otro modo edición abierto
+          document.querySelectorAll(".comment-text[contenteditable='true']").forEach(p => {
+            p.removeAttribute("contenteditable");
+            p.classList.remove("border", "border-purple-400", "bg-purple-50");
+            const saveBtn = p.parentNode.querySelector(".save-edit-btn");
+            if (saveBtn) saveBtn.remove();
           });
 
           const id = btn.getAttribute("data-id");
           const role = btn.getAttribute("data-role");
           const commentP = btn.closest(".swiper-slide").querySelector(".comment-text");
-          const oldComment = commentP.textContent;
 
-          // Crear el textarea y el botón de guardar como elementos
-          const editBox = document.createElement("div");
-          editBox.className = "flex flex-col gap-2 comment-edit-box";
-          editBox.innerHTML = `
-            <textarea class="w-full border rounded p-2 text-gray-700 resize-none" rows="3">${oldComment}</textarea>
-            <button class="save-edit-btn self-end bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded flex items-center justify-center" data-id="${id}" data-role="${role}">
-              <i class="fas fa-paper-plane text-gray-300"></i>
-            </button>
+          // Activar edición inline
+          commentP.setAttribute("contenteditable", "true");
+          commentP.focus();
+          commentP.classList.add("border", "border-purple-400", "bg-purple-50");
+
+          // Crear botón Guardar
+          const saveBtn = document.createElement("button");
+          saveBtn.className = "save-edit-btn ml-2 bg-gray-200 hover:bg-green-500 text-gray-500 hover:text-white px-3 py-1 rounded flex items-center justify-center";
+          saveBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
           `;
-          commentP.parentNode.replaceChild(editBox, commentP);
+          saveBtn.setAttribute("data-id", id);
+          saveBtn.setAttribute("data-role", role);
+
+          // Insertar el botón después del comentario
+          commentP.parentNode.appendChild(saveBtn);
 
           // Listener para guardar
-          editBox.querySelector(".save-edit-btn").onclick = async function () {
-            const newComment = editBox.querySelector("textarea").value;
+          saveBtn.onclick = async function () {
+            const newComment = commentP.textContent;
             await updateTestimonialInline(id, newComment, role);
           };
         };
