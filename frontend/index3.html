@@ -508,20 +508,17 @@
         <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mt-4"></div>
     </div>
 
-    <div class="mt-6 mx-auto p-4 w-full max-w-6xl">
+    <div class="mt-8 mx-auto p-4 w-full max-w-6xl">
     <div class="bg-white rounded-3xl p-6 md:p-10 shadow-sm border border-gray-100">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <!-- Sección de Calendario -->
-        <section aria-labelledby="calendar-heading">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <!-- Calendario -->
+        <section aria-labelledby="calendar-heading" class="flex flex-col">
             <header class="flex items-center mb-6">
             <h3 id="calendar-heading" class="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                <span class="sr-only">Calendario</span>
-                <i class="fas fa-calendar-alt text-purple-500" aria-hidden="true"></i>
+                <i class="fas fa-calendar-alt text-purple-500"></i>
                 <span>Calendario</span>
             </h3>
             </header>
-            
-            <!-- Controles del calendario -->
             <div class="flex justify-between items-center mb-6 px-2">
             <button id="prevMonth"
                 class="p-2 text-gray-500 hover:text-gray-700 rounded-full transition-all duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-300"
@@ -541,22 +538,16 @@
                 </svg>
             </button>
             </div>
-            
-            <!-- Días de la semana -->
             <div class="grid grid-cols-7 gap-1 mb-4" role="rowgroup">
-            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider" role="columnheader">Dom</div>
-            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider" role="columnheader">Lun</div>
-            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider" role="columnheader">Mar</div>
-            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider" role="columnheader">Mié</div>
-            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider" role="columnheader">Jue</div>
-            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider" role="columnheader">Vie</div>
-            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider" role="columnheader">Sáb</div>
+            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider">Dom</div>
+            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider">Lun</div>
+            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider">Mar</div>
+            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider">Mié</div>
+            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider">Jue</div>
+            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider">Vie</div>
+            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider">Sáb</div>
             </div>
-            
-            <!-- Días del mes -->
-            <div id="calendar" class="grid grid-cols-7 gap-1" role="grid"></div>
-            
-            <!-- Botón de hoy -->
+            <div id="calendar" class="grid grid-cols-7 gap-1 flex-1" role="grid"></div>
             <div class="mt-8 pt-6 border-t border-gray-100 flex justify-center">
             <button id="todayBtn"
                 class="px-5 py-2 bg-white text-blue-600 font-medium rounded-full hover:bg-blue-50 transition-all duration-200 border border-blue-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2"
@@ -566,26 +557,22 @@
             </div>
         </section>
 
-        <!-- Sección de Citas -->
-        <section aria-labelledby="appointments-heading">
+        <!-- Citas -->
+        <section aria-labelledby="appointments-heading" class="flex flex-col">
             <header class="flex items-center mb-6">
             <h3 id="appointments-heading" class="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                <span class="sr-only">Tus Citas</span>
-                <i class="fas fa-list-check text-pink-500" aria-hidden="true"></i>
+                <i class="fas fa-list-check text-pink-500"></i>
                 <span>Tus Citas</span>
             </h3>
             </header>
-            
-            <div class="bg-gray-50 rounded-2xl p-4 shadow-inner border border-gray-100 max-h-[520px] overflow-y-auto">
+            <div class="bg-gray-50 rounded-2xl p-4 shadow-inner border border-gray-100 max-h-[520px] overflow-y-auto flex-1">
             <!-- Estado de carga -->
             <div id="appointments-loading" class="hidden text-center py-12">
                 <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-pink-500 mx-auto mb-3"></div>
                 <p class="font-medium text-gray-500">Cargando citas...</p>
             </div>
-            
             <!-- Lista de citas -->
             <ul id="appointments-list" class="divide-y divide-gray-200" aria-live="polite"></ul>
-            
             <!-- Estado vacío -->
             <div id="appointments-empty" class="hidden text-center py-12 text-gray-400">
                 <i class="fas fa-calendar-times text-4xl mb-3" aria-hidden="true"></i>
