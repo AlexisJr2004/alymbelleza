@@ -539,7 +539,7 @@ const loadTestimonials = async () => {
             </div>
             ${isOwner ? `
               <div class="absolute top-4 right-4 flex gap-2 opacity-80 group-hover:opacity-100 transition">
-                <button class="edit-testimonial-btn" aria-label="Editar testimonio" title="Editar" data-id="${testimonial._id}" data-comment="${testimonial.comment}" data-role="${testimonial.role}">
+                <button class="edit-testimonial-btn" aria-label="Editar testimonio" title="Editar" data-id="${testimonial._id}" data-role="${testimonial.role}">
                   <i class="fas fa-pen text-blue-600 hover:text-blue-800 text-lg"></i>
                 </button>
                 <button class="delete-testimonial-btn" aria-label="Eliminar testimonio" title="Eliminar" data-id="${testimonial._id}">
@@ -556,76 +556,100 @@ const loadTestimonials = async () => {
     // Inicializar o actualizar Swiper
     initTestimonialSwiper();
 
-    
-// Cerrar cualquier otro textarea abierto
-document.querySelectorAll(".comment-edit-box").forEach(box => {
-  const p = document.createElement("p");
-  p.className = "text-gray-600 italic mb-8 comment-text";
-  p.textContent = box.querySelector("textarea").value;
-  box.parentNode.replaceChild(p, box);
-});
-
-    // Listeners para editar inline
-document.querySelectorAll(".edit-testimonial-btn").forEach(btn => {
-  btn.addEventListener("click", function () {
-    const id = btn.getAttribute("data-id");
-    const comment = btn.getAttribute("data-comment");
-    const role = btn.getAttribute("data-role");
-    const commentP = btn.closest(".swiper-slide").querySelector(".comment-text");
-
-    // Reemplazar el texto por un textarea y un botón de guardar
-    commentP.outerHTML = `
-      <div class="flex flex-col gap-2 comment-edit-box">
-        <textarea class="w-full border rounded p-2 text-gray-700 resize-none" rows="3">${comment}</textarea>
-        <button class="save-edit-btn self-end bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1" data-id="${id}" data-role="${role}">
-          <i class="fas fa-check"></i> Guardar
-        </button>
-      </div>
-    `;
-
-    // Listener para guardar
-    btn.closest(".swiper-slide").querySelector(".save-edit-btn").onclick = async function () {
-      const newComment = btn.closest(".swiper-slide").querySelector("textarea").value;
-      await updateTestimonialInline(id, newComment, role);
-    };
-  });
-});
-
-// Listener para eliminar
-document.querySelectorAll(".delete-testimonial-btn").forEach(btn => {
-  btn.addEventListener("click", async function () {
-    const id = btn.getAttribute("data-id");
-    if (confirm("¿Seguro que quieres borrar este testimonio?")) {
-      await deleteTestimonial(id);
-      loadTestimonials();
-    }
-  });
-});
-
-// Función para actualizar inline
-async function updateTestimonialInline(id, comment, role) {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const formData = new FormData();
-  formData.append("comment", comment);
-  formData.append("role", role);
-  formData.append("name", user.name);
-  formData.append("avatar", user.profileImage);
-
-  try {
-    const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
-      method: "PUT",
-      headers: {
-        "Authorization": `Bearer ${user.token}`
-      },
-      body: formData
+    // Cerrar cualquier otro textarea abierto
+    document.querySelectorAll(".comment-edit-box").forEach(box => {
+      const p = document.createElement("p");
+      p.className = "text-gray-600 italic mb-8 comment-text";
+      p.textContent = box.querySelector("textarea").value;
+      box.parentNode.replaceChild(p, box);
     });
-    if (!response.ok) throw new Error("No se pudo editar el testimonio");
-    showNotification("Testimonio editado correctamente", "success");
-    loadTestimonials();
-  } catch (err) {
-    showNotification("Error al editar testimonio", "error");
-  }
-}
+
+    // Listener para editar inline
+    document.querySelectorAll(".edit-testimonial-btn").forEach(btn => {
+      btn.addEventListener("click", function () {
+        // Cerrar cualquier otro textarea abierto antes de abrir uno nuevo
+        document.querySelectorAll(".comment-edit-box").forEach(box => {
+          const p = document.createElement("p");
+          p.className = "text-gray-600 italic mb-8 comment-text";
+          p.textContent = box.querySelector("textarea").value;
+          box.parentNode.replaceChild(p, box);
+        });
+
+        const id = btn.getAttribute("data-id");
+        const role = btn.getAttribute("data-role");
+        const commentP = btn.closest(".swiper-slide").querySelector(".comment-text");
+        const oldComment = commentP.textContent;
+
+        // Reemplazar el texto por un textarea y un botón de guardar
+        commentP.outerHTML = `
+          <div class="flex flex-col gap-2 comment-edit-box">
+            <textarea class="w-full border rounded p-2 text-gray-700 resize-none" rows="3">${oldComment}</textarea>
+            <button class="save-edit-btn self-end bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1" data-id="${id}" data-role="${role}">
+              <i class="fas fa-check"></i> Guardar
+            </button>
+          </div>
+        `;
+
+        // Listener para guardar
+        btn.closest(".swiper-slide").querySelector(".save-edit-btn").onclick = async function () {
+          const newComment = btn.closest(".swiper-slide").querySelector("textarea").value;
+          await updateTestimonialInline(id, newComment, role);
+        };
+      });
+    });
+
+    // Listener para eliminar
+    document.querySelectorAll(".delete-testimonial-btn").forEach(btn => {
+      btn.addEventListener("click", async function () {
+        const id = btn.getAttribute("data-id");
+        if (confirm("¿Seguro que quieres borrar este testimonio?")) {
+          await deleteTestimonial(id);
+          loadTestimonials();
+        }
+      });
+    });
+
+    // Función para actualizar inline
+    async function updateTestimonialInline(id, comment, role) {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const formData = new FormData();
+      formData.append("comment", comment);
+      formData.append("role", role);
+      formData.append("name", user.name);
+      formData.append("avatar", user.profileImage);
+
+      try {
+        const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
+          method: "PUT",
+          headers: {
+            "Authorization": `Bearer ${user.token}`
+          },
+          body: formData
+        });
+        if (!response.ok) throw new Error("No se pudo editar el testimonio");
+        showNotification("Testimonio editado correctamente", "success");
+        loadTestimonials();
+      } catch (err) {
+        showNotification("Error al editar testimonio", "error");
+      }
+    }
+
+    // Función para eliminar
+    async function deleteTestimonial(id) {
+      const user = JSON.parse(localStorage.getItem("user"));
+      try {
+        const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${user.token}`
+          }
+        });
+        if (!response.ok) throw new Error("No se pudo borrar el testimonio");
+        showNotification("Testimonio eliminado", "success");
+      } catch (err) {
+        showNotification("Error al borrar testimonio", "error");
+      }
+    }
 
   } catch (error) {
     console.error("Error al cargar testimonios:", error);
