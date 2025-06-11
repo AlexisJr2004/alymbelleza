@@ -572,11 +572,7 @@ const loadTestimonials = async () => {
           btn.parentElement.querySelector(".testimonial-menu").classList.toggle("hidden");
         };
       });
-      // Cerrar el menú si se hace clic fuera
-      document.addEventListener("click", () => {
-        document.querySelectorAll(".testimonial-menu").forEach(menu => menu.classList.add("hidden"));
-      });
-      
+
       // Listener para editar inline
       document.querySelectorAll(".edit-testimonial-btn").forEach(btn => {
         btn.onclick = function () {
@@ -700,6 +696,11 @@ const loadTestimonials = async () => {
     }
   }
 };
+
+// Cerrar el menú si se hace clic fuera
+document.addEventListener("click", () => {
+  document.querySelectorAll(".testimonial-menu").forEach(menu => menu.classList.add("hidden"));
+});
 
 // Cargar testimonios cuando el DOM esté listo
 document.addEventListener("DOMContentLoaded", () => {
