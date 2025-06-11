@@ -594,16 +594,9 @@ const loadTestimonials = async () => {
 
           // Crear botón Guardar alineado a la derecha y con poco margen superior
           const saveBtn = document.createElement("button");
-          saveBtn.className = "save-edit-btn float-right mt-[5px] w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center focus:outline-none";
+          saveBtn.className = "save-edit-btn float-right -mt-2 w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center focus:outline-none";
           saveBtn.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 40 32" fill="currentColor">
-              <g>
-                <!-- Triángulo principal -->
-                <path d="M2 4c0-2 2-3.2 4-2.5l30 12c2 0.8 2 3.2 0 4l-30 12C4 30.8 2 29.6 2 27.5V4z"></path>
-                <!-- Línea blanca horizontal -->
-                <rect x="7" y="14" width="13" height="4" rx="2" fill="white"></rect>
-              </g>
-            </svg>
+            <i class="fas fa-play text-xl text-gray-500"></i>
           `;
           saveBtn.setAttribute("data-id", id);
           saveBtn.setAttribute("data-role", role);
