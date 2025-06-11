@@ -545,8 +545,10 @@ const loadTestimonials = async () => {
                     <span class="text-2xl font-bold text-gray-600">⋮</span>
                   </button>
                   <div class="testimonial-menu hidden absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg z-10">
-                    <button class="edit-testimonial-btn block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Editar</button>
-                    <button class="delete-testimonial-btn block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50">Eliminar</button>
+                    <button class="edit-testimonial-btn block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                      data-id="${testimonial._id}" data-role="${testimonial.role}">Editar</button>
+                    <button class="delete-testimonial-btn block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
+                      data-id="${testimonial._id}">Eliminar</button>
                   </div>
                 </div>
               </div>
