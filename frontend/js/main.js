@@ -596,8 +596,8 @@ const loadTestimonials = async () => {
           editBox.className = "flex flex-col gap-2 comment-edit-box";
           editBox.innerHTML = `
             <textarea class="w-full border rounded p-2 text-gray-700 resize-none" rows="3">${oldComment}</textarea>
-            <button class="save-edit-btn self-end bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1" data-id="${id}" data-role="${role}">
-              <i class="fas fa-check"></i> Guardar
+            <button class="save-edit-btn self-end bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded flex items-center justify-center" data-id="${id}" data-role="${role}">
+              <i class="fas fa-paper-plane text-gray-300"></i>
             </button>
           `;
           commentP.parentNode.replaceChild(editBox, commentP);
