@@ -521,13 +521,13 @@ const loadTestimonials = async () => {
         const slide = document.createElement("div");
         slide.className = "swiper-slide";
         slide.innerHTML = `
-          <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
+          <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col relative group">
             <div class="relative flex-grow">
               <svg class="absolute -top-4 -left-4 h-8 w-8 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.999v10h-9.999z"/>
               </svg>
               <br>
-              <p class="text-gray-600 italic mb-8">"${testimonial.comment}"</p>
+              <p class="text-gray-600 italic mb-8 comment-text" data-id="${testimonial._id}">${testimonial.comment}</p>
             </div>
             <div class="flex items-center mt-auto">
               <img src="${formatImageUrl(testimonial.avatar)}" alt="${testimonial.name}" class="h-12 w-12 rounded-full object-cover"
@@ -538,9 +538,13 @@ const loadTestimonials = async () => {
               </div>
             </div>
             ${isOwner ? `
-              <div class="flex gap-2 mt-4">
-                <button class="edit-testimonial-btn px-3 py-1 bg-blue-100 text-blue-700 rounded" data-id="${testimonial._id}" data-comment="${testimonial.comment}" data-role="${testimonial.role}">Editar</button>
-                <button class="delete-testimonial-btn px-3 py-1 bg-red-100 text-red-700 rounded" data-id="${testimonial._id}">Borrar</button>
+              <div class="absolute top-4 right-4 flex gap-2 opacity-80 group-hover:opacity-100 transition">
+                <button class="edit-testimonial-btn" aria-label="Editar testimonio" title="Editar" data-id="${testimonial._id}" data-comment="${testimonial.comment}" data-role="${testimonial.role}">
+                  <i class="fas fa-pen text-blue-600 hover:text-blue-800 text-lg"></i>
+                </button>
+                <button class="delete-testimonial-btn" aria-label="Eliminar testimonio" title="Eliminar" data-id="${testimonial._id}">
+                  <i class="fas fa-trash text-red-500 hover:text-red-700 text-lg"></i>
+                </button>
               </div>
             ` : ""}
           </div>
@@ -552,25 +556,76 @@ const loadTestimonials = async () => {
     // Inicializar o actualizar Swiper
     initTestimonialSwiper();
 
-    // Listeners para editar y borrar
-    document.querySelectorAll(".edit-testimonial-btn").forEach(btn => {
-      btn.addEventListener("click", function () {
-        openEditTestimonialModal(
-          btn.getAttribute("data-id"),
-          btn.getAttribute("data-comment"),
-          btn.getAttribute("data-role")
-        );
-      });
+    
+// Cerrar cualquier otro textarea abierto
+document.querySelectorAll(".comment-edit-box").forEach(box => {
+  const p = document.createElement("p");
+  p.className = "text-gray-600 italic mb-8 comment-text";
+  p.textContent = box.querySelector("textarea").value;
+  box.parentNode.replaceChild(p, box);
+});
+
+    // Listeners para editar inline
+document.querySelectorAll(".edit-testimonial-btn").forEach(btn => {
+  btn.addEventListener("click", function () {
+    const id = btn.getAttribute("data-id");
+    const comment = btn.getAttribute("data-comment");
+    const role = btn.getAttribute("data-role");
+    const commentP = btn.closest(".swiper-slide").querySelector(".comment-text");
+
+    // Reemplazar el texto por un textarea y un botón de guardar
+    commentP.outerHTML = `
+      <div class="flex flex-col gap-2 comment-edit-box">
+        <textarea class="w-full border rounded p-2 text-gray-700 resize-none" rows="3">${comment}</textarea>
+        <button class="save-edit-btn self-end bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1" data-id="${id}" data-role="${role}">
+          <i class="fas fa-check"></i> Guardar
+        </button>
+      </div>
+    `;
+
+    // Listener para guardar
+    btn.closest(".swiper-slide").querySelector(".save-edit-btn").onclick = async function () {
+      const newComment = btn.closest(".swiper-slide").querySelector("textarea").value;
+      await updateTestimonialInline(id, newComment, role);
+    };
+  });
+});
+
+// Listener para eliminar
+document.querySelectorAll(".delete-testimonial-btn").forEach(btn => {
+  btn.addEventListener("click", async function () {
+    const id = btn.getAttribute("data-id");
+    if (confirm("¿Seguro que quieres borrar este testimonio?")) {
+      await deleteTestimonial(id);
+      loadTestimonials();
+    }
+  });
+});
+
+// Función para actualizar inline
+async function updateTestimonialInline(id, comment, role) {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const formData = new FormData();
+  formData.append("comment", comment);
+  formData.append("role", role);
+  formData.append("name", user.name);
+  formData.append("avatar", user.profileImage);
+
+  try {
+    const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${user.token}`
+      },
+      body: formData
     });
-    document.querySelectorAll(".delete-testimonial-btn").forEach(btn => {
-      btn.addEventListener("click", async function () {
-        const id = btn.getAttribute("data-id");
-        if (confirm("¿Seguro que quieres borrar este testimonio?")) {
-          await deleteTestimonial(id);
-          loadTestimonials();
-        }
-      });
-    });
+    if (!response.ok) throw new Error("No se pudo editar el testimonio");
+    showNotification("Testimonio editado correctamente", "success");
+    loadTestimonials();
+  } catch (err) {
+    showNotification("Error al editar testimonio", "error");
+  }
+}
 
   } catch (error) {
     console.error("Error al cargar testimonios:", error);
@@ -590,61 +645,6 @@ const loadTestimonials = async () => {
     }
   }
 };
-
-// 2. Modal para editar testimonio (reutiliza el modal existente)
-function openEditTestimonialModal(id, comment, role) {
-  const testimonialModal = document.getElementById("testimonialModal");
-  const testimonialForm = document.getElementById("testimonialForm");
-  testimonialModal.classList.remove("hidden");
-  testimonialForm["comment"].value = comment;
-  testimonialForm["role"].value = role;
-
-  // Cambia el submit temporalmente para editar
-  testimonialForm.onsubmit = async function (e) {
-    e.preventDefault();
-    const user = JSON.parse(localStorage.getItem("user"));
-    const formData = new FormData(testimonialForm);
-    formData.append("name", user.name);
-    formData.append("avatar", user.profileImage);
-
-    try {
-      const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
-        method: "PUT",
-        headers: {
-          "Authorization": `Bearer ${user.token}`
-        },
-        body: formData
-      });
-      if (!response.ok) throw new Error("No se pudo editar el testimonio");
-      testimonialModal.classList.add("hidden");
-      testimonialForm.reset();
-      showNotification("Testimonio editado correctamente", "success");
-      loadTestimonials();
-    } catch (err) {
-      showNotification("Error al editar testimonio", "error");
-    } finally {
-      testimonialForm.onsubmit = null; // Limpia para el siguiente uso
-    }
-  };
-}
-
-// 3. Función para borrar testimonio
-async function deleteTestimonial(id) {
-  const user = JSON.parse(localStorage.getItem("user"));
-  try {
-    const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Authorization": `Bearer ${user.token}`
-      }
-    });
-    if (!response.ok) throw new Error("No se pudo borrar el testimonio");
-    showNotification("Testimonio eliminado", "success");
-  } catch (err) {
-    showNotification("Error al borrar testimonio", "error");
-  }
-}
-
 
 // Cargar testimonios cuando el DOM esté listo
 document.addEventListener("DOMContentLoaded", () => {
