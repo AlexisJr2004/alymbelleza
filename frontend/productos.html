@@ -19,7 +19,7 @@
 <body class="bg-white font-body">
 
     <!-- Section Menu -->
-    <header class="bg-white/95 backdrop-blur-lg sticky top-0 z-[1000] border-b border-purple-100 ">
+    <header class="sticky top-0 z-[1000] bg-white/80 backdrop-blur-md border-b border-purple-100 shadow-sm transition-all duration-300">
         <div class="container mx-auto px-4 lg:px-8">
             <!-- Top Information Bar -->
             <div
@@ -80,23 +80,24 @@
                                     class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold hidden">0</span>
                             </button>
 
-                            <!-- Dropdown minimalista -->
+                            <!-- Centro de notificaciones -->
                             <div id="notification-dropdown"
-                                class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden transition-all duration-200 origin-top-right transform opacity-0 scale-95 hidden">
+                                class="absolute right-0 mt-3 w-96 bg-white rounded-3xl shadow-2xl z-50 border border-gray-100 overflow-hidden transition-all duration-200 origin-top-right transform opacity-0 scale-95 hidden">
 
-                                <!-- Header con gradiente -->
-                                <div
-                                    class="px-5 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 flex justify-between items-center">
+                                <!-- Header -->
+                                <div class="px-5 py-4 bg-white/60 backdrop-blur-md shadow-sm flex justify-between items-center rounded-t-3xl border-b border-blue-100">
                                     <div class="flex items-center gap-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                        </svg>
-                                        <h4 class="font-semibold text-white text-lg">Notificaciones</h4>
+                                        <div class="bg-blue-100/60 p-2 rounded-2xl shadow-sm">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                            </svg>
+                                        </div>
+                                        <h4 class="font-semibold text-blue-900 text-lg tracking-tight">Notificaciones</h4>
                                     </div>
                                     <button onclick="closeNotifications()"
-                                        class="text-blue-100 hover:text-white transition-colors">
+                                        class="text-blue-400 hover:text-blue-700 transition-colors rounded-full p-2 focus:outline-none">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -106,34 +107,19 @@
                                 </div>
 
                                 <!-- Lista de notificaciones -->
-                                <ul id="appointments-list" class="divide-y divide-gray-100 max-h-96 overflow-y-auto">
+                                <ul id="appointments-list" class="divide-y divide-gray-100 max-h-96 overflow-y-auto bg-white px-2 py-3 space-y-2">
                                     <!-- Estado vacío -->
-                                    <li class="empty-state hidden px-5 py-8 text-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300"
+                                    <li class="empty-state hidden px-8 py-12 text-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 mx-auto text-gray-300"
                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                                 d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
-                                        <p class="mt-3 text-gray-500 font-medium">No hay notificaciones</p>
-                                        <p class="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán
-                                            aquí</p>
+                                        <p class="mt-4 text-gray-500 font-semibold text-lg">No hay notificaciones</p>
+                                        <p class="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán aquí</p>
                                     </li>
-
-                                    <!-- Las notificaciones se insertarán aquí -->
+                                    <!-- Las notificaciones se insertarán aquí dinámicamente -->
                                 </ul>
-
-                                <!-- Footer con acción -->
-                                <div class="px-4 py-3 bg-gray-50 border-t border-gray-100 text-right">
-                                    <button
-                                        class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center justify-end gap-1 w-full">
-                                        <span>Marcar todas como leídas</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </button>
-                                </div>
                             </div>
                         </div>
 
@@ -499,7 +485,7 @@
                     Reserva Online
                 </a>
             </div>
-            
+
         </aside>
     </header>
 
@@ -1323,38 +1309,23 @@
                     estadoIcon = `<i class="fas fa-times-circle"></i>`;
                     estadoText = 'Cancelada';
                 }
-                // Fecha y hora
                 const fecha = new Date(app.date);
                 const fechaStr = fecha.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-                const horaStr = fecha.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-
-                // Mensaje
-                const mensaje = `Tienes una reservación con tu estilista el <span class="font-semibold">${fechaStr}`;
-
-                // Botones solo si está pendiente
-                let botones = '';
-                if (estado === 'pendiente') {
-                    botones = `
-                        <div class="flex gap-2 mt-3">
-                            <button class="cancelar-btn px-3 py-1.5 bg-rose-500 hover:bg-rose-600 text-white rounded-md text-xs font-medium flex items-center gap-1 transition-colors" data-id="${app._id}">
-                                <i class="fas fa-times"></i> Cancelar
-                            </button>
-                            <button class="realizada-btn px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-md text-xs font-medium flex items-center gap-1 transition-colors" data-id="${app._id}">
-                                <i class="fas fa-check"></i> Realizada
-                            </button>
-                        </div>
-                    `;
-                }
+                const mensaje = `Tienes una reservación con tu estilista el <span class="font-semibold">${fechaStr}</span>`;
 
                 const li = document.createElement('li');
-                li.className = "px-5 py-4 flex flex-col gap-1 bg-white hover:bg-purple-50 rounded-xl mb-2 shadow-sm border border-gray-100";
+                li.className = "bg-white rounded-2xl shadow flex items-center gap-4 px-5 py-4 mb-2 border border-gray-100 hover:bg-blue-50 transition";
                 li.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <span class="text-xl ${estadoColor}">${estadoIcon}</span>
-                        <span class="text-sm font-semibold ${estadoColor}">${estadoText}</span>
+                    <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-2xl ${estado === 'realizada' ? 'bg-emerald-100' : estado === 'cancelada' ? 'bg-rose-100' : 'bg-blue-100'}">
+                        <span class="text-2xl ${estadoColor}">${estadoIcon}</span>
                     </div>
-                    <div class="text-gray-700 text-sm mt-1">${mensaje}</div>
-                    ${botones}
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                            <span class="font-semibold text-lg ${estadoColor}">${estadoText}</span>
+                            <span class="text-xs text-gray-400 ml-2">${fechaStr}</span>
+                        </div>
+                        <div class="text-gray-700 text-sm mt-1">${mensaje}</div>
+                    </div>
                 `;
                 list.appendChild(li);
             });
@@ -1383,7 +1354,7 @@
             });
             // Quita la notificación del DOM
             const li = document.querySelector(`.realizada-btn[data-id="${id}"]`)?.closest('li') ||
-                    document.querySelector(`.cancelar-btn[data-id="${id}"]`)?.closest('li');
+                document.querySelector(`.cancelar-btn[data-id="${id}"]`)?.closest('li');
             if (li) li.remove();
             // Actualiza el contador
             const count = document.getElementById('notification-count');
