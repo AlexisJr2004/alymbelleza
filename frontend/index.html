@@ -19,7 +19,7 @@
 <body class="bg-white font-body">
 
     <!-- Section Menu -->
-    <header class="bg-white/95 backdrop-blur-lg sticky top-0 z-[1000] border-b border-purple-100 ">
+    <header class="sticky top-0 z-[1000] bg-white/80 backdrop-blur-md border-b border-purple-100 shadow-sm transition-all duration-300">
         <div class="container mx-auto px-4 lg:px-8">
             <!-- Top Information Bar -->
             <div
@@ -80,60 +80,47 @@
                                     class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold hidden">0</span>
                             </button>
 
-                            <!-- Centro de notificaciones estilo OneUI Samsung -->
-<div id="notification-dropdown"
-    class="absolute right-0 mt-3 w-96 bg-white rounded-3xl shadow-2xl z-50 border border-gray-100 overflow-hidden transition-all duration-200 origin-top-right transform opacity-0 scale-95 hidden">
+                            <!-- Centro de notificaciones -->
+                            <div id="notification-dropdown"
+                                class="absolute right-0 mt-3 w-96 bg-white rounded-3xl shadow-2xl z-50 border border-gray-100 overflow-hidden transition-all duration-200 origin-top-right transform opacity-0 scale-95 hidden">
 
-    <!-- Header OneUI -->
-    <div class="px-6 py-5 bg-gradient-to-r from-blue-500 to-indigo-600 flex justify-between items-center rounded-t-3xl">
-        <div class="flex items-center gap-4">
-            <div class="bg-white/20 p-2 rounded-2xl">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                </svg>
-            </div>
-            <h4 class="font-semibold text-white text-2xl tracking-tight">Notificaciones</h4>
-        </div>
-        <button onclick="closeNotifications()"
-            class="text-blue-100 hover:text-white transition-colors rounded-full p-2 focus:outline-none">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </button>
-    </div>
+                                <!-- Header -->
+                                <div class="px-5 py-4 bg-white/60 backdrop-blur-md shadow-sm flex justify-between items-center rounded-t-3xl border-b border-blue-100">
+                                    <div class="flex items-center gap-3">
+                                        <div class="bg-blue-100/60 p-2 rounded-2xl shadow-sm">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                            </svg>
+                                        </div>
+                                        <h4 class="font-semibold text-blue-900 text-lg tracking-tight">Notificaciones</h4>
+                                    </div>
+                                    <button onclick="closeNotifications()"
+                                        class="text-blue-400 hover:text-blue-700 transition-colors rounded-full p-2 focus:outline-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
 
-    <!-- Lista de notificaciones estilo tarjeta OneUI -->
-    <ul id="appointments-list" class="divide-y divide-gray-100 max-h-96 overflow-y-auto bg-white px-2 py-3 space-y-2">
-        <!-- Estado vacío -->
-        <li class="empty-state hidden px-8 py-12 text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 mx-auto text-gray-300"
-                fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                    d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <p class="mt-4 text-gray-500 font-semibold text-lg">No hay notificaciones</p>
-            <p class="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán aquí</p>
-        </li>
-        <!-- Las notificaciones se insertarán aquí dinámicamente -->
-    </ul>
-
-    <!-- Footer OneUI -->
-    <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 text-right rounded-b-3xl">
-        <button
-            class="text-base font-semibold text-blue-600 hover:text-blue-700 transition-colors flex items-center justify-end gap-2 w-full focus:outline-none">
-            <span>Marcar todas como leídas</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M5 13l4 4L19 7" />
-            </svg>
-        </button>
-    </div>
-</div>
+                                <!-- Lista de notificaciones -->
+                                <ul id="appointments-list" class="divide-y divide-gray-100 max-h-96 overflow-y-auto bg-white px-2 py-3 space-y-2">
+                                    <!-- Estado vacío -->
+                                    <li class="empty-state hidden px-8 py-12 text-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 mx-auto text-gray-300"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <p class="mt-4 text-gray-500 font-semibold text-lg">No hay notificaciones</p>
+                                        <p class="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán aquí</p>
+                                    </li>
+                                    <!-- Las notificaciones se insertarán aquí dinámicamente -->
+                                </ul>
+                            </div>
                         </div>
 
                         <!-- Resto de iconos -->
@@ -2982,40 +2969,40 @@
                 return;
             }
             appointments.forEach(app => {
-    // Estado visual
-    let estado = app.status || 'pendiente';
-    let estadoColor = 'text-yellow-500';
-    let estadoIcon = `<i class="fas fa-clock"></i>`;
-    let estadoText = 'Pendiente';
-    if (estado === 'realizada') {
-        estadoColor = 'text-emerald-500';
-        estadoIcon = `<i class="fas fa-check-circle"></i>`;
-        estadoText = 'Realizada';
-    } else if (estado === 'cancelada') {
-        estadoColor = 'text-rose-500';
-        estadoIcon = `<i class="fas fa-times-circle"></i>`;
-        estadoText = 'Cancelada';
-    }
-    const fecha = new Date(app.date);
-    const fechaStr = fecha.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-    const mensaje = `Tienes una reservación con tu estilista el <span class="font-semibold">${fechaStr}</span>`;
+                // Estado visual
+                let estado = app.status || 'pendiente';
+                let estadoColor = 'text-yellow-500';
+                let estadoIcon = `<i class="fas fa-clock"></i>`;
+                let estadoText = 'Pendiente';
+                if (estado === 'realizada') {
+                    estadoColor = 'text-emerald-500';
+                    estadoIcon = `<i class="fas fa-check-circle"></i>`;
+                    estadoText = 'Realizada';
+                } else if (estado === 'cancelada') {
+                    estadoColor = 'text-rose-500';
+                    estadoIcon = `<i class="fas fa-times-circle"></i>`;
+                    estadoText = 'Cancelada';
+                }
+                const fecha = new Date(app.date);
+                const fechaStr = fecha.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                const mensaje = `Tienes una reservación con tu estilista el <span class="font-semibold">${fechaStr}</span>`;
 
-    const li = document.createElement('li');
-    li.className = "bg-white rounded-2xl shadow flex items-center gap-4 px-5 py-4 mb-2 border border-gray-100 hover:bg-blue-50 transition";
-    li.innerHTML = `
-        <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-2xl ${estado === 'realizada' ? 'bg-emerald-100' : estado === 'cancelada' ? 'bg-rose-100' : 'bg-blue-100'}">
-            <span class="text-2xl ${estadoColor}">${estadoIcon}</span>
-        </div>
-        <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-2">
-                <span class="font-semibold text-lg ${estadoColor}">${estadoText}</span>
-                <span class="text-xs text-gray-400 ml-2">${fechaStr}</span>
-            </div>
-            <div class="text-gray-700 text-sm mt-1">${mensaje}</div>
-        </div>
-    `;
-    list.appendChild(li);
-});
+                const li = document.createElement('li');
+                li.className = "bg-white rounded-2xl shadow flex items-center gap-4 px-5 py-4 mb-2 border border-gray-100 hover:bg-blue-50 transition";
+                li.innerHTML = `
+                    <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-2xl ${estado === 'realizada' ? 'bg-emerald-100' : estado === 'cancelada' ? 'bg-rose-100' : 'bg-blue-100'}">
+                        <span class="text-2xl ${estadoColor}">${estadoIcon}</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                            <span class="font-semibold text-lg ${estadoColor}">${estadoText}</span>
+                            <span class="text-xs text-gray-400 ml-2">${fechaStr}</span>
+                        </div>
+                        <div class="text-gray-700 text-sm mt-1">${mensaje}</div>
+                    </div>
+                `;
+                list.appendChild(li);
+            });
 
             // Eventos para los botones
             document.querySelectorAll('.realizada-btn').forEach(btn => {

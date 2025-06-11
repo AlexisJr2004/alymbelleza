@@ -428,3 +428,12 @@ select {
   border: none !important;
   box-shadow: none !important;
 }
+
+/* Oculta la barra de scroll solo en el centro de notificaciones */
+#notification-dropdown ul::-webkit-scrollbar {
+  display: none;
+}
+#notification-dropdown ul {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
