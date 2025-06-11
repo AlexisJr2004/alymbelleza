@@ -615,28 +615,32 @@ const loadTestimonials = async () => {
 
     // Función para actualizar inline
     async function updateTestimonialInline(id, comment, role) {
-      const user = JSON.parse(localStorage.getItem("user"));
-      const formData = new FormData();
-      formData.append("comment", comment);
-      formData.append("role", role);
-      formData.append("name", user.name);
-      formData.append("avatar", user.profileImage);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const formData = new FormData();
+  formData.append("comment", comment);
+  formData.append("role", role);
+  formData.append("name", user.name);
+  formData.append("avatar", user.profileImage);
 
-      try {
-        const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
-          method: "PUT",
-          headers: {
-            "Authorization": `Bearer ${user.token}`
-          },
-          body: formData
-        });
-        if (!response.ok) throw new Error("No se pudo editar el testimonio");
-        showNotification("Testimonio editado correctamente", "success");
-        loadTestimonials();
-      } catch (err) {
-        showNotification("Error al editar testimonio", "error");
-      }
+  try {
+    const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${user.token}`
+      },
+      body: formData
+    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`No se pudo editar el testimonio: ${response.status} - ${errorText}`);
     }
+    showNotification("Testimonio editado correctamente", "success");
+    loadTestimonials();
+  } catch (err) {
+    showNotification("Error al editar testimonio: " + err.message, "error");
+    console.error(err);
+  }
+}
 
     // Función para eliminar
     async function deleteTestimonial(id) {
