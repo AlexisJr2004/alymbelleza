@@ -871,8 +871,50 @@
         });
     </script>
 
-    <!-- Script para cargar productos -->
+    <!-- Script para cargar productos y agregar al carrito -->
     <script>
+        async function actualizarContadorCarrito() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || !user.token) return;
+            try {
+                const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart", {
+                    headers: { "Authorization": `Bearer ${user.token}` }
+                });
+                const data = await res.json();
+                const count = data?.cart?.items?.length || 0;
+                const cartCount = document.getElementById('cart-count');
+                if (cartCount) {
+                    cartCount.textContent = count;
+                    if (count > 0) {
+                        cartCount.classList.remove('hidden');
+                    } else {
+                        cartCount.classList.add('hidden');
+                    }
+                }
+            } catch (err) {
+                // Si hay error, oculta el contador
+                const cartCount = document.getElementById('cart-count');
+                if (cartCount) cartCount.classList.add('hidden');
+            }
+        }
+
+        async function addToCart(token, productId, cantidad) {
+            const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart/add", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ productId, cantidad })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+                console.error('Error al agregar al carrito:', data);
+                throw new Error(data.message || data.error || "No se pudo agregar al carrito");
+            }
+            return data;
+        }
+
         document.addEventListener("DOMContentLoaded", async () => {
             const contenedor = document.getElementById("productos-lista");
             if (!contenedor) return;
@@ -880,7 +922,7 @@
                 const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/products");
                 const { data } = await res.json();
 
-                contenedor.innerHTML = data.slice(0, 8).map((p) => {
+                contenedor.innerHTML = data.map((p) => {
                     let imageUrl = p.image || "./img/default.jpg";
                     return `
                         <div class="xl:w-1/4 md:w-1/2 p-4">
