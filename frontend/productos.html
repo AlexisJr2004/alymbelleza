@@ -897,10 +897,10 @@
                                     <h3 class="text-blue-600 text-xs font-medium tracking-wider uppercase mb-1">
                                         ${p.category === 'capilar' ? 'Productos Capilares' : 'Productos Faciales'}
                                     </h3>
-                                    <h2 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 hover:text-blue-600 transition-colors duration-200">
+                                    <h2 class="text-lg font-bold text-gray-900 mb-2 hover:text-blue-600 transition-colors duration-200">
                                         ${p.name}
                                     </h2>
-                                    <p class="text-gray-500 text-sm mb-4 line-clamp-2">
+                                    <p class="text-gray-500 text-sm mb-4">
                                         ${p.description}
                                     </p>
                                     <div class="flex items-center justify-between mb-3">
@@ -922,7 +922,7 @@
                                         ${p.availability ? `
                                             <button 
                                                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center agregar-carrito-btn"
-                                                data-producto='${JSON.stringify(p)}'>
+                                                data-producto='${encodeURIComponent(JSON.stringify(p))}'>
                                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                                 </svg>
@@ -948,7 +948,7 @@
                             window.location.href = 'login.html';
                             return;
                         }
-                        const producto = JSON.parse(btn.getAttribute('data-producto'));
+                        const producto = JSON.parse(decodeURIComponent(btn.getAttribute('data-producto')));
                         try {
                             await addToCart(user.token, producto._id, 1);
                             Swal.fire({
@@ -1008,10 +1008,10 @@
                                     <h3 class="text-blue-600 text-xs font-medium tracking-wider uppercase mb-1">
                                         ${p.category === 'capilar' ? 'Productos Capilares' : 'Productos Faciales'}
                                     </h3>
-                                    <h2 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 hover:text-blue-600 transition-colors duration-200">
+                                    <h2 class="text-lg font-bold text-gray-900 mb-2 hover:text-blue-600 transition-colors duration-200">
                                         ${p.name}
                                     </h2>
-                                    <p class="text-gray-500 text-sm mb-4 line-clamp-2">
+                                    <p class="text-gray-500 text-sm mb-4">
                                         ${p.description}
                                     </p>
                                     <div class="flex items-center justify-between mb-3">
@@ -1031,11 +1031,13 @@
                                             ${p.originalPrice ? `<span class="text-gray-400 text-sm line-through ml-2">$${p.originalPrice}</span>` : ''}
                                         </div>
                                         ${p.availability ? `
-                                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center comprar-btn" data-producto="${encodeURIComponent(p.name)}">
+                                            <button 
+                                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center agregar-carrito-btn"
+                                                data-producto='${encodeURIComponent(JSON.stringify(p))}'>
                                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                                 </svg>
-                                                Comprar
+                                                Agregar al carrito
                                             </button>
                                         ` : `
                                             <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded-lg text-sm font-medium cursor-not-allowed" disabled>
