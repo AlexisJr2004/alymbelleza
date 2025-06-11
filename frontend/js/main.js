@@ -580,19 +580,20 @@ const loadTestimonials = async () => {
         const commentP = btn.closest(".swiper-slide").querySelector(".comment-text");
         const oldComment = commentP.textContent;
 
-        // Reemplazar el texto por un textarea y un botón de guardar
-        commentP.outerHTML = `
-          <div class="flex flex-col gap-2 comment-edit-box">
-            <textarea class="w-full border rounded p-2 text-gray-700 resize-none" rows="3">${oldComment}</textarea>
-            <button class="save-edit-btn self-end bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1" data-id="${id}" data-role="${role}">
-              <i class="fas fa-check"></i> Guardar
-            </button>
-          </div>
+        // Crear el textarea y el botón de guardar como elementos
+        const editBox = document.createElement("div");
+        editBox.className = "flex flex-col gap-2 comment-edit-box";
+        editBox.innerHTML = `
+          <textarea class="w-full border rounded p-2 text-gray-700 resize-none" rows="3">${oldComment}</textarea>
+          <button class="save-edit-btn self-end bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1" data-id="${id}" data-role="${role}">
+            <i class="fas fa-check"></i> Guardar
+          </button>
         `;
+        commentP.parentNode.replaceChild(editBox, commentP);
 
         // Listener para guardar
-        btn.closest(".swiper-slide").querySelector(".save-edit-btn").onclick = async function () {
-          const newComment = btn.closest(".swiper-slide").querySelector("textarea").value;
+        editBox.querySelector(".save-edit-btn").onclick = async function () {
+          const newComment = editBox.querySelector("textarea").value;
           await updateTestimonialInline(id, newComment, role);
         };
       });
