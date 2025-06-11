@@ -508,51 +508,94 @@
         <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mt-4"></div>
     </div>
 
-    <div class="mt-4 mx-auto p-4 w-full max-w-4xl">
-        <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-50">
-            <!-- Encabezado del calendario -->
-            <div class="flex justify-between items-center mb-8 px-2">
-                <button id="prevMonth"
-                    class="p-2 text-gray-400 hover:text-gray-600 rounded-full transition-all duration-300 hover:scale-110">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </button>
-
-                <h2 id="monthYear" class="text-2xl font-normal text-gray-800 mx-4 tracking-wide"></h2>
-
-                <button id="nextMonth"
-                    class="p-2 text-gray-400 hover:text-gray-600 rounded-full transition-all duration-300 hover:scale-110">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
-                    </svg>
-                </button>
+    <div class="mt-6 mx-auto p-4 w-full max-w-6xl">
+    <div class="bg-white rounded-3xl p-6 md:p-10 shadow-sm border border-gray-100">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Sección de Calendario -->
+        <section aria-labelledby="calendar-heading">
+            <header class="flex items-center mb-6">
+            <h3 id="calendar-heading" class="text-xl font-semibold text-gray-800 flex items-center gap-2">
+                <span class="sr-only">Calendario</span>
+                <i class="fas fa-calendar-alt text-purple-500" aria-hidden="true"></i>
+                <span>Calendario</span>
+            </h3>
+            </header>
+            
+            <!-- Controles del calendario -->
+            <div class="flex justify-between items-center mb-6 px-2">
+            <button id="prevMonth"
+                class="p-2 text-gray-500 hover:text-gray-700 rounded-full transition-all duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-300"
+                aria-label="Mes anterior">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <h2 id="monthYear" class="text-xl font-medium text-gray-800 mx-4 tracking-wide" aria-live="polite"></h2>
+            <button id="nextMonth"
+                class="p-2 text-gray-500 hover:text-gray-700 rounded-full transition-all duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-300"
+                aria-label="Mes siguiente">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
             </div>
-
+            
             <!-- Días de la semana -->
-            <div class="grid grid-cols-7 gap-1 mb-6">
-                <div class="text-center text-gray-500 font-normal py-3 text-xs uppercase tracking-widest">D</div>
-                <div class="text-center text-gray-500 font-normal py-3 text-xs uppercase tracking-widest">L</div>
-                <div class="text-center text-gray-500 font-normal py-3 text-xs uppercase tracking-widest">M</div>
-                <div class="text-center text-gray-500 font-normal py-3 text-xs uppercase tracking-widest">M</div>
-                <div class="text-center text-gray-500 font-normal py-3 text-xs uppercase tracking-widest">J</div>
-                <div class="text-center text-gray-500 font-normal py-3 text-xs uppercase tracking-widest">V</div>
-                <div class="text-center text-gray-500 font-normal py-3 text-xs uppercase tracking-widest">S</div>
+            <div class="grid grid-cols-7 gap-1 mb-4" role="rowgroup">
+            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider" role="columnheader">Dom</div>
+            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider" role="columnheader">Lun</div>
+            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider" role="columnheader">Mar</div>
+            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider" role="columnheader">Mié</div>
+            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider" role="columnheader">Jue</div>
+            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider" role="columnheader">Vie</div>
+            <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider" role="columnheader">Sáb</div>
             </div>
-
-            <!-- Calendario -->
-            <div id="calendar" class="grid grid-cols-7 gap-1"></div>
-
-            <!-- Pie del calendario -->
-            <div class="mt-10 pt-5 border-t border-gray-100 flex justify-center">
-                <button id="todayBtn"
-                    class="px-6 py-2.5 bg-transparent text-blue-600 font-medium rounded-full hover:bg-blue-50 transition-all duration-300 border border-blue-100 text-sm">
-                    HOY
-                </button>
+            
+            <!-- Días del mes -->
+            <div id="calendar" class="grid grid-cols-7 gap-1" role="grid"></div>
+            
+            <!-- Botón de hoy -->
+            <div class="mt-8 pt-6 border-t border-gray-100 flex justify-center">
+            <button id="todayBtn"
+                class="px-5 py-2 bg-white text-blue-600 font-medium rounded-full hover:bg-blue-50 transition-all duration-200 border border-blue-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2"
+                aria-label="Volver al día actual">
+                Hoy
+            </button>
             </div>
+        </section>
+
+        <!-- Sección de Citas -->
+        <section aria-labelledby="appointments-heading">
+            <header class="flex items-center mb-6">
+            <h3 id="appointments-heading" class="text-xl font-semibold text-gray-800 flex items-center gap-2">
+                <span class="sr-only">Tus Citas</span>
+                <i class="fas fa-list-check text-pink-500" aria-hidden="true"></i>
+                <span>Tus Citas</span>
+            </h3>
+            </header>
+            
+            <div class="bg-gray-50 rounded-2xl p-4 shadow-inner border border-gray-100 max-h-[520px] overflow-y-auto">
+            <!-- Estado de carga -->
+            <div id="appointments-loading" class="hidden text-center py-12">
+                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-pink-500 mx-auto mb-3"></div>
+                <p class="font-medium text-gray-500">Cargando citas...</p>
+            </div>
+            
+            <!-- Lista de citas -->
+            <ul id="appointments-list" class="divide-y divide-gray-200" aria-live="polite"></ul>
+            
+            <!-- Estado vacío -->
+            <div id="appointments-empty" class="hidden text-center py-12 text-gray-400">
+                <i class="fas fa-calendar-times text-4xl mb-3" aria-hidden="true"></i>
+                <p class="font-medium">No tienes citas agendadas</p>
+                <p class="text-sm mt-1">Selecciona una fecha para agregar una nueva cita</p>
+            </div>
+            </div>
+        </section>
         </div>
+    </div>
     </div>
 
     <!-- Boton Ir Arriba -->
@@ -1276,6 +1319,45 @@
                 profileLinkContainer.classList.add('hidden');
                 loginRegisterLinks.classList.remove('hidden');
                 userMenuBtn.parentElement.style.display = 'none';
+            }
+        });
+    </script>
+
+    <!-- Script global para actualizar el contador del carrito en todas las páginas -->
+    <script>
+        window.actualizarContadorCarrito = async function () {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const cartCount = document.getElementById('cart-count');
+            if (!cartCount) return;
+            if (!user || !user.token) {
+                cartCount.textContent = "0";
+                cartCount.classList.add('hidden');
+                return;
+            }
+            try {
+                const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart", {
+                    headers: { "Authorization": `Bearer ${user.token}` }
+                });
+                const data = await res.json();
+                // Soporta varias estructuras de respuesta
+                const items = data?.cart?.items || data?.items || data?.cart || [];
+                const count = Array.isArray(items) ? items.reduce((acc, item) => acc + (item.cantidad || 1), 0) : 0;
+                cartCount.textContent = count;
+                if (count > 0) {
+                    cartCount.classList.remove('hidden');
+                } else {
+                    cartCount.classList.add('hidden');
+                }
+            } catch (err) {
+                cartCount.textContent = "0";
+                cartCount.classList.add('hidden');
+            }
+        };
+
+        // Llama a la función al cargar la página
+        document.addEventListener("DOMContentLoaded", () => {
+            if (document.getElementById('cart-count')) {
+                window.actualizarContadorCarrito();
             }
         });
     </script>
