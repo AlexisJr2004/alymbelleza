@@ -616,10 +616,21 @@ const loadTestimonials = async () => {
       document.querySelectorAll(".delete-testimonial-btn").forEach(btn => {
         btn.onclick = async function () {
           const id = btn.getAttribute("data-id");
-          if (confirm("¿Seguro que quieres borrar este testimonio?")) {
-            await deleteTestimonial(id);
-            loadTestimonials();
-          }
+          Swal.fire({
+            title: "¿Seguro que quieres borrar este testimonio?",
+            text: "Esta acción no se puede deshacer.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#e3342f",
+            cancelButtonColor: "#6b7280",
+            confirmButtonText: "Sí, borrar",
+            cancelButtonText: "Cancelar"
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              await deleteTestimonial(id);
+              loadTestimonials();
+            }
+          });
         };
       });
     }, 100); // Espera breve para asegurar que Swiper terminó el render
