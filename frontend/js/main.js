@@ -1,3 +1,8 @@
+// Ajustar zoom al 80% al cargar la página
+document.addEventListener("DOMContentLoaded", function () {
+  document.body.style.zoom = "80%";
+});
+
 //Script para el menú del celular
 function toggleMobileMenu() {
   const mobileMenu = document.getElementById("mobile-menu");
