@@ -599,8 +599,13 @@ const loadTestimonials = async () => {
           const saveBtn = document.createElement("button");
           saveBtn.className = "save-edit-btn ml-2 bg-gray-200 hover:bg-green-500 text-gray-500 hover:text-white px-3 py-1 rounded flex items-center justify-center";
           saveBtn.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 40 32" fill="currentColor">
+              <g>
+                <!-- Triángulo principal -->
+                <path d="M2 4c0-2 2-3.2 4-2.5l30 12c2 0.8 2 3.2 0 4l-30 12C4 30.8 2 29.6 2 27.5V4z"/>
+                <!-- Línea blanca horizontal -->
+                <rect x="7" y="14" width="13" height="4" rx="2" fill="white"/>
+              </g>
             </svg>
           `;
           saveBtn.setAttribute("data-id", id);
