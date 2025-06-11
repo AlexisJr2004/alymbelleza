@@ -1075,7 +1075,7 @@
                                         ${p.availability ? `
                                             <button 
                                                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center agregar-carrito-btn"
-                                                data-producto='${encodeURIComponent(JSON.stringify(p))}'>
+                                                data-producto="${encodeURIComponent(JSON.stringify(p))}">
                                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                                 </svg>
@@ -1093,17 +1093,28 @@
                     `;
                 }).join("");
 
-                // Eventos para los botones de comprar
-                document.querySelectorAll('.comprar-btn').forEach(btn => {
-                    btn.addEventListener('click', function (e) {
+                // ASIGNA EL EVENTO CLICK DESPUÉS DE RENDERIZAR
+                document.querySelectorAll('.agregar-carrito-btn').forEach(btn => {
+                    btn.addEventListener('click', async function (e) {
                         const user = JSON.parse(localStorage.getItem('user'));
-                        if (!user) {
+                        if (!user || !user.token) {
                             window.location.href = 'login.html';
-                            e.preventDefault();
-                            return false;
+                            return;
                         }
-                        const producto = btn.getAttribute('data-producto');
-                        window.open(`https://wa.me/593981229675?text=Estoy interesado en el producto: ${producto}`, '_blank');
+                        const producto = JSON.parse(decodeURIComponent(btn.getAttribute('data-producto')));
+                        try {
+                            await addToCart(user.token, producto._id, 1);
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Agregado!',
+                                text: 'Producto agregado al carrito',
+                                timer: 1200,
+                                showConfirmButton: false
+                            });
+                            actualizarContadorCarrito();
+                        } catch (err) {
+                            Swal.fire('Error', err.message || 'No se pudo agregar al carrito', 'error');
+                        }
                     });
                 });
             }
