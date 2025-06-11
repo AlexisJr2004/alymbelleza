@@ -556,59 +556,62 @@ const loadTestimonials = async () => {
     // Inicializar o actualizar Swiper
     initTestimonialSwiper();
 
-    // Cerrar cualquier otro textarea abierto
-    document.querySelectorAll(".comment-edit-box").forEach(box => {
-      const p = document.createElement("p");
-      p.className = "text-gray-600 italic mb-8 comment-text";
-      p.textContent = box.querySelector("textarea").value;
-      box.parentNode.replaceChild(p, box);
-    });
+    // --- Agregar listeners después de inicializar Swiper ---
+    setTimeout(() => {
+      // Cerrar cualquier otro textarea abierto
+      document.querySelectorAll(".comment-edit-box").forEach(box => {
+        const p = document.createElement("p");
+        p.className = "text-gray-600 italic mb-8 comment-text";
+        p.textContent = box.querySelector("textarea").value;
+        box.parentNode.replaceChild(p, box);
+      });
 
-    // Listener para editar inline
-    document.querySelectorAll(".edit-testimonial-btn").forEach(btn => {
-      btn.addEventListener("click", function () {
-        // Cerrar cualquier otro textarea abierto antes de abrir uno nuevo
-        document.querySelectorAll(".comment-edit-box").forEach(box => {
-          const p = document.createElement("p");
-          p.className = "text-gray-600 italic mb-8 comment-text";
-          p.textContent = box.querySelector("textarea").value;
-          box.parentNode.replaceChild(p, box);
-        });
+      // Listener para editar inline
+      document.querySelectorAll(".edit-testimonial-btn").forEach(btn => {
+        btn.onclick = function () {
+          // Cerrar cualquier otro textarea abierto antes de abrir uno nuevo
+          document.querySelectorAll(".comment-edit-box").forEach(box => {
+            const p = document.createElement("p");
+            p.className = "text-gray-600 italic mb-8 comment-text";
+            p.textContent = box.querySelector("textarea").value;
+            box.parentNode.replaceChild(p, box);
+          });
 
-        const id = btn.getAttribute("data-id");
-        const role = btn.getAttribute("data-role");
-        const commentP = btn.closest(".swiper-slide").querySelector(".comment-text");
-        const oldComment = commentP.textContent;
+          const id = btn.getAttribute("data-id");
+          const role = btn.getAttribute("data-role");
+          const commentP = btn.closest(".swiper-slide").querySelector(".comment-text");
+          const oldComment = commentP.textContent;
 
-        // Crear el textarea y el botón de guardar como elementos
-        const editBox = document.createElement("div");
-        editBox.className = "flex flex-col gap-2 comment-edit-box";
-        editBox.innerHTML = `
-          <textarea class="w-full border rounded p-2 text-gray-700 resize-none" rows="3">${oldComment}</textarea>
-          <button class="save-edit-btn self-end bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1" data-id="${id}" data-role="${role}">
-            <i class="fas fa-check"></i> Guardar
-          </button>
-        `;
-        commentP.parentNode.replaceChild(editBox, commentP);
+          // Crear el textarea y el botón de guardar como elementos
+          const editBox = document.createElement("div");
+          editBox.className = "flex flex-col gap-2 comment-edit-box";
+          editBox.innerHTML = `
+            <textarea class="w-full border rounded p-2 text-gray-700 resize-none" rows="3">${oldComment}</textarea>
+            <button class="save-edit-btn self-end bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1" data-id="${id}" data-role="${role}">
+              <i class="fas fa-check"></i> Guardar
+            </button>
+          `;
+          commentP.parentNode.replaceChild(editBox, commentP);
 
-        // Listener para guardar
-        editBox.querySelector(".save-edit-btn").onclick = async function () {
-          const newComment = editBox.querySelector("textarea").value;
-          await updateTestimonialInline(id, newComment, role);
+          // Listener para guardar
+          editBox.querySelector(".save-edit-btn").onclick = async function () {
+            const newComment = editBox.querySelector("textarea").value;
+            await updateTestimonialInline(id, newComment, role);
+          };
         };
       });
-    });
 
-    // Listener para eliminar
-    document.querySelectorAll(".delete-testimonial-btn").forEach(btn => {
-      btn.addEventListener("click", async function () {
-        const id = btn.getAttribute("data-id");
-        if (confirm("¿Seguro que quieres borrar este testimonio?")) {
-          await deleteTestimonial(id);
-          loadTestimonials();
-        }
+      // Listener para eliminar
+      document.querySelectorAll(".delete-testimonial-btn").forEach(btn => {
+        btn.onclick = async function () {
+          const id = btn.getAttribute("data-id");
+          if (confirm("¿Seguro que quieres borrar este testimonio?")) {
+            await deleteTestimonial(id);
+            loadTestimonials();
+          }
+        };
       });
-    });
+    }, 100); // Espera breve para asegurar que Swiper terminó el render
 
     // Función para actualizar inline
     async function updateTestimonialInline(id, comment, role) {
