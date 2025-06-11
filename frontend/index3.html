@@ -16,7 +16,8 @@
 <body class="bg-white font-body">
 
     <!-- Section Menu -->
-    <header class="sticky top-0 z-[1000] bg-white/80 backdrop-blur-md border-b border-purple-100 shadow-sm transition-all duration-300">
+    <header
+        class="sticky top-0 z-[1000] bg-white/80 backdrop-blur-md border-b border-purple-100 shadow-sm transition-all duration-300">
         <div class="container mx-auto px-4 lg:px-8">
             <!-- Top Information Bar -->
             <div
@@ -82,16 +83,18 @@
                                 class="absolute right-0 mt-3 w-96 bg-white rounded-3xl shadow-2xl z-50 border border-gray-100 overflow-hidden transition-all duration-200 origin-top-right transform opacity-0 scale-95 hidden">
 
                                 <!-- Header -->
-                                <div class="px-5 py-4 bg-white/60 backdrop-blur-md shadow-sm flex justify-between items-center rounded-t-3xl border-b border-blue-100">
+                                <div
+                                    class="px-5 py-4 bg-white/60 backdrop-blur-md shadow-sm flex justify-between items-center rounded-t-3xl border-b border-blue-100">
                                     <div class="flex items-center gap-3">
                                         <div class="bg-blue-100/60 p-2 rounded-2xl shadow-sm">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                                             </svg>
                                         </div>
-                                        <h4 class="font-semibold text-blue-900 text-lg tracking-tight">Notificaciones</h4>
+                                        <h4 class="font-semibold text-blue-900 text-lg tracking-tight">Notificaciones
+                                        </h4>
                                     </div>
                                     <button onclick="closeNotifications()"
                                         class="text-blue-400 hover:text-blue-700 transition-colors rounded-full p-2 focus:outline-none">
@@ -104,7 +107,8 @@
                                 </div>
 
                                 <!-- Lista de notificaciones -->
-                                <ul id="appointments-list" class="divide-y divide-gray-100 max-h-96 overflow-y-auto bg-white px-2 py-3 space-y-2">
+                                <ul id="appointments-list"
+                                    class="divide-y divide-gray-100 max-h-96 overflow-y-auto bg-white px-2 py-3 space-y-2">
                                     <!-- Estado vacío -->
                                     <li class="empty-state hidden px-8 py-12 text-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 mx-auto text-gray-300"
@@ -113,7 +117,8 @@
                                                 d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                         <p class="mt-4 text-gray-500 font-semibold text-lg">No hay notificaciones</p>
-                                        <p class="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán aquí</p>
+                                        <p class="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán
+                                            aquí</p>
                                     </li>
                                     <!-- Las notificaciones se insertarán aquí dinámicamente -->
                                 </ul>
@@ -847,65 +852,112 @@
                     headers: { "Authorization": `Bearer ${user.token}` }
                 });
                 const data = await res.json();
-                console.log("CITAS QUE LLEGAN DEL BACKEND:", data);
                 if (data.success) {
-                    renderAppointments(data.appointments);
+                    renderAppointmentsPanel(data.appointments);
                     renderNotifications(data.appointments);
                 }
-            } catch (err) {
-                // Puedes mostrar un error si quieres
-            }
+            } catch (err) { }
         }
 
-        // Renderizar citas en el panel
-        function renderAppointments(appointments) {
-            const list = document.getElementById('appointments-list');
-            list.innerHTML = '';
+        // NUEVA función para el panel lateral "Tus Citas"
+        function renderAppointmentsPanel(appointments) {
+            const panelList = document.getElementById('appointments-panel-list');
+            const emptyState = document.getElementById('appointments-empty');
+            const loading = document.getElementById('appointments-loading');
+            panelList.innerHTML = '';
             if (!appointments.length) {
-                list.innerHTML = '<li class="text-gray-500">No tienes citas pendientes.</li>';
+                emptyState.classList.remove('hidden');
                 return;
             }
+            emptyState.classList.add('hidden');
             appointments.forEach(app => {
+                let estado = app.status || 'pendiente';
+                let estadoColor = 'text-yellow-500';
+                let estadoBg = 'bg-yellow-50';
+                let estadoIcon = `<i class="fas fa-clock"></i>`;
+                let estadoText = 'Pendiente';
+                if (estado === 'realizada') {
+                    estadoColor = 'text-emerald-500';
+                    estadoBg = 'bg-emerald-50';
+                    estadoIcon = `<i class="fas fa-check-circle"></i>`;
+                    estadoText = 'Realizada';
+                } else if (estado === 'cancelada') {
+                    estadoColor = 'text-rose-500';
+                    estadoBg = 'bg-rose-50';
+                    estadoIcon = `<i class="fas fa-times-circle"></i>`;
+                    estadoText = 'Cancelada';
+                }
+                const fecha = new Date(app.date);
+                const fechaStr = fecha.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
                 const li = document.createElement('li');
-                li.className = "flex justify-between items-center bg-purple-50 rounded-lg px-4 py-2";
+                li.className = "flex items-center justify-between gap-3 bg-white rounded-xl shadow-sm px-4 py-4 my-2 border border-gray-100 hover:bg-blue-50 transition";
                 li.innerHTML = `
-                    <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-200">
-                        <div class="flex items-center gap-3">
-                            <div class="bg-blue-100 p-2 rounded-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            </div>
-                            <span class="font-medium text-gray-700">
-                            ${new Date(app.date).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}
-                            </span>
-                        </div>
-                        
-                        <div class="flex gap-2">
-                            <button class="realizada-btn px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-md text-sm font-medium flex items-center gap-1 transition-colors" data-id="${app._id}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            Realizada
-                            </button>
-                            <button class="cancelar-btn px-3 py-1.5 bg-rose-500 hover:bg-rose-600 text-white rounded-md text-sm font-medium flex items-center gap-1 transition-colors" data-id="${app._id}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                            Cancelar
-                            </button>
-                        </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center ${estadoBg}">
+                        <span class="text-2xl ${estadoColor}">${estadoIcon}</span>
                     </div>
-                `;
-                list.appendChild(li);
+                    <div>
+                        <div class="font-semibold text-gray-800">${fechaStr}</div>
+                        <div class="text-xs mt-1 ${estadoColor}">${estadoText}</div>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    ${estado === 'pendiente' ? `
+                        <button class="realizada-btn px-3 py-1 rounded-lg bg-emerald-100 text-emerald-700 font-semibold text-xs hover:bg-emerald-200 transition" data-id="${app._id}">
+                            <i class="fas fa-check mr-1"></i> Realizada
+                        </button>
+                        <button class="cancelar-btn px-3 py-1 rounded-lg bg-rose-100 text-rose-700 font-semibold text-xs hover:bg-rose-200 transition" data-id="${app._id}">
+                            <i class="fas fa-times mr-1"></i> Cancelar
+                        </button>
+                    ` : ''}
+                    <button class="eliminar-btn px-3 py-1 rounded-lg bg-gray-100 text-gray-500 font-semibold text-xs hover:bg-gray-200 transition" data-id="${app._id}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+                panelList.appendChild(li);
             });
 
-            // Eventos para los botones
-            document.querySelectorAll('.realizada-btn').forEach(btn => {
+            // Botón marcar como realizada
+            panelList.querySelectorAll('.realizada-btn').forEach(btn => {
                 btn.onclick = () => updateAppointmentStatus(btn.dataset.id, 'realizada');
             });
-            document.querySelectorAll('.cancelar-btn').forEach(btn => {
+            // Botón cancelar
+            panelList.querySelectorAll('.cancelar-btn').forEach(btn => {
                 btn.onclick = () => cancelAppointment(btn.dataset.id);
+            });
+            // Botón eliminar
+            panelList.querySelectorAll('.eliminar-btn').forEach(btn => {
+                btn.onclick = async () => {
+                    const id = btn.dataset.id;
+                    const confirm = await Swal.fire({
+                        title: '¿Eliminar cita?',
+                        text: 'Esta acción no se puede deshacer.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#e3342f',
+                        cancelButtonColor: '#6b7280',
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'Cancelar'
+                    });
+                    if (confirm.isConfirmed) {
+                        await deleteAppointment(id);
+                        loadAppointments();
+                    }
+                };
+            });
+        }
+
+        // Función para eliminar cita
+        async function deleteAppointment(id) {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || !user.token) return;
+            await fetch(`${NOTIFICATION_API_URL}/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${user.token}`
+                }
             });
         }
 

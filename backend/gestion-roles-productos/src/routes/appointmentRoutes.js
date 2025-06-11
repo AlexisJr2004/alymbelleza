@@ -32,4 +32,13 @@ router.patch('/:id', authMiddleware, async (req, res) => {
   res.json({ success: true, appointment });
 });
 
+// Eliminar cita
+router.delete('/:id', authMiddleware, async (req, res) => {
+  const deleted = await Appointment.findOneAndDelete({ _id: req.params.id, user: req.user._id });
+  if (!deleted) {
+    return res.status(404).json({ success: false, message: 'Cita no encontrada' });
+  }
+  res.json({ success: true, message: 'Cita eliminada' });
+});
+
 module.exports = router;
