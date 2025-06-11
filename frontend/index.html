@@ -13,28 +13,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
     <link rel="icon" href="/img/mujer-con-pelo-largo.png" type="image/x-icon">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-    <style>
-        #notification-dropdown {
-            position: fixed !important;
-            top: 70px !important;
-            right: 470px !important;
-            left: auto !important;
-            z-index: 9999 !important;
-        }
-
-        @media (max-width: 767px) {
-            #notification-dropdown.mobile-active {
-                left: 50% !important;
-                right: auto !important;
-                top: 45px !important;
-                transform: translateX(-50%) scale(1) !important;
-                width: 90vw !important;
-                max-width: 380px !important;
-                border-radius: 1.5rem !important;
-                box-shadow: 0 8px 32px rgba(80, 0, 120, 0.18);
-            }
-        }
-    </style>
 </head>
 
 <body class="bg-white font-body">
@@ -101,6 +79,61 @@
                                     class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold hidden">0</span>
                             </button>
 
+                            <!-- Dropdown minimalista -->
+                            <div id="notification-dropdown"
+                                class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden transition-all duration-200 origin-top-right transform opacity-0 scale-95 hidden">
+
+                                <!-- Header con gradiente -->
+                                <div
+                                    class="px-5 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 flex justify-between items-center">
+                                    <div class="flex items-center gap-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                        </svg>
+                                        <h4 class="font-semibold text-white text-lg">Notificaciones</h4>
+                                    </div>
+                                    <button onclick="closeNotifications()"
+                                        class="text-blue-100 hover:text-white transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <!-- Lista de notificaciones -->
+                                <ul id="appointments-list" class="divide-y divide-gray-100 max-h-96 overflow-y-auto">
+                                    <!-- Estado vacío -->
+                                    <li class="empty-state hidden px-5 py-8 text-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <p class="mt-3 text-gray-500 font-medium">No hay notificaciones</p>
+                                        <p class="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán
+                                            aquí</p>
+                                    </li>
+
+                                    <!-- Las notificaciones se insertarán aquí -->
+                                </ul>
+
+                                <!-- Footer con acción -->
+                                <div class="px-4 py-3 bg-gray-50 border-t border-gray-100 text-right">
+                                    <button
+                                        class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center justify-end gap-1 w-full">
+                                        <span>Marcar todas como leídas</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Resto de iconos -->
@@ -254,26 +287,7 @@
                     </a>
                 </nav>
 
-                <!-- Solo visible en móvil, oculto en escritorio -->
-                <div class="flex items-center space-x-2 md:hidden">
-                    <!-- Notificaciones -->
-                    <button id="mobile-notification-btn"
-                        class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50 relative"
-                        title="Notificaciones">
-                        <i class="fas fa-bell"></i>
-                        <span id="mobile-notification-count"
-                            class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold hidden">0</span>
-                    </button>
-                    <!-- Carrito -->
-                    <a href="carrito.html"
-                        class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50 relative"
-                        title="Ver carrito">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span id="cart-count"
-                            class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold hidden">0</span>
-                    </a>
-                </div>
-                <!-- Botón menú móvil -->
+                <!-- Mobile Menu Button -->
                 <button id="mobile-menu-toggle"
                     class="md:hidden text-purple-600 hover:text-purple-700 focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none"
@@ -1370,58 +1384,6 @@
                 class="transition-all duration-300 ease-in-out delay-150 path-1"></path>
         </svg>
     </section>
-
-    <!-- Dropdown minimalista -->
-    <div id="notification-dropdown"
-        class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden transition-all duration-200 origin-top-right transform opacity-0 scale-95 hidden">
-
-        <!-- Header con gradiente -->
-        <div class="px-5 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                </svg>
-                <h4 class="font-semibold text-white text-lg">Notificaciones</h4>
-            </div>
-            <button onclick="closeNotifications()" class="text-blue-100 hover:text-white transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
-
-        <!-- Lista de notificaciones -->
-        <ul id="appointments-list" class="divide-y divide-gray-100 max-h-96 overflow-y-auto">
-            <!-- Estado vacío -->
-            <li class="empty-state hidden px-5 py-8 text-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <p class="mt-3 text-gray-500 font-medium">No hay notificaciones</p>
-                <p class="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán
-                    aquí</p>
-            </li>
-
-            <!-- Las notificaciones se insertarán aquí -->
-        </ul>
-
-        <!-- Footer con acción -->
-        <div class="px-4 py-3 bg-gray-50 border-t border-gray-100 text-right">
-            <button
-                class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center justify-end gap-1 w-full">
-                <span>Marcar todas como leídas</span>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-            </button>
-        </div>
-    </div>
 
     <!-- Cookies Section -->
     <div id="cookies-consent" class="fixed bottom-0 end-0 z-[90] sm:max-w-sm w-full mx-auto p-6 hidden">
@@ -3197,15 +3159,17 @@
         document.getElementById('notification-btn').onclick = function (e) {
             e.stopPropagation();
             const dropdown = document.getElementById('notification-dropdown');
-            if (window.innerWidth >= 768) {
-                dropdown.classList.remove('mobile-active');
-                dropdown.style.display = '';
-                dropdown.classList.toggle('hidden');
-                dropdown.classList.toggle('opacity-0');
-                dropdown.classList.toggle('scale-95');
-                dropdown.classList.toggle('opacity-100');
-                dropdown.classList.toggle('scale-100');
-                if (!dropdown.classList.contains('hidden')) loadAppointments();
+            const isHidden = dropdown.classList.contains('hidden');
+            if (isHidden) {
+                dropdown.classList.remove('hidden', 'opacity-0', 'scale-95');
+                dropdown.classList.add('opacity-100', 'scale-100');
+            } else {
+                dropdown.classList.remove('opacity-100', 'scale-100');
+                dropdown.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => dropdown.classList.add('hidden'), 200);
+            }
+            if (!dropdown.classList.contains('hidden')) {
+                loadAppointments();
             }
         };
 
@@ -3213,43 +3177,16 @@
             const dropdown = document.getElementById('notification-dropdown');
             dropdown.classList.remove('opacity-100', 'scale-100');
             dropdown.classList.add('opacity-0', 'scale-95');
-            setTimeout(() => {
-                dropdown.classList.add('hidden');
-                dropdown.classList.remove('mobile-active');
-                dropdown.style.display = '';
-            }, 200);
+            setTimeout(() => dropdown.classList.add('hidden'), 200);
         }
-    </script>
-
-    <script>
-        document.getElementById('mobile-notification-btn').onclick = function (e) {
-            e.stopPropagation();
-            const dropdown = document.getElementById('notification-dropdown');
-            if (window.innerWidth < 768) {
-                dropdown.classList.add('mobile-active');
-                dropdown.classList.remove('hidden', 'opacity-0', 'scale-95');
-                dropdown.classList.add('opacity-100', 'scale-100');
-                dropdown.style.display = 'block';
-                loadAppointments();
-            }
-        };
 
         document.addEventListener('click', function (event) {
             const dropdown = document.getElementById('notification-dropdown');
             const btn = document.getElementById('notification-btn');
-            const mobileBtn = document.getElementById('mobile-notification-btn');
-            if (
-                !dropdown.contains(event.target) &&
-                !btn.contains(event.target) &&
-                !mobileBtn.contains(event.target)
-            ) {
+            if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
                 dropdown.classList.remove('opacity-100', 'scale-100');
                 dropdown.classList.add('opacity-0', 'scale-95');
-                setTimeout(() => {
-                    dropdown.classList.add('hidden');
-                    dropdown.classList.remove('mobile-active');
-                    dropdown.style.display = '';
-                }, 200);
+                setTimeout(() => dropdown.classList.add('hidden'), 200);
             }
         });
     </script>
