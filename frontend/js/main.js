@@ -538,13 +538,17 @@ const loadTestimonials = async () => {
               </div>
             </div>
             ${isOwner ? `
-              <div class="absolute top-4 right-4 flex gap-2 opacity-80 group-hover:opacity-100 transition">
-                <button class="edit-testimonial-btn" aria-label="Editar testimonio" title="Editar" data-id="${testimonial._id}" data-role="${testimonial.role}">
-                  <i class="fas fa-pen text-blue-600 hover:text-blue-800 text-lg"></i>
-                </button>
-                <button class="delete-testimonial-btn" aria-label="Eliminar testimonio" title="Eliminar" data-id="${testimonial._id}">
-                  <i class="fas fa-trash text-red-500 hover:text-red-700 text-lg"></i>
-                </button>
+              <div class="absolute top-4 right-4">
+                <div class="relative group">
+                  <button class="testimonial-menu-btn w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center focus:outline-none" aria-label="Opciones">
+                    <span class="sr-only">Opciones</span>
+                    <span class="text-2xl font-bold text-gray-600">⋮</span>
+                  </button>
+                  <div class="testimonial-menu hidden absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg z-10">
+                    <button class="edit-testimonial-btn block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Editar</button>
+                    <button class="delete-testimonial-btn block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50">Eliminar</button>
+                  </div>
+                </div>
               </div>
             ` : ""}
           </div>
@@ -681,6 +685,21 @@ const loadTestimonials = async () => {
     }
   }
 };
+
+// Mostrar/ocultar menú de opciones de testimonio
+document.querySelectorAll(".testimonial-menu-btn").forEach(btn => {
+  btn.onclick = function (e) {
+    e.stopPropagation();
+    // Cerrar otros menús abiertos
+    document.querySelectorAll(".testimonial-menu").forEach(menu => menu.classList.add("hidden"));
+    // Abrir el menú de este testimonio
+    btn.parentElement.querySelector(".testimonial-menu").classList.toggle("hidden");
+  };
+});
+// Cerrar el menú si se hace clic fuera
+document.addEventListener("click", () => {
+  document.querySelectorAll(".testimonial-menu").forEach(menu => menu.classList.add("hidden"));
+});
 
 // Cargar testimonios cuando el DOM esté listo
 document.addEventListener("DOMContentLoaded", () => {
