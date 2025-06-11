@@ -80,44 +80,58 @@
                                     class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold hidden">0</span>
                             </button>
 
-    <!-- Notification dropdown - Minimal & Elegant -->
-<div id="notification-dropdown" class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl z-50 border border-gray-100 hidden opacity-0 scale-95 transition-all duration-150 origin-top-right">
+                            <!-- Dropdown de notificaciones minimalista y elegante -->
+                        <div id="notification-dropdown"
+                            class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-xl z-50 border border-gray-100 overflow-hidden transition-all duration-200 origin-top-right transform opacity-0 scale-95 hidden">
 
-  <!-- Header with subtle elegance -->
-  <div class="px-4 py-3 bg-white border-b border-gray-100 flex justify-between items-center">
-    <div class="flex items-center space-x-2">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
-        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-      </svg>
-      <h4 class="font-medium text-gray-900">Notifications</h4>
-    </div>
-    <button onclick="closeNotifications()" class="text-gray-400 hover:text-gray-500">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-      </svg>
-    </button>
-  </div>
+                            <!-- Header con gradiente -->
+                            <div class="px-5 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 flex justify-between items-center">
+                                <div class="flex items-center gap-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                    </svg>
+                                    <h4 class="font-semibold text-white text-lg">Notificaciones</h4>
+                                </div>
+                                <button onclick="closeNotifications()"
+                                    class="text-blue-100 hover:text-white transition-colors rounded-full p-1.5 focus:outline-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
 
-  <!-- Notifications list -->
-  <ul id="appointments-list" class="divide-y divide-gray-100 max-h-96 overflow-y-auto">
-    <!-- Empty state -->
-    <li class="empty-state hidden px-4 py-6 text-center">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-      <p class="mt-2 text-gray-500">No notifications</p>
-      <p class="text-xs text-gray-400 mt-1">New appointments will appear here</p>
-    </li>
-    <!-- Notifications will be inserted here -->
-  </ul>
+                            <!-- Lista de notificaciones -->
+                            <ul id="appointments-list" class="divide-y divide-gray-100 max-h-96 overflow-y-auto bg-white">
+                                <!-- Estado vacío -->
+                                <li class="empty-state hidden px-5 py-8 text-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <p class="mt-3 text-gray-500 font-medium">No hay notificaciones</p>
+                                    <p class="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán aquí</p>
+                                </li>
+                                <!-- Las notificaciones se insertarán aquí dinámicamente -->
+                            </ul>
 
-  <!-- Footer action -->
-  <div class="px-3 py-2 bg-gray-50 text-center border-t border-gray-100">
-    <button class="text-xs font-medium text-indigo-600 hover:text-indigo-700 transition-colors">
-      Mark all as read
-    </button>
-  </div>
-</div>
+                            <!-- Footer con acción -->
+                            <div class="px-4 py-3 bg-gray-50 border-t border-gray-100 text-right">
+                                <button
+                                    class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center justify-end gap-1 w-full focus:outline-none">
+                                    <span>Marcar todas como leídas</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
                         </div>
 
                         <!-- Resto de iconos -->
