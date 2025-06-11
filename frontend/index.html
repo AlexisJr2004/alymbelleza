@@ -1073,57 +1073,45 @@
         </div>
     </div>
 
-    <!-- Modal para agregar testimonio -->
+    <!-- Modal para agregar testimonio minimalista -->
     <div id="testimonialModal"
-        class="modal-origin fixed inset-0 bg-black/50 hidden z-[9999] backdrop-blur-sm transition-opacity duration-300">
-        <div class="flex justify-center items-center min-h-screen p-4">
-            <div
-                class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden transition-all duration-300 transform scale-[0.98] modal-enter:scale-100">
-                <!-- Encabezado -->
-                <div class="bg-gradient-to-r from-purple-600 to-pink-500 p-5">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-xl font-semibold text-white">Nuevo Testimonio</h3>
-                        <button id="closeTestimonialModal" class="text-white/80 hover:text-white transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Contenido del formulario -->
-                <form id="testimonialForm" class="p-6 space-y-5">
-                    <!-- Campo Categoría -->
-                    <div class="space-y-2">
-                        <label for="role" class="block text-sm font-medium text-gray-700">Tipo de testimonio</label>
-                        <select id="role" name="role" required
-                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none transition-all">
-                            <option value="" disabled selected hidden>Selecciona una opción</option>
-                            <option value="CLIENTE SATISFECHO" class="bg-white">😊 Cliente satisfecho</option>
-                            <option value="RECOMENDACIÓN" class="bg-white">👍 Recomendación</option>
-                            <option value="PÉSIMO SERVICIO" class="bg-white">😞 Pésimo servicio</option>
-                        </select>
-                    </div>
-
-                    <!-- Campo Comentario -->
-                    <div class="space-y-2">
-                        <label for="comment" class="block text-sm font-medium text-gray-700">Tu experiencia</label>
-                        <textarea id="comment" name="comment" rows="4" required
-                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                            placeholder="Cuéntanos tu experiencia..."></textarea>
-                    </div>
-
-                    <!-- Botones -->
-                    <div class="flex justify-end space-x-3 pt-4">
-                        <button type="submit"
-                            class="px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-pink-500 rounded-xl hover:from-purple-700 hover:to-pink-600 shadow-md transition-all transform hover:scale-[1.02]">
-                            Enviar testimonio
-                        </button>
-                    </div>
-                </form>
+        class="fixed inset-0 bg-black/40 hidden z-[9999] flex items-center justify-center transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-auto overflow-hidden">
+            <!-- Encabezado minimalista -->
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                <h3 class="text-lg font-semibold text-gray-900">Nuevo Testimonio</h3>
+                <button id="closeTestimonialModal" class="text-gray-400 hover:text-gray-700 transition-colors">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
             </div>
+            <!-- Formulario -->
+            <form id="testimonialForm" class="p-6 space-y-5">
+                <!-- Campo Categoría -->
+                <div>
+                    <label for="role" class="block text-xs font-medium text-gray-500 mb-1">Tipo de testimonio</label>
+                    <select id="role" name="role" required
+                        class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-purple-400 focus:border-purple-400 text-sm transition">
+                        <option value="" disabled selected hidden>Selecciona una opción</option>
+                        <option value="CLIENTE SATISFECHO">😊 Cliente satisfecho</option>
+                        <option value="RECOMENDACIÓN">👍 Recomendación</option>
+                        <option value="PÉSIMO SERVICIO">😞 Pésimo servicio</option>
+                    </select>
+                </div>
+                <!-- Campo Comentario -->
+                <div>
+                    <label for="comment" class="block text-xs font-medium text-gray-500 mb-1">Tu experiencia</label>
+                    <textarea id="comment" name="comment" rows="4" required
+                        class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-purple-400 focus:border-purple-400 text-sm transition"
+                        placeholder="Cuéntanos tu experiencia..."></textarea>
+                </div>
+                <!-- Botón -->
+                <div class="flex justify-end pt-2">
+                    <button type="submit"
+                        class="px-5 py-2 text-sm font-semibold text-white rounded-full bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 shadow transition-all">
+                        Enviar
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
