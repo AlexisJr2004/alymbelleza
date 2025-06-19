@@ -1082,20 +1082,14 @@
                     profilePhone.textContent = user.phone ? ` | Tel: ${user.phone}` : '';
                     profileGender.textContent = user.gender ? ` | Género: ${user.gender}` : '';
                     profileBirthdate.textContent = user.birthdate
-                        ? ` | Nacimiento: ${new Date(user.birthdate).toLocaleDateString('es-ES', {
-                            year: 'numeric',
-                            month: '2-digit',
-                            day: '2-digit'
-                        })}`
+                        ? ` | Nacimiento: ${user.birthdate}`
                         : '';
                     profileAddress.textContent = user.address ? ` | Dirección: ${user.address}` : '';
 
                     // Actualizar formulario de edición
                     editName.value = user.name || '';
                     editDni.value = user.dni || '';
-                    editBirthdate.value = user.birthdate
-                        ? new Date(user.birthdate).toISOString().split('T')[0] // Formato YYYY-MM-DD
-                        : '';
+                    editBirthdate.value = user.birthdate || '';
                     editGender.value = user.gender || '';
                     editPhone.value = user.phone || '';
                     editAddress.value = user.address || '';
