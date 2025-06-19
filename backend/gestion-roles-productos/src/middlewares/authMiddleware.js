@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 const User = require('../models/user');
 
 exports.verifyToken = async (req, res, next) => {
@@ -9,9 +10,17 @@ exports.verifyToken = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log('Token decodificado:', decoded); // Depuración
 
-    const user = await User.findById(decoded.userId || decoded._id);
+    // Convertir userId a ObjectId
+    const userId = mongoose.Types.ObjectId.isValid(decoded.userId) ? mongoose.Types.ObjectId(decoded.userId) : null;
+
+    if (!userId) {
+      console.log('El userId no es válido:', decoded.userId);
+      return res.status(400).json({ error: 'ID de usuario no válido.' });
+    }
+
+    const user = await User.findById(userId);
     if (!user) {
-      console.log('Usuario no encontrado en la base de datos:', decoded.userId || decoded._id);
+      console.log('Usuario no encontrado en la base de datos:', userId);
       return res.status(401).json({ error: 'Usuario no encontrado.' });
     }
 
