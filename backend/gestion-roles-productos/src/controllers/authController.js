@@ -129,35 +129,35 @@ exports.register = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-  try {
-    const { name, email, phone, address, gender, birthdate } = req.body;
+    try {
+        const { name, email, phone, address, gender, birthdate } = req.body;
 
-    // Buscar al usuario autenticado
-    const user = await User.findById(req.user._id);
-    if (!user) {
-      return res.status(404).json({ error: 'Usuario no encontrado.' });
+        // Buscar al usuario autenticado
+        const user = await User.findById(req.user._id);
+        if (!user) {
+            return res.status(404).json({ error: 'Usuario no encontrado.' });
+        }
+
+        // Actualizar los campos permitidos
+        user.name = name || user.name;
+        user.email = email || user.email;
+        user.phone = phone || user.phone;
+        user.address = address || user.address;
+        user.gender = gender || user.gender;
+        user.birthdate = birthdate || user.birthdate;
+
+        // Si se subió una nueva imagen de perfil
+        if (req.file && req.file.path) {
+            user.profileImage = req.file.path;
+        }
+
+        await user.save();
+
+        res.json({ success: true, message: 'Perfil actualizado correctamente.', user });
+    } catch (err) {
+        console.error('Error al actualizar el perfil:', err);
+        res.status(500).json({ error: 'Error al actualizar el perfil.' });
     }
-
-    // Actualizar los campos permitidos
-    user.name = name || user.name;
-    user.email = email || user.email;
-    user.phone = phone || user.phone;
-    user.address = address || user.address;
-    user.gender = gender || user.gender;
-    user.birthdate = birthdate || user.birthdate;
-
-    // Si se subió una nueva imagen de perfil
-    if (req.file && req.file.path) {
-      user.profileImage = req.file.path;
-    }
-
-    await user.save();
-
-    res.json({ success: true, message: 'Perfil actualizado correctamente.', user });
-  } catch (err) {
-    console.error('Error al actualizar el perfil:', err);
-    res.status(500).json({ error: 'Error al actualizar el perfil.' });
-  }
 };
 
 exports.login = async (req, res) => {

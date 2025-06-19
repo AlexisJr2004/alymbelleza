@@ -1155,9 +1155,8 @@
                         method: 'PUT',
                         headers: {
                             'Authorization': `Bearer ${userLocal.token}`,
-                            'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(formData)
+                        body: formData, // Enviar directamente el FormData
                     });
 
                     const data = await res.json();
@@ -1183,11 +1182,8 @@
                     saveBtn.classList.add('hidden');
                     editBtn.classList.remove('hidden');
 
-                    // Recargar la página para mostrar los nuevos datos
-                    window.location.reload();
-
                     // Recargar datos
-                    setTimeout(() => loadProfile(), 1000);
+                    await loadProfile();
 
                 } catch (error) {
                     console.error('Error:', error);
