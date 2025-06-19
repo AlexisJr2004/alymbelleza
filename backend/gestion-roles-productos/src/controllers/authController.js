@@ -193,6 +193,7 @@ exports.editTestimonial = async (req, res) => {
         const { comment } = req.body; // Nuevo contenido del testimonio
         const userId = req.user._id; // ID del usuario autenticado
 
+        // Buscar el testimonio
         const testimonial = await Testimonial.findById(id);
         if (!testimonial) {
             return res.status(404).json({ error: 'Testimonio no encontrado.' });
@@ -203,12 +204,16 @@ exports.editTestimonial = async (req, res) => {
             return res.status(403).json({ error: 'No tienes permiso para editar este testimonio.' });
         }
 
-        testimonial.comment = comment;
+        // Actualizar el contenido del testimonio
+        if (comment) {
+            testimonial.comment = comment;
+        }
+
         await testimonial.save();
 
         res.json({ success: true, message: 'Testimonio editado correctamente.', testimonial });
     } catch (err) {
-        console.error(err);
+        console.error('Error al editar el testimonio:', err);
         res.status(500).json({ error: 'Error al editar el testimonio.' });
     }
 };
@@ -219,6 +224,7 @@ exports.deleteTestimonial = async (req, res) => {
         const { id } = req.params; // ID del testimonio
         const userId = req.user._id; // ID del usuario autenticado
 
+        // Buscar el testimonio
         const testimonial = await Testimonial.findById(id);
         if (!testimonial) {
             return res.status(404).json({ error: 'Testimonio no encontrado.' });
@@ -230,9 +236,35 @@ exports.deleteTestimonial = async (req, res) => {
         }
 
         await testimonial.remove();
+
         res.json({ success: true, message: 'Testimonio eliminado correctamente.' });
     } catch (err) {
-        console.error(err);
+        console.error('Error al eliminar el testimonio:', err);
         res.status(500).json({ error: 'Error al eliminar el testimonio.' });
+    }
+};
+
+exports.createTestimonial = async (req, res) => {
+    try {
+        const { comment } = req.body; // Contenido del testimonio
+        const userId = req.user._id; // ID del usuario autenticado
+        const name = req.user.name; // Nombre del usuario autenticado
+
+        if (!comment) {
+            return res.status(400).json({ error: 'El comentario es obligatorio.' });
+        }
+
+        const newTestimonial = new Testimonial({
+            comment,
+            userId,
+            name,
+        });
+
+        await newTestimonial.save();
+
+        res.status(201).json({ success: true, message: 'Testimonio creado correctamente.', testimonial: newTestimonial });
+    } catch (err) {
+        console.error('Error al crear el testimonio:', err);
+        res.status(500).json({ error: 'Error al crear el testimonio.' });
     }
 };

@@ -23,6 +23,7 @@ router.post('/forgot-password', authController.forgotPassword);
 router.post('/reset-password/:token', authController.resetPassword);
 router.put('/me', verifyToken, upload.single('profileImage'), authController.updateProfile);
 router.get('/me', verifyToken, authController.me);
+router.post('/testimonials', verifyToken, authController.createTestimonial);
 router.put('/testimonials/:id', verifyToken, authController.editTestimonial);
 router.delete('/testimonials/:id', verifyToken, authController.deleteTestimonial);
 
