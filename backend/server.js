@@ -10,6 +10,7 @@ const authRoutes = require("./gestion-roles-productos/src/routes/authRoutes");
 const productRoutes = require("./gestion-roles-productos/src/routes/productRoutes");
 const appointmentRoutes = require('./gestion-roles-productos/src/routes/appointmentRoutes');
 const cartRoutes = require('./gestion-roles-productos/src/routes/cartRoutes');
+const Testimonial = require('./gestion-roles-productos/src/models/testimonial');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -102,48 +103,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 
 // 6. Resto de middlewares y rutas (testimonios, email, etc.)
-// Modelo de Testimonio
-const testimonialSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: [true, "El nombre es requerido"],
-      trim: true,
-      maxlength: [100, "El nombre no puede exceder los 100 caracteres"],
-    },
-    role: {
-      type: String,
-      required: [true, "El rol/título es requerido"],
-      trim: true,
-      maxlength: [100, "El rol no puede exceder los 100 caracteres"],
-    },
-    comment: {
-      type: String,
-      required: [true, "El comentario es requerido"],
-      trim: true,
-      maxlength: [500, "El comentario no puede exceder los 500 caracteres"],
-    },
-    avatar: {
-      type: String,
-      required: [true, "La imagen de avatar es requerida"],
-      validate: {
-        validator: (v) => /\.(jpe?g|png|gif|webp)$/i.test(v),
-        message: "La URL de la imagen no es válida",
-      },
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-      index: true,
-    },
-  },
-  {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
-  }
-);
-
-const Testimonial = mongoose.model("Testimonial", testimonialSchema);
 
 // Multer para testimonios (usa el mismo uploadDir y configuración)
 const testimonialStorage = multer.diskStorage({
