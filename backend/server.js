@@ -196,14 +196,27 @@ app.put("/api/testimonials/:id", testimonialUpload.none(), async (req, res) => {
 });
 
 // Eliminar testimonio
-app.delete("/api/testimonials/:id", async (req, res) => {
+app.delete("/api/testimonials/:id", verifyToken, async (req, res) => {
   try {
-    const testimonial = await Testimonial.findByIdAndDelete(req.params.id);
+    const { id } = req.params; // ID del testimonio
+    const userId = req.user._id; // ID del usuario autenticado (proporcionado por verifyToken)
+
+    // Buscar el testimonio
+    const testimonial = await Testimonial.findById(id);
     if (!testimonial) {
       return res.status(404).json({ success: false, error: "Testimonio no encontrado" });
     }
-    res.json({ success: true, message: "Testimonio eliminado" });
+
+    // Verificar si el usuario es el autor del testimonio
+    if (testimonial.userId.toString() !== userId.toString()) {
+      return res.status(403).json({ success: false, error: "No tienes permiso para eliminar este testimonio" });
+    }
+
+    // Eliminar el testimonio
+    await testimonial.remove();
+    res.json({ success: true, message: "Testimonio eliminado correctamente" });
   } catch (error) {
+    console.error("Error al eliminar el testimonio:", error);
     res.status(500).json({ success: false, error: "Error al eliminar testimonio" });
   }
 });
