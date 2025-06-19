@@ -490,6 +490,23 @@ const initTestimonialSwiper = () => {
   });
 };
 
+// Función para renderizar un testimonio
+function renderTestimonial(testimonial) {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const isOwner = user && testimonial.userId === user._id;
+
+    return `
+        <div class="testimonial">
+            <p>${testimonial.comment}</p>
+            <span>Por: ${testimonial.name}</span>
+            ${isOwner ? `
+                <button class="edit-testimonial-btn" data-id="${testimonial._id}">Editar</button>
+                <button class="delete-testimonial-btn" data-id="${testimonial._id}">Eliminar</button>
+            ` : ''}
+        </div>
+    `;
+}
+
 // Función para cargar testimonios
 const loadTestimonials = async () => {
   try {
