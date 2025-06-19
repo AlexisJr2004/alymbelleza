@@ -1081,13 +1081,21 @@
                     profileDni.textContent = user.dni ? `Cédula: ${user.dni}` : '';
                     profilePhone.textContent = user.phone ? ` | Tel: ${user.phone}` : '';
                     profileGender.textContent = user.gender ? ` | Género: ${user.gender}` : '';
-                    profileBirthdate.textContent = user.birthdate ? ` | Nacimiento: ${new Date(user.birthdate).toLocaleDateString()}` : '';
+                    profileBirthdate.textContent = user.birthdate
+                        ? ` | Nacimiento: ${new Date(user.birthdate).toLocaleDateString('es-ES', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit'
+                        })}`
+                        : '';
                     profileAddress.textContent = user.address ? ` | Dirección: ${user.address}` : '';
 
                     // Actualizar formulario de edición
                     editName.value = user.name || '';
                     editDni.value = user.dni || '';
-                    editBirthdate.value = user.birthdate ? user.birthdate.substr(0, 10) : '';
+                    editBirthdate.value = user.birthdate
+                        ? new Date(user.birthdate).toISOString().split('T')[0] // Formato YYYY-MM-DD
+                        : '';
                     editGender.value = user.gender || '';
                     editPhone.value = user.phone || '';
                     editAddress.value = user.address || '';
@@ -1098,7 +1106,6 @@
                     msg.className = "text-red-500";
                 }
             }
-
             await loadProfile();
 
             // Habilitar edición
@@ -1151,12 +1158,18 @@
                 try {
                     const formData = new FormData(form);
 
+                    // Convertir la fecha de nacimiento al formato YYYY-MM-DD
+                    const birthdateInput = form.querySelector('#edit-birthdate');
+                    if (birthdateInput && birthdateInput.value) {
+                        formData.set('birthdate', new Date(birthdateInput.value).toISOString().split('T')[0]);
+                    }
+
                     const res = await fetch('https://aly-mbelleza-backend.onrender.com/api/auth/me', {
                         method: 'PUT',
                         headers: {
                             'Authorization': `Bearer ${userLocal.token}`,
                         },
-                        body: formData, // Enviar directamente el FormData
+                        body: formData,
                     });
 
                     const data = await res.json();
@@ -1170,9 +1183,7 @@
 
                     // Actualizar datos en localStorage
                     if (userLocal && data.user) {
-                        userLocal.name = data.user.name || userLocal.name;
-                        userLocal.profileImage = data.user.profileImage || userLocal.profileImage;
-                        userLocal.dni = data.user.dni || userLocal.dni;
+                        userLocal.birthdate = data.user.birthdate || userLocal.birthdate;
                         localStorage.setItem('user', JSON.stringify(userLocal));
                     }
 
