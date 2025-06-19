@@ -7,4 +7,5 @@ const testimonialSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('Testimonial', testimonialSchema);
+// Verificar si el modelo ya existe antes de definirlo
+module.exports = mongoose.models.Testimonial || mongoose.model('Testimonial', testimonialSchema);
