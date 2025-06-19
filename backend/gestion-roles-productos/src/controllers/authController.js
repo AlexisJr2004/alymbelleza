@@ -130,7 +130,7 @@ exports.register = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
     try {
-        const { name, email, phone, address, gender, birthdate } = req.body;
+        const { name, email, phone, address, gender, birthdate, dni } = req.body;
 
         // Buscar al usuario autenticado
         const user = await User.findById(req.user._id);
@@ -145,6 +145,7 @@ exports.updateProfile = async (req, res) => {
         user.address = address || user.address;
         user.gender = gender || user.gender;
         user.birthdate = birthdate || user.birthdate;
+        user.dni = dni || user.dni;
 
         // Si se subió una nueva imagen de perfil
         if (req.file && req.file.path) {

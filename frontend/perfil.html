@@ -1063,7 +1063,7 @@
                     }
 
                     const data = await res.json();
-                    const user = data.user; // <--- ESTA ES LA CLAVE
+                    const user = data.user;
 
                     // Actualizar imagen de perfil
                     let profileImageUrl = user.profileImage && user.profileImage.startsWith('http')
@@ -1172,18 +1172,12 @@
                     if (userLocal && data.user) {
                         userLocal.name = data.user.name || userLocal.name;
                         userLocal.profileImage = data.user.profileImage || userLocal.profileImage;
+                        userLocal.dni = data.user.dni || userLocal.dni;
                         localStorage.setItem('user', JSON.stringify(userLocal));
                     }
 
-                    // Deshabilitar campos nuevamente
-                    form.querySelectorAll('input, select, button').forEach(el => {
-                        if (el.id !== 'edit-btn') el.disabled = true;
-                    });
-                    saveBtn.classList.add('hidden');
-                    editBtn.classList.remove('hidden');
-
-                    // Recargar datos
-                    await loadProfile();
+                    // Recargar la página para mostrar los nuevos datos
+                    window.location.reload();
 
                 } catch (error) {
                     console.error('Error:', error);
