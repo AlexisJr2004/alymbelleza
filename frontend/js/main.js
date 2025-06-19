@@ -521,201 +521,49 @@ const loadTestimonials = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
 
     if (testimonials.length === 0) {
-      swiperWrapper.innerHTML = `<div class="swiper-slide flex items-center justify-center h-full w-full">
-        <div class="text-center p-8 max-w-sm mx-auto">
-          <div class="inline-flex items-center justify-center rounded-full bg-gray-100 p-4 mb-4">
-            <svg class="h-10 w-10 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-            </svg>
+      swiperWrapper.innerHTML = `
+        <div class="swiper-slide flex items-center justify-center h-full w-full">
+          <div class="text-center p-8 max-w-sm mx-auto">
+            <div class="inline-flex items-center justify-center rounded-full bg-gray-100 p-4 mb-4">
+              <svg class="h-10 w-10 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">No hay testimonios aún</h3>
+            <p class="text-gray-600 mb-6">Parece que nadie ha compartido su experiencia todavía.</p>
           </div>
-          <h3 class="text-xl font-semibold text-gray-800 mb-2">No hay testimonios aún</h3>
-          <p class="text-gray-600 mb-6">Parece que nadie ha compartido su experiencia todavía.</p>
-        </div>
-      </div>`;
+        </div>`;
     } else {
       testimonials.forEach((testimonial) => {
-        const isOwner = user && (testimonial.userId === user._id || testimonial.email === user.email);
+        const isOwner = user && testimonial.userId === user._id;
         const slide = document.createElement("div");
         slide.className = "swiper-slide";
         slide.innerHTML = `
           <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col relative group">
             <div class="relative flex-grow">
-              <svg class="absolute -top-4 -left-4 h-8 w-8 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.999v10h-9.999z"/>
-              </svg>
-              <br>
-              <p class="text-gray-600 italic mb-8 comment-text" data-id="${testimonial._id}">${testimonial.comment}</p>
+              <p class="text-gray-600 italic mb-8">${testimonial.comment}</p>
             </div>
             <div class="flex items-center mt-auto">
-              <img src="${formatImageUrl(testimonial.avatar)}" alt="${testimonial.name}" class="h-12 w-12 rounded-full object-cover"
-                onerror="this.onerror=null;this.src='https://us.123rf.com/450wm/thesomeday123/thesomeday1231712/thesomeday123171200009/91087331-icono-de-perfil-de-avatar-predeterminado-para-hombre-marcador-de-posici%C3%B3n-de-foto-gris-vector-de.jpg?ver=6'">
+              <img src="${testimonial.avatar || 'https://via.placeholder.com/150'}" alt="${testimonial.name}" class="h-12 w-12 rounded-full object-cover">
               <div class="ml-4">
                 <h4 class="font-semibold text-gray-900">${testimonial.name}</h4>
-                <p class="text-gray-500 text-sm">${testimonial.role}</p>
               </div>
             </div>
             ${isOwner ? `
               <div class="absolute top-4 right-4">
-                <div class="relative group">
-                  <button class="testimonial-menu-btn w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center focus:outline-none" aria-label="Opciones">
-                    <span class="sr-only">Opciones</span>
-                    <span class="text-2xl font-bold text-gray-600">⋮</span>
-                  </button>
-                  <div class="testimonial-menu hidden absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg z-10">
-                    <button class="edit-testimonial-btn block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                      data-id="${testimonial._id}" data-role="${testimonial.role}">Editar</button>
-                    <button class="delete-testimonial-btn block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
-                      data-id="${testimonial._id}">Eliminar</button>
-                  </div>
-                </div>
-              </div>
-            ` : ""}
-          </div>
-        `;
+                <button class="edit-testimonial-btn" data-id="${testimonial._id}">Editar</button>
+                <button class="delete-testimonial-btn" data-id="${testimonial._id}">Eliminar</button>
+              </div>` : ""}
+          </div>`;
         swiperWrapper.appendChild(slide);
       });
     }
 
-    // Inicializar o actualizar Swiper
     initTestimonialSwiper();
-
-    // --- Agregar listeners después de inicializar Swiper ---
-    setTimeout(() => {
-      // Mostrar/ocultar menú de opciones de testimonio
-      document.querySelectorAll(".testimonial-menu-btn").forEach(btn => {
-        btn.onclick = function (e) {
-          e.stopPropagation();
-          // Cerrar otros menús abiertos
-          document.querySelectorAll(".testimonial-menu").forEach(menu => menu.classList.add("hidden"));
-          // Abrir el menú de este testimonio
-          btn.parentElement.querySelector(".testimonial-menu").classList.toggle("hidden");
-        };
-      });
-
-      // Listener para editar inline
-      document.querySelectorAll(".edit-testimonial-btn").forEach(btn => {
-        btn.onclick = function () {
-          // Cerrar cualquier otro modo edición abierto
-          document.querySelectorAll(".comment-text[contenteditable='true']").forEach(p => {
-            p.removeAttribute("contenteditable");
-            const saveBtn = p.parentNode.querySelector(".save-edit-btn");
-            if (saveBtn) saveBtn.remove();
-          });
-
-          const id = btn.getAttribute("data-id");
-          const role = btn.getAttribute("data-role");
-          const commentP = btn.closest(".swiper-slide").querySelector(".comment-text");
-
-          // Activar edición inline
-          commentP.setAttribute("contenteditable", "true");
-
-          // Crear botón Guardar alineado a la derecha y con poco margen superior
-          const saveBtn = document.createElement("button");
-          saveBtn.className = "save-edit-btn float-right -mt-2 w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center focus:outline-none";
-          saveBtn.innerHTML = `
-            <i class="fas fa-play text-xl text-gray-500"></i>
-          `;
-          saveBtn.setAttribute("data-id", id);
-          saveBtn.setAttribute("data-role", role);
-
-          // Insertar el botón después del comentario
-          commentP.parentNode.appendChild(saveBtn);
-
-          // Listener para guardar
-          saveBtn.onclick = async function () {
-            const newComment = commentP.textContent;
-            await updateTestimonialInline(id, newComment, role);
-          };
-        };
-      });
-
-      // Listener para eliminar
-      document.querySelectorAll(".delete-testimonial-btn").forEach(btn => {
-        btn.onclick = async function () {
-          const id = btn.getAttribute("data-id");
-          Swal.fire({
-            title: "¿Seguro que quieres borrar este testimonio?",
-            text: "Esta acción no se puede deshacer.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#e3342f",
-            cancelButtonColor: "#6b7280",
-            confirmButtonText: "Sí, borrar",
-            cancelButtonText: "Cancelar"
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              await deleteTestimonial(id);
-              loadTestimonials();
-            }
-          });
-        };
-      });
-    }, 100); // Espera breve para asegurar que Swiper terminó el render
-
-    // Función para actualizar inline
-    async function updateTestimonialInline(id, comment, role) {
-      const user = JSON.parse(localStorage.getItem("user"));
-      if (!user || !user.token) {
-        showNotification("error", "Error", "Debes iniciar sesión para editar testimonios.");
-        return;
-      }
-      const formData = new FormData();
-      formData.append("comment", comment);
-      formData.append("role", role);
-      formData.append("name", user.name);
-      formData.append("avatar", user.profileImage);
-
-      try {
-        const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
-          method: "PUT",
-          headers: {
-            "Authorization": `Bearer ${user.token}`
-          },
-          body: formData
-        });
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.error || "No se pudo editar el testimonio");
-        }
-        showNotification("success", "¡Éxito!", data.message || "Testimonio editado correctamente");
-        loadTestimonials();
-      } catch (err) {
-        showNotification("error", "Error al editar testimonio", err.message || "Error desconocido");
-        console.error(err);
-      }
-    }
-
-    // Función para eliminar
-    async function deleteTestimonial(id) {
-      const user = JSON.parse(localStorage.getItem("user"));
-      if (!user || !user.token) {
-        showNotification("error", "Error", "Debes iniciar sesión para borrar testimonios.");
-        return;
-      }
-      try {
-        const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
-          method: "DELETE",
-          headers: {
-            "Authorization": `Bearer ${user.token}`
-          }
-        });
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.error || "No se pudo borrar el testimonio");
-        }
-        showNotification("success", "¡Éxito!", data.message || "Testimonio eliminado");
-      } catch (err) {
-        showNotification("error", "Error al borrar testimonio", err.message || "Error desconocido");
-        console.error(err);
-      }
-    }
-
   } catch (error) {
     console.error("Error al cargar testimonios:", error);
 
-    const swiperWrapper = document.querySelector(
-      ".testimonials-swiper .swiper-wrapper"
-    );
+    const swiperWrapper = document.querySelector(".testimonials-swiper .swiper-wrapper");
     if (swiperWrapper) {
       swiperWrapper.innerHTML = `
         <div class="swiper-slide">
@@ -723,8 +571,7 @@ const loadTestimonials = async () => {
             <p>Error al cargar testimonios.</p>
             <p class="text-sm">${error.message}</p>
           </div>
-        </div>
-      `;
+        </div>`;
     }
   }
 };
@@ -800,13 +647,10 @@ if (testimonialForm) {
 
       const formData = new FormData(testimonialForm);
 
-      // Tomar datos del usuario logueado
+      // Verificar si el usuario está autenticado
       const user = JSON.parse(localStorage.getItem("user"));
-      if (!user) {
-        showNotification(
-          "Debes iniciar sesión para dejar un testimonio.",
-          "error"
-        );
+      if (!user || !user.token) {
+        showNotification("error", "Error", "Debes iniciar sesión para dejar un testimonio.");
         submitBtn.disabled = false;
         submitBtn.textContent = originalBtnText;
         return;
@@ -815,45 +659,30 @@ if (testimonialForm) {
       formData.append("name", user.name);
       formData.append("avatar", user.profileImage);
 
-      const response = await fetch(
-        "https://aly-mbelleza-backend.onrender.com/api/testimonials",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch(`${API_URL}/api/testimonials`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: formData,
+      });
 
       if (!response.ok) {
-        let errorMessage = "Error al enviar testimonio";
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.message || errorMessage;
-        } catch (e) {
-          const text = await response.text();
-          if (text) errorMessage = text;
-        }
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage = errorData.error || `Error: ${response.status}`;
         throw new Error(errorMessage);
       }
 
-      const result = await response.json().catch(() => ({}));
-
+      const result = await response.json();
       testimonialModal.classList.add("hidden");
       testimonialForm.reset();
 
       setTimeout(loadTestimonials, 500);
 
-      showNotification(
-        "success",
-        "¡Éxito!",
-        result.message || "Testimonio agregado correctamente"
-      );
+      showNotification("success", "¡Éxito!", result.message || "Testimonio agregado correctamente");
     } catch (error) {
       console.error("Error en el envío:", error);
-      showNotification(
-        "error",
-        "Error",
-        typeof error === "object" ? error.message : "Error al enviar testimonio"
-      );
+      showNotification("error", "Error", error.message || "Error al enviar testimonio");
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = originalBtnText;
@@ -862,17 +691,19 @@ if (testimonialForm) {
 }
 
 // Función para mostrar notificaciones
-function showNotification(message, type = "success") {
+function showNotification(type, title, message) {
   const notification = document.createElement("div");
   notification.className = `fixed top-4 right-4 px-6 py-3 rounded-md shadow-lg text-white ${
     type === "success" ? "bg-green-500" : "bg-red-500"
   } z-50 transition-all duration-300 transform translate-x-0`;
-  notification.textContent = message;
+  notification.innerHTML = `
+    <strong>${title}</strong>
+    <p>${message}</p>
+  `;
   document.body.appendChild(notification);
 
   setTimeout(() => {
-    notification.classList.add("translate-x-full");
-    setTimeout(() => notification.remove(), 300);
+    notification.remove();
   }, 3000);
 }
 
