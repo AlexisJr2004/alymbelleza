@@ -10,8 +10,8 @@ exports.verifyToken = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log('Token decodificado:', decoded); // Depuración
 
-    // Convertir userId a ObjectId
-    const userId = mongoose.Types.ObjectId.isValid(decoded.userId) ? mongoose.Types.ObjectId(decoded.userId) : null;
+    // Convertir userId a ObjectId usando `new`
+    const userId = mongoose.Types.ObjectId.isValid(decoded.userId) ? new mongoose.Types.ObjectId(decoded.userId) : null;
 
     if (!userId) {
       console.log('El userId no es válido:', decoded.userId);
