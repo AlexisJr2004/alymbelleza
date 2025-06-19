@@ -7,12 +7,13 @@ exports.verifyToken = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    // Busca el usuario real en la base de datos
+    console.log('Token decodificado:', decoded); // Depuración
     const user = await User.findById(decoded.userId || decoded._id);
     if (!user) return res.status(401).json({ error: 'Usuario no encontrado.' });
-    req.user = user; // Ahora req.user es el usuario real de MongoDB
+    req.user = user;
     next();
   } catch (err) {
+    console.error('Error al verificar el token:', err); // Depuración
     return res.status(403).json({ error: 'Token inválido.' });
   }
 };

@@ -1154,9 +1154,10 @@
                     const res = await fetch('https://aly-mbelleza-backend.onrender.com/api/auth/me', {
                         method: 'PUT',
                         headers: {
-                            'Authorization': `Bearer ${userLocal.token}`
+                            'Authorization': `Bearer ${userLocal.token}`,
+                            'Content-Type': 'application/json'
                         },
-                        body: formData
+                        body: JSON.stringify(formData)
                     });
 
                     const data = await res.json();
