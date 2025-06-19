@@ -8,8 +8,13 @@ exports.verifyToken = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log('Token decodificado:', decoded); // Depuración
+
     const user = await User.findById(decoded.userId || decoded._id);
-    if (!user) return res.status(401).json({ error: 'Usuario no encontrado.' });
+    if (!user) {
+      console.log('Usuario no encontrado en la base de datos:', decoded.userId || decoded._id);
+      return res.status(401).json({ error: 'Usuario no encontrado.' });
+    }
+
     req.user = user;
     next();
   } catch (err) {
