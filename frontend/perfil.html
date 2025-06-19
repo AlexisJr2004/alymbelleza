@@ -1074,6 +1074,11 @@
 
                     profileImg.src = profileImageUrl;
 
+                    // Procesar la fecha de nacimiento
+                    const formattedBirthdate = user.birthdate
+                        ? user.birthdate.split('T')[0] // Extraer solo la parte de la fecha (YYYY-MM-DD)
+                        : '';
+
                     // Actualizar tarjeta de perfil
                     profileName.textContent = user.name || 'Nombre Apellido';
                     profileEmail.textContent = user.email || 'correo@ejemplo.com';
@@ -1081,15 +1086,15 @@
                     profileDni.textContent = user.dni ? `Cédula: ${user.dni}` : '';
                     profilePhone.textContent = user.phone ? ` | Tel: ${user.phone}` : '';
                     profileGender.textContent = user.gender ? ` | Género: ${user.gender}` : '';
-                    profileBirthdate.textContent = user.birthdate
-                        ? ` | Nacimiento: ${user.birthdate}`
+                    profileBirthdate.textContent = formattedBirthdate
+                        ? ` | Nacimiento: ${formattedBirthdate}` // Mostrar solo la fecha
                         : '';
                     profileAddress.textContent = user.address ? ` | Dirección: ${user.address}` : '';
 
                     // Actualizar formulario de edición
                     editName.value = user.name || '';
                     editDni.value = user.dni || '';
-                    editBirthdate.value = user.birthdate || '';
+                    editBirthdate.value = formattedBirthdate || ''; // Mostrar la fecha en el input
                     editGender.value = user.gender || '';
                     editPhone.value = user.phone || '';
                     editAddress.value = user.address || '';
