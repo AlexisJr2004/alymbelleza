@@ -144,8 +144,12 @@ exports.updateProfile = async (req, res) => {
         user.phone = phone || user.phone;
         user.address = address || user.address;
         user.gender = gender || user.gender;
-        user.birthdate = birthdate || user.birthdate;
         user.dni = dni || user.dni;
+
+        // Convertir la fecha de nacimiento a UTC
+        if (birthdate) {
+            user.birthdate = new Date(birthdate);
+        }
 
         // Si se subió una nueva imagen de perfil
         if (req.file && req.file.path) {
