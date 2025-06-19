@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const Testimonial = require('../models/testimonial');
 
 // Configuración de Nodemailer (usa tu configuración existente)
 const transporter = nodemailer.createTransport({
@@ -183,4 +184,55 @@ exports.login = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: 'Error al registrar usuario.', details: err.message });
   }
+};
+
+// Editar un testimonio
+exports.editTestimonial = async (req, res) => {
+    try {
+        const { id } = req.params; // ID del testimonio
+        const { comment } = req.body; // Nuevo contenido del testimonio
+        const userId = req.user._id; // ID del usuario autenticado
+
+        const testimonial = await Testimonial.findById(id);
+        if (!testimonial) {
+            return res.status(404).json({ error: 'Testimonio no encontrado.' });
+        }
+
+        // Verificar si el usuario es el autor del testimonio
+        if (testimonial.userId.toString() !== userId.toString()) {
+            return res.status(403).json({ error: 'No tienes permiso para editar este testimonio.' });
+        }
+
+        testimonial.comment = comment;
+        await testimonial.save();
+
+        res.json({ success: true, message: 'Testimonio editado correctamente.', testimonial });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Error al editar el testimonio.' });
+    }
+};
+
+// Eliminar un testimonio
+exports.deleteTestimonial = async (req, res) => {
+    try {
+        const { id } = req.params; // ID del testimonio
+        const userId = req.user._id; // ID del usuario autenticado
+
+        const testimonial = await Testimonial.findById(id);
+        if (!testimonial) {
+            return res.status(404).json({ error: 'Testimonio no encontrado.' });
+        }
+
+        // Verificar si el usuario es el autor del testimonio
+        if (testimonial.userId.toString() !== userId.toString()) {
+            return res.status(403).json({ error: 'No tienes permiso para eliminar este testimonio.' });
+        }
+
+        await testimonial.remove();
+        res.json({ success: true, message: 'Testimonio eliminado correctamente.' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Error al eliminar el testimonio.' });
+    }
 };
