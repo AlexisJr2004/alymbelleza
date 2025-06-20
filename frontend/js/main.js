@@ -660,7 +660,8 @@ if (testimonialForm) {
       submitBtn.disabled = true;
       submitBtn.textContent = "Enviando...";
 
-      const formData = new FormData(testimonialForm);
+      // Obtener el comentario del formulario
+      const comment = testimonialForm.querySelector('textarea[name="comment"]').value;
 
       // Verificar si el usuario está autenticado
       const user = JSON.parse(localStorage.getItem("user"));
@@ -671,27 +672,29 @@ if (testimonialForm) {
         return;
       }
 
-      formData.append("name", user.name);
-      formData.append("avatar", user.profileImage);
-
+      // Enviar la solicitud al backend
       const response = await fetch(`${API_URL}/api/auth/testimonials`, {
         method: "POST",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${user.token}`,
         },
-        body: formData,
+        body: JSON.stringify({ comment }), // Enviar el comentario como JSON
       });
 
+      // Manejar errores de la respuesta
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         const errorMessage = errorData.error || `Error: ${response.status}`;
         throw new Error(errorMessage);
       }
 
+      // Procesar la respuesta exitosa
       const result = await response.json();
       testimonialModal.classList.add("hidden");
       testimonialForm.reset();
 
+      // Recargar los testimonios
       setTimeout(loadTestimonials, 500);
 
       showNotification("success", "¡Éxito!", result.message || "Testimonio agregado correctamente");

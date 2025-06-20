@@ -240,28 +240,32 @@ exports.deleteTestimonial = async (req, res) => {
 };
 
 exports.createTestimonial = async (req, res) => {
-    try {
-        const { comment } = req.body;
-        const userId = req.user._id;
-        const name = req.user.name;
+  try {
+    const { comment } = req.body;
+    const userId = req.user._id;
+    const name = req.user.name;
 
-        if (!comment) {
-            return res.status(400).json({ error: 'El comentario es obligatorio.' });
-        }
-
-        const newTestimonial = new Testimonial({
-            comment,
-            userId,
-            name,
-        });
-
-        await newTestimonial.save();
-
-        res.status(201).json({ success: true, message: 'Testimonio creado correctamente.', testimonial: newTestimonial });
-    } catch (err) {
-        console.error('Error al crear el testimonio:', err);
-        res.status(500).json({ error: 'Error al crear el testimonio.' });
+    if (!comment) {
+      return res.status(400).json({ error: 'El comentario es obligatorio.' });
     }
+
+    const newTestimonial = new Testimonial({
+      comment,
+      userId,
+      name,
+    });
+
+    await newTestimonial.save();
+
+    res.status(201).json({
+      success: true,
+      message: 'Testimonio creado correctamente.',
+      testimonial: newTestimonial,
+    });
+  } catch (err) {
+    console.error('Error al crear el testimonio:', err);
+    res.status(500).json({ error: 'Error al crear el testimonio.' });
+  }
 };
 
 exports.getTestimonials = async (req, res) => {
