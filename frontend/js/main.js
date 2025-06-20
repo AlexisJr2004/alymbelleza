@@ -674,7 +674,7 @@ if (testimonialForm) {
       formData.append("name", user.name);
       formData.append("avatar", user.profileImage);
 
-      const response = await fetch(`${API_URL}/api/testimonials`, {
+      const response = await fetch(`${API_URL}/api/auth/testimonials`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${user.token}`,
