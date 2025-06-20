@@ -10,7 +10,6 @@ const authRoutes = require("./gestion-roles-productos/src/routes/authRoutes");
 const productRoutes = require("./gestion-roles-productos/src/routes/productRoutes");
 const appointmentRoutes = require('./gestion-roles-productos/src/routes/appointmentRoutes');
 const cartRoutes = require('./gestion-roles-productos/src/routes/cartRoutes');
-const Testimonial = require('./gestion-roles-productos/src/models/testimonial');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -101,21 +100,50 @@ app.use(
 // 5. Rutas de autenticación y API
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
-app.use("/api/appointments", appointmentRoutes);
-app.use("/api/cart", cartRoutes);
-
-// Ruta para testimonios (si no está en un archivo separado)
-app.get("/api/testimonials", async (req, res) => {
-  try {
-    const testimonials = await Testimonial.find().sort({ createdAt: -1 });
-    res.json({ success: true, data: testimonials });
-  } catch (err) {
-    console.error("Error al obtener los testimonios:", err);
-    res.status(500).json({ error: "Error al obtener los testimonios." });
-  }
-});
 
 // 6. Resto de middlewares y rutas (testimonios, email, etc.)
+// Modelo de Testimonio
+const testimonialSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "El nombre es requerido"],
+      trim: true,
+      maxlength: [100, "El nombre no puede exceder los 100 caracteres"],
+    },
+    role: {
+      type: String,
+      required: [true, "El rol/título es requerido"],
+      trim: true,
+      maxlength: [100, "El rol no puede exceder los 100 caracteres"],
+    },
+    comment: {
+      type: String,
+      required: [true, "El comentario es requerido"],
+      trim: true,
+      maxlength: [500, "El comentario no puede exceder los 500 caracteres"],
+    },
+    avatar: {
+      type: String,
+      required: [true, "La imagen de avatar es requerida"],
+      validate: {
+        validator: (v) => /\.(jpe?g|png|gif|webp)$/i.test(v),
+        message: "La URL de la imagen no es válida",
+      },
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      index: true,
+    },
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
+
+const Testimonial = mongoose.model("Testimonial", testimonialSchema);
 
 // Multer para testimonios (usa el mismo uploadDir y configuración)
 const testimonialStorage = multer.diskStorage({
@@ -131,6 +159,94 @@ const testimonialUpload = multer({
     if (allowedTypes.includes(file.mimetype)) cb(null, true);
     else cb(new Error("Tipo de archivo no permitido. Solo imágenes."), false);
   },
+});
+
+// Ruta para subir testimonios (ahora acepta avatar como URL)
+app.post("/api/testimonials", testimonialUpload.none(), async (req, res) => {
+  try {
+    const { name, role, comment, avatar } = req.body;
+    if (!name || !role || !comment || !avatar) {
+      return res.status(400).json({
+        success: false,
+        error: "Todos los campos son requeridos",
+      });
+    }
+    const newTestimonial = new Testimonial({
+      name,
+      role,
+      comment,
+      avatar,
+    });
+    await newTestimonial.save();
+    res.status(201).json({
+      success: true,
+      message: "Testimonio agregado exitosamente",
+      data: newTestimonial,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: "Error al procesar el testimonio",
+    });
+  }
+});
+
+// Ruta para obtener testimonios (paginada)
+app.get("/api/testimonials", async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    const [testimonials, total] = await Promise.all([
+      Testimonial.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
+      Testimonial.countDocuments(),
+    ]);
+    res.json({
+      success: true,
+      count: testimonials.length,
+      total,
+      page,
+      pages: Math.ceil(total / limit),
+      data: testimonials,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: "Error al obtener testimonios",
+    });
+  }
+});
+
+// Editar testimonio
+app.put("/api/testimonials/:id", testimonialUpload.none(), async (req, res) => {
+  try {
+    const { name, role, comment, avatar } = req.body;
+    const testimonial = await Testimonial.findById(req.params.id);
+    if (!testimonial) {
+      return res.status(404).json({ success: false, error: "Testimonio no encontrado" });
+    }
+    testimonial.name = name || testimonial.name;
+    testimonial.role = role || testimonial.role;
+    testimonial.comment = comment || testimonial.comment;
+    testimonial.avatar = avatar || testimonial.avatar;
+    await testimonial.save();
+    res.json({ success: true, message: "Testimonio actualizado", data: testimonial });
+  } catch (error) {
+    res.status(500).json({ success: false, error: "Error al actualizar testimonio" });
+  }
+});
+
+// Eliminar testimonio
+app.delete("/api/testimonials/:id", async (req, res) => {
+  try {
+    const testimonial = await Testimonial.findByIdAndDelete(req.params.id);
+    if (!testimonial) {
+      return res.status(404).json({ success: false, error: "Testimonio no encontrado" });
+    }
+    res.json({ success: true, message: "Testimonio eliminado" });
+  } catch (error) {
+    res.status(500).json({ success: false, error: "Error al eliminar testimonio" });
+  }
 });
 
 // Configuración de Nodemailer

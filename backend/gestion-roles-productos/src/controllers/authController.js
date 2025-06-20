@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const Testimonial = require('../models/testimonial');
 
 // Configuración de Nodemailer (usa tu configuración existente)
 const transporter = nodemailer.createTransport({
@@ -183,97 +182,5 @@ exports.login = async (req, res) => {
     res.json({ token, user: { name: user.name, email: user.email, role: user.role, profileImage: user.profileImage } });
   } catch (err) {
     res.status(500).json({ error: 'Error al registrar usuario.', details: err.message });
-  }
-};
-
-// Editar un testimonio
-exports.editTestimonial = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { comment } = req.body;
-        const userId = req.user._id;
-
-        const testimonial = await Testimonial.findById(id);
-        if (!testimonial) {
-            return res.status(404).json({ error: 'Testimonio no encontrado.' });
-        }
-
-        if (testimonial.userId.toString() !== userId.toString()) {
-            return res.status(403).json({ error: 'No tienes permiso para editar este testimonio.' });
-        }
-
-        if (comment) {
-            testimonial.comment = comment;
-        }
-
-        await testimonial.save();
-
-        res.json({ success: true, message: 'Testimonio editado correctamente.', testimonial });
-    } catch (err) {
-        console.error('Error al editar el testimonio:', err);
-        res.status(500).json({ error: 'Error al editar el testimonio.' });
-    }
-};
-
-// Eliminar un testimonio
-exports.deleteTestimonial = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const userId = req.user._id;
-
-        const testimonial = await Testimonial.findById(id);
-        if (!testimonial) {
-            return res.status(404).json({ error: 'Testimonio no encontrado.' });
-        }
-
-        if (testimonial.userId.toString() !== userId.toString()) {
-            return res.status(403).json({ error: 'No tienes permiso para eliminar este testimonio.' });
-        }
-
-        await testimonial.remove();
-
-        res.json({ success: true, message: 'Testimonio eliminado correctamente.' });
-    } catch (err) {
-        console.error('Error al eliminar el testimonio:', err);
-        res.status(500).json({ error: 'Error al eliminar el testimonio.' });
-    }
-};
-
-exports.createTestimonial = async (req, res) => {
-  try {
-    const { comment } = req.body;
-    const userId = req.user._id;
-    const name = req.user.name;
-
-    if (!comment) {
-      return res.status(400).json({ error: 'El comentario es obligatorio.' });
-    }
-
-    const newTestimonial = new Testimonial({
-      comment,
-      userId,
-      name,
-    });
-
-    await newTestimonial.save();
-
-    res.status(201).json({
-      success: true,
-      message: 'Testimonio creado correctamente.',
-      testimonial: newTestimonial,
-    });
-  } catch (err) {
-    console.error('Error al crear el testimonio:', err);
-    res.status(500).json({ error: 'Error al crear el testimonio.' });
-  }
-};
-
-exports.getTestimonials = async (req, res) => {
-  try {
-    const testimonials = await Testimonial.find().sort({ createdAt: -1 });
-    res.json({ success: true, data: testimonials });
-  } catch (err) {
-    console.error('Error al obtener los testimonios:', err);
-    res.status(500).json({ error: 'Error al obtener los testimonios.' });
   }
 };
