@@ -101,6 +101,8 @@ app.use(
 // 5. Rutas de autenticación y API
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/appointments", appointmentRoutes);
+app.use("/api/cart", cartRoutes);
 
 // 6. Resto de middlewares y rutas (testimonios, email, etc.)
 
