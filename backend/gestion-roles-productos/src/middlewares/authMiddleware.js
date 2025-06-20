@@ -11,22 +11,12 @@ exports.verifyToken = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log('Token decodificado:', decoded);
-
-    // Validar el userId
-    if (!decoded.userId || !mongoose.Types.ObjectId.isValid(decoded.userId)) {
-      console.log('El userId no es válido:', decoded.userId);
-      return res.status(400).json({ error: 'ID de usuario no válido.' });
-    }
-
-    // Buscar usuario en la base de datos
     const user = await User.findById(decoded.userId);
     if (!user) {
-      console.log('Usuario no encontrado en la base de datos:', decoded.userId);
       return res.status(401).json({ error: 'Usuario no encontrado.' });
     }
 
-    req.user = user; // Adjuntar el usuario autenticado al objeto req
+    req.user = user;
     next();
   } catch (err) {
     console.error('Error al verificar el token:', err);
