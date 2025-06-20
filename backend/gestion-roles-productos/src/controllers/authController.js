@@ -266,6 +266,7 @@ exports.createTestimonial = async (req, res) => {
 
 exports.getTestimonials = async (req, res) => {
   try {
+    console.log('Solicitud recibida en /api/testimonials');
     const testimonials = await Testimonial.find().sort({ createdAt: -1 });
     console.log('Testimonios obtenidos:', testimonials);
     res.json({ success: true, data: testimonials });

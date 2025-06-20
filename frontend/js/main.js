@@ -510,7 +510,7 @@ function renderTestimonial(testimonial) {
 // Función para cargar testimonios
 const loadTestimonials = async () => {
   try {
-    const response = await fetch(`${API_URL}/testimonials`);
+    const response = await fetch(`${API_URL}/api/testimonials`);
     console.log('Estado de la respuesta:', response.status);
     const responseText = await response.text();
     console.log('Contenido de la respuesta:', responseText);
