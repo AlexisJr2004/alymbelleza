@@ -13,22 +13,20 @@ exports.verifyToken = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log('Token decodificado:', decoded);
 
-    // Validar y convertir el userId
+    // Validar el userId
     if (!decoded.userId || !mongoose.Types.ObjectId.isValid(decoded.userId)) {
       console.log('El userId no es válido:', decoded.userId);
       return res.status(400).json({ error: 'ID de usuario no válido.' });
     }
 
-    const userId = new mongoose.Types.ObjectId(decoded.userId);
-
     // Buscar usuario en la base de datos
-    const user = await User.findById(userId);
+    const user = await User.findById(decoded.userId);
     if (!user) {
-      console.log('Usuario no encontrado en la base de datos:', userId);
+      console.log('Usuario no encontrado en la base de datos:', decoded.userId);
       return res.status(401).json({ error: 'Usuario no encontrado.' });
     }
 
-    req.user = user;
+    req.user = user; // Adjuntar el usuario autenticado al objeto req
     next();
   } catch (err) {
     console.error('Error al verificar el token:', err);

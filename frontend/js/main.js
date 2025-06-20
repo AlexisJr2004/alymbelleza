@@ -511,8 +511,15 @@ function renderTestimonial(testimonial) {
 const loadTestimonials = async () => {
   try {
     const response = await fetch(`${API_URL}/api/testimonials`);
-    if (!response.ok) throw new Error(`Error HTTP ${response.status}`);
-    const { data: testimonials } = await response.json();
+    console.log('Estado de la respuesta:', response.status);
+    const responseText = await response.text();
+    console.log('Contenido de la respuesta:', responseText);
+
+    if (!response.ok) {
+      throw new Error(`Error HTTP ${response.status}: ${responseText}`);
+    }
+
+    const { data: testimonials } = JSON.parse(responseText);
 
     const swiperWrapper = document.querySelector(".testimonials-swiper .swiper-wrapper");
     if (!swiperWrapper) throw new Error("No se encontró el contenedor de testimonios");

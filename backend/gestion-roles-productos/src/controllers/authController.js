@@ -265,12 +265,12 @@ exports.createTestimonial = async (req, res) => {
 };
 
 exports.getTestimonials = async (req, res) => {
-    try {
-        const testimonials = await Testimonial.find().sort({ createdAt: -1 });
-        console.log('Testimonios obtenidos:', testimonials);
-        res.json({ success: true, data: testimonials });
-    } catch (err) {
-        console.error('Error al obtener los testimonios:', err);
-        res.status(500).json({ error: 'Error al obtener los testimonios.' });
-    }
+  try {
+    const testimonials = await Testimonial.find().sort({ createdAt: -1 });
+    console.log('Testimonios obtenidos:', testimonials);
+    res.json({ success: true, data: testimonials });
+  } catch (err) {
+    console.error('Error al obtener los testimonios:', err);
+    res.status(500).json({ error: 'Error al obtener los testimonios.' });
+  }
 };
