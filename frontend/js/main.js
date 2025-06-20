@@ -512,21 +512,27 @@ const loadTestimonials = async () => {
   try {
     const response = await fetch(`${API_URL}/api/testimonials`);
     console.log('Estado de la respuesta:', response.status);
-    const responseText = await response.text();
-    console.log('Contenido de la respuesta:', responseText);
 
+    // Verificar si la respuesta es válida
     if (!response.ok) {
-      throw new Error(`Error HTTP ${response.status}: ${responseText}`);
+      const errorText = await response.text();
+      console.error('Error en la respuesta:', errorText);
+      throw new Error(`Error HTTP ${response.status}: ${errorText}`);
     }
 
-    const { data: testimonials } = JSON.parse(responseText);
+    // Parsear la respuesta como JSON
+    const { data: testimonials } = await response.json();
+    console.log('Testimonios cargados:', testimonials);
 
+    // Seleccionar el contenedor de testimonios
     const swiperWrapper = document.querySelector(".testimonials-swiper .swiper-wrapper");
     if (!swiperWrapper) throw new Error("No se encontró el contenedor de testimonios");
     swiperWrapper.innerHTML = "";
 
+    // Obtener datos del usuario autenticado
     const user = JSON.parse(localStorage.getItem("user"));
 
+    // Renderizar testimonios o mostrar mensaje si no hay datos
     if (testimonials.length === 0) {
       swiperWrapper.innerHTML = `
         <div class="swiper-slide flex items-center justify-center h-full w-full">
@@ -566,10 +572,12 @@ const loadTestimonials = async () => {
       });
     }
 
+    // Inicializar Swiper
     initTestimonialSwiper();
   } catch (error) {
     console.error("Error al cargar testimonios:", error);
 
+    // Mostrar mensaje de error en el contenedor de testimonios
     const swiperWrapper = document.querySelector(".testimonials-swiper .swiper-wrapper");
     if (swiperWrapper) {
       swiperWrapper.innerHTML = `

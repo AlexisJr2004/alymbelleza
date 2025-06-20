@@ -101,6 +101,19 @@ app.use(
 // 5. Rutas de autenticación y API
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/appointments", appointmentRoutes);
+app.use("/api/cart", cartRoutes);
+
+// Ruta para testimonios (si no está en un archivo separado)
+app.get("/api/testimonials", async (req, res) => {
+  try {
+    const testimonials = await Testimonial.find().sort({ createdAt: -1 });
+    res.json({ success: true, data: testimonials });
+  } catch (err) {
+    console.error("Error al obtener los testimonios:", err);
+    res.status(500).json({ error: "Error al obtener los testimonios." });
+  }
+});
 
 // 6. Resto de middlewares y rutas (testimonios, email, etc.)
 

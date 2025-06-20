@@ -26,7 +26,7 @@ router.get('/me', verifyToken, authController.me);
 router.post('/testimonials', verifyToken, authController.createTestimonial);
 router.put('/testimonials/:id', verifyToken, authController.editTestimonial);
 router.delete('/testimonials/:id', verifyToken, authController.deleteTestimonial);
-router.get('/testimonials', verifyToken, authController.getTestimonials);
+router.get('/testimonials', authController.getTestimonials);
 
 
 
