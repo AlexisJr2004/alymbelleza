@@ -488,21 +488,13 @@ app.post("/api/gallery", verifyToken, roleMiddleware(['admin']), galleryStorage.
       return res.status(400).json({ error: "La categoría es requerida" });
     }
 
-    // Determinar el tipo de archivo
     const fileType = file.mimetype.startsWith('image/') ? 'image' : 'video';
-    
-    // Configurar opciones de Cloudinary según el tipo
+
     const uploadOptions = {
       folder: `bella-beauty/gallery/${category}`,
       resource_type: fileType === 'video' ? 'video' : 'image',
     };
 
-    if (fileType === 'video') {
-      uploadOptions.format = 'mp4';
-      uploadOptions.quality = 'auto';
-    }
-
-    // Subir a Cloudinary
     const result = await new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
         uploadOptions,
@@ -514,13 +506,12 @@ app.post("/api/gallery", verifyToken, roleMiddleware(['admin']), galleryStorage.
       stream.end(file.buffer);
     });
 
-    // Guardar en la base de datos
     const galleryItem = new GalleryItem({
       url: result.secure_url,
       category,
       type: fileType,
       filename: result.original_filename,
-      uploadedBy: req.user.id
+      uploadedBy: req.user.id,
     });
 
     await galleryItem.save();
@@ -528,15 +519,11 @@ app.post("/api/gallery", verifyToken, roleMiddleware(['admin']), galleryStorage.
     res.json({
       success: true,
       message: `${fileType === 'image' ? 'Imagen' : 'Video'} subido exitosamente`,
-      data: galleryItem
+      data: galleryItem,
     });
-
   } catch (error) {
     console.error("Error al subir archivo:", error);
-    res.status(500).json({ 
-      error: "Error al subir el archivo",
-      details: error.message 
-    });
+    res.status(500).json({ error: "Error al subir el archivo", details: error.message });
   }
 });
 

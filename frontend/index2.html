@@ -993,42 +993,40 @@
         document.querySelector('.upload-text').classList.add('hidden');
         document.querySelector('.upload-loading').classList.remove('hidden');
 
-        try {
-            const formData = new FormData(uploadForm);
+try {
+  const response = await fetch(GALLERY_API_URL, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${user.token}`
+    },
+    body: formData
+  });
 
-            const response = await fetch(GALLERY_API_URL, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${user.token}`
-                },
-                body: formData
-            });
+  const result = await response.json();
 
-            const result = await response.json();
+  if (!response.ok) {
+    throw new Error(result.error || 'Error al subir el archivo');
+  }
 
-            if (!response.ok) {
-                throw new Error(result.error || 'Error al subir el archivo');
-            }
+  Swal.fire({
+    icon: 'success',
+    title: '¡Éxito!',
+    text: result.message,
+    confirmButtonColor: '#7e22ce',
+    timer: 2000,
+    timerProgressBar: true
+  });
 
-            Swal.fire({
-                icon: 'success',
-                title: '¡Éxito!',
-                text: result.message,
-                confirmButtonColor: '#7e22ce',
-                timer: 2000,
-                timerProgressBar: true
-            });
+  closeModal();
+  loadGalleryFromDatabase();
 
-            closeModal();
-            loadGalleryFromDatabase();
-
-        } catch (error) {
-            console.error('Error al subir archivo:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: error.message || 'Error al subir el archivo',
-                confirmButtonColor: '#7e22ce'
+} catch (error) {
+  console.error('Error al subir archivo:', error);
+  Swal.fire({
+    icon: 'error',
+    title: 'Error',
+    text: error.message || 'Error al subir el archivo',
+    confirmButtonColor: '#7e22ce'
             });
         } finally {
             submitUpload.disabled = false;
