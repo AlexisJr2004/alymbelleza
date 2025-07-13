@@ -10,6 +10,7 @@ const authRoutes = require("./gestion-roles-productos/src/routes/authRoutes");
 const productRoutes = require("./gestion-roles-productos/src/routes/productRoutes");
 const appointmentRoutes = require('./gestion-roles-productos/src/routes/appointmentRoutes');
 const cartRoutes = require('./gestion-roles-productos/src/routes/cartRoutes');
+const { verifyToken: authMiddleware } = require('./gestion-roles-productos/src/middlewares/authMiddleware');
 const { verifyToken } = require('./gestion-roles-productos/src/middlewares/authMiddleware');
 const roleMiddleware = require('./gestion-roles-productos/src/middlewares/roleMiddleware');
 const app = express();
