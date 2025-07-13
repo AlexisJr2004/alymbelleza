@@ -485,7 +485,75 @@
 
         </aside>
     </header>
-    
+
+    <!-- Modal para subir contenido (solo admin) -->
+    <div id="uploadModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <!-- Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-gray-900">Subir Contenido a Galería</h3>
+                    <button id="closeUploadModal" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Form -->
+                <form id="uploadForm" enctype="multipart/form-data" class="space-y-6">
+                    <!-- Categoría -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Categoría</label>
+                        <select name="category" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                            <option value="">Seleccionar categoría...</option>
+                            <option value="escuela">Local</option>
+                            <option value="especialidades">Especialidades</option>
+                            <option value="eventos">Tratamientos capilares</option>
+                            <option value="viajes-escolares">Tratamientos faciales</option>
+                        </select>
+                    </div>
+
+                    <!-- Archivo -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Archivo</label>
+                        <div class="relative">
+                            <input type="file" name="file" id="galleryFile" accept="image/*,video/*" required 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">
+                            Imágenes: JPG, PNG, GIF, WEBP (máx. 10MB)<br>
+                            Videos: MP4, MOV, AVI (máx. 50MB)
+                        </p>
+                    </div>
+
+                    <!-- Vista previa -->
+                    <div id="filePreview" class="hidden">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Vista previa</label>
+                        <div class="border border-gray-200 rounded-lg p-3">
+                            <img id="imagePreview" class="hidden max-w-full h-48 object-cover rounded-lg mx-auto">
+                            <video id="videoPreview" class="hidden max-w-full h-48 object-cover rounded-lg mx-auto" controls></video>
+                            <div id="fileInfo" class="text-sm text-gray-600 mt-2"></div>
+                        </div>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="flex gap-3 pt-4">
+                        <button type="button" id="cancelUpload" 
+                            class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                            Cancelar
+                        </button>
+                        <button type="submit" id="submitUpload"
+                            class="flex-1 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span class="upload-text">Subir</span>
+                            <span class="upload-loading hidden">
+                                <i class="fas fa-spinner fa-spin mr-2"></i>Subiendo...
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Galeria de Fotos -->
     <section class="relative overflow-hidden before:absolute before:top-0 before:start-1/2 before:bg-[url('https://preline.co/assets/svg/examples/polygon-bg-element.svg')] before:bg-no-repeat before:bg-top before:bg-cover before:size-full before:-z-[1] before:transform before:-translate-x-1/2">
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
@@ -504,6 +572,16 @@
                 <p class="mb-8 mt-4 text-center text-base text-gray-600 max-w-xl">
                     Explora los momentos más memorables de nuestro trabajo
                 </p>
+
+                <!-- Botón para admin subir contenido -->
+                <div id="admin-upload-section" class="hidden mb-6">
+                    <button id="upload-btn" 
+                        class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-2">
+                        <i class="fas fa-plus"></i>
+                        <i class="fas fa-image"></i>
+                        Subir Contenido
+                    </button>
+                </div>
 
                 <div id="filter-buttons" class="flex items-center justify-center py-2 md:py-2 flex-wrap">
                     <button data-filter="all"
@@ -800,6 +878,273 @@
                 class="transition-all duration-300 ease-in-out delay-150 path-1"></path>
         </svg>
     </section>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const adminUploadSection = document.getElementById('admin-upload-section');
+    const uploadModal = document.getElementById('uploadModal');
+    const uploadBtn = document.getElementById('upload-btn');
+    const closeUploadModal = document.getElementById('closeUploadModal');
+    const cancelUpload = document.getElementById('cancelUpload');
+    const uploadForm = document.getElementById('uploadForm');
+    const galleryFile = document.getElementById('galleryFile');
+    const filePreview = document.getElementById('filePreview');
+    const imagePreview = document.getElementById('imagePreview');
+    const videoPreview = document.getElementById('videoPreview');
+    const fileInfo = document.getElementById('fileInfo');
+    const submitUpload = document.getElementById('submitUpload');
+    const GALLERY_API_URL = "https://aly-mbelleza-backend.onrender.com/api/gallery";
+
+    // Mostrar botón de subida solo para administradores
+    if (user && user.role === 'admin') {
+        adminUploadSection.classList.remove('hidden');
+    }
+
+    // Abrir modal
+    if (uploadBtn) {
+        uploadBtn.addEventListener('click', () => {
+            uploadModal.classList.remove('hidden');
+        });
+    }
+
+    // Cerrar modal
+    function closeModal() {
+        uploadModal.classList.add('hidden');
+        uploadForm.reset();
+        filePreview.classList.add('hidden');
+        imagePreview.classList.add('hidden');
+        videoPreview.classList.add('hidden');
+    }
+
+    closeUploadModal.addEventListener('click', closeModal);
+    cancelUpload.addEventListener('click', closeModal);
+
+    // Cerrar modal al hacer clic fuera
+    uploadModal.addEventListener('click', (e) => {
+        if (e.target === uploadModal) {
+            closeModal();
+        }
+    });
+
+    // Vista previa del archivo
+    galleryFile.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) {
+            filePreview.classList.add('hidden');
+            return;
+        }
+
+        // Validar tamaño
+        const maxSize = file.type.startsWith('video/') ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
+        if (file.size > maxSize) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Archivo muy grande',
+                text: `El archivo es muy grande. Máximo ${file.type.startsWith('video/') ? '50MB' : '10MB'}.`,
+                confirmButtonColor: '#7e22ce'
+            });
+            galleryFile.value = '';
+            return;
+        }
+
+        // Mostrar información del archivo
+        const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+        fileInfo.textContent = `${file.name} (${fileSizeMB} MB)`;
+
+        // Vista previa
+        filePreview.classList.remove('hidden');
+        imagePreview.classList.add('hidden');
+        videoPreview.classList.add('hidden');
+
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result;
+                imagePreview.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        } else if (file.type.startsWith('video/')) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                videoPreview.src = e.target.result;
+                videoPreview.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Manejar envío del formulario
+    uploadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (!user || !user.token || user.role !== 'admin') {
+            Swal.fire({
+                icon: 'error',
+                title: 'No autorizado',
+                text: 'Solo los administradores pueden subir contenido.',
+                confirmButtonColor: '#7e22ce'
+            });
+            return;
+        }
+
+        // Deshabilitar botón y mostrar loading
+        submitUpload.disabled = true;
+        document.querySelector('.upload-text').classList.add('hidden');
+        document.querySelector('.upload-loading').classList.remove('hidden');
+
+        try {
+            const formData = new FormData(uploadForm);
+
+            const response = await fetch(GALLERY_API_URL, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                },
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.error || 'Error al subir el archivo');
+            }
+
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: result.message,
+                confirmButtonColor: '#7e22ce',
+                timer: 2000,
+                timerProgressBar: true
+            });
+
+            closeModal();
+            loadGalleryFromDatabase();
+
+        } catch (error) {
+            console.error('Error al subir archivo:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.message || 'Error al subir el archivo',
+                confirmButtonColor: '#7e22ce'
+            });
+        } finally {
+            submitUpload.disabled = false;
+            document.querySelector('.upload-text').classList.remove('hidden');
+            document.querySelector('.upload-loading').classList.add('hidden');
+        }
+    });
+
+    // Función para cargar galería desde la base de datos
+    async function loadGalleryFromDatabase() {
+        try {
+            const response = await fetch(GALLERY_API_URL);
+            const result = await response.json();
+
+            if (result.success) {
+                renderDatabaseGallery(result.data);
+            }
+        } catch (error) {
+            console.error('Error al cargar galería:', error);
+        }
+    }
+
+    // Función para renderizar galería desde base de datos
+    function renderDatabaseGallery(items) {
+        const gallery = document.getElementById("gallery-grid");
+        gallery.innerHTML = "";
+
+        items.forEach((item) => {
+            const itemDiv = document.createElement("div");
+            itemDiv.className = "gallery-item relative group overflow-hidden rounded-lg transform transition-all duration-500 ease-in-out";
+
+            let mediaElement;
+            if (item.type === 'video') {
+                mediaElement = document.createElement("video");
+                mediaElement.src = item.url;
+                mediaElement.controls = true;
+                mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
+            } else {
+                mediaElement = document.createElement("img");
+                mediaElement.src = item.url;
+                mediaElement.alt = item.category;
+                mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
+            }
+
+            itemDiv.appendChild(mediaElement);
+
+            // Agregar botón de eliminar para admin
+            if (user && user.role === 'admin') {
+                const deleteBtn = document.createElement("button");
+                deleteBtn.className = "absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300";
+                deleteBtn.innerHTML = '<i class="fas fa-trash text-xs"></i>';
+                deleteBtn.onclick = () => deleteGalleryItem(item._id);
+                itemDiv.appendChild(deleteBtn);
+            }
+
+            gallery.appendChild(itemDiv);
+        });
+    }
+
+    // Función para eliminar elemento de galería
+    async function deleteGalleryItem(itemId) {
+        if (!user || !user.token || user.role !== 'admin') return;
+
+        const result = await Swal.fire({
+            title: '¿Eliminar elemento?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch(`${GALLERY_API_URL}/${itemId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${user.token}`
+                    }
+                });
+
+                const deleteResult = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(deleteResult.error || 'Error al eliminar');
+                }
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Eliminado',
+                    text: deleteResult.message,
+                    confirmButtonColor: '#7e22ce',
+                    timer: 1500,
+                    timerProgressBar: true
+                });
+
+                loadGalleryFromDatabase();
+
+            } catch (error) {
+                console.error('Error al eliminar:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.message || 'Error al eliminar el elemento',
+                    confirmButtonColor: '#7e22ce'
+                });
+            }
+        }
+    }
+
+    // Cargar galería al iniciar la página
+    loadGalleryFromDatabase();
+});
+    </script>
 
     <!-- Script para la funcionalidad del botón de Usuario y Reservas en línea -->
     <script>

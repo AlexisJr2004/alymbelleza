@@ -426,7 +426,12 @@ function setupFilterButtons() {
 
 // Ejecutar al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
-  createMasonryGallery();
+  // Intentar cargar desde base de datos primero, luego fallback a estático
+  if (typeof loadGalleryFromDatabase === 'function') {
+    loadGalleryFromDatabase();
+  } else {
+    createMasonryGallery();
+  }
   setupFilterButtons();
 });
 

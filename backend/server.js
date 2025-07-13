@@ -437,3 +437,157 @@ process.on("unhandledRejection", (err) => {
   console.error("⚠️ Unhandled Rejection:", err);
   server.close(() => process.exit(1));
 });
+
+// Configuración para subida de galería
+const galleryStorage = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB para videos
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = [
+      "image/jpeg", "image/png", "image/gif", "image/webp",
+      "video/mp4", "video/mpeg", "video/quicktime", "video/x-msvideo"
+    ];
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error("Tipo de archivo no permitido. Solo imágenes y videos."), false);
+    }
+  },
+});
+
+// Modelo para elementos de galería
+const gallerySchema = new mongoose.Schema({
+  url: { type: String, required: true },
+  category: { 
+    type: String, 
+    required: true,
+    enum: ['escuela', 'especialidades', 'eventos', 'viajes-escolares']
+  },
+  type: { type: String, enum: ['image', 'video'], required: true },
+  filename: String,
+  uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  createdAt: { type: Date, default: Date.now }
+});
+
+const GalleryItem = mongoose.model('GalleryItem', gallerySchema);
+
+// Ruta para subir elementos a la galería (solo admin)
+app.post("/api/gallery", authMiddleware, roleMiddleware(['admin']), galleryStorage.single('file'), async (req, res) => {
+  try {
+    const { category } = req.body;
+    const file = req.file;
+
+    if (!file) {
+      return res.status(400).json({ error: "No se proporcionó ningún archivo" });
+    }
+
+    if (!category) {
+      return res.status(400).json({ error: "La categoría es requerida" });
+    }
+
+    // Determinar el tipo de archivo
+    const fileType = file.mimetype.startsWith('image/') ? 'image' : 'video';
+    
+    // Configurar opciones de Cloudinary según el tipo
+    const uploadOptions = {
+      folder: `bella-beauty/gallery/${category}`,
+      resource_type: fileType === 'video' ? 'video' : 'image',
+    };
+
+    if (fileType === 'video') {
+      uploadOptions.format = 'mp4';
+      uploadOptions.quality = 'auto';
+    }
+
+    // Subir a Cloudinary
+    const result = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        uploadOptions,
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      stream.end(file.buffer);
+    });
+
+    // Guardar en la base de datos
+    const galleryItem = new GalleryItem({
+      url: result.secure_url,
+      category,
+      type: fileType,
+      filename: result.original_filename,
+      uploadedBy: req.user.id
+    });
+
+    await galleryItem.save();
+
+    res.json({
+      success: true,
+      message: `${fileType === 'image' ? 'Imagen' : 'Video'} subido exitosamente`,
+      data: galleryItem
+    });
+
+  } catch (error) {
+    console.error("Error al subir archivo:", error);
+    res.status(500).json({ 
+      error: "Error al subir el archivo",
+      details: error.message 
+    });
+  }
+});
+
+// Ruta para obtener elementos de la galería
+app.get("/api/gallery", async (req, res) => {
+  try {
+    const { category } = req.query;
+    const filter = category && category !== 'all' ? { category } : {};
+    
+    const items = await GalleryItem.find(filter)
+      .sort({ createdAt: -1 })
+      .populate('uploadedBy', 'name');
+
+    res.json({
+      success: true,
+      data: items
+    });
+  } catch (error) {
+    console.error("Error al obtener galería:", error);
+    res.status(500).json({ error: "Error al obtener elementos de la galería" });
+  }
+});
+
+// Ruta para eliminar elemento de galería (solo admin)
+app.delete("/api/gallery/:id", authMiddleware, roleMiddleware(['admin']), async (req, res) => {
+  try {
+    const item = await GalleryItem.findById(req.params.id);
+    
+    if (!item) {
+      return res.status(404).json({ error: "Elemento no encontrado" });
+    }
+
+    // Extraer public_id de Cloudinary de la URL
+    const urlParts = item.url.split('/');
+    const filenameWithExt = urlParts[urlParts.length - 1];
+    const filename = filenameWithExt.split('.')[0];
+    const folder = urlParts.slice(-3, -1).join('/');
+    const publicId = `${folder}/${filename}`;
+
+    // Eliminar de Cloudinary
+    await cloudinary.uploader.destroy(publicId, {
+      resource_type: item.type === 'video' ? 'video' : 'image'
+    });
+     
+    // Eliminar de la base de datos
+    await GalleryItem.findByIdAndDelete(req.params.id);
+
+    res.json({
+      success: true,
+      message: "Elemento eliminado exitosamente"
+    });
+
+  } catch (error) {
+    console.error("Error al eliminar elemento:", error);
+    res.status(500).json({ error: "Error al eliminar el elemento" });
+  }
+});
