@@ -10,6 +10,8 @@ const authRoutes = require("./gestion-roles-productos/src/routes/authRoutes");
 const productRoutes = require("./gestion-roles-productos/src/routes/productRoutes");
 const appointmentRoutes = require('./gestion-roles-productos/src/routes/appointmentRoutes');
 const cartRoutes = require('./gestion-roles-productos/src/routes/cartRoutes');
+const { verifyToken } = require('./gestion-roles-productos/src/middlewares/authMiddleware');
+const roleMiddleware = require('./gestion-roles-productos/src/middlewares/roleMiddleware');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -472,7 +474,7 @@ const gallerySchema = new mongoose.Schema({
 const GalleryItem = mongoose.model('GalleryItem', gallerySchema);
 
 // Ruta para subir elementos a la galería (solo admin)
-app.post("/api/gallery", authMiddleware, roleMiddleware(['admin']), galleryStorage.single('file'), async (req, res) => {
+app.post("/api/gallery", verifyToken, roleMiddleware(['admin']), galleryStorage.single('file'), async (req, res) => {
   try {
     const { category } = req.body;
     const file = req.file;
