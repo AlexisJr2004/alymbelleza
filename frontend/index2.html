@@ -1082,20 +1082,25 @@
     const filterButtons = document.querySelectorAll(".filter-btn");
 
     // Función para cargar contenido desde la base de datos
-    async function loadGalleryFromDatabase() {
-        try {
-            const response = await fetch(GALLERY_API_URL);
-            const result = await response.json();
-
-            if (result.success) {
-                renderGallery(result.data);
-            } else {
-                console.error("Error al cargar la galería:", result.error);
-            }
-        } catch (error) {
-            console.error("Error al cargar la galería:", error);
+async function loadGalleryFromDatabase() {
+    try {
+        const response = await fetch(GALLERY_API_URL);
+        if (!response.ok) {
+            throw new Error(`Error HTTP ${response.status}`);
         }
+
+        const result = await response.json();
+        if (result.success) {
+            renderDatabaseGallery(result.data);
+        } else {
+            console.error("Error en la respuesta del servidor:", result.error);
+        }
+    } catch (error) {
+        console.error("Error al cargar galería:", error);
+        const gallery = document.getElementById("gallery-grid");
+        gallery.innerHTML = `<div class="text-center text-red-500">Error al cargar la galería.</div>`;
     }
+}
 
     // Función para renderizar la galería
 function renderGallery(items) {

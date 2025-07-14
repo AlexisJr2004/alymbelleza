@@ -545,22 +545,22 @@ app.post("/api/gallery", verifyToken, roleMiddleware(['admin']), galleryStorage.
 
 // Ruta para obtener elementos de la galería
 app.get("/api/gallery", async (req, res) => {
-  try {
-    const { category } = req.query;
-    const filter = category && category !== 'all' ? { category } : {};
-    
-    const items = await GalleryItem.find(filter)
-      .sort({ createdAt: -1 })
-      .populate('uploadedBy', 'name');
+    try {
+        const { category } = req.query;
+        const filter = category && category !== 'all' ? { category } : {};
 
-    res.json({
-      success: true,
-      data: items
-    });
-  } catch (error) {
-    console.error("Error al obtener galería:", error);
-    res.status(500).json({ error: "Error al obtener elementos de la galería" });
-  }
+        const items = await GalleryItem.find(filter)
+            .sort({ createdAt: -1 })
+            .populate('uploadedBy', 'name');
+
+        res.json({
+            success: true,
+            data: items
+        });
+    } catch (error) {
+        console.error("Error al obtener galería:", error);
+        res.status(500).json({ error: "Error al obtener elementos de la galería" });
+    }
 });
 
 // Ruta para eliminar elemento de galería (solo admin)
