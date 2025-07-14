@@ -444,19 +444,19 @@ process.on("unhandledRejection", (err) => {
 
 // Configuración de Multer para subir archivos
 const galleryStorage = multer({
-  storage: multer.memoryStorage(),
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB para videos
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = [
-      "image/jpeg", "image/png", "image/gif", "image/webp",
-      "video/mp4", "video/mpeg", "video/quicktime", "video/x-msvideo"
-    ];
-    if (allowedTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error("Tipo de archivo no permitido. Solo imágenes y videos."), false);
-    }
-  },
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 50 * 1024 * 1024 }, // 50MB para videos
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = [
+            "image/jpeg", "image/png", "image/gif", "image/webp",
+            "video/mp4", "video/mpeg", "video/quicktime", "video/x-msvideo"
+        ];
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error("Tipo de archivo no permitido. Solo imágenes y videos."), false);
+        }
+    },
 });
 
 // Modelo para elementos de galería
@@ -493,7 +493,7 @@ app.post("/api/gallery", verifyToken, roleMiddleware(['admin']), galleryStorage.
 
         const uploadOptions = {
             folder: `bella-beauty/gallery/${category}`,
-            resource_type: fileType === 'video' ? 'video' : 'image',
+            resource_type: fileType === 'video' ? 'video' : 'image', // Configuración para videos
         };
 
         const result = await new Promise((resolve, reject) => {
