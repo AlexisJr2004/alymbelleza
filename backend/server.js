@@ -461,16 +461,16 @@ const galleryStorage = multer({
 
 // Modelo para elementos de galería
 const gallerySchema = new mongoose.Schema({
-  url: { type: String, required: true },
-  category: { 
-    type: String, 
-    required: true,
-    enum: ['escuela', 'especialidades', 'eventos', 'viajes-escolares']
-  },
-  type: { type: String, enum: ['image', 'video'], required: true },
-  filename: String,
-  uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  createdAt: { type: Date, default: Date.now }
+    url: { type: String, required: true },
+    category: { 
+        type: String, 
+        required: true,
+        enum: ['escuela', 'especialidades', 'eventos', 'viajes-escolares', 'tratamiento_capilar', 'tratamiento_facial', 'local']
+    },
+    type: { type: String, enum: ['image', 'video'], required: true },
+    filename: { type: String, required: true },
+    uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    createdAt: { type: Date, default: Date.now }
 });
 
 const GalleryItem = mongoose.model('GalleryItem', gallerySchema);
@@ -493,7 +493,7 @@ app.post("/api/gallery", verifyToken, roleMiddleware(['admin']), galleryStorage.
 
         const uploadOptions = {
             folder: `bella-beauty/gallery/${category}`,
-            resource_type: fileType === 'video' ? 'video' : 'image', // Configuración para videos
+            resource_type: fileType === 'video' ? 'video' : 'image',
         };
 
         const result = await new Promise((resolve, reject) => {
@@ -507,6 +507,12 @@ app.post("/api/gallery", verifyToken, roleMiddleware(['admin']), galleryStorage.
             stream.end(file.buffer);
         });
 
+        // Validar el resultado de Cloudinary
+        if (!result || !result.secure_url) {
+            throw new Error("Error al subir el archivo a Cloudinary");
+        }
+
+        // Crear el objeto para guardar en la base de datos
         const galleryItem = new GalleryItem({
             url: result.secure_url,
             category,
@@ -515,6 +521,7 @@ app.post("/api/gallery", verifyToken, roleMiddleware(['admin']), galleryStorage.
             uploadedBy: req.user.id,
         });
 
+        // Guardar en la base de datos
         await galleryItem.save();
 
         res.json({
@@ -524,6 +531,14 @@ app.post("/api/gallery", verifyToken, roleMiddleware(['admin']), galleryStorage.
         });
     } catch (error) {
         console.error("Error al subir archivo:", error);
+
+        // Si el archivo se subió a Cloudinary pero no se guardó en la base de datos, eliminarlo de Cloudinary
+        if (error.message.includes("Error al guardar en la base de datos") && result && result.public_id) {
+            await cloudinary.uploader.destroy(result.public_id, {
+                resource_type: fileType === 'video' ? 'video' : 'image',
+            });
+        }
+
         res.status(500).json({ error: "Error al subir el archivo", details: error.message });
     }
 });
