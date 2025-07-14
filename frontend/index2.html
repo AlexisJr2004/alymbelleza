@@ -967,17 +967,23 @@
             });
 
             // Función para cargar galería desde la base de datos
-            async function loadGalleryFromDatabase() {
+async function loadGalleryFromDatabase() {
     try {
         const user = JSON.parse(localStorage.getItem('user'));
         const headers = user && user.token ? { 'Authorization': `Bearer ${user.token}` } : {};
 
+        console.log("Token enviado:", headers['Authorization']);
+
         const response = await fetch(GALLERY_API_URL, { headers });
+        console.log("Respuesta completa del servidor:", response);
+
         if (!response.ok) {
             throw new Error(`Error HTTP ${response.status}`);
         }
 
         const result = await response.json();
+        console.log("Datos recibidos:", result);
+
         if (result.success) {
             renderDatabaseGallery(result.data);
         } else {

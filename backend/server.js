@@ -544,7 +544,7 @@ app.post("/api/gallery", verifyToken, roleMiddleware(['admin']), galleryStorage.
 });
 
 // Ruta para obtener elementos de la galería
-app.get("/api/gallery", verifyToken, async (req, res) => {
+app.get("/api/gallery", async (req, res) => {
     try {
         const { category } = req.query;
         const filter = category && category !== 'all' ? { category } : {};
