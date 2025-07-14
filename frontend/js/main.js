@@ -1162,58 +1162,69 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.getElementById('uploadForm').addEventListener('submit', async (e) => {
-  e.preventDefault(); // Evita el envío predeterminado del formulario
+    e.preventDefault(); // Evita el envío predeterminado del formulario
 
-  const user = JSON.parse(localStorage.getItem('user')); // Obtén el usuario autenticado
-  if (!user || !user.token || user.role !== 'admin') {
-    Swal.fire({
-      icon: 'error',
-      title: 'No autorizado',
-      text: 'Solo los administradores pueden subir contenido.',
-      confirmButtonColor: '#7e22ce'
-    });
-    return;
-  }
-
-  try {
-    // Crear el objeto FormData a partir del formulario
-    const form = document.getElementById('uploadForm');
-    const formData = new FormData(form);
-
-    // Enviar los datos al backend
-    const response = await fetch('https://aly-mbelleza-backend.onrender.com/api/gallery', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${user.token}`
-      },
-      body: formData
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result.error || 'Error al subir el archivo');
+    const user = JSON.parse(localStorage.getItem('user')); // Obtén el usuario autenticado
+    if (!user || !user.token || user.role !== 'admin') {
+        Swal.fire({
+            icon: 'error',
+            title: 'No autorizado',
+            text: 'Solo los administradores pueden subir contenido.',
+            confirmButtonColor: '#7e22ce'
+        });
+        return;
     }
 
-    Swal.fire({
-      icon: 'success',
-      title: '¡Éxito!',
-      text: result.message,
-      confirmButtonColor: '#7e22ce',
-      timer: 2000,
-      timerProgressBar: true
-    });
+    try {
+        // Crear el objeto FormData a partir del formulario
+        const form = document.getElementById('uploadForm');
+        const formData = new FormData(form);
 
-    // Reiniciar el formulario
-    form.reset();
-    loadGalleryFromDatabase(); // Recargar la galería
-  } catch (error) {
-    console.error('Error al subir archivo:', error);
-    Swal.fire({
-      icon: 'error',
-      title: 'Error',
-      text: error.message || 'Error al subir el archivo',
-      confirmButtonColor: '#7e22ce'
-    });
-  }
+        // Deshabilitar botón y mostrar loading
+        const submitUpload = document.getElementById('submitUpload');
+        submitUpload.disabled = true;
+        document.querySelector('.upload-text').classList.add('hidden');
+        document.querySelector('.upload-loading').classList.remove('hidden');
+
+        // Enviar los datos al backend
+        const response = await fetch('https://aly-mbelleza-backend.onrender.com/api/gallery', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${user.token}`
+            },
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || 'Error al subir el archivo');
+        }
+
+        Swal.fire({
+            icon: 'success',
+            title: '¡Éxito!',
+            text: result.message,
+            confirmButtonColor: '#7e22ce',
+            timer: 2000,
+            timerProgressBar: true
+        });
+
+        // Reiniciar el formulario
+        form.reset();
+        document.getElementById('filePreview').classList.add('hidden');
+    } catch (error) {
+        console.error('Error al subir archivo:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message || 'Error al subir el archivo',
+            confirmButtonColor: '#7e22ce'
+        });
+    } finally {
+        const submitUpload = document.getElementById('submitUpload');
+        submitUpload.disabled = false;
+        document.querySelector('.upload-text').classList.remove('hidden');
+        document.querySelector('.upload-loading').classList.add('hidden');
+    }
 });
