@@ -1161,13 +1161,10 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// ...existing code...
-
-// Manejo del formulario de subida
 document.getElementById('uploadForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
+  e.preventDefault(); // Evita el envío predeterminado del formulario
 
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem('user')); // Obtén el usuario autenticado
   if (!user || !user.token || user.role !== 'admin') {
     Swal.fire({
       icon: 'error',
@@ -1179,8 +1176,11 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
   }
 
   try {
-    const formData = new FormData(document.getElementById('uploadForm'));
+    // Crear el objeto FormData a partir del formulario
+    const form = document.getElementById('uploadForm');
+    const formData = new FormData(form);
 
+    // Enviar los datos al backend
     const response = await fetch('https://aly-mbelleza-backend.onrender.com/api/gallery', {
       method: 'POST',
       headers: {
@@ -1204,8 +1204,9 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
       timerProgressBar: true
     });
 
-    document.getElementById('uploadForm').reset();
-    loadGalleryFromDatabase();
+    // Reiniciar el formulario
+    form.reset();
+    loadGalleryFromDatabase(); // Recargar la galería
   } catch (error) {
     console.error('Error al subir archivo:', error);
     Swal.fire({
