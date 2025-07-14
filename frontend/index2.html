@@ -997,26 +997,26 @@ async function loadGalleryFromDatabase() {
 }
 
             // Función para renderizar galería desde base de datos
-            function renderDatabaseGallery(items) {
-                const gallery = document.getElementById("gallery-grid");
-                gallery.innerHTML = "";
+function renderDatabaseGallery(items) {
+    const gallery = document.getElementById("gallery-grid");
+    gallery.innerHTML = "";
 
-                items.forEach((item) => {
-                    const itemDiv = document.createElement("div");
-                    itemDiv.className = "gallery-item relative group overflow-hidden rounded-lg transform transition-all duration-500 ease-in-out";
+    items.forEach((item) => {
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "gallery-item relative group overflow-hidden rounded-lg transform transition-all duration-500 ease-in-out";
 
-                    let mediaElement;
-                    if (item.type === 'video') {
-                        mediaElement = document.createElement("video");
-                        mediaElement.src = item.url;
-                        mediaElement.controls = true;
-                        mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
-                    } else {
-                        mediaElement = document.createElement("img");
-                        mediaElement.src = item.url;
-                        mediaElement.alt = item.category;
-                        mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
-                    }
+        let mediaElement;
+        if (item.type === 'video') {
+            mediaElement = document.createElement("video");
+            mediaElement.src = item.url;
+            mediaElement.controls = true;
+            mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
+        } else {
+            mediaElement = document.createElement("img");
+            mediaElement.src = item.url;
+            mediaElement.alt = item.category;
+            mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
+        }
 
                     itemDiv.appendChild(mediaElement);
 

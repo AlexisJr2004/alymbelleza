@@ -462,11 +462,7 @@ const galleryStorage = multer({
 // Modelo para elementos de galería
 const gallerySchema = new mongoose.Schema({
     url: { type: String, required: true },
-    category: { 
-        type: String, 
-        required: true,
-        enum: ['escuela', 'especialidades', 'eventos', 'viajes-escolares', 'tratamiento_capilar', 'tratamiento_facial', 'local']
-    },
+    category: { type: String, required: true, enum: ['escuela', 'especialidades', 'eventos', 'viajes-escolares', 'tratamiento_capilar', 'tratamiento_facial', 'local'] },
     type: { type: String, enum: ['image', 'video'], required: true },
     filename: { type: String, required: true },
     uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -497,15 +493,20 @@ app.post("/api/gallery", verifyToken, roleMiddleware(['admin']), galleryStorage.
         };
 
         const result = await new Promise((resolve, reject) => {
-            const stream = cloudinary.uploader.upload_stream(
-                uploadOptions,
-                (error, result) => {
-                    if (error) reject(error);
-                    else resolve(result);
-                }
-            );
-            stream.end(file.buffer);
-        });
+    const stream = cloudinary.uploader.upload_stream(
+        { folder: `bella-beauty/gallery/${category}`, resource_type: fileType === 'video' ? 'video' : 'image' },
+        (error, result) => {
+            if (error) {
+                console.error("Error al subir a Cloudinary:", error);
+                reject(error);
+            } else {
+                console.log("Subida exitosa a Cloudinary:", result);
+                resolve(result);
+            }
+        }
+    );
+    stream.end(file.buffer);
+});
 
         // Validar el resultado de Cloudinary
         if (!result || !result.secure_url) {
@@ -546,17 +547,8 @@ app.post("/api/gallery", verifyToken, roleMiddleware(['admin']), galleryStorage.
 // Ruta para obtener elementos de la galería
 app.get("/api/gallery", async (req, res) => {
     try {
-        const { category } = req.query;
-        const filter = category && category !== 'all' ? { category } : {};
-
-        const items = await GalleryItem.find(filter)
-            .sort({ createdAt: -1 })
-            .populate('uploadedBy', 'name');
-
-        res.json({
-            success: true,
-            data: items
-        });
+        const items = await GalleryItem.find().sort({ createdAt: -1 });
+        res.json({ success: true, data: items });
     } catch (error) {
         console.error("Error al obtener galería:", error);
         res.status(500).json({ error: "Error al obtener elementos de la galería" });
