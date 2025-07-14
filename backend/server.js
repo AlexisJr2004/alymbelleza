@@ -13,6 +13,7 @@ const cartRoutes = require('./gestion-roles-productos/src/routes/cartRoutes');
 const { verifyToken: authMiddleware } = require('./gestion-roles-productos/src/middlewares/authMiddleware');
 const { verifyToken } = require('./gestion-roles-productos/src/middlewares/authMiddleware');
 const roleMiddleware = require('./gestion-roles-productos/src/middlewares/roleMiddleware');
+const cloudinary = require('./gestion-roles-productos/src/utils/cloudinary');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
