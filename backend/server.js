@@ -476,55 +476,55 @@ const GalleryItem = mongoose.model('GalleryItem', gallerySchema);
 
 // Ruta para subir elementos a la galería (solo admin)
 app.post("/api/gallery", verifyToken, roleMiddleware(['admin']), galleryStorage.single('file'), async (req, res) => {
-  try {
-    const { category } = req.body;
-    const file = req.file;
+    try {
+        const { category } = req.body;
+        const file = req.file;
 
-    if (!file) {
-      return res.status(400).json({ error: "No se proporcionó ningún archivo" });
-    }
-
-    if (!category) {
-      return res.status(400).json({ error: "La categoría es requerida" });
-    }
-
-    const fileType = file.mimetype.startsWith('image/') ? 'image' : 'video';
-
-    const uploadOptions = {
-      folder: `bella-beauty/gallery/${category}`,
-      resource_type: fileType === 'video' ? 'video' : 'image',
-    };
-
-    const result = await new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        uploadOptions,
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
+        if (!file) {
+            return res.status(400).json({ error: "No se proporcionó ningún archivo" });
         }
-      );
-      stream.end(file.buffer);
-    });
 
-    const galleryItem = new GalleryItem({
-      url: result.secure_url,
-      category,
-      type: fileType,
-      filename: result.original_filename,
-      uploadedBy: req.user.id,
-    });
+        if (!category) {
+            return res.status(400).json({ error: "La categoría es requerida" });
+        }
 
-    await galleryItem.save();
+        const fileType = file.mimetype.startsWith('image/') ? 'image' : 'video';
 
-    res.json({
-      success: true,
-      message: `${fileType === 'image' ? 'Imagen' : 'Video'} subido exitosamente`,
-      data: galleryItem,
-    });
-  } catch (error) {
-    console.error("Error al subir archivo:", error);
-    res.status(500).json({ error: "Error al subir el archivo", details: error.message });
-  }
+        const uploadOptions = {
+            folder: `bella-beauty/gallery/${category}`,
+            resource_type: fileType === 'video' ? 'video' : 'image',
+        };
+
+        const result = await new Promise((resolve, reject) => {
+            const stream = cloudinary.uploader.upload_stream(
+                uploadOptions,
+                (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
+                }
+            );
+            stream.end(file.buffer);
+        });
+
+        const galleryItem = new GalleryItem({
+            url: result.secure_url,
+            category,
+            type: fileType,
+            filename: result.original_filename,
+            uploadedBy: req.user.id,
+        });
+
+        await galleryItem.save();
+
+        res.json({
+            success: true,
+            message: `${fileType === 'image' ? 'Imagen' : 'Video'} subido exitosamente`,
+            data: galleryItem,
+        });
+    } catch (error) {
+        console.error("Error al subir archivo:", error);
+        res.status(500).json({ error: "Error al subir el archivo", details: error.message });
+    }
 });
 
 // Ruta para obtener elementos de la galería
