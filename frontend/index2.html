@@ -584,32 +584,31 @@
                 </div>
 
                 <div id="filter-buttons" class="flex items-center justify-center py-2 md:py-2 flex-wrap">
-                    <button data-filter="all"
-                        class="filter-btn text-blue-700 hover:text-white border border-blue-600 bg-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
-                        Todas las categorias
-                    </button>
-                    <button data-filter="tratamiento_capilar"
-                        class="filter-btn text-gray-900 border border-white hover:border-gray-200 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
-                        Tratamientos capilares
-                    </button>
-                    <button data-filter="tratamiento_facial"
-                        class="filter-btn text-gray-900 border border-white hover:border-gray-200 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
-                        Tratamientos faciales
-                    </button>
-                    <button data-filter="especialidades"
-                        class="filter-btn text-gray-900 border border-white hover:border-gray-200 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
-                        Especialidades
-                    </button>
-                    <button data-filter="local"
-                        class="filter-btn text-gray-900 border border-white hover:border-gray-200 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
-                        Local
-                    </button>
-                </div>
-                
-                <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <button data-filter="all"
+        class="filter-btn text-blue-700 hover:text-white border border-blue-600 bg-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
+        Todas las categorías
+    </button>
+    <button data-filter="tratamiento_capilar"
+        class="filter-btn text-gray-900 border border-white hover:border-gray-200 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
+        Tratamientos capilares
+    </button>
+    <button data-filter="tratamiento_facial"
+        class="filter-btn text-gray-900 border border-white hover:border-gray-200 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
+        Tratamientos faciales
+    </button>
+    <button data-filter="especialidades"
+        class="filter-btn text-gray-900 border border-white hover:border-gray-200 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
+        Especialidades
+    </button>
+    <button data-filter="local"
+        class="filter-btn text-gray-900 border border-white hover:border-gray-200 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
+        Local
+    </button>
+</div>
+
+<div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
     <!-- Los elementos de la galería se insertarán aquí dinámicamente -->
 </div>
-            </div>
         </div>
     </section>
 
@@ -1076,7 +1075,7 @@
         });
     </script>
 
-    <script>
+<script>
     document.addEventListener('DOMContentLoaded', () => {
         const GALLERY_API_URL = "https://aly-mbelleza-backend.onrender.com/api/gallery";
         const galleryGrid = document.getElementById("gallery-grid");
@@ -1090,9 +1089,11 @@
 
                 if (result.success) {
                     renderGallery(result.data);
+                } else {
+                    console.error("Error al cargar la galería:", result.error);
                 }
             } catch (error) {
-                console.error('Error al cargar galería:', error);
+                console.error("Error al cargar la galería:", error);
             }
         }
 
