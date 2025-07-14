@@ -1160,3 +1160,59 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("file-name").textContent = fileName;
   });
 });
+
+// ...existing code...
+
+// Manejo del formulario de subida
+document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (!user || !user.token || user.role !== 'admin') {
+    Swal.fire({
+      icon: 'error',
+      title: 'No autorizado',
+      text: 'Solo los administradores pueden subir contenido.',
+      confirmButtonColor: '#7e22ce'
+    });
+    return;
+  }
+
+  try {
+    const formData = new FormData(document.getElementById('uploadForm'));
+
+    const response = await fetch('https://aly-mbelleza-backend.onrender.com/api/gallery', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${user.token}`
+      },
+      body: formData
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || 'Error al subir el archivo');
+    }
+
+    Swal.fire({
+      icon: 'success',
+      title: '¡Éxito!',
+      text: result.message,
+      confirmButtonColor: '#7e22ce',
+      timer: 2000,
+      timerProgressBar: true
+    });
+
+    document.getElementById('uploadForm').reset();
+    loadGalleryFromDatabase();
+  } catch (error) {
+    console.error('Error al subir archivo:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: error.message || 'Error al subir el archivo',
+      confirmButtonColor: '#7e22ce'
+    });
+  }
+});
