@@ -823,7 +823,8 @@ async function handleContactFormSubmit(e) {
 
     const response = await fetch(`${API_URL}/api/contact`, {
       method: "POST",
-      body: formData,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formDataObj),
     });
 
     if (!response.ok) {
