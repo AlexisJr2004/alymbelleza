@@ -821,7 +821,7 @@ async function handleContactFormSubmit(e) {
     const formDataObj = Object.fromEntries(formData.entries());
     console.log("Datos del formulario:", formDataObj);
 
-    const response = await fetch(`${API_URL}/api/contac`, {
+    const response = await fetch(`${API_URL}/api/contact`, {
       method: "POST",
       body: formData,
     });
