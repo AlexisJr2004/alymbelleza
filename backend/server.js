@@ -3,14 +3,14 @@ const express = require("express");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const path = require("path");
-const nodemailer = require("nodemailer");
 const fs = require("fs");
 const cors = require("cors");
 const authRoutes = require("./gestion-roles-productos/src/routes/authRoutes");
 const productRoutes = require("./gestion-roles-productos/src/routes/productRoutes");
-const appointmentRoutes = require('./gestion-roles-productos/src/routes/appointmentRoutes');
-const cartRoutes = require('./gestion-roles-productos/src/routes/cartRoutes');
 const galleryRoutes = require('./gestion-roles-productos/src/routes/galleryRoutes');
+const testimonialRoutes = require("./gestion-roles-productos/src/routes/testimonialRoutes");
+const contactRoutes = require("./gestion-roles-productos/src/routes/contactRoutes");
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -28,9 +28,8 @@ app.use(
 );
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-app.use('/api/appointments', appointmentRoutes);
-app.use('/api/cart', cartRoutes);
 app.use("/api/gallery", galleryRoutes);
+app.use("/api/contact", contactRoutes);
 
 // 2. Conexión a MongoDB
 const DB_URI =
@@ -102,278 +101,9 @@ app.use(
 // 5. Rutas de autenticación y API
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/testimonials", testimonialRoutes);
 
-// 6. Resto de middlewares y rutas (testimonios, email, etc.)
-// Modelo de Testimonio
-const testimonialSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: [true, "El nombre es requerido"],
-      trim: true,
-      maxlength: [100, "El nombre no puede exceder los 100 caracteres"],
-    },
-    role: {
-      type: String,
-      required: [true, "El rol/título es requerido"],
-      trim: true,
-      maxlength: [100, "El rol no puede exceder los 100 caracteres"],
-    },
-    comment: {
-      type: String,
-      required: [true, "El comentario es requerido"],
-      trim: true,
-      maxlength: [500, "El comentario no puede exceder los 500 caracteres"],
-    },
-    avatar: {
-      type: String,
-      required: [true, "La imagen de avatar es requerida"],
-      validate: {
-        validator: (v) => /\.(jpe?g|png|gif|webp)$/i.test(v),
-        message: "La URL de la imagen no es válida",
-      },
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-      index: true,
-    },
-  },
-  {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
-  }
-);
-
-const Testimonial = mongoose.model("Testimonial", testimonialSchema);
-
-// Multer para testimonios (usa el mismo uploadDir y configuración)
-const testimonialStorage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadDir),
-  filename: (req, file, cb) =>
-    cb(null, `testimonial-${Date.now()}${path.extname(file.originalname)}`),
-});
-const testimonialUpload = multer({
-  storage: testimonialStorage,
-  limits: { fileSize: 15 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
-    if (allowedTypes.includes(file.mimetype)) cb(null, true);
-    else cb(new Error("Tipo de archivo no permitido. Solo imágenes."), false);
-  },
-});
-
-// Ruta para subir testimonios (ahora acepta avatar como URL)
-app.post("/api/testimonials", testimonialUpload.none(), async (req, res) => {
-  try {
-    const { name, role, comment, avatar } = req.body;
-    if (!name || !role || !comment || !avatar) {
-      return res.status(400).json({
-        success: false,
-        error: "Todos los campos son requeridos",
-      });
-    }
-    const newTestimonial = new Testimonial({
-      name,
-      role,
-      comment,
-      avatar,
-    });
-    await newTestimonial.save();
-    res.status(201).json({
-      success: true,
-      message: "Testimonio agregado exitosamente",
-      data: newTestimonial,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: "Error al procesar el testimonio",
-    });
-  }
-});
-
-// Ruta para obtener testimonios (paginada)
-app.get("/api/testimonials", async (req, res) => {
-  try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-    const [testimonials, total] = await Promise.all([
-      Testimonial.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
-      Testimonial.countDocuments(),
-    ]);
-    res.json({
-      success: true,
-      count: testimonials.length,
-      total,
-      page,
-      pages: Math.ceil(total / limit),
-      data: testimonials,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: "Error al obtener testimonios",
-    });
-  }
-});
-
-// Editar testimonio
-app.put("/api/testimonials/:id", testimonialUpload.none(), async (req, res) => {
-  try {
-    const { name, role, comment, avatar } = req.body;
-    const testimonial = await Testimonial.findById(req.params.id);
-    if (!testimonial) {
-      return res.status(404).json({ success: false, error: "Testimonio no encontrado" });
-    }
-    testimonial.name = name || testimonial.name;
-    testimonial.role = role || testimonial.role;
-    testimonial.comment = comment || testimonial.comment;
-    testimonial.avatar = avatar || testimonial.avatar;
-    await testimonial.save();
-    res.json({ success: true, message: "Testimonio actualizado", data: testimonial });
-  } catch (error) {
-    res.status(500).json({ success: false, error: "Error al actualizar testimonio" });
-  }
-});
-
-// Eliminar testimonio
-app.delete("/api/testimonials/:id", async (req, res) => {
-  try {
-    const testimonial = await Testimonial.findByIdAndDelete(req.params.id);
-    if (!testimonial) {
-      return res.status(404).json({ success: false, error: "Testimonio no encontrado" });
-    }
-    res.json({ success: true, message: "Testimonio eliminado" });
-  } catch (error) {
-    res.status(500).json({ success: false, error: "Error al eliminar testimonio" });
-  }
-});
-
-// Configuración de Nodemailer
-const mailConfig = {
-  service: "gmail",
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER || "duranalexis879@gmail.com",
-    pass: process.env.EMAIL_PASS || "yccz nfxk mtfk mhwc",
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
-};
-const transporter = nodemailer.createTransport(mailConfig);
-
-// Ruta para enviar emails de contacto
-app.post("/api/send-email", express.json(), async (req, res) => {
-  try {
-    const { name, email, message } = req.body;
-
-    // Validación más robusta
-    if (!name?.trim() || !email?.trim() || !message?.trim()) {
-      return res.status(400).json({
-        success: false,
-        error: "Todos los campos son requeridos",
-      });
-    }
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return res.status(400).json({
-        success: false,
-        error: "El email no es válido",
-      });
-    }
-
-    // Configuración más segura del correo
-    const mailOptions = {
-      from: `"Bella Beauty Contacto" <${mailConfig.auth.user}>`,
-      to: mailConfig.auth.user,
-      replyTo: `${name} <${email}>`,
-      subject: `Nuevo mensaje de contacto de ${name}`,
-      text: `Nombre: ${name}\nEmail: ${email}\n\nMensaje:\n${message}`,
-      html: `
-        <div style="font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: 0 auto; color: #333;">
-          <div style="text-align: center; padding: 20px 0; border-bottom: 1px solid #eaeaea;">
-            <img src="https://res.cloudinary.com/dokmxt0ja/image/upload/v1748585094/mujer-con-pelo-largo_ppap6w.png" alt="Bella Beauty Logo" style="max-width: 80px; height: auto;">
-            <h1 style="color: #7e22ce; font-size: 24px; margin-top: 15px; font-weight: 600;">Nuevo Mensaje de Contacto</h1>
-          </div>
-
-          <div style="padding: 25px 30px;">
-            <div style="margin-bottom: 25px;">
-              <h2 style="color: #4b5563; font-size: 18px; font-weight: 500; margin-bottom: 5px;">Información del Cliente</h2>
-              <table style="width: 100%; border-collapse: collapse;">
-                <tr>
-                  <td style="width: 30%; padding: 8px 0; color: #6b7280; font-weight: 500;">Nombre:</td>
-                  <td style="padding: 8px 0; color: #111827; font-weight: 400;">${name}</td>
-                </tr>
-                <tr>
-                  <td style="width: 30%; padding: 8px 0; color: #6b7280; font-weight: 500;">Email:</td>
-                  <td style="padding: 8px 0;">
-                    <a href="mailto:${email}" style="color: #7e22ce; text-decoration: none; font-weight: 500;">${email}</a>
-                  </td>
-                </tr>
-              </table>
-            </div>
-
-            <div style="margin-bottom: 30px;">
-              <h2 style="color: #4b5563; font-size: 18px; font-weight: 500; margin-bottom: 10px;">Mensaje</h2>
-              <div style="background: #f9fafb; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <p style="margin: 0; color: #374151; line-height: 1.7; white-space: pre-line;">${message}</p>
-              </div>
-            </div>
-
-            <div style="text-align: center; margin-top: 30px;">
-              <a href="mailto:${email}" style="display: inline-block; background-color: #7e22ce; color: white; text-decoration: none; padding: 12px 25px; border-radius: 6px; font-weight: 500; font-size: 15px; box-shadow: 0 2px 5px rgba(126, 34, 206, 0.2);">Responder al Cliente</a>
-            </div>
-          </div>
-
-          <!-- Pie de página -->
-          <div style="padding: 20px; background-color: #f9fafb; text-align: center; border-top: 1px solid #eaeaea; font-size: 13px; color: #6b7280;">
-            <p style="margin: 0 0 10px 0;">Este mensaje fue enviado desde el formulario de contacto de Bella Beauty</p>
-            <p style="margin: 0;">
-              <a href="https://bellabeauty.com" style="color: #7e22ce; text-decoration: none;">bellabeauty.com</a> | 
-              <a href="tel:+1234567890" style="color: #7e22ce; text-decoration: none;">+1 234 567 890</a> | 
-              <a href="mailto:info@bellabeauty.com" style="color: #7e22ce; text-decoration: none;">info@bellabeauty.com</a>
-            </p>
-          </div>
-        </div>
-      `,
-    };
-
-    // Verificar la conexión con el servidor SMTP primero
-    await transporter.verify();
-
-    // Enviar el correo
-    const info = await transporter.sendMail(mailOptions);
-
-    res.json({
-      success: true,
-      message: "Correo enviado exitosamente",
-      messageId: info.messageId,
-    });
-  } catch (error) {
-    console.error("Error al enviar correo:", error);
-
-    let errorMessage = "Error al enviar el mensaje";
-    if (error.code === "EAUTH") {
-      errorMessage = "Error de autenticación con el servidor de correo";
-    } else if (error.code === "ECONNECTION") {
-      errorMessage = "No se pudo conectar al servidor de correo";
-    }
-
-    res.status(500).json({
-      success: false,
-      error: errorMessage,
-      details:
-        process.env.NODE_ENV === "development" ? error.message : undefined,
-    });
-  }
-});
-
-// 7. Servir el frontend
+// 6. Servir el frontend
 app.use(
   express.static(path.join(__dirname, "../frontend"), {
     extensions: ["html", "htm"],
@@ -381,12 +111,12 @@ app.use(
   })
 );
 
-// 8. Catch-all para SPA (debe ir al final)
+// 7. Catch-all para SPA (debe ir al final)
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/login.html"));
 });
 
-// 9. Manejo centralizado de errores
+// 8. Manejo centralizado de errores
 app.use((err, req, res, next) => {
   console.error("🔥 Error:", err.stack);
 
@@ -417,7 +147,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 10. Inicio del servidor
+// 9. Inicio del servidor
 const server = app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
   console.log(`📌 Entorno: ${process.env.NODE_ENV || "development"}`);
@@ -438,21 +168,4 @@ process.on("SIGTERM", () => {
 process.on("unhandledRejection", (err) => {
   console.error("⚠️ Unhandled Rejection:", err);
   server.close(() => process.exit(1));
-});
-
-// Configuración de Multer para subir archivos
-const galleryStorage = multer({
-    storage: multer.memoryStorage(),
-    limits: { fileSize: 50 * 1024 * 1024 }, // 50MB para videos
-    fileFilter: (req, file, cb) => {
-        const allowedTypes = [
-            "image/jpeg", "image/png", "image/gif", "image/webp",
-            "video/mp4", "video/mpeg", "video/quicktime", "video/x-msvideo"
-        ];
-        if (allowedTypes.includes(file.mimetype)) {
-            cb(null, true);
-        } else {
-            cb(new Error("Tipo de archivo no permitido. Solo imágenes y videos."), false);
-        }
-    },
 });

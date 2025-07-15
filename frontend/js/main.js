@@ -296,8 +296,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-
-
 // Añadir estilos adicionales para transiciones suaves
 const style = document.createElement("style");
 style.textContent = `
