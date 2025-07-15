@@ -997,41 +997,43 @@ async function loadGalleryFromDatabase() {
 }
 
             // Función para renderizar galería desde base de datos
-            function renderDatabaseGallery(items) {
-                const gallery = document.getElementById("gallery-grid");
-                gallery.innerHTML = "";
+ function renderDatabaseGallery(items) {
+    const galleryGrid = document.getElementById("gallery-grid");
+    galleryGrid.innerHTML = "";
 
-                items.forEach((item) => {
-                    const itemDiv = document.createElement("div");
-                    itemDiv.className = "gallery-item relative group overflow-hidden rounded-lg transform transition-all duration-500 ease-in-out";
+    items.forEach((item) => {
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "gallery-item relative group overflow-hidden rounded-lg transform transition-all duration-500 ease-in-out";
+        itemDiv.setAttribute("data-category", item.category);
 
-                    let mediaElement;
-                    if (item.type === 'video') {
-                        mediaElement = document.createElement("video");
-                        mediaElement.src = item.url;
-                        mediaElement.controls = true;
-                        mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
-                    } else {
-                        mediaElement = document.createElement("img");
-                        mediaElement.src = item.url;
-                        mediaElement.alt = item.category;
-                        mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
-                    }
+        let mediaElement;
+        if (item.type === 'video') {
+            mediaElement = document.createElement("video");
+            mediaElement.src = item.url; // URL proporcionada por la base de datos
+            mediaElement.controls = true;
+            mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
+        } else {
+            mediaElement = document.createElement("img");
+            mediaElement.src = item.url; // URL proporcionada por la base de datos
+            mediaElement.alt = item.category;
+            mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
+        }
 
-                    itemDiv.appendChild(mediaElement);
+        itemDiv.appendChild(mediaElement);
 
-                    // Agregar botón de eliminar para admin
-                    if (user && user.role === 'admin') {
-                        const deleteBtn = document.createElement("button");
-                        deleteBtn.className = "absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300";
-                        deleteBtn.innerHTML = '<i class="fas fa-trash text-xs"></i>';
-                        deleteBtn.onclick = () => deleteGalleryItem(item._id);
-                        itemDiv.appendChild(deleteBtn);
-                    }
+        // Agregar botón de eliminar para admin
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user && user.role === 'admin') {
+            const deleteBtn = document.createElement("button");
+            deleteBtn.className = "absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300";
+            deleteBtn.innerHTML = '<i class="fas fa-trash text-xs"></i>';
+            deleteBtn.onclick = () => deleteGalleryItem(item._id);
+            itemDiv.appendChild(deleteBtn);
+        }
 
-                    gallery.appendChild(itemDiv);
-                });
-            }
+        galleryGrid.appendChild(itemDiv);
+    });
+}
 
             // Función para eliminar elemento de galería
             async function deleteGalleryItem(itemId) {
@@ -1097,27 +1099,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const galleryGrid = document.getElementById("gallery-grid");
     const filterButtons = document.querySelectorAll(".filter-btn");
 
-    async function loadGalleryFromDatabase() {
-        try {
-            const user = JSON.parse(localStorage.getItem('user'));
-            const headers = user && user.token ? { 'Authorization': `Bearer ${user.token}` } : {};
+async function loadGalleryFromDatabase() {
+    try {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const headers = user && user.token ? { 'Authorization': `Bearer ${user.token}` } : {};
 
-            const response = await fetch(GALLERY_API_URL, { headers });
-            if (!response.ok) {
-                throw new Error(`Error HTTP ${response.status}`);
-            }
-
-            const result = await response.json();
-            if (!result.success) {
-                throw new Error(result.error || 'Error desconocido');
-            }
-
-            renderDatabaseGallery(result.data);
-        } catch (error) {
-            console.error("Error al cargar galería:", error);
-            galleryGrid.innerHTML = `<div class="text-center text-red-500">Error al cargar la galería.</div>`;
+        const response = await fetch("https://aly-mbelleza-backend.onrender.com/api/gallery", { headers });
+        if (!response.ok) {
+            throw new Error(`Error HTTP ${response.status}`);
         }
+
+        const result = await response.json();
+        if (!result.success) {
+            throw new Error(result.error || 'Error desconocido');
+        }
+
+        renderDatabaseGallery(result.data);
+    } catch (error) {
+        console.error("Error al cargar galería:", error);
+        const galleryGrid = document.getElementById("gallery-grid");
+        galleryGrid.innerHTML = `<div class="text-center text-red-500">Error al cargar la galería.</div>`;
     }
+}
 
     function renderDatabaseGallery(items) {
         galleryGrid.innerHTML = "";
