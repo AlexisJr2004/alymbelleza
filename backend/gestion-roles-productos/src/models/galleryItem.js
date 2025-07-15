@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const gallerySchema = new mongoose.Schema({
     url: { type: String, required: true },
     category: { 
@@ -12,3 +14,5 @@ const gallerySchema = new mongoose.Schema({
 });
 
 const GalleryItem = mongoose.model('GalleryItem', gallerySchema);
+
+module.exports = GalleryItem;
