@@ -1,39 +1,119 @@
-//Script para el menú del celular
+// =============================================
+// CONSTANTES Y CONFIGURACIONES GLOBALES
+// =============================================
+const API_URL = "https://aly-mbelleza-backend.onrender.com";
+let testimonialSwiper = null;
+
+// =============================================
+// FUNCIONES DE UTILIDAD
+// =============================================
+
+/**
+ * Formatea la URL de una imagen
+ * @param {string} url - URL de la imagen a formatear
+ * @returns {string} URL formateada
+ */
+function formatImageUrl(url) {
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
+  const baseUrl = window.location.origin;
+  return `${baseUrl}${url.startsWith("/") ? "" : "/"}${url}`;
+}
+
+/**
+ * Muestra una notificación al usuario
+ * @param {string} type - Tipo de notificación (success/error)
+ * @param {string} title - Título de la notificación
+ * @param {string} message - Mensaje de la notificación
+ */
+function showNotification(type, title, message) {
+  const notification = document.createElement("div");
+  notification.className = `notification ${
+    type === "success" ? "bg-teal-50 border-teal-500" : "bg-red-50 border-red-500"
+  } border-t-2 rounded-lg p-4`;
+  notification.setAttribute("role", "alert");
+  notification.setAttribute("tabindex", "-1");
+
+  const icon = document.createElement("span");
+  icon.className = `inline-flex justify-center items-center size-8 rounded-full border-4 ${
+    type === "success"
+      ? "border-teal-100 bg-teal-200 text-teal-800"
+      : "border-red-100 bg-red-200 text-red-800"
+  }`;
+  icon.innerHTML = `
+    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      ${
+        type === "success"
+          ? '<path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m9 12 2 2 4-4"></path>'
+          : '<path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>'
+      }
+    </svg>
+  `;
+
+  const content = document.createElement("div");
+  content.className = "ms-3";
+  content.innerHTML = `
+    <h3 class="text-gray-800 font-semibold">${title}</h3>
+    <p class="text-sm text-gray-700">${message}</p>
+  `;
+
+  notification.appendChild(icon);
+  notification.appendChild(content);
+  document.body.appendChild(notification);
+
+  setTimeout(() => {
+    notification.classList.add("hide");
+    notification.addEventListener("animationend", () => notification.remove(), { once: true });
+  }, 5000);
+}
+
+// =============================================
+// MANEJO DEL MENÚ MÓVIL
+// =============================================
+
+/**
+ * Alterna la visibilidad del menú móvil
+ */
 function toggleMobileMenu() {
   const mobileMenu = document.getElementById("mobile-menu");
-  const menuIcon = document
-    .getElementById("mobile-menu-toggle")
-    .querySelector("svg");
+  const menuIcon = document.getElementById("mobile-menu-toggle").querySelector("svg");
+  
   mobileMenu.classList.toggle("hidden");
+  
   if (!mobileMenu.classList.contains("hidden")) {
     menuIcon.innerHTML = `
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-        `;
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+    `;
   } else {
     menuIcon.innerHTML = `
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
-        `;
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+    `;
   }
 }
-document.addEventListener("DOMContentLoaded", () => {
-  const mobileMenuToggle = document.getElementById("mobile-menu-toggle");
-  if (mobileMenuToggle) {
-    mobileMenuToggle.addEventListener("click", toggleMobileMenu);
-  }
-});
 
-// Función para mostrar/ocultar el submenú de servicios
+// =============================================
+// MANEJO DEL SUBMENÚ DE SERVICIOS
+// =============================================
+
+/**
+ * Alterna la visibilidad del submenú de servicios
+ */
 function toggleServicesMenu() {
   const submenu = document.getElementById("services-submenu");
   submenu.classList.toggle("hidden");
 }
 
-// Cargar datos del usuario
-document.addEventListener("DOMContentLoaded", () => {
+// =============================================
+// MANEJO DEL USUARIO Y PERFIL
+// =============================================
+
+/**
+ * Carga y muestra los datos del usuario desde localStorage
+ */
+function loadUserData() {
   const user = JSON.parse(localStorage.getItem("user"));
-  const userProfileSection = document.getElementById(
-    "mobile-user-profile-section"
-  );
+  const userProfileSection = document.getElementById("mobile-user-profile-section");
   const loginSection = document.getElementById("mobile-login-section");
   const profileImg = document.getElementById("mobile-profile-img");
   const profileName = document.getElementById("mobile-profile-name");
@@ -41,20 +121,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const profileRole = document.getElementById("mobile-profile-role");
   const statusIndicator = document.getElementById("mobile-status-indicator");
   const logoutBtn = document.getElementById("mobile-logout-btn");
-  const adminLinkContainer = document.getElementById(
-    "mobile-admin-link-container"
-  );
+  const adminLinkContainer = document.getElementById("mobile-admin-link-container");
 
   if (user) {
-    // Mostrar sección de perfil y ocultar login
     userProfileSection.classList.remove("hidden");
     loginSection.classList.add("hidden");
 
-    // Configurar datos del usuario
     profileName.textContent = user.name || "Usuario";
     profileEmail.textContent = user.email || "";
 
-    // Establecer rol y color del indicador
     if (user.role === "admin") {
       profileRole.textContent = "Administrador";
       statusIndicator.classList.remove("bg-green-500");
@@ -64,47 +139,56 @@ document.addEventListener("DOMContentLoaded", () => {
       profileRole.textContent = "Cliente";
     }
 
-    // Imagen de perfil
-    const profileImageUrl =
-      user.profileImage && user.profileImage.startsWith("http")
-        ? user.profileImage
-        : user.profileImage && user.profileImage.startsWith("/uploads/")
-        ? "https://aly-mbelleza-backend.onrender.com" + user.profileImage
-        : `https://ui-avatars.com/api/?name=${encodeURIComponent(
-            user.name || "U"
-          )}&background=random&length=1`;
+    const profileImageUrl = 
+      user.profileImage && user.profileImage.startsWith("http") ? user.profileImage :
+      user.profileImage && user.profileImage.startsWith("/uploads/") ? 
+        "https://aly-mbelleza-backend.onrender.com" + user.profileImage :
+        `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || "U")}&background=random&length=1`;
 
     profileImg.src = profileImageUrl;
 
-    // Logout con SweetAlert
-    logoutBtn.addEventListener("click", () => {
-      Swal.fire({
-        title: "¿Cerrar sesión?",
-        text: "¿Estás seguro de que deseas salir de tu cuenta?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#7e22ce",
-        cancelButtonColor: "#6b7280",
-        confirmButtonText: "Sí, cerrar sesión",
-        cancelButtonText: "Cancelar",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          localStorage.removeItem("user");
-          window.location.href = "index.html";
-        }
-      });
-    });
+    setupLogoutButton(logoutBtn);
   } else {
-    // Mostrar sección de login y ocultar perfil
     loginSection.classList.remove("hidden");
     userProfileSection.classList.add("hidden");
   }
-});
+}
 
-//Script para el botón de la pantalla completa
-document.addEventListener("DOMContentLoaded", () => {
+/**
+ * Configura el botón de logout con SweetAlert
+ * @param {HTMLElement} logoutBtn - Botón de logout
+ */
+function setupLogoutButton(logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    Swal.fire({
+      title: "¿Cerrar sesión?",
+      text: "¿Estás seguro de que deseas salir de tu cuenta?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#7e22ce",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Sí, cerrar sesión",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("user");
+        window.location.href = "index.html";
+      }
+    });
+  });
+}
+
+// =============================================
+// MANEJO DE PANTALLA COMPLETA
+// =============================================
+
+/**
+ * Configura el botón de pantalla completa
+ */
+function setupFullscreenToggle() {
   const fullscreenToggle = document.getElementById("fullscreen-toggle");
   const fullscreenIcon = document.getElementById("fullscreen-icon");
+  
   fullscreenToggle.addEventListener("click", () => {
     if (!document.fullscreenElement) {
       if (document.documentElement.requestFullscreen) {
@@ -118,12 +202,20 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
-});
+}
 
-//Script para la seccion de preguntas
-document.addEventListener("DOMContentLoaded", () => {
+// =============================================
+// MANEJO DE ACORDEÓN (FAQ)
+// =============================================
+
+/**
+ * Configura el comportamiento del acordeón
+ */
+function setupAccordion() {
   const toggles = document.querySelectorAll(".accordion-toggle");
   const contents = document.querySelectorAll(".accordion-content");
+  
+  // Abrir el primer elemento por defecto
   contents[0].style.maxHeight = contents[0].scrollHeight + "px";
   toggles[0].querySelector("svg").classList.add("rotate-180");
 
@@ -131,14 +223,16 @@ document.addEventListener("DOMContentLoaded", () => {
     toggle.addEventListener("click", () => {
       const content = contents[index];
       const isOpen = content.style.maxHeight;
+      
+      // Cerrar otros elementos abiertos
       contents.forEach((otherContent, otherIndex) => {
         if (index !== otherIndex) {
           otherContent.style.maxHeight = null;
-          toggles[otherIndex]
-            .querySelector("svg")
-            .classList.remove("rotate-180");
+          toggles[otherIndex].querySelector("svg").classList.remove("rotate-180");
         }
       });
+      
+      // Alternar el elemento actual
       if (isOpen) {
         content.style.maxHeight = null;
         toggle.querySelector("svg").classList.remove("rotate-180");
@@ -148,50 +242,67 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-});
+}
 
-//Script para el botón ir arriba
-document.addEventListener("DOMContentLoaded", function () {
+// =============================================
+// MANEJO DEL BOTÓN "IR ARRIBA"
+// =============================================
+
+/**
+ * Configura el botón "Ir arriba"
+ */
+function setupGoTopButton() {
   window.addEventListener("scroll", function () {
-    var goTopBtn = document.getElementById("goTopBtn");
+    const goTopBtn = document.getElementById("goTopBtn");
     if (window.scrollY > 100) {
-      goTopBtn.classList.remove("translate-y-20");
-      goTopBtn.classList.remove("opacity-0");
-      goTopBtn.classList.add("translate-y-0");
-      goTopBtn.classList.add("opacity-100");
+      goTopBtn.classList.remove("translate-y-20", "opacity-0");
+      goTopBtn.classList.add("translate-y-0", "opacity-100");
     } else {
-      goTopBtn.classList.add("translate-y-20");
-      goTopBtn.classList.add("opacity-0");
-      goTopBtn.classList.remove("translate-y-0");
-      goTopBtn.classList.remove("opacity-100");
+      goTopBtn.classList.add("translate-y-20", "opacity-0");
+      goTopBtn.classList.remove("translate-y-0", "opacity-100");
     }
   });
 
   document.getElementById("goTopBtn").addEventListener("click", function () {
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
-});
+}
 
-//Script para el boón de accesibilidad
-document.addEventListener("DOMContentLoaded", () => {
-  const mobileMenuToggle = document.getElementById("mobile-menu-toggle");
-  if (mobileMenuToggle) {
-    mobileMenuToggle.addEventListener("click", toggleMobileMenu);
-  }
-});
-const button = document.getElementById("dropdownDefaultButton");
-const dropdown = document.getElementById("dropdown");
-button.addEventListener("click", () => {
-  dropdown.classList.toggle("show");
-});
-document.addEventListener("click", (event) => {
-  if (!button.contains(event.target) && !dropdown.contains(event.target)) {
-    dropdown.classList.remove("show");
-  }
-});
+// =============================================
+// MANEJO DE ACCESIBILIDAD
+// =============================================
 
-// Funciones para controlar el zoom
+// Variables para accesibilidad
 let currentZoom = 100;
+let currentFontIndex = 0;
+let currentFontSize = 100;
+const fontSizeStep = 10;
+const minFontSize = 80;
+const maxFontSize = 200;
+const fonts = ["Quicksand", "Arial", "Verdana", "Georgia", "Times New Roman", "Courier New"];
+
+/**
+ * Configura el menú desplegable de accesibilidad
+ */
+function setupAccessibilityDropdown() {
+  const button = document.getElementById("dropdownDefaultButton");
+  const dropdown = document.getElementById("dropdown");
+  
+  button.addEventListener("click", () => {
+    dropdown.classList.toggle("show");
+  });
+  
+  document.addEventListener("click", (event) => {
+    if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+      dropdown.classList.remove("show");
+    }
+  });
+}
+
+/**
+ * Cambia el zoom de la página
+ * @param {string} direction - Dirección del zoom ('in' o 'out')
+ */
 function changeZoom(direction) {
   if (direction === "in") {
     currentZoom += 10;
@@ -201,21 +312,18 @@ function changeZoom(direction) {
   currentZoom = Math.max(50, Math.min(currentZoom, 200));
   document.body.style.zoom = `${currentZoom}%`;
 }
+
+/**
+ * Restablece el zoom a 100%
+ */
 function resetZoom() {
   currentZoom = 100;
   document.body.style.zoom = "100%";
 }
 
-// Script y Array de fuentes disponibles, incluyendo la fuente por defecto
-const fonts = [
-  "Quicksand",
-  "Arial",
-  "Verdana",
-  "Georgia",
-  "Times New Roman",
-  "Courier New",
-];
-let currentFontIndex = 0;
+/**
+ * Cambia la fuente de la página
+ */
 function changeFont() {
   currentFontIndex = (currentFontIndex + 1) % fonts.length;
   const newFont = fonts[currentFontIndex];
@@ -223,26 +331,21 @@ function changeFont() {
   updateFontDisplay(newFont);
   localStorage.setItem("selectedFont", newFont);
 }
+
+/**
+ * Actualiza la visualización de la fuente actual
+ * @param {string} fontName - Nombre de la fuente a mostrar
+ */
 function updateFontDisplay(fontName) {
   const fontDisplay = document.querySelector(".current-font-name");
   if (fontDisplay) {
     fontDisplay.textContent = fontName;
   }
 }
-// Al cargar la página, aplicar la fuente guardada si existe
-document.addEventListener("DOMContentLoaded", function () {
-  const savedFont = localStorage.getItem("selectedFont");
-  if (savedFont) {
-    document.body.style.fontFamily = savedFont;
-    currentFontIndex = fonts.indexOf(savedFont);
-    if (currentFontIndex === -1) currentFontIndex = 0;
-    updateFontDisplay(savedFont);
-  } else {
-    updateFontDisplay(fonts[0]);
-  }
-});
 
-// Script para la lectura de pantalla
+/**
+ * Alterna la lectura de texto a voz
+ */
 function toggleTextToSpeech() {
   if (window.speechSynthesis.speaking) {
     window.speechSynthesis.cancel();
@@ -254,13 +357,10 @@ function toggleTextToSpeech() {
   window.speechSynthesis.speak(utterance);
 }
 
-// Variables para el ajuste de tamaño de fuente
-let currentFontSize = 100;
-const fontSizeStep = 10;
-const minFontSize = 80;
-const maxFontSize = 200;
-
-// Función para cambiar el tamaño de la fuente
+/**
+ * Cambia el tamaño de la fuente
+ * @param {string} action - Acción a realizar ('increase' o 'decrease')
+ */
 function changeFontSize(action) {
   if (action === "increase" && currentFontSize < maxFontSize) {
     currentFontSize += fontSizeStep;
@@ -270,14 +370,22 @@ function changeFontSize(action) {
   document.body.style.fontSize = `${currentFontSize}%`;
 }
 
-// Función para resetear el tamaño de la fuente
+/**
+ * Restablece el tamaño de la fuente a 100%
+ */
 function resetFontSize() {
   currentFontSize = 100;
   document.body.style.fontSize = "100%";
 }
 
-//Script para el efecto de luz en la seccion
-document.addEventListener("DOMContentLoaded", () => {
+// =============================================
+// EFECTO DE LUZ
+// =============================================
+
+/**
+ * Configura el efecto de luz que sigue al cursor
+ */
+function setupLightEffect() {
   const container = document.querySelector(".light-container");
   const light = document.querySelector(".light-follow");
 
@@ -294,46 +402,25 @@ document.addEventListener("DOMContentLoaded", () => {
   container.addEventListener("mouseleave", () => {
     light.style.opacity = "0";
   });
-});
-
-// Añadir estilos adicionales para transiciones suaves
-const style = document.createElement("style");
-style.textContent = `
-  .gallery-item {
-      transition: all 0.5s ease-in-out;
-  }
-`;
-document.head.appendChild(style);
-
-// Configuración global
-const API_URL = "https://aly-mbelleza-backend.onrender.com";
-let testimonialSwiper = null;
-
-// Función para formatear la URL de la imagen
-function formatImageUrl(url) {
-  // Si ya es una URL completa, devolverla tal cual
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    return url;
-  }
-
-  // Si es una ruta relativa, construir la URL completa
-  const baseUrl = window.location.origin; // O usa tu dominio específico
-  return `${baseUrl}${url.startsWith("/") ? "" : "/"}${url}`;
 }
 
-// Función para inicializar Swiper
-const initTestimonialSwiper = () => {
+// =============================================
+// MANEJO DE TESTIMONIOS
+// =============================================
+
+/**
+ * Inicializa el carrusel de testimonios con Swiper
+ */
+function initTestimonialSwiper() {
   if (typeof Swiper === "undefined") {
     console.error("Swiper no está disponible");
     return;
   }
 
-  // Destruir instancia anterior si existe
   if (testimonialSwiper) {
     testimonialSwiper.destroy(true, true);
   }
 
-  // Crear nueva instancia
   testimonialSwiper = new Swiper(".testimonials-swiper", {
     loop: true,
     autoplay: {
@@ -354,10 +441,12 @@ const initTestimonialSwiper = () => {
       1024: { slidesPerView: 3, spaceBetween: 40 },
     },
   });
-};
+}
 
-// Función para cargar testimonios
-const loadTestimonials = async () => {
+/**
+ * Carga los testimonios desde la API
+ */
+async function loadTestimonials() {
   try {
     const response = await fetch(`${API_URL}/api/testimonials`);
     if (!response.ok) throw new Error(`Error HTTP ${response.status}`);
@@ -370,17 +459,18 @@ const loadTestimonials = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
 
     if (testimonials.length === 0) {
-      swiperWrapper.innerHTML = `<div class="swiper-slide flex items-center justify-center h-full w-full">
-        <div class="text-center p-8 max-w-sm mx-auto">
-          <div class="inline-flex items-center justify-center rounded-full bg-gray-100 p-4 mb-4">
-            <svg class="h-10 w-10 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-            </svg>
+      swiperWrapper.innerHTML = `
+        <div class="swiper-slide flex items-center justify-center h-full w-full">
+          <div class="text-center p-8 max-w-sm mx-auto">
+            <div class="inline-flex items-center justify-center rounded-full bg-gray-100 p-4 mb-4">
+              <svg class="h-10 w-10 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">No hay testimonios aún</h3>
+            <p class="text-gray-600 mb-6">Parece que nadie ha compartido su experiencia todavía.</p>
           </div>
-          <h3 class="text-xl font-semibold text-gray-800 mb-2">No hay testimonios aún</h3>
-          <p class="text-gray-600 mb-6">Parece que nadie ha compartido su experiencia todavía.</p>
-        </div>
-      </div>`;
+        </div>`;
     } else {
       testimonials.forEach((testimonial) => {
         const isOwner = user && (testimonial.userId === user._id || testimonial.email === user.email);
@@ -425,146 +515,11 @@ const loadTestimonials = async () => {
       });
     }
 
-    // Inicializar o actualizar Swiper
     initTestimonialSwiper();
-
-    // --- Agregar listeners después de inicializar Swiper ---
-    setTimeout(() => {
-      // Mostrar/ocultar menú de opciones de testimonio
-      document.querySelectorAll(".testimonial-menu-btn").forEach(btn => {
-        btn.onclick = function (e) {
-          e.stopPropagation();
-          // Cerrar otros menús abiertos
-          document.querySelectorAll(".testimonial-menu").forEach(menu => menu.classList.add("hidden"));
-          // Abrir el menú de este testimonio
-          btn.parentElement.querySelector(".testimonial-menu").classList.toggle("hidden");
-        };
-      });
-
-      // Listener para editar inline
-      document.querySelectorAll(".edit-testimonial-btn").forEach(btn => {
-        btn.onclick = function () {
-          // Cerrar cualquier otro modo edición abierto
-          document.querySelectorAll(".comment-text[contenteditable='true']").forEach(p => {
-            p.removeAttribute("contenteditable");
-            const saveBtn = p.parentNode.querySelector(".save-edit-btn");
-            if (saveBtn) saveBtn.remove();
-          });
-
-          const id = btn.getAttribute("data-id");
-          const role = btn.getAttribute("data-role");
-          const commentP = btn.closest(".swiper-slide").querySelector(".comment-text");
-
-          // Activar edición inline
-          commentP.setAttribute("contenteditable", "true");
-
-          // Crear botón Guardar alineado a la derecha y con poco margen superior
-          const saveBtn = document.createElement("button");
-          saveBtn.className = "save-edit-btn float-right -mt-2 w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center focus:outline-none";
-          saveBtn.innerHTML = `
-            <i class="fas fa-play text-xl text-gray-500"></i>
-          `;
-          saveBtn.setAttribute("data-id", id);
-          saveBtn.setAttribute("data-role", role);
-
-          // Insertar el botón después del comentario
-          commentP.parentNode.appendChild(saveBtn);
-
-          // Listener para guardar
-          saveBtn.onclick = async function () {
-            const newComment = commentP.textContent;
-            await updateTestimonialInline(id, newComment, role);
-          };
-        };
-      });
-
-      // Listener para eliminar
-      document.querySelectorAll(".delete-testimonial-btn").forEach(btn => {
-        btn.onclick = async function () {
-          const id = btn.getAttribute("data-id");
-          Swal.fire({
-            title: "¿Seguro que quieres borrar este testimonio?",
-            text: "Esta acción no se puede deshacer.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#e3342f",
-            cancelButtonColor: "#6b7280",
-            confirmButtonText: "Sí, borrar",
-            cancelButtonText: "Cancelar"
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              await deleteTestimonial(id);
-              loadTestimonials();
-            }
-          });
-        };
-      });
-    }, 100); // Espera breve para asegurar que Swiper terminó el render
-
-    // Función para actualizar inline
-    async function updateTestimonialInline(id, comment, role) {
-      const user = JSON.parse(localStorage.getItem("user"));
-      if (!user || !user.token) {
-        showNotification("error", "Error", "Debes iniciar sesión para editar testimonios.");
-        return;
-      }
-      const formData = new FormData();
-      formData.append("comment", comment);
-      formData.append("role", role);
-      formData.append("name", user.name);
-      formData.append("avatar", user.profileImage);
-
-      try {
-        const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
-          method: "PUT",
-          headers: {
-            "Authorization": `Bearer ${user.token}`
-          },
-          body: formData
-        });
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.error || "No se pudo editar el testimonio");
-        }
-        showNotification("success", "¡Éxito!", data.message || "Testimonio editado correctamente");
-        loadTestimonials();
-      } catch (err) {
-        showNotification("error", "Error al editar testimonio", err.message || "Error desconocido");
-        console.error(err);
-      }
-    }
-
-    // Función para eliminar
-    async function deleteTestimonial(id) {
-      const user = JSON.parse(localStorage.getItem("user"));
-      if (!user || !user.token) {
-        showNotification("error", "Error", "Debes iniciar sesión para borrar testimonios.");
-        return;
-      }
-      try {
-        const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
-          method: "DELETE",
-          headers: {
-            "Authorization": `Bearer ${user.token}`
-          }
-        });
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.error || "No se pudo borrar el testimonio");
-        }
-        showNotification("success", "¡Éxito!", data.message || "Testimonio eliminado");
-      } catch (err) {
-        showNotification("error", "Error al borrar testimonio", err.message || "Error desconocido");
-        console.error(err);
-      }
-    }
-
+    setupTestimonialEventListeners();
   } catch (error) {
     console.error("Error al cargar testimonios:", error);
-
-    const swiperWrapper = document.querySelector(
-      ".testimonials-swiper .swiper-wrapper"
-    );
+    const swiperWrapper = document.querySelector(".testimonials-swiper .swiper-wrapper");
     if (swiperWrapper) {
       swiperWrapper.innerHTML = `
         <div class="swiper-slide">
@@ -576,167 +531,143 @@ const loadTestimonials = async () => {
       `;
     }
   }
-};
-
-// Cerrar el menú si se hace clic fuera
-document.addEventListener("click", () => {
-  document.querySelectorAll(".testimonial-menu").forEach(menu => menu.classList.add("hidden"));
-});
-
-// Cargar testimonios cuando el DOM esté listo
-document.addEventListener("DOMContentLoaded", () => {
-  // Cargar CSS de Swiper si no está presente
-  if (!document.querySelector('link[href*="swiper-bundle.min.css"]')) {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://unpkg.com/swiper@8/swiper-bundle.min.css";
-    document.head.appendChild(link);
-  }
-
-  // Cargar Swiper JS si no está disponible
-  if (typeof Swiper === "undefined") {
-    const script = document.createElement("script");
-    script.src = "https://unpkg.com/swiper@8/swiper-bundle.min.js";
-    script.onload = loadTestimonials;
-    document.head.appendChild(script);
-  } else {
-    loadTestimonials();
-  }
-});
-
-// Manejo del modal (tu código existente sigue igual)
-const testimonialModal = document.getElementById("testimonialModal");
-const openModalBtn = document.getElementById("openTestimonialModal");
-const closeModalBtn = document.getElementById("closeTestimonialModal");
-const testimonialForm = document.getElementById("testimonialForm");
-
-// Reemplazamos este bloque por uno con validación de sesión
-if (openModalBtn) {
-  openModalBtn.addEventListener("click", () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
-      Swal.fire({
-        icon: "warning",
-        title: "Inicia sesión",
-        text: "Debes iniciar sesión para dejar un testimonio.",
-        confirmButtonColor: "#7e22ce",
-      });
-      return;
-    }
-    if (testimonialModal) {
-      testimonialModal.classList.remove("hidden");
-    }
-  });
 }
 
-if (closeModalBtn && testimonialModal) {
-  closeModalBtn.addEventListener("click", () => {
-    testimonialModal.classList.add("hidden");
-  });
-}
-
-if (testimonialForm) {
-  testimonialForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-
-    const submitBtn = testimonialForm.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.textContent;
-
-    try {
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Enviando...";
-
-      const formData = new FormData(testimonialForm);
-
-      // Tomar datos del usuario logueado
-      const user = JSON.parse(localStorage.getItem("user"));
-      if (!user) {
-        showNotification(
-          "Debes iniciar sesión para dejar un testimonio.",
-          "error"
-        );
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalBtnText;
-        return;
-      }
-
-      formData.append("name", user.name);
-      formData.append("avatar", user.profileImage);
-
-      const response = await fetch(
-        "https://aly-mbelleza-backend.onrender.com/api/testimonials",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      if (!response.ok) {
-        let errorMessage = "Error al enviar testimonio";
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.message || errorMessage;
-        } catch (e) {
-          const text = await response.text();
-          if (text) errorMessage = text;
-        }
-        throw new Error(errorMessage);
-      }
-
-      const result = await response.json().catch(() => ({}));
-
-      testimonialModal.classList.add("hidden");
-      testimonialForm.reset();
-
-      setTimeout(loadTestimonials, 500);
-
-      showNotification(
-        "success",
-        "¡Éxito!",
-        result.message || "Testimonio agregado correctamente"
-      );
-    } catch (error) {
-      console.error("Error en el envío:", error);
-      showNotification(
-        "error",
-        "Error",
-        typeof error === "object" ? error.message : "Error al enviar testimonio"
-      );
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = originalBtnText;
-    }
-  });
-}
-
-// Función para mostrar notificaciones
-function showNotification(message, type = "success") {
-  const notification = document.createElement("div");
-  notification.className = `fixed top-4 right-4 px-6 py-3 rounded-md shadow-lg text-white ${
-    type === "success" ? "bg-green-500" : "bg-red-500"
-  } z-50 transition-all duration-300 transform translate-x-0`;
-  notification.textContent = message;
-  document.body.appendChild(notification);
-
+/**
+ * Configura los event listeners para los testimonios
+ */
+function setupTestimonialEventListeners() {
   setTimeout(() => {
-    notification.classList.add("translate-x-full");
-    setTimeout(() => notification.remove(), 300);
-  }, 3000);
+    // Menú de opciones
+    document.querySelectorAll(".testimonial-menu-btn").forEach(btn => {
+      btn.onclick = function (e) {
+        e.stopPropagation();
+        document.querySelectorAll(".testimonial-menu").forEach(menu => menu.classList.add("hidden"));
+        btn.parentElement.querySelector(".testimonial-menu").classList.toggle("hidden");
+      };
+    });
+
+    // Edición de testimonios
+    document.querySelectorAll(".edit-testimonial-btn").forEach(btn => {
+      btn.onclick = function () {
+        document.querySelectorAll(".comment-text[contenteditable='true']").forEach(p => {
+          p.removeAttribute("contenteditable");
+          const saveBtn = p.parentNode.querySelector(".save-edit-btn");
+          if (saveBtn) saveBtn.remove();
+        });
+
+        const id = btn.getAttribute("data-id");
+        const role = btn.getAttribute("data-role");
+        const commentP = btn.closest(".swiper-slide").querySelector(".comment-text");
+
+        commentP.setAttribute("contenteditable", "true");
+
+        const saveBtn = document.createElement("button");
+        saveBtn.className = "save-edit-btn float-right -mt-2 w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center focus:outline-none";
+        saveBtn.innerHTML = `<i class="fas fa-play text-xl text-gray-500"></i>`;
+        saveBtn.setAttribute("data-id", id);
+        saveBtn.setAttribute("data-role", role);
+
+        commentP.parentNode.appendChild(saveBtn);
+
+        saveBtn.onclick = async function () {
+          const newComment = commentP.textContent;
+          await updateTestimonialInline(id, newComment, role);
+        };
+      };
+    });
+
+    // Eliminación de testimonios
+    document.querySelectorAll(".delete-testimonial-btn").forEach(btn => {
+      btn.onclick = async function () {
+        const id = btn.getAttribute("data-id");
+        Swal.fire({
+          title: "¿Seguro que quieres borrar este testimonio?",
+          text: "Esta acción no se puede deshacer.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#e3342f",
+          cancelButtonColor: "#6b7280",
+          confirmButtonText: "Sí, borrar",
+          cancelButtonText: "Cancelar"
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            await deleteTestimonial(id);
+            loadTestimonials();
+          }
+        });
+      };
+    });
+  }, 100);
 }
 
-// Cargar testimonios al iniciar y asegurar que Swiper esté cargado
-document.addEventListener("DOMContentLoaded", () => {
-  // Verificar si Swiper está disponible
-  if (typeof Swiper === "undefined") {
-    console.warn("Swiper no está cargado. Cargando ahora...");
-    loadSwiperScript().then(loadTestimonials);
-  } else {
-    loadTestimonials();
+/**
+ * Actualiza un testimonio directamente
+ * @param {string} id - ID del testimonio
+ * @param {string} comment - Nuevo comentario
+ * @param {string} role - Rol del usuario
+ */
+async function updateTestimonialInline(id, comment, role) {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user || !user.token) {
+    showNotification("error", "Error", "Debes iniciar sesión para editar testimonios.");
+    return;
   }
-});
+  
+  const formData = new FormData();
+  formData.append("comment", comment);
+  formData.append("role", role);
+  formData.append("name", user.name);
+  formData.append("avatar", user.profileImage);
 
-// Función para cargar Swiper dinámicamente si es necesario
+  try {
+    const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
+      method: "PUT",
+      headers: { "Authorization": `Bearer ${user.token}` },
+      body: formData
+    });
+    
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "No se pudo editar el testimonio");
+    
+    showNotification("success", "¡Éxito!", data.message || "Testimonio editado correctamente");
+    loadTestimonials();
+  } catch (err) {
+    showNotification("error", "Error al editar testimonio", err.message || "Error desconocido");
+    console.error(err);
+  }
+}
+
+/**
+ * Elimina un testimonio
+ * @param {string} id - ID del testimonio a eliminar
+ */
+async function deleteTestimonial(id) {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user || !user.token) {
+    showNotification("error", "Error", "Debes iniciar sesión para borrar testimonios.");
+    return;
+  }
+  
+  try {
+    const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
+      method: "DELETE",
+      headers: { "Authorization": `Bearer ${user.token}` }
+    });
+    
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "No se pudo borrar el testimonio");
+    
+    showNotification("success", "¡Éxito!", data.message || "Testimonio eliminado");
+  } catch (err) {
+    showNotification("error", "Error al borrar testimonio", err.message || "Error desconocido");
+    console.error(err);
+  }
+}
+
+/**
+ * Carga dinámicamente Swiper si es necesario
+ */
 function loadSwiperScript() {
   return new Promise((resolve) => {
     if (typeof Swiper !== "undefined") return resolve();
@@ -748,39 +679,133 @@ function loadSwiperScript() {
   });
 }
 
-document.getElementById("avatar").addEventListener("change", function (event) {
-  const file = event.target.files[0]; // Obtener el archivo seleccionado
-  if (file) {
-    const reader = new FileReader(); // Crear un FileReader para leer el archivo
-    reader.onload = function (e) {
-      // Mostrar la imagen en un elemento <img> (opcional)
-      const imgPreview = document.createElement("img");
-      imgPreview.src = e.target.result;
-      imgPreview.classList.add(
-        "w-24",
-        "h-24",
-        "rounded-full",
-        "mx-auto",
-        "mb-4",
-        "shadow-md"
-      );
-      document
-        .getElementById("avatar")
-        .insertAdjacentElement("afterend", imgPreview);
-    };
-    reader.readAsDataURL(file); // Leer el archivo como una URL de datos
+// =============================================
+// MANEJO DEL MODAL DE TESTIMONIOS
+// =============================================
+
+/**
+ * Configura el modal de testimonios
+ */
+function setupTestimonialModal() {
+  const testimonialModal = document.getElementById("testimonialModal");
+  const openModalBtn = document.getElementById("openTestimonialModal");
+  const closeModalBtn = document.getElementById("closeTestimonialModal");
+  const testimonialForm = document.getElementById("testimonialForm");
+
+  if (openModalBtn) {
+    openModalBtn.addEventListener("click", () => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user) {
+        Swal.fire({
+          icon: "warning",
+          title: "Inicia sesión",
+          text: "Debes iniciar sesión para dejar un testimonio.",
+          confirmButtonColor: "#7e22ce",
+        });
+        return;
+      }
+      if (testimonialModal) {
+        testimonialModal.classList.remove("hidden");
+      }
+    });
   }
-});
 
-document.getElementById("contactForm").addEventListener("submit", async (e) => {
+  if (closeModalBtn && testimonialModal) {
+    closeModalBtn.addEventListener("click", () => {
+      testimonialModal.classList.add("hidden");
+    });
+  }
+
+  if (testimonialForm) {
+    testimonialForm.addEventListener("submit", handleTestimonialSubmit);
+  }
+}
+
+/**
+ * Maneja el envío del formulario de testimonios
+ * @param {Event} e - Evento de submit
+ */
+async function handleTestimonialSubmit(e) {
   e.preventDefault();
+  e.stopImmediatePropagation();
 
+  const testimonialModal = document.getElementById("testimonialModal");
+  const testimonialForm = document.getElementById("testimonialForm");
+  const submitBtn = testimonialForm.querySelector('button[type="submit"]');
+  const originalBtnText = submitBtn.textContent;
+
+  try {
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Enviando...";
+
+    const formData = new FormData(testimonialForm);
+    const user = JSON.parse(localStorage.getItem("user"));
+    
+    if (!user) {
+      showNotification("error", "Error", "Debes iniciar sesión para dejar un testimonio.");
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalBtnText;
+      return;
+    }
+
+    formData.append("name", user.name);
+    formData.append("avatar", user.profileImage);
+
+    const response = await fetch(`${API_URL}/api/testimonials`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      let errorMessage = "Error al enviar testimonio";
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorMessage;
+      } catch (e) {
+        const text = await response.text();
+        if (text) errorMessage = text;
+      }
+      throw new Error(errorMessage);
+    }
+
+    const result = await response.json().catch(() => ({}));
+
+    testimonialModal.classList.add("hidden");
+    testimonialForm.reset();
+    setTimeout(loadTestimonials, 500);
+
+    showNotification("success", "¡Éxito!", result.message || "Testimonio agregado correctamente");
+  } catch (error) {
+    console.error("Error en el envío:", error);
+    showNotification("error", "Error", typeof error === "object" ? error.message : "Error al enviar testimonio");
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalBtnText;
+  }
+}
+
+// =============================================
+// MANEJO DEL FORMULARIO DE CONTACTO
+// =============================================
+
+/**
+ * Configura el formulario de contacto
+ */
+function setupContactForm() {
+  document.getElementById("contactForm").addEventListener("submit", handleContactFormSubmit);
+}
+
+/**
+ * Maneja el envío del formulario de contacto
+ * @param {Event} e - Evento de submit
+ */
+async function handleContactFormSubmit(e) {
+  e.preventDefault();
   const form = e.target;
   const submitBtn = form.querySelector('button[type="submit"]');
   const originalBtnText = submitBtn.innerHTML;
 
   try {
-    // Estado de carga
     submitBtn.disabled = true;
     submitBtn.innerHTML = `
       <span class="inline-flex items-center">
@@ -792,19 +817,13 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
       </span>
     `;
 
-    // Crear FormData directamente del formulario
     const formData = new FormData(form);
-
-    // Convertir a objeto simple para logging
     const formDataObj = Object.fromEntries(formData.entries());
     console.log("Datos del formulario:", formDataObj);
 
-    const backendUrl =
-      "https://aly-mbelleza-backend.onrender.com/api/send-email";
-
-    const response = await fetch(backendUrl, {
+    const response = await fetch(`${API_URL}/api/send-email`, {
       method: "POST",
-      body: formData, // Enviamos FormData directamente
+      body: formData,
     });
 
     if (!response.ok) {
@@ -816,12 +835,7 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
     const result = await response.json();
     console.log("Respuesta exitosa:", result);
 
-    showNotification(
-      "success",
-      "¡Mensaje enviado!",
-      "Gracias por contactarnos. Te responderemos pronto."
-    );
-
+    showNotification("success", "¡Mensaje enviado!", "Gracias por contactarnos. Te responderemos pronto.");
     form.reset();
   } catch (error) {
     console.error("Error en el envío:", error);
@@ -836,66 +850,16 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
     submitBtn.disabled = false;
     submitBtn.innerHTML = originalBtnText;
   }
-});
-
-function showNotification(type, title, message) {
-  // Crear el contenedor de la notificación
-  const notification = document.createElement("div");
-  notification.className = `notification ${
-    type === "success"
-      ? "bg-teal-50 border-teal-500"
-      : "bg-red-50 border-red-500"
-  } border-t-2 rounded-lg p-4`;
-  notification.setAttribute("role", "alert");
-  notification.setAttribute("tabindex", "-1");
-
-  // Icono
-  const icon = document.createElement("span");
-  icon.className = `inline-flex justify-center items-center size-8 rounded-full border-4 ${
-    type === "success"
-      ? "border-teal-100 bg-teal-200 text-teal-800"
-      : "border-red-100 bg-red-200 text-red-800"
-  }`;
-  icon.innerHTML = `
-    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      ${
-        type === "success"
-          ? '<path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m9 12 2 2 4-4"></path>'
-          : '<path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>'
-      }
-    </svg>
-  `;
-
-  // Contenido
-  const content = document.createElement("div");
-  content.className = "ms-3";
-  content.innerHTML = `
-    <h3 class="text-gray-800 font-semibold">${title}</h3>
-    <p class="text-sm text-gray-700">${message}</p>
-  `;
-
-  // Agregar icono y contenido a la notificación
-  notification.appendChild(icon);
-  notification.appendChild(content);
-
-  // Agregar la notificación al cuerpo del documento
-  document.body.appendChild(notification);
-
-  // Ocultar y eliminar la notificación después de 5 segundos
-  setTimeout(() => {
-    notification.classList.add("hide");
-    notification.addEventListener(
-      "animationend",
-      () => {
-        notification.remove();
-      },
-      { once: true }
-    );
-  }, 5000);
 }
 
-// Cambiamos DOMContentLoaded por window.onload para esperar a toda la página
-window.addEventListener("load", function () {
+// =============================================
+// MANEJO DE COOKIES
+// =============================================
+
+/**
+ * Configura el consentimiento de cookies
+ */
+function setupCookieConsent() {
   const cookieConsent = document.getElementById("cookies-consent");
   const cookieCard = document.getElementById("cookie-card");
   const closeBtn = document.getElementById("close-btn");
@@ -903,13 +867,11 @@ window.addEventListener("load", function () {
   const rejectAll = document.getElementById("reject-all");
   const manageCookies = document.getElementById("manage-cookies");
 
-  // Mostrar el consentimiento con animación después de que la página cargue
   setTimeout(() => {
     cookieConsent.style.display = "block";
     cookieCard.classList.add("animate-slide-in-bottom");
   }, 1000);
 
-  // Función para cerrar el consentimiento de cookies
   function closeCookieConsent() {
     cookieCard.classList.remove("animate-slide-in-bottom");
     cookieCard.classList.add("animate-slide-out-bottom");
@@ -918,174 +880,155 @@ window.addEventListener("load", function () {
     }, 500);
   }
 
-  // Listeners para todos los botones
   closeBtn.addEventListener("click", closeCookieConsent);
   acceptAll.addEventListener("click", closeCookieConsent);
   rejectAll.addEventListener("click", closeCookieConsent);
   manageCookies.addEventListener("click", closeCookieConsent);
+}
+
+// =============================================
+// MANEJO DE SUBIDA DE ARCHIVOS
+// =============================================
+
+/**
+ * Configura el formulario de subida de archivos
+ */
+function setupUploadForm() {
+  document.getElementById('uploadForm').addEventListener('submit', handleUploadSubmit);
+}
+
+/**
+ * Maneja el envío del formulario de subida
+ * @param {Event} e - Evento de submit
+ */
+async function handleUploadSubmit(e) {
+  e.preventDefault();
+  const user = JSON.parse(localStorage.getItem('user'));
+  
+  if (!user || !user.token || user.role !== 'admin') {
+    Swal.fire({
+      icon: 'error',
+      title: 'No autorizado',
+      text: 'Solo los administradores pueden subir contenido.',
+      confirmButtonColor: '#7e22ce'
+    });
+    return;
+  }
+
+  try {
+    const form = document.getElementById('uploadForm');
+    const formData = new FormData(form);
+    const submitUpload = document.getElementById('submitUpload');
+    
+    submitUpload.disabled = true;
+    document.querySelector('.upload-text').classList.add('hidden');
+    document.querySelector('.upload-loading').classList.remove('hidden');
+
+    const response = await fetch(`${API_URL}/api/gallery`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${user.token}` },
+      body: formData
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || 'Error al subir el archivo');
+    }
+
+    Swal.fire({
+      icon: 'success',
+      title: '¡Éxito!',
+      text: result.message,
+      confirmButtonColor: '#7e22ce',
+      timer: 2000,
+      timerProgressBar: true
+    });
+
+    form.reset();
+    document.getElementById('filePreview').classList.add('hidden');
+  } catch (error) {
+    console.error('Error al subir archivo:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: error.message || 'Error al subir el archivo',
+      confirmButtonColor: '#7e22ce'
+    });
+  } finally {
+    const submitUpload = document.getElementById('submitUpload');
+    submitUpload.disabled = false;
+    document.querySelector('.upload-text').classList.remove('hidden');
+    document.querySelector('.upload-loading').classList.add('hidden');
+  }
+}
+
+// =============================================
+// INICIALIZACIÓN DE EVENTOS AL CARGAR LA PÁGINA
+// =============================================
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Menú móvil
+  const mobileMenuToggle = document.getElementById("mobile-menu-toggle");
+  if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener("click", toggleMobileMenu);
+  }
+
+  // Cargar datos del usuario
+  loadUserData();
+
+  // Configurar componentes
+  setupFullscreenToggle();
+  setupAccordion();
+  setupGoTopButton();
+  setupAccessibilityDropdown();
+  setupLightEffect();
+  setupTestimonialModal();
+  setupContactForm();
+  setupCookieConsent();
+  setupUploadForm();
+
+  // Añadir estilos para transiciones
+  const style = document.createElement("style");
+  style.textContent = `.gallery-item { transition: all 0.5s ease-in-out; }`;
+  document.head.appendChild(style);
+
+  // Cargar fuente guardada
+  const savedFont = localStorage.getItem("selectedFont");
+  if (savedFont) {
+    document.body.style.fontFamily = savedFont;
+    currentFontIndex = fonts.indexOf(savedFont);
+    if (currentFontIndex === -1) currentFontIndex = 0;
+    updateFontDisplay(savedFont);
+  } else {
+    updateFontDisplay(fonts[0]);
+  }
+
+  // Cargar testimonios
+  if (!document.querySelector('link[href*="swiper-bundle.min.css"]')) {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://unpkg.com/swiper@8/swiper-bundle.min.css";
+    document.head.appendChild(link);
+  }
+
+  if (typeof Swiper === "undefined") {
+    const script = document.createElement("script");
+    script.src = "https://unpkg.com/swiper@8/swiper-bundle.min.js";
+    script.onload = loadTestimonials;
+    document.head.appendChild(script);
+  } else {
+    loadTestimonials();
+  }
+});
+
+// Cerrar menús de testimonios al hacer clic fuera
+document.addEventListener("click", () => {
+  document.querySelectorAll(".testimonial-menu").forEach(menu => menu.classList.add("hidden"));
 });
 
 // Mostrar nombre del archivo seleccionado
 document.getElementById("avatar").addEventListener("change", function (e) {
   const fileName = e.target.files[0]?.name || "Seleccionar imagen";
   document.getElementById("file-name").textContent = fileName;
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-  const openButton = document.getElementById("openTestimonialModal");
-  const closeButton = document.getElementById("closeTestimonialModal");
-  const modal = document.getElementById("testimonialModal");
-  const form = document.getElementById("testimonialForm");
-
-  // Posicionar el modal inicialmente sobre el botón
-  function positionModalOnButton() {
-    const buttonRect = openButton.getBoundingClientRect();
-    const modalContent = modal.querySelector("> div > div");
-
-    // Calcular posición central del botón
-    const centerX = buttonRect.left + buttonRect.width / 2;
-    const centerY = buttonRect.top + buttonRect.height / 2;
-
-    // Establecer posición inicial
-    modal.style.position = "fixed";
-    modal.style.left = `${centerX}px`;
-    modal.style.top = `${centerY}px`;
-    modal.style.transform = "translate(-50%, -50%) scale(0)";
-    modalContent.style.transform = "scale(0.5)";
-  }
-
-  // Abrir modal con animación
-  openButton.addEventListener("click", function (e) {
-    e.preventDefault();
-
-    // Posicionar el modal sobre el botón primero
-    positionModalOnButton();
-
-    // Mostrar el modal
-    modal.classList.remove("hidden");
-
-    // Forzar reflow para que la animación funcione
-    void modal.offsetWidth;
-
-    // Animación de entrada
-    modal.style.transform = "translate(-50%, -50%) scale(1)";
-    modal.querySelector("> div > div").classList.add("modal-enter");
-
-    // Expandir a pantalla completa después de la animación inicial
-    setTimeout(() => {
-      modal.style.left = "0";
-      modal.style.top = "0";
-      modal.style.transform = "none";
-      modal.querySelector("> div > div").style.transform = "none";
-    }, 300);
-  });
-
-  // Cerrar modal con animación
-  closeButton.addEventListener("click", function (e) {
-    e.preventDefault();
-
-    // Volver a posicionar sobre el botón antes de la animación
-    const buttonRect = openButton.getBoundingClientRect();
-    const centerX = buttonRect.left + buttonRect.width / 2;
-    const centerY = buttonRect.top + buttonRect.height / 2;
-
-    // Animación de salida
-    modal.querySelector("> div > div").classList.remove("modal-enter");
-    modal.querySelector("> div > div").classList.add("modal-exit");
-
-    // Mover de vuelta al botón durante la animación
-    setTimeout(() => {
-      modal.style.left = `${centerX}px`;
-      modal.style.top = `${centerY}px`;
-      modal.style.transform = "translate(-50%, -50%) scale(0)";
-    }, 100);
-
-    // Ocultar el modal después de la animación
-    setTimeout(() => {
-      modal.classList.add("hidden");
-      modal.querySelector("> div > div").classList.remove("modal-exit");
-    }, 300);
-  });
-
-  // Manejar el envío del formulario (opcional)
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    // Aquí iría tu lógica para enviar el testimonio
-    alert("Testimonio enviado con éxito!");
-    closeButton.click(); // Cierra el modal después de enviar
-  });
-
-  // Actualizar nombre del archivo seleccionado
-  document.getElementById("avatar").addEventListener("change", function (e) {
-    const fileName = e.target.files[0]?.name || "Seleccionar imagen";
-    document.getElementById("file-name").textContent = fileName;
-  });
-});
-
-document.getElementById('uploadForm').addEventListener('submit', async (e) => {
-    e.preventDefault(); // Evita el envío predeterminado del formulario
-
-    const user = JSON.parse(localStorage.getItem('user')); // Obtén el usuario autenticado
-    if (!user || !user.token || user.role !== 'admin') {
-        Swal.fire({
-            icon: 'error',
-            title: 'No autorizado',
-            text: 'Solo los administradores pueden subir contenido.',
-            confirmButtonColor: '#7e22ce'
-        });
-        return;
-    }
-
-    try {
-        // Crear el objeto FormData a partir del formulario
-        const form = document.getElementById('uploadForm');
-        const formData = new FormData(form);
-
-        // Deshabilitar botón y mostrar loading
-        const submitUpload = document.getElementById('submitUpload');
-        submitUpload.disabled = true;
-        document.querySelector('.upload-text').classList.add('hidden');
-        document.querySelector('.upload-loading').classList.remove('hidden');
-
-        // Enviar los datos al backend
-        const response = await fetch('https://aly-mbelleza-backend.onrender.com/api/gallery', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${user.token}`
-            },
-            body: formData
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-            throw new Error(result.error || 'Error al subir el archivo');
-        }
-
-        Swal.fire({
-            icon: 'success',
-            title: '¡Éxito!',
-            text: result.message,
-            confirmButtonColor: '#7e22ce',
-            timer: 2000,
-            timerProgressBar: true
-        });
-
-        // Reiniciar el formulario
-        form.reset();
-        document.getElementById('filePreview').classList.add('hidden');
-    } catch (error) {
-        console.error('Error al subir archivo:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.message || 'Error al subir el archivo',
-            confirmButtonColor: '#7e22ce'
-        });
-    } finally {
-        const submitUpload = document.getElementById('submitUpload');
-        submitUpload.disabled = false;
-        document.querySelector('.upload-text').classList.remove('hidden');
-        document.querySelector('.upload-loading').classList.add('hidden');
-    }
 });
