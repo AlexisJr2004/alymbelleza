@@ -807,348 +807,244 @@
     </section>
 
     <!-- Script para Subir las imagenes y videos a galeria -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const user = JSON.parse(localStorage.getItem('user'));
-            const adminUploadSection = document.getElementById('admin-upload-section');
-            const uploadModal = document.getElementById('uploadModal');
-            const uploadBtn = document.getElementById('upload-btn');
-            const closeUploadModal = document.getElementById('closeUploadModal');
-            const cancelUpload = document.getElementById('cancelUpload');
-            const uploadForm = document.getElementById('uploadForm');
-            const galleryFile = document.getElementById('galleryFile');
-            const filePreview = document.getElementById('filePreview');
-            const imagePreview = document.getElementById('imagePreview');
-            const videoPreview = document.getElementById('videoPreview');
-            const fileInfo = document.getElementById('fileInfo');
-            const submitUpload = document.getElementById('submitUpload');
-            const GALLERY_API_URL = "https://aly-mbelleza-backend.onrender.com/api/gallery";
-
-            // Mostrar botón de subida solo para administradores
-            if (user && user.role === 'admin') {
-                adminUploadSection.classList.remove('hidden');
-            }
-
-            // Abrir modal
-            if (uploadBtn) {
-                uploadBtn.addEventListener('click', () => {
-                    uploadModal.classList.remove('hidden');
-                });
-            }
-
-            // Cerrar modal
-            function closeModal() {
-                uploadModal.classList.add('hidden');
-                uploadForm.reset();
-                filePreview.classList.add('hidden');
-                imagePreview.classList.add('hidden');
-                videoPreview.classList.add('hidden');
-            }
-
-            closeUploadModal.addEventListener('click', closeModal);
-            cancelUpload.addEventListener('click', closeModal);
-
-            // Cerrar modal al hacer clic fuera
-            uploadModal.addEventListener('click', (e) => {
-                if (e.target === uploadModal) {
-                    closeModal();
-                }
-            });
-
-            // Vista previa del archivo
-            galleryFile.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (!file) {
-                    filePreview.classList.add('hidden');
-                    return;
-                }
-
-                // Validar tamaño
-                const maxSize = file.type.startsWith('video/') ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
-                if (file.size > maxSize) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Archivo muy grande',
-                        text: `El archivo es muy grande. Máximo ${file.type.startsWith('video/') ? '50MB' : '10MB'}.`,
-                        confirmButtonColor: '#7e22ce'
-                    });
-                    galleryFile.value = '';
-                    return;
-                }
-
-                // Mostrar información del archivo
-                const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
-                fileInfo.textContent = `${file.name} (${fileSizeMB} MB)`;
-
-                // Vista previa
-                filePreview.classList.remove('hidden');
-                imagePreview.classList.add('hidden');
-                videoPreview.classList.add('hidden');
-
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        imagePreview.src = e.target.result;
-                        imagePreview.classList.remove('hidden');
-                    };
-                    reader.readAsDataURL(file);
-                } else if (file.type.startsWith('video/')) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        videoPreview.src = e.target.result;
-                        videoPreview.classList.remove('hidden');
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            // Manejar envío del formulario
-            uploadForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-
-                if (!user || !user.token || user.role !== 'admin') {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'No autorizado',
-                        text: 'Solo los administradores pueden subir contenido.',
-                        confirmButtonColor: '#7e22ce'
-                    });
-                    return;
-                }
-
-                // Crear el objeto FormData
-                const formData = new FormData(uploadForm);
-
-                // Deshabilitar botón y mostrar loading
-                submitUpload.disabled = true;
-                document.querySelector('.upload-text').classList.add('hidden');
-                document.querySelector('.upload-loading').classList.remove('hidden');
-
-                try {
-                    const response = await fetch(GALLERY_API_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${user.token}`
-                        },
-                        body: formData
-                    });
-
-                    const result = await response.json();
-
-                    if (!response.ok) {
-                        throw new Error(result.error || 'Error al subir el archivo');
-                    }
-
-                    Swal.fire({
-                        icon: 'success',
-                        title: '¡Éxito!',
-                        text: result.message,
-                        confirmButtonColor: '#7e22ce',
-                        timer: 2000,
-                        timerProgressBar: true
-                    });
-
-                    closeModal();
-                    loadGalleryFromDatabase();
-
-                } catch (error) {
-                    console.error('Error al subir archivo:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: error.message || 'Error al subir el archivo',
-                        confirmButtonColor: '#7e22ce'
-                    });
-                } finally {
-                    submitUpload.disabled = false;
-                    document.querySelector('.upload-text').classList.remove('hidden');
-                    document.querySelector('.upload-loading').classList.add('hidden');
-                }
-            });
-
-            // Función para cargar galería desde la base de datos
-async function loadGalleryFromDatabase() {
-    try {
-        const user = JSON.parse(localStorage.getItem('user'));
-        const headers = user && user.token ? { 'Authorization': `Bearer ${user.token}` } : {};
-
-        console.log("Token enviado:", headers['Authorization']);
-
-        const response = await fetch(GALLERY_API_URL, { headers });
-        console.log("Respuesta completa del servidor:", response);
-
-        if (!response.ok) {
-            throw new Error(`Error HTTP ${response.status}`);
-        }
-
-        const result = await response.json();
-        console.log("Datos recibidos:", result);
-
-        if (result.success) {
-            renderDatabaseGallery(result.data);
-        } else {
-            console.error("Error en la respuesta del servidor:", result.error);
-        }
-    } catch (error) {
-        console.error("Error al cargar galería:", error);
-        const gallery = document.getElementById("gallery-grid");
-        gallery.innerHTML = `<div class="text-center text-red-500">Error al cargar la galería.</div>`;
-    }
-}
-
-            // Función para renderizar galería desde base de datos
- function renderDatabaseGallery(items) {
-    const galleryGrid = document.getElementById("gallery-grid");
-    galleryGrid.innerHTML = "";
-
-    items.forEach((item) => {
-        const itemDiv = document.createElement("div");
-        itemDiv.className = "gallery-item relative group overflow-hidden rounded-lg transform transition-all duration-500 ease-in-out";
-        itemDiv.setAttribute("data-category", item.category);
-
-        let mediaElement;
-        if (item.type === 'video') {
-            mediaElement = document.createElement("video");
-            mediaElement.src = item.url; // URL proporcionada por la base de datos
-            mediaElement.controls = true;
-            mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
-        } else {
-            mediaElement = document.createElement("img");
-            mediaElement.src = item.url; // URL proporcionada por la base de datos
-            mediaElement.alt = item.category;
-            mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
-        }
-
-        itemDiv.appendChild(mediaElement);
-
-        // Agregar botón de eliminar para admin
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user && user.role === 'admin') {
-            const deleteBtn = document.createElement("button");
-            deleteBtn.className = "absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300";
-            deleteBtn.innerHTML = '<i class="fas fa-trash text-xs"></i>';
-            deleteBtn.onclick = () => deleteGalleryItem(item._id);
-            itemDiv.appendChild(deleteBtn);
-        }
-
-        galleryGrid.appendChild(itemDiv);
-    });
-}
-
-            // Función para eliminar elemento de galería
-            async function deleteGalleryItem(itemId) {
-                if (!user || !user.token || user.role !== 'admin') return;
-
-                const result = await Swal.fire({
-                    title: '¿Eliminar elemento?',
-                    text: 'Esta acción no se puede deshacer.',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#dc2626',
-                    cancelButtonColor: '#6b7280',
-                    confirmButtonText: 'Sí, eliminar',
-                    cancelButtonText: 'Cancelar'
-                });
-
-                if (result.isConfirmed) {
-                    try {
-                        const response = await fetch(`${GALLERY_API_URL}/${itemId}`, {
-                            method: 'DELETE',
-                            headers: {
-                                'Authorization': `Bearer ${user.token}`
-                            }
-                        });
-
-                        const deleteResult = await response.json();
-
-                        if (!response.ok) {
-                            throw new Error(deleteResult.error || 'Error al eliminar');
-                        }
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Eliminado',
-                            text: deleteResult.message,
-                            confirmButtonColor: '#7e22ce',
-                            timer: 1500,
-                            timerProgressBar: true
-                        });
-
-                        loadGalleryFromDatabase();
-
-                    } catch (error) {
-                        console.error('Error al eliminar:', error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: error.message || 'Error al eliminar el elemento',
-                            confirmButtonColor: '#7e22ce'
-                        });
-                    }
-                }
-            }
-
-            // Cargar galería al iniciar la página
-            loadGalleryFromDatabase();
-        });
-    </script>
-
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const adminUploadSection = document.getElementById('admin-upload-section');
+    const uploadModal = document.getElementById('uploadModal');
+    const uploadBtn = document.getElementById('upload-btn');
+    const closeUploadModal = document.getElementById('closeUploadModal');
+    const cancelUpload = document.getElementById('cancelUpload');
+    const uploadForm = document.getElementById('uploadForm');
+    const galleryFile = document.getElementById('galleryFile');
+    const filePreview = document.getElementById('filePreview');
+    const imagePreview = document.getElementById('imagePreview');
+    const videoPreview = document.getElementById('videoPreview');
+    const fileInfo = document.getElementById('fileInfo');
+    const submitUpload = document.getElementById('submitUpload');
     const GALLERY_API_URL = "https://aly-mbelleza-backend.onrender.com/api/gallery";
     const galleryGrid = document.getElementById("gallery-grid");
     const filterButtons = document.querySelectorAll(".filter-btn");
 
-async function loadGalleryFromDatabase() {
-    try {
-        const user = JSON.parse(localStorage.getItem('user'));
-        const headers = user && user.token ? { 'Authorization': `Bearer ${user.token}` } : {};
-
-        const response = await fetch("https://aly-mbelleza-backend.onrender.com/api/gallery", { headers });
-        if (!response.ok) {
-            throw new Error(`Error HTTP ${response.status}`);
-        }
-
-        const result = await response.json();
-        if (!result.success) {
-            throw new Error(result.error || 'Error desconocido');
-        }
-
-        renderDatabaseGallery(result.data);
-    } catch (error) {
-        console.error("Error al cargar galería:", error);
-        const galleryGrid = document.getElementById("gallery-grid");
-        galleryGrid.innerHTML = `<div class="text-center text-red-500">Error al cargar la galería.</div>`;
+    // Mostrar botón de subida solo para administradores
+    if (user && user.role === 'admin') {
+        adminUploadSection.classList.remove('hidden');
     }
-}
 
+    // Abrir modal
+    if (uploadBtn) {
+        uploadBtn.addEventListener('click', () => {
+            uploadModal.classList.remove('hidden');
+        });
+    }
+
+    // Cerrar modal
+    function closeModal() {
+        uploadModal.classList.add('hidden');
+        uploadForm.reset();
+        filePreview.classList.add('hidden');
+        imagePreview.classList.add('hidden');
+        videoPreview.classList.add('hidden');
+    }
+    closeUploadModal.addEventListener('click', closeModal);
+    cancelUpload.addEventListener('click', closeModal);
+    uploadModal.addEventListener('click', (e) => {
+        if (e.target === uploadModal) closeModal();
+    });
+
+    // Vista previa del archivo
+    galleryFile.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) {
+            filePreview.classList.add('hidden');
+            return;
+        }
+        const maxSize = file.type.startsWith('video/') ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
+        if (file.size > maxSize) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Archivo muy grande',
+                text: `El archivo es muy grande. Máximo ${file.type.startsWith('video/') ? '50MB' : '10MB'}.`,
+                confirmButtonColor: '#7e22ce'
+            });
+            galleryFile.value = '';
+            return;
+        }
+        const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+        fileInfo.textContent = `${file.name} (${fileSizeMB} MB)`;
+        filePreview.classList.remove('hidden');
+        imagePreview.classList.add('hidden');
+        videoPreview.classList.add('hidden');
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result;
+                imagePreview.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        } else if (file.type.startsWith('video/')) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                videoPreview.src = e.target.result;
+                videoPreview.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Manejar envío del formulario
+    uploadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!user || !user.token || user.role !== 'admin') {
+            Swal.fire({
+                icon: 'error',
+                title: 'No autorizado',
+                text: 'Solo los administradores pueden subir contenido.',
+                confirmButtonColor: '#7e22ce'
+            });
+            return;
+        }
+        const formData = new FormData(uploadForm);
+        submitUpload.disabled = true;
+        document.querySelector('.upload-text').classList.add('hidden');
+        document.querySelector('.upload-loading').classList.remove('hidden');
+        try {
+            const response = await fetch(GALLERY_API_URL, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${user.token}` },
+                body: formData
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || 'Error al subir el archivo');
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: result.message,
+                confirmButtonColor: '#7e22ce',
+                timer: 2000,
+                timerProgressBar: true
+            });
+            closeModal();
+            loadGalleryFromDatabase();
+        } catch (error) {
+            console.error('Error al subir archivo:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.message || 'Error al subir el archivo',
+                confirmButtonColor: '#7e22ce'
+            });
+        } finally {
+            submitUpload.disabled = false;
+            document.querySelector('.upload-text').classList.remove('hidden');
+            document.querySelector('.upload-loading').classList.add('hidden');
+        }
+    });
+
+    // Cargar galería desde la base de datos
+    async function loadGalleryFromDatabase() {
+        try {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const headers = user && user.token ? { 'Authorization': `Bearer ${user.token}` } : {};
+            const response = await fetch(GALLERY_API_URL, { headers });
+            if (!response.ok) throw new Error(`Error HTTP ${response.status}`);
+            const result = await response.json();
+            if (result.success) {
+                renderDatabaseGallery(result.data);
+            } else {
+                galleryGrid.innerHTML = `<div class="text-center text-red-500">Error al cargar la galería.</div>`;
+            }
+        } catch (error) {
+            console.error("Error al cargar galería:", error);
+            galleryGrid.innerHTML = `<div class="text-center text-red-500">Error al cargar la galería.</div>`;
+        }
+    }
+
+    // Renderizar galería
     function renderDatabaseGallery(items) {
         galleryGrid.innerHTML = "";
-
-        const baseUrl = "https://aly-mbelleza-backend.onrender.com";
         items.forEach((item) => {
             const itemDiv = document.createElement("div");
             itemDiv.className = "gallery-item relative group overflow-hidden rounded-lg transform transition-all duration-500 ease-in-out";
             itemDiv.setAttribute("data-category", item.category);
 
+            // Asegura la URL correcta (Cloudinary o local)
+            let url = item.url;
+            if (!/^https?:\/\//.test(url)) {
+                url = "https://aly-mbelleza-backend.onrender.com" + (url.startsWith("/") ? "" : "/") + url;
+            }
+
             let mediaElement;
             if (item.type === 'video') {
                 mediaElement = document.createElement("video");
-                mediaElement.src = item.url.startsWith("http") ? item.url : `${baseUrl}${item.url}`;
+                mediaElement.src = url;
                 mediaElement.controls = true;
                 mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
             } else {
                 mediaElement = document.createElement("img");
-                mediaElement.src = item.url.startsWith("http") ? item.url : `${baseUrl}${item.url}`;
+                mediaElement.src = url;
                 mediaElement.alt = item.category;
                 mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
             }
-
             itemDiv.appendChild(mediaElement);
+
+            // Botón eliminar solo para admin
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user && user.role === 'admin') {
+                const deleteBtn = document.createElement("button");
+                deleteBtn.className = "absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300";
+                deleteBtn.innerHTML = '<i class="fas fa-trash text-xs"></i>';
+                deleteBtn.onclick = () => deleteGalleryItem(item._id);
+                itemDiv.appendChild(deleteBtn);
+            }
             galleryGrid.appendChild(itemDiv);
         });
     }
 
+    // Eliminar elemento de galería
+    async function deleteGalleryItem(itemId) {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user || !user.token || user.role !== 'admin') return;
+        const result = await Swal.fire({
+            title: '¿Eliminar elemento?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        });
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch(`${GALLERY_API_URL}/${itemId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${user.token}` }
+                });
+                const deleteResult = await response.json();
+                if (!response.ok) throw new Error(deleteResult.error || 'Error al eliminar');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Eliminado',
+                    text: deleteResult.message,
+                    confirmButtonColor: '#7e22ce',
+                    timer: 1500,
+                    timerProgressBar: true
+                });
+                loadGalleryFromDatabase();
+            } catch (error) {
+                console.error('Error al eliminar:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.message || 'Error al eliminar el elemento',
+                    confirmButtonColor: '#7e22ce'
+                });
+            }
+        }
+    }
+
+    // Filtros de galería
     filterButtons.forEach((button) => {
         button.addEventListener("click", () => {
             const filter = button.getAttribute("data-filter");
@@ -1170,6 +1066,7 @@ async function loadGalleryFromDatabase() {
         });
     }
 
+    // Cargar galería al iniciar
     loadGalleryFromDatabase();
 });
 </script>
