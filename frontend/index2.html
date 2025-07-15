@@ -1092,92 +1092,81 @@ async function loadGalleryFromDatabase() {
     </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const GALLERY_API_URL = "https://aly-mbelleza-backend.onrender.com/api/gallery";
     const galleryGrid = document.getElementById("gallery-grid");
     const filterButtons = document.querySelectorAll(".filter-btn");
 
-    // Función para cargar contenido desde la base de datos
-async function loadGalleryFromDatabase() {
-    try {
-        const response = await fetch(GALLERY_API_URL);
-        if (!response.ok) {
-            throw new Error(`Error HTTP ${response.status}`);
-        }
+    async function loadGalleryFromDatabase() {
+        try {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const headers = user && user.token ? { 'Authorization': `Bearer ${user.token}` } : {};
 
-        const result = await response.json();
-        if (result.success) {
+            const response = await fetch(GALLERY_API_URL, { headers });
+            if (!response.ok) {
+                throw new Error(`Error HTTP ${response.status}`);
+            }
+
+            const result = await response.json();
+            if (!result.success) {
+                throw new Error(result.error || 'Error desconocido');
+            }
+
             renderDatabaseGallery(result.data);
-        } else {
-            console.error("Error en la respuesta del servidor:", result.error);
+        } catch (error) {
+            console.error("Error al cargar galería:", error);
+            galleryGrid.innerHTML = `<div class="text-center text-red-500">Error al cargar la galería.</div>`;
         }
-    } catch (error) {
-        console.error("Error al cargar galería:", error);
-        const gallery = document.getElementById("gallery-grid");
-        gallery.innerHTML = `<div class="text-center text-red-500">Error al cargar la galería.</div>`;
     }
-}
 
-    // Función para renderizar la galería
-function renderGallery(items) {
-    galleryGrid.innerHTML = ""; // Limpiar galería
+    function renderDatabaseGallery(items) {
+        galleryGrid.innerHTML = "";
 
-    items.forEach((item) => {
-        const itemDiv = document.createElement("div");
-        itemDiv.className = "gallery-item relative group overflow-hidden rounded-lg transform transition-all duration-500 ease-in-out";
-        itemDiv.setAttribute("data-category", item.category);
+        const baseUrl = "https://aly-mbelleza-backend.onrender.com";
+        items.forEach((item) => {
+            const itemDiv = document.createElement("div");
+            itemDiv.className = "gallery-item relative group overflow-hidden rounded-lg transform transition-all duration-500 ease-in-out";
+            itemDiv.setAttribute("data-category", item.category);
 
-        let mediaElement;
-        if (item.type === 'video') {
-            mediaElement = document.createElement("video");
-            mediaElement.src = item.url;
-            mediaElement.controls = true;
-            mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
-        } else {
-            mediaElement = document.createElement("img");
-            mediaElement.src = item.url;
-            mediaElement.alt = item.category;
-            mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
-        }
+            let mediaElement;
+            if (item.type === 'video') {
+                mediaElement = document.createElement("video");
+                mediaElement.src = item.url.startsWith("http") ? item.url : `${baseUrl}${item.url}`;
+                mediaElement.controls = true;
+                mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
+            } else {
+                mediaElement = document.createElement("img");
+                mediaElement.src = item.url.startsWith("http") ? item.url : `${baseUrl}${item.url}`;
+                mediaElement.alt = item.category;
+                mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
+            }
 
-        itemDiv.appendChild(mediaElement);
-        galleryGrid.appendChild(itemDiv);
-    });
-}
+            itemDiv.appendChild(mediaElement);
+            galleryGrid.appendChild(itemDiv);
+        });
+    }
 
-function applyFilter(filter) {
-    const galleryItems = document.querySelectorAll(".gallery-item");
-
-    galleryItems.forEach((item) => {
-        const category = item.getAttribute("data-category");
-        if (filter === "all" || category === filter) {
-            item.style.display = "block";
-        } else {
-            item.style.display = "none";
-        }
-    });
-}
-
-    // Evento para los botones de filtro
     filterButtons.forEach((button) => {
         button.addEventListener("click", () => {
             const filter = button.getAttribute("data-filter");
-
-            // Actualizar estilos de los botones
             filterButtons.forEach((btn) => {
                 btn.classList.remove("text-blue-700", "bg-blue-700", "text-white");
                 btn.classList.add("text-gray-900", "bg-white");
             });
-
             button.classList.remove("text-gray-900", "bg-white");
             button.classList.add("text-blue-700", "bg-blue-700", "text-white");
-
-            // Aplicar filtro
             applyFilter(filter);
         });
     });
 
-    // Cargar galería al iniciar la página
+    function applyFilter(filter) {
+        const galleryItems = document.querySelectorAll(".gallery-item");
+        galleryItems.forEach((item) => {
+            const category = item.getAttribute("data-category");
+            item.style.display = filter === "all" || category === filter ? "block" : "none";
+        });
+    }
+
     loadGalleryFromDatabase();
 });
 </script>
