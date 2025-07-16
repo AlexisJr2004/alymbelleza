@@ -817,13 +817,15 @@ async function handleContactFormSubmit(e) {
       </span>
     `;
 
+    // Cambia aquí: envía como JSON
     const formData = new FormData(form);
     const formDataObj = Object.fromEntries(formData.entries());
     console.log("Datos del formulario:", formDataObj);
 
     const response = await fetch(`${API_URL}/api/contact`, {
       method: "POST",
-      body: formData,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formDataObj),
     });
 
     if (!response.ok) {
