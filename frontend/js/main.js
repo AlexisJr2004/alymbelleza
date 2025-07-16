@@ -831,11 +831,17 @@ async function handleContactFormSubmit(e) {
     try {
       result = await response.json();
     } catch (err) {
+      // Si la respuesta no es JSON, result será {}
     }
 
     if (!response.ok) {
       console.error("Error del servidor:", result);
-      throw new Error(result.error || `Error: ${response.status}`);
+      showNotification(
+        "error",
+        "Error",
+        result.error || `Error: ${response.status}`
+      );
+      return; // Detén el flujo aquí, no muestres notificación de éxito ni resetees el formulario
     }
 
     console.log("Respuesta exitosa:", result);
