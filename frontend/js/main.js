@@ -817,7 +817,6 @@ async function handleContactFormSubmit(e) {
       </span>
     `;
 
-    // Cambia aquí: envía como JSON
     const formData = new FormData(form);
     const formDataObj = Object.fromEntries(formData.entries());
     console.log("Datos del formulario:", formDataObj);
@@ -828,13 +827,17 @@ async function handleContactFormSubmit(e) {
       body: JSON.stringify(formDataObj),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error("Error del servidor:", errorData);
-      throw new Error(errorData.error || `Error: ${response.status}`);
+    let result = {};
+    try {
+      result = await response.json();
+    } catch (err) {
     }
 
-    const result = await response.json();
+    if (!response.ok) {
+      console.error("Error del servidor:", result);
+      throw new Error(result.error || `Error: ${response.status}`);
+    }
+
     console.log("Respuesta exitosa:", result);
 
     showNotification("success", "¡Mensaje enviado!", "Gracias por contactarnos. Te responderemos pronto.");
