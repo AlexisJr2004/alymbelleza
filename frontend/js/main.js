@@ -795,22 +795,22 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
     // Recoge los datos del formulario como objeto
     const formData = new FormData(form);
     const formDataObj = Object.fromEntries(formData.entries());
-    console.log("Datos del formulario:", formDataObj);
-
     const backendUrl = "https://aly-mbelleza-backend.onrender.com/api/contact";
 
-    // ENVÍA COMO JSON
     const response = await fetch(backendUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formDataObj),
     });
 
-    let result = {};
-    try {
+    // Detecta si la respuesta es JSON
+    const contentType = response.headers.get("content-type");
+    let result;
+    if (contentType && contentType.includes("application/json")) {
       result = await response.json();
-    } catch (err) {
-      throw new Error("El servidor no respondió correctamente. Intenta más tarde.");
+    } else {
+      const text = await response.text();
+      throw new Error(text || "El servidor no respondió correctamente. Intenta más tarde.");
     }
 
     if (!response.ok) {
