@@ -41,7 +41,7 @@ exports.sendContactEmail = async (req, res) => {
       html: `
         <div style="font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: 0 auto; color: #333;">
           <div style="text-align: center; padding: 20px 0; border-bottom: 1px solid #eaeaea;">
-            <img src="https://res.cloudinary.com/dokmxt0ja/image/upload/v1748585094/mujer-con-pelo-largo_ppap6w.png" alt="Bella Beauty Logo" style="max-width: 80px; height: auto;">
+            <img src="https://res.cloudinary.com/dokmxt0ja/image/upload/v1752727246/logo_mybdvl.png" alt="Bella Beauty Logo" style="max-width: 80px; height: auto;">
             <h1 style="color: #7e22ce; font-size: 24px; margin-top: 15px; font-weight: 600;">Nuevo Mensaje de Contacto</h1>
           </div>
           <div style="padding: 25px 30px;">
