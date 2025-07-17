@@ -11,6 +11,7 @@ const galleryRoutes = require('./gestion-roles-productos/src/routes/galleryRoute
 const testimonialRoutes = require("./gestion-roles-productos/src/routes/testimonialRoutes");
 const contactRoutes = require("./gestion-roles-productos/src/routes/contactRoutes");
 const cartRoutes = require("./gestion-roles-productos/src/routes/cartRoutes");
+const appointmentRoutes = require("./gestion-roles-productos/src/routes/appointmentRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -32,6 +33,7 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use("/api/gallery", galleryRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/appointments", appointmentRoutes);
 
 // 2. Conexión a MongoDB
 const DB_URI =
