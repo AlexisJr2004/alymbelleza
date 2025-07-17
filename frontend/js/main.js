@@ -792,29 +792,30 @@ document.getElementById("contactForm").addEventListener("submit", async (e) => {
       </span>
     `;
 
-    // Crear FormData directamente del formulario
+    // Recoge los datos del formulario como objeto
     const formData = new FormData(form);
-
-    // Convertir a objeto simple para logging
     const formDataObj = Object.fromEntries(formData.entries());
     console.log("Datos del formulario:", formDataObj);
 
-    const backendUrl =
-      "https://aly-mbelleza-backend.onrender.com/api/contact";
+    const backendUrl = "https://aly-mbelleza-backend.onrender.com/api/contact";
 
+    // ENVÍA COMO JSON
     const response = await fetch(backendUrl, {
       method: "POST",
-      body: formData, // Enviamos FormData directamente
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formDataObj),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error("Error del servidor:", errorData);
-      throw new Error(errorData.error || `Error: ${response.status}`);
+    let result = {};
+    try {
+      result = await response.json();
+    } catch (err) {
+      throw new Error("El servidor no respondió correctamente. Intenta más tarde.");
     }
 
-    const result = await response.json();
-    console.log("Respuesta exitosa:", result);
+    if (!response.ok) {
+      throw new Error(result.error || `Error: ${response.status}`);
+    }
 
     showNotification(
       "success",
