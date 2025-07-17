@@ -827,24 +827,17 @@ async function handleContactFormSubmit(e) {
       body: JSON.stringify(formDataObj),
     });
 
-    let result = {};
+    let result;
     try {
       result = await response.json();
     } catch (err) {
-      // Si la respuesta no es JSON, result será {}
+      // Si la respuesta no es JSON, probablemente es HTML (error de ruta/catch-all)
+      throw new Error("El servidor no respondió correctamente. Intenta más tarde.");
     }
 
     if (!response.ok) {
-      console.error("Error del servidor:", result);
-      showNotification(
-        "error",
-        "Error",
-        result.error || `Error: ${response.status}`
-      );
-      return; // Detén el flujo aquí, no muestres notificación de éxito ni resetees el formulario
+      throw new Error(result.error || `Error: ${response.status}`);
     }
-
-    console.log("Respuesta exitosa:", result);
 
     showNotification("success", "¡Mensaje enviado!", "Gracias por contactarnos. Te responderemos pronto.");
     form.reset();
