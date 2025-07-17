@@ -3134,8 +3134,8 @@
             const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/cart/add", {
                 method: "POST",
                 headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({ productId, cantidad })
             });
