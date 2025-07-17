@@ -1089,4 +1089,4 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
         document.querySelector('.upload-text').classList.remove('hidden');
         document.querySelector('.upload-loading').classList.add('hidden');
     }
-});
+}); 
