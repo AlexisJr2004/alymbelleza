@@ -543,6 +543,8 @@ function setupContactForm() {
   if (contactForm) {
     contactForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+      e.stopImmediatePropagation();
+
       const form = e.target;
       const submitBtn = form.querySelector('button[type="submit"]');
       const originalBtnText = submitBtn.innerHTML;
