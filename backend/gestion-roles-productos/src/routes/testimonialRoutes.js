@@ -96,7 +96,7 @@ router.put("/:id", verifyToken, testimonialUpload.none(), async (req, res) => {
   }
 });
 
-// Eliminar testimonio
+// Eliminar testimonio 
 router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const testimonial = await Testimonial.findById(req.params.id);
