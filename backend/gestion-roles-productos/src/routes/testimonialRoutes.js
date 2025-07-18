@@ -2,7 +2,6 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const Testimonial = require("../models/Testimonial");
-const { verifyToken } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
@@ -23,7 +22,7 @@ const testimonialUpload = multer({
 });
 
 // Crear testimonio
-router.post("/", verifyToken, testimonialUpload.none(), async (req, res) => {
+router.post("/", testimonialUpload.none(), async (req, res) => {
   try {
     const { name, role, comment, avatar } = req.body;
     if (!name || !role || !comment || !avatar) {
@@ -32,13 +31,7 @@ router.post("/", verifyToken, testimonialUpload.none(), async (req, res) => {
         error: "Todos los campos son requeridos",
       });
     }
-    const newTestimonial = new Testimonial({
-      name,
-      role,
-      comment,
-      avatar,
-      userId: req.user._id, // Guarda el usuario autenticado
-    });
+    const newTestimonial = new Testimonial({ name, role, comment, avatar });
     await newTestimonial.save();
     res.status(201).json({
       success: true,
@@ -80,21 +73,17 @@ router.get("/", async (req, res) => {
 });
 
 // Editar testimonio
-router.put("/:id", verifyToken, testimonialUpload.none(), async (req, res) => {
+router.put("/:id", testimonialUpload.none(), async (req, res) => {
   try {
+    const { name, role, comment, avatar } = req.body;
     const testimonial = await Testimonial.findById(req.params.id);
     if (!testimonial) {
       return res.status(404).json({ success: false, error: "Testimonio no encontrado" });
     }
-    if (testimonial.userId.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ success: false, error: "No autorizado" });
-    }
-    // Actualiza solo los campos permitidos
-    const { name, role, comment, avatar } = req.body;
-    if (name) testimonial.name = name;
-    if (role) testimonial.role = role;
-    if (comment) testimonial.comment = comment;
-    if (avatar) testimonial.avatar = avatar;
+    testimonial.name = name || testimonial.name;
+    testimonial.role = role || testimonial.role;
+    testimonial.comment = comment || testimonial.comment;
+    testimonial.avatar = avatar || testimonial.avatar;
     await testimonial.save();
     res.json({ success: true, message: "Testimonio actualizado", data: testimonial });
   } catch (error) {
@@ -102,17 +91,13 @@ router.put("/:id", verifyToken, testimonialUpload.none(), async (req, res) => {
   }
 });
 
-// Eliminar testimonio 
-router.delete("/:id", verifyToken, async (req, res) => {
+// Eliminar testimonio
+router.delete("/:id", async (req, res) => {
   try {
-    const testimonial = await Testimonial.findById(req.params.id);
+    const testimonial = await Testimonial.findByIdAndDelete(req.params.id);
     if (!testimonial) {
       return res.status(404).json({ success: false, error: "Testimonio no encontrado" });
     }
-    if (testimonial.userId.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ success: false, error: "No autorizado" });
-    }
-    await testimonial.deleteOne();
     res.json({ success: true, message: "Testimonio eliminado" });
   } catch (error) {
     res.status(500).json({ success: false, error: "Error al eliminar testimonio" });

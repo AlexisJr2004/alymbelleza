@@ -28,11 +28,6 @@ const testimonialSchema = new mongoose.Schema(
         message: "La URL de la imagen no es válida",
       },
     },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
     createdAt: {
       type: Date,
       default: Date.now,
