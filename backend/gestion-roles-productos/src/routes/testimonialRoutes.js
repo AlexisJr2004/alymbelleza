@@ -89,6 +89,12 @@ router.put("/:id", verifyToken, testimonialUpload.none(), async (req, res) => {
     if (testimonial.userId.toString() !== req.user._id.toString()) {
       return res.status(403).json({ success: false, error: "No autorizado" });
     }
+    // Actualiza solo los campos permitidos
+    const { name, role, comment, avatar } = req.body;
+    if (name) testimonial.name = name;
+    if (role) testimonial.role = role;
+    if (comment) testimonial.comment = comment;
+    if (avatar) testimonial.avatar = avatar;
     await testimonial.save();
     res.json({ success: true, message: "Testimonio actualizado", data: testimonial });
   } catch (error) {
