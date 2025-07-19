@@ -274,7 +274,7 @@ async function loadTestimonials() {
       testimonials.forEach((testimonial) => {
   // Depuración: imprime los valores
   console.log("Testimonio:", testimonial, "Usuario:", user);
-
+console.log("Comparando:", testimonial.userId, user && user._id);
   let isOwner = false;
   if (
     user &&
