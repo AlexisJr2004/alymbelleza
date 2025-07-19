@@ -2,6 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const Testimonial = require("../models/Testimonial");
+const requireAuth = require("../middleware/requireAuth");
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ const testimonialUpload = multer({
 });
 
 // Crear testimonio
-router.post("/", testimonialUpload.none(), async (req, res) => {
+router.post("/", requireAuth, testimonialUpload.none(), async (req, res) => {
   try {
     const { name, role, comment, avatar } = req.body;
     if (!name || !role || !comment || !avatar) {
@@ -31,7 +32,13 @@ router.post("/", testimonialUpload.none(), async (req, res) => {
         error: "Todos los campos son requeridos",
       });
     }
-    const newTestimonial = new Testimonial({ name, role, comment, avatar });
+    const newTestimonial = new Testimonial({
+      name,
+      role,
+      comment,
+      avatar,
+      userId: req.user._id, //
+    });
     await newTestimonial.save();
     res.status(201).json({
       success: true,
@@ -73,12 +80,16 @@ router.get("/", async (req, res) => {
 });
 
 // Editar testimonio
-router.put("/:id", testimonialUpload.none(), async (req, res) => {
+router.put("/:id", requireAuth, testimonialUpload.none(), async (req, res) => {
   try {
     const { name, role, comment, avatar } = req.body;
     const testimonial = await Testimonial.findById(req.params.id);
     if (!testimonial) {
       return res.status(404).json({ success: false, error: "Testimonio no encontrado" });
+    }
+    // Solo el dueño puede editar
+    if (testimonial.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ success: false, error: "No autorizado" });
     }
     testimonial.name = name || testimonial.name;
     testimonial.role = role || testimonial.role;
@@ -92,12 +103,17 @@ router.put("/:id", testimonialUpload.none(), async (req, res) => {
 });
 
 // Eliminar testimonio
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requireAuth, async (req, res) => {
   try {
-    const testimonial = await Testimonial.findByIdAndDelete(req.params.id);
+    const testimonial = await Testimonial.findById(req.params.id);
     if (!testimonial) {
       return res.status(404).json({ success: false, error: "Testimonio no encontrado" });
     }
+    // Solo el dueño puede eliminar
+    if (testimonial.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ success: false, error: "No autorizado" });
+    }
+    await testimonial.deleteOne();
     res.json({ success: true, message: "Testimonio eliminado" });
   } catch (error) {
     res.status(500).json({ success: false, error: "Error al eliminar testimonio" });
