@@ -243,172 +243,6 @@ function setupUserProfile() {
 // =============================================
 // TESTIMONIOS
 // =============================================
-async function loadTestimonialsForum() {
-  const container = document.getElementById("testimonials-forum");
-  container.innerHTML = `<div class="text-center text-gray-500 py-8">Cargando testimonios...</div>`;
-  const user = JSON.parse(localStorage.getItem("user"));
-  if (user && !user._id && user.token) {
-    try {
-      const payload = JSON.parse(atob(user.token.split(".")[1]));
-      user._id = payload.userId || payload._id || payload.id;
-    } catch (e) {}
-  }
-
-  // 1. Obtener testimonios
-  let testimonials = [];
-  try {
-    const res = await fetch(`${API_URL}/api/testimonials`);
-    const { data } = await res.json();
-    testimonials = data || [];
-  } catch (e) {
-    container.innerHTML = `<div class="text-center text-red-500 py-8">Error al cargar testimonios.</div>`;
-    return;
-  }
-
-  // 2. Centrar el testimonio del usuario logueado
-  if (user && user._id) {
-    const myIndex = testimonials.findIndex(t => String(t.userId) === String(user._id));
-    if (myIndex > -1) {
-      const middle = Math.floor(testimonials.length / 2);
-      const [myTestimonial] = testimonials.splice(myIndex, 1);
-      testimonials.splice(middle, 0, myTestimonial);
-    }
-  }
-
-  // 3. Renderizar testimonios
-  container.innerHTML = testimonials.map((t, idx) => {
-    const isOwner = user && t.userId && String(t.userId) === String(user._id);
-    const date = new Date(t.createdAt).toLocaleDateString("es-ES", { year: "numeric", month: "short", day: "numeric" });
-    return `
-      <article class="p-6 mb-3 text-base bg-white rounded-lg dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
-        <footer class="flex justify-between items-center mb-2">
-          <div class="flex items-center">
-            <p class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white font-semibold">
-              <img class="mr-2 w-6 h-6 rounded-full" src="${t.avatar}" alt="${t.name}">${t.name}
-            </p>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
-              <time pubdate datetime="${t.createdAt}" title="${t.createdAt}">${date}</time>
-            </p>
-          </div>
-          <div class="relative">
-            <button data-id="${t._id}" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 dark:text-gray-400 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600 testimonial-menu-btn" type="button">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 3"><path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/></svg>
-              <span class="sr-only">Opciones</span>
-            </button>
-            <div class="testimonial-menu hidden absolute right-0 mt-2 w-36 bg-white rounded divide-y divide-gray-100 shadow z-10">
-              ${isOwner ? `
-                <button class="edit-testimonial-btn block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100" data-id="${t._id}">Editar</button>
-                <button class="delete-testimonial-btn block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50" data-id="${t._id}">Eliminar</button>
-              ` : ""}
-              <button class="reply-testimonial-btn block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100" data-id="${t._id}">Responder</button>
-            </div>
-          </div>
-        </footer>
-        <p class="text-gray-500 dark:text-gray-400 mb-2 comment-text" data-id="${t._id}">${t.comment}</p>
-        <div class="flex items-center mt-4 space-x-4">
-          <button type="button" class="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400 font-medium reply-testimonial-btn" data-id="${t._id}">
-            <svg class="mr-1.5 w-3.5 h-3.5" fill="none" viewBox="0 0 20 18"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5h5M5 8h2m6-3h2m-5 3h6m2-7H2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h3v5l5-5h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z"/></svg>
-            Responder
-          </button>
-        </div>
-        <div class="replies-container" id="replies-${t._id}"></div>
-      </article>
-    `;
-  }).join("");
-
-  // 4. Menú de opciones (mostrar/ocultar)
-  document.querySelectorAll(".testimonial-menu-btn").forEach(btn => {
-    btn.onclick = function (e) {
-      e.stopPropagation();
-      document.querySelectorAll(".testimonial-menu").forEach(menu => menu.classList.add("hidden"));
-      btn.parentElement.querySelector(".testimonial-menu").classList.toggle("hidden");
-    };
-  });
-  document.addEventListener("click", () => {
-    document.querySelectorAll(".testimonial-menu").forEach(menu => menu.classList.add("hidden"));
-  });
-
-  // 5. Editar y eliminar (solo dueño)
-  document.querySelectorAll(".edit-testimonial-btn").forEach(btn => {
-    btn.onclick = function () {
-      btn.closest(".testimonial-menu").classList.add("hidden");
-      const commentP = btn.closest("article").querySelector(".comment-text");
-      commentP.setAttribute("contenteditable", "true");
-      commentP.focus();
-      // Botón guardar
-      if (!commentP.parentNode.querySelector(".save-edit-btn")) {
-        const saveBtn = document.createElement("button");
-        saveBtn.className = "save-edit-btn ml-2 px-3 py-1 bg-purple-600 text-white rounded";
-        saveBtn.textContent = "Guardar";
-        commentP.parentNode.appendChild(saveBtn);
-        saveBtn.onclick = async function () {
-          const newComment = commentP.textContent;
-          await updateTestimonialInline(btn.getAttribute("data-id"), newComment, "");
-        };
-      }
-    };
-  });
-  document.querySelectorAll(".delete-testimonial-btn").forEach(btn => {
-    btn.onclick = async function () {
-      btn.closest(".testimonial-menu").classList.add("hidden");
-      if (confirm("¿Seguro que quieres eliminar este testimonio?")) {
-        await deleteTestimonial(btn.getAttribute("data-id"));
-        loadTestimonialsForum();
-      }
-    };
-  });
-
-  // 6. Responder
-  document.querySelectorAll(".reply-testimonial-btn").forEach(btn => {
-    btn.onclick = function () {
-      const id = btn.getAttribute("data-id");
-      const repliesContainer = document.getElementById(`replies-${id}`);
-      repliesContainer.innerHTML = `
-        <form class="reply-form mt-4">
-          <textarea class="w-full p-2 border rounded mb-2" rows="2" placeholder="Escribe tu respuesta..."></textarea>
-          <button type="submit" class="bg-purple-600 text-white px-4 py-1 rounded">Responder</button>
-        </form>
-      `;
-      repliesContainer.querySelector('form').onsubmit = async function (e) {
-        e.preventDefault();
-        const reply = this.querySelector('textarea').value.trim();
-        if (reply) {
-          // Aquí deberías hacer un fetch POST a tu backend para guardar la respuesta
-          // await fetch(...);
-          repliesContainer.innerHTML += `<div class="ml-6 mt-2 p-2 bg-gray-50 rounded">${reply}</div>`;
-          this.remove();
-        }
-      };
-    };
-  });
-}
-
-// Reemplaza tu llamada a loadTestimonials() por loadTestimonialsForum()
-document.addEventListener("DOMContentLoaded", loadTestimonialsForum);
-
-// Si tienes un formulario para agregar testimonios, adáptalo:
-document.getElementById("testimonialForm").onsubmit = async function (e) {
-  e.preventDefault();
-  const user = JSON.parse(localStorage.getItem("user"));
-  if (!user || !user.token) {
-    alert("Debes iniciar sesión para comentar.");
-    return;
-  }
-  const comment = document.getElementById("comment").value.trim();
-  if (!comment) return;
-  const formData = new FormData();
-  formData.append("comment", comment);
-  formData.append("role", "CLIENTE SATISFECHO");
-  formData.append("name", user.name);
-  formData.append("avatar", user.profileImage);
-  await fetch(`${API_URL}/api/testimonials`, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${user.token}` },
-    body: formData,
-  });
-  this.reset();
-  loadTestimonialsForum();
-};
 function initTestimonialSwiper() {
   if (typeof Swiper === "undefined") {
     console.error("Swiper no está disponible");
@@ -471,9 +305,14 @@ async function loadTestimonials() {
         </div>`;
     } else {
       testimonials.forEach((testimonial) => {
-        // Depuración: imprime los valores
-        console.log("Testimonio:", testimonial, "Usuario:", user);
-        console.log("Comparando:", testimonial.userId, user && user._id);
+        // FECHA Y HORA DE PUBLICACIÓN
+        const fecha = new Date(testimonial.createdAt).toLocaleDateString("es-ES", {
+          year: "numeric", month: "short", day: "numeric"
+        });
+        const hora = new Date(testimonial.createdAt).toLocaleTimeString("es-ES", {
+          hour: "2-digit", minute: "2-digit"
+        });
+
         let isOwner = false;
         if (
           user &&
@@ -496,6 +335,9 @@ async function loadTestimonials() {
         <p class="text-gray-600 italic mb-8 comment-text" data-id="${
           testimonial._id
         }">${testimonial.comment}</p>
+        <p class="text-xs text-gray-500 mt-2">
+          Publicado el <span>${fecha}</span> a las <span>${hora}</span>
+        </p>
       </div>
       <div class="flex items-center mt-auto">
         <img src="${formatImageUrl(testimonial.avatar)}" alt="${
