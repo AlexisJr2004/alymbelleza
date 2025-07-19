@@ -63,6 +63,8 @@ router.get("/", async (req, res) => {
       Testimonial.find().sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
       Testimonial.countDocuments(),
     ]);
+    // Forzar userId a string
+    testimonials.forEach(t => t.userId = t.userId?.toString());
     res.json({
       success: true,
       count: testimonials.length,
