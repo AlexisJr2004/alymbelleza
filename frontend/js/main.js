@@ -272,46 +272,58 @@ async function loadTestimonials() {
         </div>`;
     } else {
       testimonials.forEach((testimonial) => {
-        const isOwner = !!(user && testimonial.userId && user._id && String(testimonial.userId) === String(user._id));
-        const slide = document.createElement("div");
-        slide.className = "swiper-slide";
-        slide.innerHTML = `
-          <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col relative group">
-            <div class="relative flex-grow">
-              <svg class="absolute -top-4 -left-4 h-8 w-8 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.999v10h-9.999z"/>
-              </svg>
-              <br>
-              <p class="text-gray-600 italic mb-8 comment-text" data-id="${testimonial._id}">${testimonial.comment}</p>
+  // Depuración: imprime los valores
+  console.log("Testimonio:", testimonial, "Usuario:", user);
+
+  let isOwner = false;
+  if (
+    user &&
+    testimonial.userId &&
+    user._id &&
+    String(testimonial.userId) === String(user._id)
+  ) {
+    isOwner = true;
+  }
+
+  const slide = document.createElement("div");
+  slide.className = "swiper-slide";
+  slide.innerHTML = `
+    <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col relative group">
+      <div class="relative flex-grow">
+        <svg class="absolute -top-4 -left-4 h-8 w-8 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.999v10h-9.999z"/>
+        </svg>
+        <br>
+        <p class="text-gray-600 italic mb-8 comment-text" data-id="${testimonial._id}">${testimonial.comment}</p>
+      </div>
+      <div class="flex items-center mt-auto">
+        <img src="${formatImageUrl(testimonial.avatar)}" alt="${testimonial.name}" class="h-12 w-12 rounded-full object-cover"
+          onerror="this.onerror=null;this.src='https://us.123rf.com/450wm/thesomeday123/thesomeday1231712/thesomeday123171200009/91087331-icono-de-perfil-de-avatar-predeterminado-para-hombre-marcador-de-posici%C3%B3n-de-foto-gris-vector-de.jpg?ver=6'">
+        <div class="ml-4">
+          <h4 class="font-semibold text-gray-900">${testimonial.name}</h4>
+          <p class="text-gray-500 text-sm">${testimonial.role}</p>
+        </div>
+      </div>
+      ${isOwner ? `
+        <div class="absolute top-4 right-4">
+          <div class="relative group">
+            <button class="testimonial-menu-btn w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center focus:outline-none" aria-label="Opciones">
+              <span class="sr-only">Opciones</span>
+              <span class="text-2xl font-bold text-gray-600">⋮</span>
+            </button>
+            <div class="testimonial-menu hidden absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg z-10">
+              <button class="edit-testimonial-btn block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                data-id="${testimonial._id}" data-role="${testimonial.role}">Editar</button>
+              <button class="delete-testimonial-btn block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
+                data-id="${testimonial._id}">Eliminar</button>
             </div>
-            <div class="flex items-center mt-auto">
-              <img src="${formatImageUrl(testimonial.avatar)}" alt="${testimonial.name}" class="h-12 w-12 rounded-full object-cover"
-                onerror="this.onerror=null;this.src='https://us.123rf.com/450wm/thesomeday123/thesomeday1231712/thesomeday123171200009/91087331-icono-de-perfil-de-avatar-predeterminado-para-hombre-marcador-de-posici%C3%B3n-de-foto-gris-vector-de.jpg?ver=6'">
-              <div class="ml-4">
-                <h4 class="font-semibold text-gray-900">${testimonial.name}</h4>
-                <p class="text-gray-500 text-sm">${testimonial.role}</p>
-              </div>
-            </div>
-            ${isOwner ? `
-              <div class="absolute top-4 right-4">
-                <div class="relative group">
-                  <button class="testimonial-menu-btn w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center focus:outline-none" aria-label="Opciones">
-                    <span class="sr-only">Opciones</span>
-                    <span class="text-2xl font-bold text-gray-600">⋮</span>
-                  </button>
-                  <div class="testimonial-menu hidden absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg z-10">
-                    <button class="edit-testimonial-btn block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                      data-id="${testimonial._id}" data-role="${testimonial.role}">Editar</button>
-                    <button class="delete-testimonial-btn block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
-                      data-id="${testimonial._id}">Eliminar</button>
-                  </div>
-                </div>
-              </div>
-            ` : ""}
           </div>
-        `;
-        swiperWrapper.appendChild(slide);
-      });
+        </div>
+      ` : ""}
+    </div>
+  `;
+  swiperWrapper.appendChild(slide);
+});
     }
 
     initTestimonialSwiper();
