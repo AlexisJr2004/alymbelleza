@@ -256,6 +256,12 @@ async function loadTestimonials() {
     swiperWrapper.innerHTML = "";
 
     const user = JSON.parse(localStorage.getItem("user"));
+    if (user && !user._id && user.token) {
+      try {
+        const payload = JSON.parse(atob(user.token.split('.')[1]));
+        user._id = payload.userId || payload._id || payload.id;
+      } catch (e) {}
+    }
 
     if (testimonials.length === 0) {
       swiperWrapper.innerHTML = `
