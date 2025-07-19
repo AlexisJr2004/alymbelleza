@@ -405,6 +405,7 @@ console.log("Comparando:", testimonial.userId, user && user._id);
 
 async function updateTestimonialInline(id, comment, role) {
   const user = JSON.parse(localStorage.getItem("user"));
+  if (user && !user._id && user.id) user._id = user.id;
   if (!user || !user.token) {
     showNotification("error", "Error", "Debes iniciar sesión para editar testimonios.");
     return;
