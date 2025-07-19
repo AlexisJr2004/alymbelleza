@@ -912,8 +912,12 @@
             });
 
             // Manejar envío del formulario
+            let isUploading = false;
             uploadForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                if (isUploading) return;
+                isUploading = true;
+
                 if (!user || !user.token || user.role !== 'admin') {
                     Swal.fire({
                         icon: 'error',
@@ -921,6 +925,7 @@
                         text: 'Solo los administradores pueden subir contenido.',
                         confirmButtonColor: '#7e22ce'
                     });
+                    isUploading = false;
                     return;
                 }
                 const formData = new FormData(uploadForm);
