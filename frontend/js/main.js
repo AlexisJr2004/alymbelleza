@@ -2,7 +2,14 @@
 // CONSTANTES Y CONFIGURACIONES GLOBALES
 // =============================================
 const API_URL = "https://aly-mbelleza-backend.onrender.com";
-const fonts = ["Quicksand", "Arial", "Verdana", "Georgia", "Times New Roman", "Courier New"];
+const fonts = [
+  "Quicksand",
+  "Arial",
+  "Verdana",
+  "Georgia",
+  "Times New Roman",
+  "Courier New",
+];
 let currentZoom = 100;
 let currentFontSize = 100;
 let currentFontIndex = 0;
@@ -23,14 +30,18 @@ function formatImageUrl(url) {
 function showNotification(type, title, message) {
   const notification = document.createElement("div");
   notification.className = `notification ${
-    type === "success" ? "bg-teal-50 border-teal-500" : "bg-red-50 border-red-500"
+    type === "success"
+      ? "bg-teal-50 border-teal-500"
+      : "bg-red-50 border-red-500"
   } border-t-2 rounded-lg p-4`;
   notification.setAttribute("role", "alert");
   notification.setAttribute("tabindex", "-1");
 
   const icon = document.createElement("span");
   icon.className = `inline-flex justify-center items-center size-8 rounded-full border-4 ${
-    type === "success" ? "border-teal-100 bg-teal-200 text-teal-800" : "border-red-100 bg-red-200 text-red-800"
+    type === "success"
+      ? "border-teal-100 bg-teal-200 text-teal-800"
+      : "border-red-100 bg-red-200 text-red-800"
   }`;
   icon.innerHTML = `
     <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -55,7 +66,9 @@ function showNotification(type, title, message) {
 
   setTimeout(() => {
     notification.classList.add("hide");
-    notification.addEventListener("animationend", () => notification.remove(), { once: true });
+    notification.addEventListener("animationend", () => notification.remove(), {
+      once: true,
+    });
   }, 5000);
 }
 
@@ -65,10 +78,12 @@ function showNotification(type, title, message) {
 
 function toggleMobileMenu() {
   const mobileMenu = document.getElementById("mobile-menu");
-  const menuIcon = document.getElementById("mobile-menu-toggle").querySelector("svg");
-  
+  const menuIcon = document
+    .getElementById("mobile-menu-toggle")
+    .querySelector("svg");
+
   mobileMenu.classList.toggle("hidden");
-  
+
   if (!mobileMenu.classList.contains("hidden")) {
     menuIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>`;
   } else {
@@ -84,11 +99,11 @@ function toggleServicesMenu() {
 function setupDropdownMenu() {
   const button = document.getElementById("dropdownDefaultButton");
   const dropdown = document.getElementById("dropdown");
-  
+
   button.addEventListener("click", () => {
     dropdown.classList.toggle("show");
   });
-  
+
   document.addEventListener("click", (event) => {
     if (!button.contains(event.target) && !dropdown.contains(event.target)) {
       dropdown.classList.remove("show");
@@ -161,7 +176,9 @@ function toggleTextToSpeech() {
 
 function setupUserProfile() {
   const user = JSON.parse(localStorage.getItem("user"));
-  const userProfileSection = document.getElementById("mobile-user-profile-section");
+  const userProfileSection = document.getElementById(
+    "mobile-user-profile-section"
+  );
   const loginSection = document.getElementById("mobile-login-section");
   const profileImg = document.getElementById("mobile-profile-img");
   const profileName = document.getElementById("mobile-profile-name");
@@ -169,7 +186,9 @@ function setupUserProfile() {
   const profileRole = document.getElementById("mobile-profile-role");
   const statusIndicator = document.getElementById("mobile-status-indicator");
   const logoutBtn = document.getElementById("mobile-logout-btn");
-  const adminLinkContainer = document.getElementById("mobile-admin-link-container");
+  const adminLinkContainer = document.getElementById(
+    "mobile-admin-link-container"
+  );
 
   if (user) {
     userProfileSection.classList.remove("hidden");
@@ -187,11 +206,14 @@ function setupUserProfile() {
       profileRole.textContent = "Cliente";
     }
 
-    const profileImageUrl = 
-      user.profileImage && user.profileImage.startsWith("http") ? user.profileImage :
-      user.profileImage && user.profileImage.startsWith("/uploads/") ? 
-        "https://aly-mbelleza-backend.onrender.com" + user.profileImage :
-        `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || "U")}&background=random&length=1`;
+    const profileImageUrl =
+      user.profileImage && user.profileImage.startsWith("http")
+        ? user.profileImage
+        : user.profileImage && user.profileImage.startsWith("/uploads/")
+        ? "https://aly-mbelleza-backend.onrender.com" + user.profileImage
+        : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+            user.name || "U"
+          )}&background=random&length=1`;
 
     profileImg.src = profileImageUrl;
 
@@ -204,7 +226,7 @@ function setupUserProfile() {
         confirmButtonColor: "#7e22ce",
         cancelButtonColor: "#6b7280",
         confirmButtonText: "Sí, cerrar sesión",
-        cancelButtonText: "Cancelar"
+        cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
           localStorage.removeItem("user");
@@ -236,12 +258,15 @@ function initTestimonialSwiper() {
     loop: true,
     autoplay: { delay: 5000, disableOnInteraction: false },
     pagination: { el: ".swiper-pagination", clickable: true },
-    navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
     breakpoints: {
       640: { slidesPerView: 1, spaceBetween: 20 },
       768: { slidesPerView: 2, spaceBetween: 30 },
-      1024: { slidesPerView: 3, spaceBetween: 40 }
-    }
+      1024: { slidesPerView: 3, spaceBetween: 40 },
+    },
   });
 }
 
@@ -251,14 +276,17 @@ async function loadTestimonials() {
     if (!response.ok) throw new Error(`Error HTTP ${response.status}`);
     const { data: testimonials } = await response.json();
 
-    const swiperWrapper = document.querySelector(".testimonials-swiper .swiper-wrapper");
-    if (!swiperWrapper) throw new Error("No se encontró el contenedor de testimonios");
+    const swiperWrapper = document.querySelector(
+      ".testimonials-swiper .swiper-wrapper"
+    );
+    if (!swiperWrapper)
+      throw new Error("No se encontró el contenedor de testimonios");
     swiperWrapper.innerHTML = "";
 
     const user = JSON.parse(localStorage.getItem("user"));
     if (user && !user._id && user.token) {
       try {
-        const payload = JSON.parse(atob(user.token.split('.')[1]));
+        const payload = JSON.parse(atob(user.token.split(".")[1]));
         user._id = payload.userId || payload._id || payload.id;
       } catch (e) {}
     }
@@ -278,39 +306,45 @@ async function loadTestimonials() {
         </div>`;
     } else {
       testimonials.forEach((testimonial) => {
-  // Depuración: imprime los valores
-  console.log("Testimonio:", testimonial, "Usuario:", user);
-console.log("Comparando:", testimonial.userId, user && user._id);
-  let isOwner = false;
-  if (
-    user &&
-    testimonial.userId &&
-    user._id &&
-    String(testimonial.userId) === String(user._id)
-  ) {
-    isOwner = true;
-  }
+        // Depuración: imprime los valores
+        console.log("Testimonio:", testimonial, "Usuario:", user);
+        console.log("Comparando:", testimonial.userId, user && user._id);
+        let isOwner = false;
+        if (
+          user &&
+          testimonial.userId &&
+          user._id &&
+          String(testimonial.userId) === String(user._id)
+        ) {
+          isOwner = true;
+        }
 
-  const slide = document.createElement("div");
-  slide.className = "swiper-slide";
-  slide.innerHTML = `
+        const slide = document.createElement("div");
+        slide.className = "swiper-slide";
+        slide.innerHTML = `
     <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col relative group">
       <div class="relative flex-grow">
         <svg class="absolute -top-4 -left-4 h-8 w-8 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
           <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.999v10h-9.999z"/>
         </svg>
         <br>
-        <p class="text-gray-600 italic mb-8 comment-text" data-id="${testimonial._id}">${testimonial.comment}</p>
+        <p class="text-gray-600 italic mb-8 comment-text" data-id="${
+          testimonial._id
+        }">${testimonial.comment}</p>
       </div>
       <div class="flex items-center mt-auto">
-        <img src="${formatImageUrl(testimonial.avatar)}" alt="${testimonial.name}" class="h-12 w-12 rounded-full object-cover"
+        <img src="${formatImageUrl(testimonial.avatar)}" alt="${
+          testimonial.name
+        }" class="h-12 w-12 rounded-full object-cover"
           onerror="this.onerror=null;this.src='https://us.123rf.com/450wm/thesomeday123/thesomeday1231712/thesomeday123171200009/91087331-icono-de-perfil-de-avatar-predeterminado-para-hombre-marcador-de-posici%C3%B3n-de-foto-gris-vector-de.jpg?ver=6'">
         <div class="ml-4">
           <h4 class="font-semibold text-gray-900">${testimonial.name}</h4>
           <p class="text-gray-500 text-sm">${testimonial.role}</p>
         </div>
       </div>
-      ${isOwner ? `
+      ${
+        isOwner
+          ? `
         <div class="absolute top-4 right-4">
           <div class="relative group">
             <button class="testimonial-menu-btn w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center focus:outline-none" aria-label="Opciones">
@@ -325,40 +359,63 @@ console.log("Comparando:", testimonial.userId, user && user._id);
             </div>
           </div>
         </div>
-      ` : ""}
+      `
+          : ""
+      }
     </div>
   `;
-  swiperWrapper.appendChild(slide);
-});
+        swiperWrapper.appendChild(slide);
+      });
     }
 
     initTestimonialSwiper();
+    // Al final de loadTestimonials(), después de initTestimonialSwiper();
+    if (testimonialSwiper && user && user._id) {
+      const myIndex = testimonials.findIndex(
+        (t) => String(t.userId) === String(user._id)
+      );
+      if (myIndex !== -1) {
+        // Swiper es circular, así que ajusta el índice para el loop
+        testimonialSwiper.slideToLoop(myIndex, 0); // 0 ms de transición
+      }
+    }
 
     setTimeout(() => {
-      document.querySelectorAll(".testimonial-menu-btn").forEach(btn => {
+      document.querySelectorAll(".testimonial-menu-btn").forEach((btn) => {
         btn.onclick = function (e) {
           e.stopPropagation();
-          document.querySelectorAll(".testimonial-menu").forEach(menu => menu.classList.add("hidden"));
-          btn.parentElement.querySelector(".testimonial-menu").classList.toggle("hidden");
+          document
+            .querySelectorAll(".testimonial-menu")
+            .forEach((menu) => menu.classList.add("hidden"));
+          btn.parentElement
+            .querySelector(".testimonial-menu")
+            .classList.toggle("hidden");
         };
       });
 
-      document.querySelectorAll(".edit-testimonial-btn").forEach(btn => {
+      document.querySelectorAll(".edit-testimonial-btn").forEach((btn) => {
         btn.onclick = function () {
-          document.querySelectorAll(".comment-text[contenteditable='true']").forEach(p => {
-            p.removeAttribute("contenteditable");
-            const saveBtn = p.parentNode.querySelector(".save-edit-btn");
-            if (saveBtn) saveBtn.remove();
-          });
+          btn.closest(".testimonial-menu").classList.add("hidden");
+
+          document
+            .querySelectorAll(".comment-text[contenteditable='true']")
+            .forEach((p) => {
+              p.removeAttribute("contenteditable");
+              const saveBtn = p.parentNode.querySelector(".save-edit-btn");
+              if (saveBtn) saveBtn.remove();
+            });
 
           const id = btn.getAttribute("data-id");
           const role = btn.getAttribute("data-role");
-          const commentP = btn.closest(".swiper-slide").querySelector(".comment-text");
+          const commentP = btn
+            .closest(".swiper-slide")
+            .querySelector(".comment-text");
 
           commentP.setAttribute("contenteditable", "true");
 
           const saveBtn = document.createElement("button");
-          saveBtn.className = "save-edit-btn float-right -mt-2 w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center focus:outline-none";
+          saveBtn.className =
+            "save-edit-btn float-right -mt-2 w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center focus:outline-none";
           saveBtn.innerHTML = `<i class="fas fa-play text-xl text-gray-500"></i>`;
           saveBtn.setAttribute("data-id", id);
           saveBtn.setAttribute("data-role", role);
@@ -372,7 +429,7 @@ console.log("Comparando:", testimonial.userId, user && user._id);
         };
       });
 
-      document.querySelectorAll(".delete-testimonial-btn").forEach(btn => {
+      document.querySelectorAll(".delete-testimonial-btn").forEach((btn) => {
         btn.onclick = async function () {
           const id = btn.getAttribute("data-id");
           Swal.fire({
@@ -383,7 +440,7 @@ console.log("Comparando:", testimonial.userId, user && user._id);
             confirmButtonColor: "#e3342f",
             cancelButtonColor: "#6b7280",
             confirmButtonText: "Sí, borrar",
-            cancelButtonText: "Cancelar"
+            cancelButtonText: "Cancelar",
           }).then(async (result) => {
             if (result.isConfirmed) {
               await deleteTestimonial(id);
@@ -395,7 +452,9 @@ console.log("Comparando:", testimonial.userId, user && user._id);
     }, 100);
   } catch (error) {
     console.error("Error al cargar testimonios:", error);
-    const swiperWrapper = document.querySelector(".testimonials-swiper .swiper-wrapper");
+    const swiperWrapper = document.querySelector(
+      ".testimonials-swiper .swiper-wrapper"
+    );
     if (swiperWrapper) {
       swiperWrapper.innerHTML = `
         <div class="swiper-slide">
@@ -413,10 +472,14 @@ async function updateTestimonialInline(id, comment, role) {
   const user = JSON.parse(localStorage.getItem("user"));
   if (user && !user._id && user.id) user._id = user.id;
   if (!user || !user.token) {
-    showNotification("error", "Error", "Debes iniciar sesión para editar testimonios.");
+    showNotification(
+      "error",
+      "Error",
+      "Debes iniciar sesión para editar testimonios."
+    );
     return;
   }
-  
+
   const formData = new FormData();
   formData.append("comment", comment);
   formData.append("role", role);
@@ -426,17 +489,26 @@ async function updateTestimonialInline(id, comment, role) {
   try {
     const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
       method: "PUT",
-      headers: { "Authorization": `Bearer ${user.token}` },
-      body: formData
+      headers: { Authorization: `Bearer ${user.token}` },
+      body: formData,
     });
-    
+
     const data = await response.json();
-    if (!response.ok) throw new Error(data.error || "No se pudo editar el testimonio");
-    
-    showNotification("success", "¡Éxito!", data.message || "Testimonio editado correctamente");
+    if (!response.ok)
+      throw new Error(data.error || "No se pudo editar el testimonio");
+
+    showNotification(
+      "success",
+      "¡Éxito!",
+      data.message || "Testimonio editado correctamente"
+    );
     loadTestimonials();
   } catch (err) {
-    showNotification("error", "Error al editar testimonio", err.message || "Error desconocido");
+    showNotification(
+      "error",
+      "Error al editar testimonio",
+      err.message || "Error desconocido"
+    );
     console.error(err);
   }
 }
@@ -444,22 +516,35 @@ async function updateTestimonialInline(id, comment, role) {
 async function deleteTestimonial(id) {
   const user = JSON.parse(localStorage.getItem("user"));
   if (!user || !user.token) {
-    showNotification("error", "Error", "Debes iniciar sesión para borrar testimonios.");
+    showNotification(
+      "error",
+      "Error",
+      "Debes iniciar sesión para borrar testimonios."
+    );
     return;
   }
-  
+
   try {
     const response = await fetch(`${API_URL}/api/testimonials/${id}`, {
       method: "DELETE",
-      headers: { "Authorization": `Bearer ${user.token}` }
+      headers: { Authorization: `Bearer ${user.token}` },
     });
-    
+
     const data = await response.json();
-    if (!response.ok) throw new Error(data.error || "No se pudo borrar el testimonio");
-    
-    showNotification("success", "¡Éxito!", data.message || "Testimonio eliminado");
+    if (!response.ok)
+      throw new Error(data.error || "No se pudo borrar el testimonio");
+
+    showNotification(
+      "success",
+      "¡Éxito!",
+      data.message || "Testimonio eliminado"
+    );
   } catch (err) {
-    showNotification("error", "Error al borrar testimonio", err.message || "Error desconocido");
+    showNotification(
+      "error",
+      "Error al borrar testimonio",
+      err.message || "Error desconocido"
+    );
     console.error(err);
   }
 }
@@ -478,7 +563,7 @@ function setupTestimonialModal() {
           icon: "warning",
           title: "Inicia sesión",
           text: "Debes iniciar sesión para dejar un testimonio.",
-          confirmButtonColor: "#7e22ce"
+          confirmButtonColor: "#7e22ce",
         });
         return;
       }
@@ -506,9 +591,12 @@ function setupTestimonialModal() {
 
         const formData = new FormData(testimonialForm);
         const user = JSON.parse(localStorage.getItem("user"));
-        
+
         if (!user) {
-          showNotification("Debes iniciar sesión para dejar un testimonio.", "error");
+          showNotification(
+            "Debes iniciar sesión para dejar un testimonio.",
+            "error"
+          );
           submitBtn.disabled = false;
           submitBtn.textContent = originalBtnText;
           return;
@@ -520,9 +608,9 @@ function setupTestimonialModal() {
         const response = await fetch(`${API_URL}/api/testimonials`, {
           method: "POST",
           headers: {
-            "Authorization": `Bearer ${user.token}`
+            Authorization: `Bearer ${user.token}`,
           },
-          body: formData
+          body: formData,
         });
 
         if (!response.ok) {
@@ -543,10 +631,20 @@ function setupTestimonialModal() {
         testimonialForm.reset();
         setTimeout(loadTestimonials, 500);
 
-        showNotification("success", "¡Éxito!", result.message || "Testimonio agregado correctamente");
+        showNotification(
+          "success",
+          "¡Éxito!",
+          result.message || "Testimonio agregado correctamente"
+        );
       } catch (error) {
         console.error("Error en el envío:", error);
-        showNotification("error", "Error", typeof error === "object" ? error.message : "Error al enviar testimonio");
+        showNotification(
+          "error",
+          "Error",
+          typeof error === "object"
+            ? error.message
+            : "Error al enviar testimonio"
+        );
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = originalBtnText;
@@ -561,7 +659,7 @@ function setupTestimonialModal() {
 
 function setupContactForm() {
   const contactForm = document.getElementById("contactForm");
-  
+
   if (contactForm) {
     contactForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -589,30 +687,37 @@ function setupContactForm() {
         const response = await fetch(`${API_URL}/api/contact`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formDataObj)
+          body: JSON.stringify(formDataObj),
         });
 
         const contentType = response.headers.get("content-type");
         let result;
-        
+
         if (contentType && contentType.includes("application/json")) {
           result = await response.json();
         } else {
           const text = await response.text();
-          throw new Error(text || "El servidor no respondió correctamente. Intenta más tarde.");
+          throw new Error(
+            text || "El servidor no respondió correctamente. Intenta más tarde."
+          );
         }
 
-        if (!response.ok) throw new Error(result.error || `Error: ${response.status}`);
+        if (!response.ok)
+          throw new Error(result.error || `Error: ${response.status}`);
 
-        showNotification("success", "¡Mensaje enviado!", "Gracias por contactarnos. Te responderemos pronto.");
+        showNotification(
+          "success",
+          "¡Mensaje enviado!",
+          "Gracias por contactarnos. Te responderemos pronto."
+        );
         form.reset();
       } catch (error) {
         console.error("Error en el envío:", error);
         showNotification(
-          "error", 
-          "Error", 
-          error.message.includes("Failed to fetch") 
-            ? "No se pudo conectar con el servidor. Intenta más tarde." 
+          "error",
+          "Error",
+          error.message.includes("Failed to fetch")
+            ? "No se pudo conectar con el servidor. Intenta más tarde."
             : error.message
         );
       } finally {
@@ -625,18 +730,18 @@ function setupContactForm() {
 
 function setupUploadForm() {
   const uploadForm = document.getElementById("uploadForm");
-  
+
   if (uploadForm) {
     uploadForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const user = JSON.parse(localStorage.getItem("user"));
-      
+
       if (!user || !user.token || user.role !== "admin") {
         Swal.fire({
           icon: "error",
           title: "No autorizado",
           text: "Solo los administradores pueden subir contenido.",
-          confirmButtonColor: "#7e22ce"
+          confirmButtonColor: "#7e22ce",
         });
         return;
       }
@@ -645,20 +750,21 @@ function setupUploadForm() {
         const form = document.getElementById("uploadForm");
         const formData = new FormData(form);
         const submitUpload = document.getElementById("submitUpload");
-        
+
         submitUpload.disabled = true;
         document.querySelector(".upload-text").classList.add("hidden");
         document.querySelector(".upload-loading").classList.remove("hidden");
 
         const response = await fetch(`${API_URL}/api/gallery`, {
           method: "POST",
-          headers: { "Authorization": `Bearer ${user.token}` },
-          body: formData
+          headers: { Authorization: `Bearer ${user.token}` },
+          body: formData,
         });
 
         const result = await response.json();
 
-        if (!response.ok) throw new Error(result.error || "Error al subir el archivo");
+        if (!response.ok)
+          throw new Error(result.error || "Error al subir el archivo");
 
         Swal.fire({
           icon: "success",
@@ -666,7 +772,7 @@ function setupUploadForm() {
           text: result.message,
           confirmButtonColor: "#7e22ce",
           timer: 2000,
-          timerProgressBar: true
+          timerProgressBar: true,
         });
 
         form.reset();
@@ -677,7 +783,7 @@ function setupUploadForm() {
           icon: "error",
           title: "Error",
           text: error.message || "Error al subir el archivo",
-          confirmButtonColor: "#7e22ce"
+          confirmButtonColor: "#7e22ce",
         });
       } finally {
         const submitUpload = document.getElementById("submitUpload");
@@ -697,7 +803,7 @@ function setupGoTopButton() {
   window.addEventListener("scroll", function () {
     const goTopBtn = document.getElementById("goTopBtn");
     if (!goTopBtn) return;
-    
+
     if (window.scrollY > 100) {
       goTopBtn.classList.remove("translate-y-20", "opacity-0");
       goTopBtn.classList.add("translate-y-0", "opacity-100");
@@ -718,7 +824,7 @@ function setupGoTopButton() {
 function setupAccordion() {
   const toggles = document.querySelectorAll(".accordion-toggle");
   const contents = document.querySelectorAll(".accordion-content");
-  
+
   if (contents.length > 0) {
     contents[0].style.maxHeight = contents[0].scrollHeight + "px";
     toggles[0].querySelector("svg").classList.add("rotate-180");
@@ -728,14 +834,16 @@ function setupAccordion() {
     toggle.addEventListener("click", () => {
       const content = contents[index];
       const isOpen = content.style.maxHeight;
-      
+
       contents.forEach((otherContent, otherIndex) => {
         if (index !== otherIndex) {
           otherContent.style.maxHeight = null;
-          toggles[otherIndex].querySelector("svg").classList.remove("rotate-180");
+          toggles[otherIndex]
+            .querySelector("svg")
+            .classList.remove("rotate-180");
         }
       });
-      
+
       if (isOpen) {
         content.style.maxHeight = null;
         toggle.querySelector("svg").classList.remove("rotate-180");
@@ -815,7 +923,8 @@ function setupCookieConsent() {
   if (closeBtn) closeBtn.addEventListener("click", closeCookieConsent);
   if (acceptAll) acceptAll.addEventListener("click", closeCookieConsent);
   if (rejectAll) rejectAll.addEventListener("click", closeCookieConsent);
-  if (manageCookies) manageCookies.addEventListener("click", closeCookieConsent);
+  if (manageCookies)
+    manageCookies.addEventListener("click", closeCookieConsent);
 }
 
 // =============================================
@@ -825,8 +934,9 @@ function setupCookieConsent() {
 document.addEventListener("DOMContentLoaded", () => {
   // Menús y navegación
   const mobileMenuToggle = document.getElementById("mobile-menu-toggle");
-  if (mobileMenuToggle) mobileMenuToggle.addEventListener("click", toggleMobileMenu);
-  
+  if (mobileMenuToggle)
+    mobileMenuToggle.addEventListener("click", toggleMobileMenu);
+
   setupDropdownMenu();
   setupUserProfile();
 
@@ -871,19 +981,30 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Avatar preview
-  document.getElementById("avatar").addEventListener("change", function (event) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const imgPreview = document.createElement("img");
-        imgPreview.src = e.target.result;
-        imgPreview.classList.add("w-24", "h-24", "rounded-full", "mx-auto", "mb-4", "shadow-md");
-        document.getElementById("avatar").insertAdjacentElement("afterend", imgPreview);
-      };
-      reader.readAsDataURL(file);
-    }
-  });
+  document
+    .getElementById("avatar")
+    .addEventListener("change", function (event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const imgPreview = document.createElement("img");
+          imgPreview.src = e.target.result;
+          imgPreview.classList.add(
+            "w-24",
+            "h-24",
+            "rounded-full",
+            "mx-auto",
+            "mb-4",
+            "shadow-md"
+          );
+          document
+            .getElementById("avatar")
+            .insertAdjacentElement("afterend", imgPreview);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
 });
 
 window.addEventListener("load", setupCookieConsent);
