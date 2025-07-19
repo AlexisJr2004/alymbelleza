@@ -268,7 +268,7 @@ function initTestimonialSwiper() {
     },
   });
 }
-
+ 
 async function loadTestimonials() {
   try {
     const response = await fetch(`${API_URL}/api/testimonials`);
