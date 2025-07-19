@@ -500,6 +500,9 @@ function setupTestimonialModal() {
 
         const response = await fetch(`${API_URL}/api/testimonials`, {
           method: "POST",
+          headers: {
+            "Authorization": `Bearer ${user.token}`
+          },
           body: formData
         });
 
