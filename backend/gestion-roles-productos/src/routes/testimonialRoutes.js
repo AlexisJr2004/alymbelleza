@@ -2,7 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const Testimonial = require("../models/Testimonial");
-const requireAuth = require("../middleware/requireAuth");
+const { authMiddleware } = require("../middlewares/auth");
 
 const router = express.Router();
 
@@ -23,7 +23,7 @@ const testimonialUpload = multer({
 });
 
 // Crear testimonio
-router.post("/", requireAuth, testimonialUpload.none(), async (req, res) => {
+router.post("/", authMiddleware, testimonialUpload.none(), async (req, res) => {
   try {
     const { name, role, comment, avatar } = req.body;
     if (!name || !role || !comment || !avatar) {
@@ -80,7 +80,7 @@ router.get("/", async (req, res) => {
 });
 
 // Editar testimonio
-router.put("/:id", requireAuth, testimonialUpload.none(), async (req, res) => {
+router.put("/:id", authMiddleware, testimonialUpload.none(), async (req, res) => {
   try {
     const { name, role, comment, avatar } = req.body;
     const testimonial = await Testimonial.findById(req.params.id);
@@ -103,7 +103,7 @@ router.put("/:id", requireAuth, testimonialUpload.none(), async (req, res) => {
 });
 
 // Eliminar testimonio
-router.delete("/:id", requireAuth, async (req, res) => {
+router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     const testimonial = await Testimonial.findById(req.params.id);
     if (!testimonial) {
