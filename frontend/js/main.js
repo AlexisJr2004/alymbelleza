@@ -272,7 +272,7 @@ async function loadTestimonials() {
         </div>`;
     } else {
       testimonials.forEach((testimonial) => {
-        const isOwner = user && (testimonial.userId === user._id || testimonial.email === user.email);
+        const isOwner = user && testimonial.userId && testimonial.userId.toString() === user._id;
         const slide = document.createElement("div");
         slide.className = "swiper-slide";
         slide.innerHTML = `

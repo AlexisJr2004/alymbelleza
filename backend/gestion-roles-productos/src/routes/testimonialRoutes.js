@@ -60,7 +60,7 @@ router.get("/", async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
     const [testimonials, total] = await Promise.all([
-      Testimonial.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
+      Testimonial.find().sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
       Testimonial.countDocuments(),
     ]);
     res.json({
