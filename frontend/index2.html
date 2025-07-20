@@ -1002,8 +1002,16 @@
                 galleryGrid.innerHTML = "";
                 items.forEach((item) => {
                     const itemDiv = document.createElement("div");
-                    itemDiv.className = "gallery-item relative group overflow-hidden rounded-lg transform transition-all duration-500 ease-in-out cursor-pointer";
+                    itemDiv.className = `
+                        gallery-item relative group rounded-xl overflow-hidden shadow-md bg-white
+                        transition-all duration-500 ease-in-out cursor-pointer
+                        hover:shadow-2xl hover:-translate-y-1
+                    `.replace(/\s+/g, ' ');
+
                     itemDiv.setAttribute("data-category", item.category);
+                    itemDiv.style.opacity = "1";
+                    itemDiv.style.transform = "scale(1)";
+                    itemDiv.style.transition = "opacity 0.4s, transform 0.4s";
 
                     // Asegura la URL correcta (Cloudinary o local)
                     let url = item.url;
@@ -1021,20 +1029,37 @@
                         mediaElement = document.createElement("video");
                         mediaElement.src = url;
                         mediaElement.controls = false;
-                        mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
+                        mediaElement.className = `
+                            w-full h-48 md:h-64 object-cover
+                            transition-transform duration-300 group-hover:scale-105
+                            rounded-xl
+                        `.replace(/\s+/g, ' ');
                     } else {
                         mediaElement = document.createElement("img");
                         mediaElement.src = url;
                         mediaElement.alt = item.category;
-                        mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
+                        mediaElement.className = `
+                            w-full h-48 md:h-64 object-cover
+                            transition-transform duration-300 group-hover:scale-105
+                            rounded-xl
+                        `.replace(/\s+/g, ' ');
                     }
                     // Evento para abrir el popup
                     mediaElement.addEventListener("click", () => openGalleryPopup(item));
 
                     // Hover info
                     const hoverInfo = document.createElement("div");
-                    hoverInfo.className = "gallery-hover-info absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none";
-                    hoverInfo.innerHTML = `<span class="text-white text-sm font-semibold px-3 py-2 rounded-lg bg-black/70">${fecha}</span>`;
+                    hoverInfo.className = `
+                        gallery-hover-info absolute inset-0 flex items-center justify-center
+                        opacity-0 group-hover:opacity-100
+                        transition-opacity duration-300 pointer-events-none
+                        bg-gradient-to-t from-black/80 via-black/40 to-transparent
+                    `.replace(/\s+/g, ' ');
+                    hoverInfo.innerHTML = `
+                        <span class="text-white text-base font-semibold px-4 py-2 rounded-lg bg-black/70 shadow-lg backdrop-blur-sm">
+                            <i class="fas fa-calendar-alt mr-2"></i>${fecha}
+                        </span>
+                    `;
 
                     itemDiv.appendChild(mediaElement);
                     itemDiv.appendChild(hoverInfo);
@@ -1043,7 +1068,10 @@
                     const user = JSON.parse(localStorage.getItem('user'));
                     if (user && user.role === 'admin') {
                         const deleteBtn = document.createElement("button");
-                        deleteBtn.className = "absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300";
+                        deleteBtn.className = `
+                            absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center
+                            opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg
+                        `.replace(/\s+/g, ' ');
                         deleteBtn.innerHTML = '<i class="fas fa-trash text-xs"></i>';
                         deleteBtn.onclick = (e) => {
                             e.stopPropagation();
@@ -1052,6 +1080,24 @@
                         itemDiv.appendChild(deleteBtn);
                     }
                     galleryGrid.appendChild(itemDiv);
+                });
+            }
+            // Transición suave al filtrar
+            function applyFilter(filter) {
+                const galleryItems = document.querySelectorAll(".gallery-item");
+                galleryItems.forEach((item) => {
+                    const category = item.getAttribute("data-category");
+                    if (filter === "all" || category === filter) {
+                        item.style.pointerEvents = "auto";
+                        item.style.opacity = "1";
+                        item.style.transform = "scale(1)";
+                        setTimeout(() => { item.style.display = "block"; }, 400);
+                    } else {
+                        item.style.pointerEvents = "none";
+                        item.style.opacity = "0";
+                        item.style.transform = "scale(0.95)";
+                        setTimeout(() => { item.style.display = "none"; }, 400);
+                    }
                 });
             }
 
