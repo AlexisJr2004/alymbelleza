@@ -388,75 +388,93 @@ async function loadTestimonials() {
     }
 
     setTimeout(() => {
-      document.querySelectorAll(".testimonial-menu-btn").forEach((btn) => {
-        btn.onclick = function (e) {
-          e.stopPropagation();
-          document
-            .querySelectorAll(".testimonial-menu")
-            .forEach((menu) => menu.classList.add("hidden"));
-          btn.parentElement
-            .querySelector(".testimonial-menu")
-            .classList.toggle("hidden");
-        };
+    // Manejo del menú de opciones de testimonios
+    document.querySelectorAll(".testimonial-menu-btn").forEach((btn) => {
+      btn.onclick = function (e) {
+        e.stopPropagation();
+        const menu = btn.parentElement.querySelector(".testimonial-menu");
+        // Si el menú ya está visible, ciérralo
+        const isOpen = !menu.classList.contains("hidden");
+        // Cierra todos los menús primero
+        document.querySelectorAll(".testimonial-menu").forEach((m) => m.classList.add("hidden"));
+        // Si estaba cerrado, ábrelo (toggle)
+        if (!isOpen) menu.classList.remove("hidden");
+      };
+    });
+
+    // Cerrar menú al hacer clic fuera
+    document.addEventListener("click", function closeMenus(e) {
+      document.querySelectorAll(".testimonial-menu").forEach((menu) => {
+        if (!menu.classList.contains("hidden")) {
+          menu.classList.add("hidden");
+        }
       });
+    });
 
-      document.querySelectorAll(".edit-testimonial-btn").forEach((btn) => {
-        btn.onclick = function () {
-          btn.closest(".testimonial-menu").classList.add("hidden");
+    // Evita que el menú se cierre si haces clic dentro del menú
+    document.querySelectorAll(".testimonial-menu").forEach((menu) => {
+      menu.onclick = function (e) {
+        e.stopPropagation();
+      };
+    });
 
-          document
-            .querySelectorAll(".comment-text[contenteditable='true']")
-            .forEach((p) => {
-              p.removeAttribute("contenteditable");
-              const saveBtn = p.parentNode.querySelector(".save-edit-btn");
-              if (saveBtn) saveBtn.remove();
-            });
+    document.querySelectorAll(".edit-testimonial-btn").forEach((btn) => {
+      btn.onclick = function () {
+        btn.closest(".testimonial-menu").classList.add("hidden");
 
-          const id = btn.getAttribute("data-id");
-          const role = btn.getAttribute("data-role");
-          const commentP = btn
-            .closest(".swiper-slide")
-            .querySelector(".comment-text");
-
-          commentP.setAttribute("contenteditable", "true");
-
-          const saveBtn = document.createElement("button");
-          saveBtn.className =
-            "save-edit-btn float-right -mt-2 w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center focus:outline-none";
-          saveBtn.innerHTML = `<i class="fas fa-play text-xl text-gray-500"></i>`;
-          saveBtn.setAttribute("data-id", id);
-          saveBtn.setAttribute("data-role", role);
-
-          commentP.parentNode.appendChild(saveBtn);
-
-          saveBtn.onclick = async function () {
-            const newComment = commentP.textContent;
-            await updateTestimonialInline(id, newComment, role);
-          };
-        };
-      });
-
-      document.querySelectorAll(".delete-testimonial-btn").forEach((btn) => {
-        btn.onclick = async function () {
-          const id = btn.getAttribute("data-id");
-          Swal.fire({
-            title: "¿Seguro que quieres borrar este testimonio?",
-            text: "Esta acción no se puede deshacer.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#e3342f",
-            cancelButtonColor: "#6b7280",
-            confirmButtonText: "Sí, borrar",
-            cancelButtonText: "Cancelar",
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              await deleteTestimonial(id);
-              loadTestimonials();
-            }
+        document
+          .querySelectorAll(".comment-text[contenteditable='true']")
+          .forEach((p) => {
+            p.removeAttribute("contenteditable");
+            const saveBtn = p.parentNode.querySelector(".save-edit-btn");
+            if (saveBtn) saveBtn.remove();
           });
+
+        const id = btn.getAttribute("data-id");
+        const role = btn.getAttribute("data-role");
+        const commentP = btn
+          .closest(".swiper-slide")
+          .querySelector(".comment-text");
+
+        commentP.setAttribute("contenteditable", "true");
+
+        const saveBtn = document.createElement("button");
+        saveBtn.className =
+          "save-edit-btn float-right -mt-2 w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center focus:outline-none";
+        saveBtn.innerHTML = `<i class="fas fa-play text-xl text-gray-500"></i>`;
+        saveBtn.setAttribute("data-id", id);
+        saveBtn.setAttribute("data-role", role);
+
+        commentP.parentNode.appendChild(saveBtn);
+
+        saveBtn.onclick = async function () {
+          const newComment = commentP.textContent;
+          await updateTestimonialInline(id, newComment, role);
         };
-      });
-    }, 100);
+      };
+    });
+
+    document.querySelectorAll(".delete-testimonial-btn").forEach((btn) => {
+      btn.onclick = async function () {
+        const id = btn.getAttribute("data-id");
+        Swal.fire({
+          title: "¿Seguro que quieres borrar este testimonio?",
+          text: "Esta acción no se puede deshacer.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#e3342f",
+          cancelButtonColor: "#6b7280",
+          confirmButtonText: "Sí, borrar",
+          cancelButtonText: "Cancelar",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            await deleteTestimonial(id);
+            loadTestimonials();
+          }
+        });
+      };
+    });
+  }, 100);
   } catch (error) {
     console.error("Error al cargar testimonios:", error);
     const swiperWrapper = document.querySelector(
