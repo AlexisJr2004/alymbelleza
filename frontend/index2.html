@@ -561,6 +561,17 @@
         </div>
     </div>
 
+    <!-- Modal para mostrar imagen/video en grande -->
+    <div id="galleryPopupModal" class="fixed inset-0 z-[99999] bg-black/70 flex items-center justify-center hidden">
+        <div class="relative bg-transparent max-w-3xl w-full flex flex-col items-center">
+            <button id="closeGalleryPopup" class="absolute top-2 right-2 text-white text-3xl z-10 hover:text-pink-300">
+                &times;
+            </button>
+            <div id="galleryPopupContent" class="w-full flex items-center justify-center"></div>
+            <div id="galleryPopupDate" class="mt-4 text-white text-sm"></div>
+        </div>
+    </div>
+
     <!-- Galeria de Fotos -->
     <section
         class="relative overflow-hidden before:absolute before:top-0 before:start-1/2 before:bg-[url('https://preline.co/assets/svg/examples/polygon-bg-element.svg')] before:bg-no-repeat before:bg-top before:bg-cover before:size-full before:-z-[1] before:transform before:-translate-x-1/2">
@@ -828,144 +839,144 @@
     <!-- Script para Subir las imagenes y videos a galeria -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    const adminUploadSection = document.getElementById('admin-upload-section');
-    const uploadModal = document.getElementById('uploadModal');
-    const uploadBtn = document.getElementById('upload-btn');
-    const closeUploadModal = document.getElementById('closeUploadModal');
-    const cancelUpload = document.getElementById('cancelUpload');
-    const uploadForm = document.getElementById('uploadForm');
-    const galleryFile = document.getElementById('galleryFile');
-    const filePreview = document.getElementById('filePreview');
-    const imagePreview = document.getElementById('imagePreview');
-    const videoPreview = document.getElementById('videoPreview');
-    const fileInfo = document.getElementById('fileInfo');
-    const submitUpload = document.getElementById('submitUpload');
-    const GALLERY_API_URL = "https://aly-mbelleza-backend.onrender.com/api/gallery";
-    const galleryGrid = document.getElementById("gallery-grid");
-    const filterButtons = document.querySelectorAll(".filter-btn");
+            const user = JSON.parse(localStorage.getItem('user'));
+            const adminUploadSection = document.getElementById('admin-upload-section');
+            const uploadModal = document.getElementById('uploadModal');
+            const uploadBtn = document.getElementById('upload-btn');
+            const closeUploadModal = document.getElementById('closeUploadModal');
+            const cancelUpload = document.getElementById('cancelUpload');
+            const uploadForm = document.getElementById('uploadForm');
+            const galleryFile = document.getElementById('galleryFile');
+            const filePreview = document.getElementById('filePreview');
+            const imagePreview = document.getElementById('imagePreview');
+            const videoPreview = document.getElementById('videoPreview');
+            const fileInfo = document.getElementById('fileInfo');
+            const submitUpload = document.getElementById('submitUpload');
+            const GALLERY_API_URL = "https://aly-mbelleza-backend.onrender.com/api/gallery";
+            const galleryGrid = document.getElementById("gallery-grid");
+            const filterButtons = document.querySelectorAll(".filter-btn");
 
-    // Mostrar botón de subida solo para administradores
-    if (user && user.role === 'admin') {
-        adminUploadSection.classList.remove('hidden');
-    }
+            // Mostrar botón de subida solo para administradores
+            if (user && user.role === 'admin') {
+                adminUploadSection.classList.remove('hidden');
+            }
 
-    // Abrir modal
-    if (uploadBtn) {
-        uploadBtn.addEventListener('click', () => {
-            uploadModal.classList.remove('hidden');
-        });
-    }
+            // Abrir modal
+            if (uploadBtn) {
+                uploadBtn.addEventListener('click', () => {
+                    uploadModal.classList.remove('hidden');
+                });
+            }
 
-    // Cerrar modal
-    function closeModal() {
-        uploadModal.classList.add('hidden');
-        uploadForm.reset();
-        filePreview.classList.add('hidden');
-        imagePreview.classList.add('hidden');
-        videoPreview.classList.add('hidden');
-        isUploading = false; // <-- Añadido aquí
-    }
-    closeUploadModal.addEventListener('click', closeModal);
-    cancelUpload.addEventListener('click', closeModal);
-    uploadModal.addEventListener('click', (e) => {
-        if (e.target === uploadModal) closeModal();
-    });
-
-    // Vista previa del archivo
-    galleryFile.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) {
-            filePreview.classList.add('hidden');
-            return;
-        }
-        const maxSize = file.type.startsWith('video/') ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
-        if (file.size > maxSize) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Archivo muy grande',
-                text: `El archivo es muy grande. Máximo ${file.type.startsWith('video/') ? '50MB' : '10MB'}.`,
-                confirmButtonColor: '#7e22ce'
+            // Cerrar modal
+            function closeModal() {
+                uploadModal.classList.add('hidden');
+                uploadForm.reset();
+                filePreview.classList.add('hidden');
+                imagePreview.classList.add('hidden');
+                videoPreview.classList.add('hidden');
+                isUploading = false; // <-- Añadido aquí
+            }
+            closeUploadModal.addEventListener('click', closeModal);
+            cancelUpload.addEventListener('click', closeModal);
+            uploadModal.addEventListener('click', (e) => {
+                if (e.target === uploadModal) closeModal();
             });
-            galleryFile.value = '';
-            return;
-        }
-        const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
-        fileInfo.textContent = `${file.name} (${fileSizeMB} MB)`;
-        filePreview.classList.remove('hidden');
-        imagePreview.classList.add('hidden');
-        videoPreview.classList.add('hidden');
-        if (file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                imagePreview.src = e.target.result;
-                imagePreview.classList.remove('hidden');
-            };
-            reader.readAsDataURL(file);
-        } else if (file.type.startsWith('video/')) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                videoPreview.src = e.target.result;
-                videoPreview.classList.remove('hidden');
-            };
-            reader.readAsDataURL(file);
-        }
-    });
 
-    // Manejar envío del formulario
-    let isUploading = false;
-    uploadForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (isUploading) return;
-        isUploading = true;
+            // Vista previa del archivo
+            galleryFile.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) {
+                    filePreview.classList.add('hidden');
+                    return;
+                }
+                const maxSize = file.type.startsWith('video/') ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
+                if (file.size > maxSize) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Archivo muy grande',
+                        text: `El archivo es muy grande. Máximo ${file.type.startsWith('video/') ? '50MB' : '10MB'}.`,
+                        confirmButtonColor: '#7e22ce'
+                    });
+                    galleryFile.value = '';
+                    return;
+                }
+                const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                fileInfo.textContent = `${file.name} (${fileSizeMB} MB)`;
+                filePreview.classList.remove('hidden');
+                imagePreview.classList.add('hidden');
+                videoPreview.classList.add('hidden');
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        imagePreview.src = e.target.result;
+                        imagePreview.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                } else if (file.type.startsWith('video/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        videoPreview.src = e.target.result;
+                        videoPreview.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
 
-        if (!user || !user.token || user.role !== 'admin') {
-            Swal.fire({
-                icon: 'error',
-                title: 'No autorizado',
-                text: 'Solo los administradores pueden subir contenido.',
-                confirmButtonColor: '#7e22ce'
+            // Manejar envío del formulario
+            let isUploading = false;
+            uploadForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (isUploading) return;
+                isUploading = true;
+
+                if (!user || !user.token || user.role !== 'admin') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'No autorizado',
+                        text: 'Solo los administradores pueden subir contenido.',
+                        confirmButtonColor: '#7e22ce'
+                    });
+                    isUploading = false;
+                    return;
+                }
+                const formData = new FormData(uploadForm);
+                submitUpload.disabled = true;
+                document.querySelector('.upload-text').classList.add('hidden');
+                document.querySelector('.upload-loading').classList.remove('hidden');
+                try {
+                    const response = await fetch(GALLERY_API_URL, {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${user.token}` },
+                        body: formData
+                    });
+                    const result = await response.json();
+                    if (!response.ok) throw new Error(result.error || 'Error al subir el archivo');
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Éxito!',
+                        text: result.message,
+                        confirmButtonColor: '#7e22ce',
+                        timer: 2000,
+                        timerProgressBar: true
+                    });
+                    closeModal();
+                    loadGalleryFromDatabase();
+                } catch (error) {
+                    console.error('Error al subir archivo:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error.message || 'Error al subir el archivo',
+                        confirmButtonColor: '#7e22ce'
+                    });
+                } finally {
+                    submitUpload.disabled = false;
+                    document.querySelector('.upload-text').classList.remove('hidden');
+                    document.querySelector('.upload-loading').classList.add('hidden');
+                    isUploading = false;
+                }
             });
-            isUploading = false;
-            return;
-        }
-        const formData = new FormData(uploadForm);
-        submitUpload.disabled = true;
-        document.querySelector('.upload-text').classList.add('hidden');
-        document.querySelector('.upload-loading').classList.remove('hidden');
-        try {
-            const response = await fetch(GALLERY_API_URL, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${user.token}` },
-                body: formData
-            });
-            const result = await response.json();
-            if (!response.ok) throw new Error(result.error || 'Error al subir el archivo');
-            Swal.fire({
-                icon: 'success',
-                title: '¡Éxito!',
-                text: result.message,
-                confirmButtonColor: '#7e22ce',
-                timer: 2000,
-                timerProgressBar: true
-            });
-            closeModal();
-            loadGalleryFromDatabase();
-        } catch (error) {
-            console.error('Error al subir archivo:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: error.message || 'Error al subir el archivo',
-                confirmButtonColor: '#7e22ce'
-            });
-        } finally {
-            submitUpload.disabled = false;
-            document.querySelector('.upload-text').classList.remove('hidden');
-            document.querySelector('.upload-loading').classList.add('hidden');
-            isUploading = false;
-        }
-    });
 
             // Cargar galería desde la base de datos
             async function loadGalleryFromDatabase() {
@@ -991,7 +1002,7 @@
                 galleryGrid.innerHTML = "";
                 items.forEach((item) => {
                     const itemDiv = document.createElement("div");
-                    itemDiv.className = "gallery-item relative group overflow-hidden rounded-lg transform transition-all duration-500 ease-in-out";
+                    itemDiv.className = "gallery-item relative group overflow-hidden rounded-lg transform transition-all duration-500 ease-in-out cursor-pointer";
                     itemDiv.setAttribute("data-category", item.category);
 
                     // Asegura la URL correcta (Cloudinary o local)
@@ -1000,11 +1011,16 @@
                         url = "https://aly-mbelleza-backend.onrender.com" + (url.startsWith("/") ? "" : "/") + url;
                     }
 
+                    // Fecha de subida
+                    const fecha = new Date(item.createdAt).toLocaleDateString("es-ES", {
+                        year: "numeric", month: "short", day: "numeric"
+                    });
+
                     let mediaElement;
                     if (item.type === 'video') {
                         mediaElement = document.createElement("video");
                         mediaElement.src = url;
-                        mediaElement.controls = true;
+                        mediaElement.controls = false;
                         mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
                     } else {
                         mediaElement = document.createElement("img");
@@ -1012,7 +1028,16 @@
                         mediaElement.alt = item.category;
                         mediaElement.className = "w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-110";
                     }
+                    // Evento para abrir el popup
+                    mediaElement.addEventListener("click", () => openGalleryPopup(item));
+
+                    // Hover info
+                    const hoverInfo = document.createElement("div");
+                    hoverInfo.className = "gallery-hover-info absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none";
+                    hoverInfo.innerHTML = `<span class="text-white text-sm font-semibold px-3 py-2 rounded-lg bg-black/70">${fecha}</span>`;
+
                     itemDiv.appendChild(mediaElement);
+                    itemDiv.appendChild(hoverInfo);
 
                     // Botón eliminar solo para admin
                     const user = JSON.parse(localStorage.getItem('user'));
@@ -1020,7 +1045,10 @@
                         const deleteBtn = document.createElement("button");
                         deleteBtn.className = "absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300";
                         deleteBtn.innerHTML = '<i class="fas fa-trash text-xs"></i>';
-                        deleteBtn.onclick = () => deleteGalleryItem(item._id);
+                        deleteBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            deleteGalleryItem(item._id);
+                        };
                         itemDiv.appendChild(deleteBtn);
                     }
                     galleryGrid.appendChild(itemDiv);
@@ -1094,6 +1122,48 @@
 
             // Cargar galería al iniciar
             loadGalleryFromDatabase();
+        });
+
+        // Popup para imagen/video
+        function openGalleryPopup(item) {
+            const modal = document.getElementById("galleryPopupModal");
+            const content = document.getElementById("galleryPopupContent");
+            const date = document.getElementById("galleryPopupDate");
+            let url = item.url;
+            if (!/^https?:\/\//.test(url)) {
+                url = "https://aly-mbelleza-backend.onrender.com" + (url.startsWith("/") ? "" : "/") + url;
+            }
+            content.innerHTML = "";
+            if (item.type === "video") {
+                const video = document.createElement("video");
+                video.src = url;
+                video.controls = true;
+                video.autoplay = true;
+                video.className = "max-h-[70vh] max-w-full rounded-lg shadow-lg";
+                content.appendChild(video);
+            } else {
+                const img = document.createElement("img");
+                img.src = url;
+                img.alt = item.category;
+                img.className = "max-h-[70vh] max-w-full rounded-lg shadow-lg";
+                content.appendChild(img);
+            }
+            date.textContent = "Subido el " + new Date(item.createdAt).toLocaleDateString("es-ES", {
+                year: "numeric", month: "long", day: "numeric"
+            });
+            modal.classList.remove("hidden");
+        }
+
+        // Cerrar popup
+        document.addEventListener("DOMContentLoaded", () => {
+            const modal = document.getElementById("galleryPopupModal");
+            const closeBtn = document.getElementById("closeGalleryPopup");
+            if (closeBtn) {
+                closeBtn.onclick = () => modal.classList.add("hidden");
+            }
+            modal.onclick = (e) => {
+                if (e.target === modal) modal.classList.add("hidden");
+            };
         });
     </script>
 
