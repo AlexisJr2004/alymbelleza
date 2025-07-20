@@ -735,73 +735,6 @@ function setupContactForm() {
   }
 }
 
-function setupUploadForm() {
-  const uploadForm = document.getElementById("uploadForm");
-
-  if (uploadForm) {
-    uploadForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const user = JSON.parse(localStorage.getItem("user"));
-
-      if (!user || !user.token || user.role !== "admin") {
-        Swal.fire({
-          icon: "error",
-          title: "No autorizado",
-          text: "Solo los administradores pueden subir contenido.",
-          confirmButtonColor: "#7e22ce",
-        });
-        return;
-      }
-
-      try {
-        const form = document.getElementById("uploadForm");
-        const formData = new FormData(form);
-        const submitUpload = document.getElementById("submitUpload");
-
-        submitUpload.disabled = true;
-        document.querySelector(".upload-text").classList.add("hidden");
-        document.querySelector(".upload-loading").classList.remove("hidden");
-
-        const response = await fetch(`${API_URL}/api/gallery`, {
-          method: "POST",
-          headers: { Authorization: `Bearer ${user.token}` },
-          body: formData,
-        });
-
-        const result = await response.json();
-
-        if (!response.ok)
-          throw new Error(result.error || "Error al subir el archivo");
-
-        Swal.fire({
-          icon: "success",
-          title: "¡Éxito!",
-          text: result.message,
-          confirmButtonColor: "#7e22ce",
-          timer: 2000,
-          timerProgressBar: true,
-        });
-
-        form.reset();
-        document.getElementById("filePreview").classList.add("hidden");
-      } catch (error) {
-        console.error("Error al subir archivo:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error.message || "Error al subir el archivo",
-          confirmButtonColor: "#7e22ce",
-        });
-      } finally {
-        const submitUpload = document.getElementById("submitUpload");
-        submitUpload.disabled = false;
-        document.querySelector(".upload-text").classList.remove("hidden");
-        document.querySelector(".upload-loading").classList.add("hidden");
-      }
-    });
-  }
-}
-
 // =============================================
 // ELEMENTOS DE INTERFAZ
 // =============================================
@@ -967,7 +900,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Formularios
   setupContactForm();
-  setupUploadForm();
   setupTestimonialModal();
 
   // Testimonios
