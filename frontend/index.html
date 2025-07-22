@@ -1424,6 +1424,60 @@
         </div>
     </div>
 
+    <!-- Modal de Gestión de Cookies -->
+    <div id="manageCookiesModal" class="fixed inset-0 bg-black/40 z-[99999] hidden flex items-center justify-center transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative animate-fade-in">
+            <button id="closeManageCookiesModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl focus:outline-none">
+                &times;
+            </button>
+            <h2 class="text-xl font-bold text-purple-700 mb-4">Gestionar preferencias de cookies</h2>
+            <form id="cookiesPreferencesForm" class="space-y-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="font-semibold text-gray-800">Cookies esenciales</span>
+                        <p class="text-xs text-gray-500">Necesarias para el funcionamiento básico (no se pueden desactivar).</p>
+                    </div>
+                    <input type="checkbox" checked disabled class="form-checkbox h-5 w-5 text-purple-600">
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="font-semibold text-gray-800">Cookies de rendimiento</span>
+                        <p class="text-xs text-gray-500">Ayudan a mejorar nuestros servicios y productos.</p>
+                    </div>
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="performanceCookies" class="form-checkbox h-5 w-5 text-purple-600">
+                        <span class="ml-2"></span>
+                    </label>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="font-semibold text-gray-800">Cookies de personalización</span>
+                        <p class="text-xs text-gray-500">Recuerdan tus preferencias de accesibilidad, idioma y usuario.</p>
+                    </div>
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="personalizationCookies" class="form-checkbox h-5 w-5 text-purple-600">
+                        <span class="ml-2"></span>
+                    </label>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="font-semibold text-gray-800">Cookies de terceros</span>
+                        <p class="text-xs text-gray-500">Servicios externos como redes sociales, análisis y chatbot.</p>
+                    </div>
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="thirdPartyCookies" class="form-checkbox h-5 w-5 text-purple-600">
+                        <span class="ml-2"></span>
+                    </label>
+                </div>
+                <div class="flex justify-end pt-4">
+                    <button type="submit" class="px-5 py-2 text-sm font-semibold text-white rounded-full bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 shadow transition-all">
+                        Guardar preferencias
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- ChatBot Section -->
     <div id="chatbot-container" class="fixed bottom-4 left-8 z-[50]">
         <button id="open-chat"
@@ -3266,6 +3320,43 @@
                 if (e.target === this) this.classList.add('hidden');
             };
         });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        // Abrir modal de gestión de cookies
+        document.getElementById('manage-cookies').onclick = function () {
+            document.getElementById('manageCookiesModal').classList.remove('hidden');
+            // Cargar preferencias guardadas
+            document.getElementById('performanceCookies').checked = localStorage.getItem('performanceCookies') === 'true';
+            document.getElementById('personalizationCookies').checked = localStorage.getItem('personalizationCookies') === 'true';
+            document.getElementById('thirdPartyCookies').checked = localStorage.getItem('thirdPartyCookies') === 'true';
+        };
+
+        // Cerrar modal
+        document.getElementById('closeManageCookiesModal').onclick = function () {
+            document.getElementById('manageCookiesModal').classList.add('hidden');
+        };
+        document.getElementById('manageCookiesModal').onclick = function (e) {
+            if (e.target === this) this.classList.add('hidden');
+        };
+
+        // Guardar preferencias
+        document.getElementById('cookiesPreferencesForm').onsubmit = function (e) {
+            e.preventDefault();
+            localStorage.setItem('performanceCookies', document.getElementById('performanceCookies').checked);
+            localStorage.setItem('personalizationCookies', document.getElementById('personalizationCookies').checked);
+            localStorage.setItem('thirdPartyCookies', document.getElementById('thirdPartyCookies').checked);
+            document.getElementById('manageCookiesModal').classList.add('hidden');
+            Swal.fire({
+                icon: 'success',
+                title: 'Preferencias guardadas',
+                text: 'Tus preferencias de cookies han sido actualizadas.',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        };
+    });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
