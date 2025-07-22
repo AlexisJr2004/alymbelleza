@@ -1400,6 +1400,30 @@
         </div>
     </div>
 
+    <!-- Modal de Políticas de Cookies -->
+    <div id="cookiesPolicyModal" class="fixed inset-0 bg-black/40 z-[99999] hidden flex items-center justify-center transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 relative animate-fade-in">
+            <button id="closeCookiesPolicyModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl focus:outline-none">
+                &times;
+            </button>
+            <h2 class="text-2xl font-bold text-purple-700 mb-4">Política de Cookies</h2>
+            <div class="text-gray-700 space-y-4 text-base">
+                <p>
+                    En Bella Beauty utilizamos cookies para mejorar tu experiencia de navegación, analizar el tráfico y personalizar el contenido. Las cookies nos permiten recordar tus preferencias y ofrecerte servicios adaptados a tus intereses.
+                </p>
+                <ul class="list-disc pl-5">
+                    <li><strong>Cookies esenciales:</strong> necesarias para el funcionamiento básico del sitio.</li>
+                    <li><strong>Cookies de rendimiento:</strong> nos ayudan a entender cómo usas la web para mejorarla.</li>
+                    <li><strong>Cookies de personalización:</strong> recuerdan tus preferencias y configuraciones.</li>
+                    <li><strong>Cookies de terceros:</strong> pueden ser usadas por servicios externos como redes sociales o análisis.</li>
+                </ul>
+                <p>
+                    Puedes gestionar tus preferencias de cookies en cualquier momento desde la configuración. Para más información, consulta nuestra política completa o contáctanos.
+                </p>
+            </div>
+        </div>
+    </div>
+
     <!-- ChatBot Section -->
     <div id="chatbot-container" class="fixed bottom-4 left-8 z-[50]">
         <button id="open-chat"
@@ -3219,6 +3243,36 @@
             if (document.getElementById('cart-count')) {
                 window.actualizarContadorCarrito();
             }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Abrir el modal al hacer clic en el enlace
+            document.querySelectorAll('.policies-link, .cookies-policy-link').forEach(function (el) {
+                el.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.getElementById('cookiesPolicyModal').classList.remove('hidden');
+                });
+            });
+
+            // También para el enlace en el consent
+            const policyLink = document.querySelector('#cookies-consent a');
+            if (policyLink) {
+                policyLink.classList.add('cookies-policy-link');
+                policyLink.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.getElementById('cookiesPolicyModal').classList.remove('hidden');
+                });
+            }
+
+            // Cerrar el modal
+            document.getElementById('closeCookiesPolicyModal').onclick = function () {
+                document.getElementById('cookiesPolicyModal').classList.add('hidden');
+            };
+            document.getElementById('cookiesPolicyModal').onclick = function (e) {
+                if (e.target === this) this.classList.add('hidden');
+            };
         });
     </script>
 
