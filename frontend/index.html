@@ -1409,16 +1409,16 @@
             <h2 class="text-2xl font-bold text-purple-700 mb-4">Política de Cookies</h2>
             <div class="text-gray-700 space-y-4 text-base">
                 <p>
-                    En Bella Beauty utilizamos cookies para mejorar tu experiencia de navegación, analizar el tráfico y personalizar el contenido. Las cookies nos permiten recordar tus preferencias y ofrecerte servicios adaptados a tus intereses.
+                    En <strong>Bella Beauty</strong> utilizamos cookies para mejorar tu experiencia de navegación, analizar el tráfico y personalizar el contenido. Las cookies nos permiten recordar tus preferencias y ofrecerte servicios adaptados a tus intereses, como la reserva online, el carrito de compras y el acceso a tu perfil.
                 </p>
                 <ul class="list-disc pl-5">
-                    <li><strong>Cookies esenciales:</strong> necesarias para el funcionamiento básico del sitio.</li>
-                    <li><strong>Cookies de rendimiento:</strong> nos ayudan a entender cómo usas la web para mejorarla.</li>
-                    <li><strong>Cookies de personalización:</strong> recuerdan tus preferencias y configuraciones.</li>
-                    <li><strong>Cookies de terceros:</strong> pueden ser usadas por servicios externos como redes sociales o análisis.</li>
+                    <li><strong>Cookies esenciales:</strong> necesarias para el funcionamiento básico del sitio, como el inicio de sesión y la gestión de tu carrito.</li>
+                    <li><strong>Cookies de rendimiento:</strong> nos ayudan a entender cómo usas la web para mejorar nuestros servicios y productos.</li>
+                    <li><strong>Cookies de personalización:</strong> recuerdan tus preferencias de accesibilidad, idioma y configuración de usuario.</li>
+                    <li><strong>Cookies de terceros:</strong> pueden ser usadas por servicios externos como redes sociales, análisis de visitas y el chatbot de asistencia.</li>
                 </ul>
                 <p>
-                    Puedes gestionar tus preferencias de cookies en cualquier momento desde la configuración. Para más información, consulta nuestra política completa o contáctanos.
+                    Puedes gestionar tus preferencias de cookies en cualquier momento desde la configuración. Para más información, contáctanos en <a href="mailto:info@bellabeauty.com" class="text-blue-600 underline">info@bellabeauty.com</a> o revisa nuestra sección de <a href="#contacto" class="text-blue-600 underline">Contacto</a>.
                 </p>
             </div>
         </div>
@@ -3249,14 +3249,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Abrir el modal al hacer clic en el enlace
-            document.querySelectorAll('.policies-link, .cookies-policy-link').forEach(function (el) {
-                el.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.getElementById('cookiesPolicyModal').classList.remove('hidden');
-                });
-            });
-
-            // También para el enlace en el consent
             const policyLink = document.querySelector('#cookies-consent a');
             if (policyLink) {
                 policyLink.classList.add('cookies-policy-link');
