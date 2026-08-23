@@ -27,6 +27,7 @@
 - [Pruebas](#pruebas)
 - [Seguridad](#seguridad)
 - [Despliegue](#despliegue)
+- [Mantenimiento](#mantenimiento)
 - [Contacto](#contacto)
 - [Licencia](#licencia)
 
@@ -98,6 +99,7 @@ Bella Beauty es una plataforma web para la gestión integral de un centro de bel
 │   ├── package.json
 │   ├── .env.example         # Variables de entorno requeridas (copiar como .env)
 │   ├── tests/                # Pruebas con Jest + Supertest
+│   ├── scripts/               # Utilidades de mantenimiento (limpieza de Cloudinary)
 │   └── gestion-roles-productos/
 │       └── src/
 │           ├── controllers/
@@ -214,6 +216,20 @@ La aplicación está pensada para desplegarse como un único servicio web en Ren
 - Comando de build: `npm install`; comando de arranque: `npm start`.
 - Variables de entorno configuradas en el panel de Render (ver [Variables de entorno](#variables-de-entorno)).
 - Endpoint `GET /health` disponible para el monitoreo del servicio.
+
+---
+
+## Mantenimiento
+
+Al crear o reemplazar una imagen (galería, producto o foto de perfil) se guarda su `public_id` de Cloudinary junto con la URL, para poder borrar el archivo real cuando se elimina o se reemplaza. Para revisar si quedaron archivos huérfanos en Cloudinary (por ejemplo, de antes de que existiera este control):
+
+```sh
+cd backend
+npm run cleanup:cloudinary            # modo de prueba: solo reporta lo que encontraría
+npm run cleanup:cloudinary -- --delete  # borra de verdad los huérfanos encontrados
+```
+
+Siempre correr primero sin `--delete` y revisar el reporte antes de borrar.
 
 ---
 

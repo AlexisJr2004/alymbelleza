@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const gallerySchema = new mongoose.Schema({
     url: { type: String, required: true },
-    category: { 
+    publicId: { type: String, required: true }, // public_id de Cloudinary, necesario para poder borrar el archivo real
+    category: {
         type: String, 
         required: true,
         enum: ['escuela', 'especialidades', 'eventos', 'viajes-escolares', 'tratamiento_capilar', 'tratamiento_facial', 'local']

@@ -59,6 +59,7 @@ router.post(
       if (!result || !result.secure_url) throw new Error("Error al subir el archivo a Cloudinary");
       const galleryItem = new GalleryItem({
         url: result.secure_url,
+        publicId: result.public_id,
         category,
         type: fileType,
         filename: result.original_filename,
@@ -85,15 +86,23 @@ router.delete(
     try {
       const item = await GalleryItem.findById(req.params.id);
       if (!item) return res.status(404).json({ error: "Elemento no encontrado" });
-      // Eliminar de Cloudinary
-      const urlParts = item.url.split('/');
-      const filenameWithExt = urlParts[urlParts.length - 1];
-      const filename = filenameWithExt.split('.')[0];
-      const folder = urlParts.slice(-3, -1).join('/');
-      const publicId = `${folder}/${filename}`;
-      await cloudinary.uploader.destroy(publicId, {
-        resource_type: item.type === 'video' ? 'video' : 'image'
+
+      // Elementos subidos antes de guardar publicId: se reconstruye con la misma
+      // carpeta que usa el endpoint de subida (bella-beauty/gallery/<categoria>).
+      const publicId = item.publicId || (() => {
+        const filenameWithExt = item.url.split('/').pop();
+        const filename = filenameWithExt.split('.')[0];
+        return `bella-beauty/gallery/${item.category}/${filename}`;
+      })();
+
+      const cloudinaryResult = await cloudinary.uploader.destroy(publicId, {
+        resource_type: item.type === 'video' ? 'video' : 'image',
+        invalidate: true,
       });
+      if (cloudinaryResult.result !== 'ok' && cloudinaryResult.result !== 'not found') {
+        console.warn(`No se pudo borrar de Cloudinary (${publicId}):`, cloudinaryResult.result);
+      }
+
       await GalleryItem.findByIdAndDelete(req.params.id);
       res.json({ success: true, message: "Elemento eliminado exitosamente" });
     } catch (error) {

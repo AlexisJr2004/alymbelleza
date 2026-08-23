@@ -8,6 +8,7 @@ const productSchema = new mongoose.Schema({
     price: { type: Number, required: true, min: 0 },
     originalPrice: { type: Number },
     image: { type: String },
+    imagePublicId: { type: String }, // public_id de Cloudinary, necesario para poder borrar la imagen real
     category: { type: String, enum: ['capilar', 'facial'], required: true },
     featured: { type: Boolean, default: false },
 }, { timestamps: true });

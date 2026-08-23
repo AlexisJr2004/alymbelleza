@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   profileImage: { type: String },
+  profileImagePublicId: { type: String }, // public_id de Cloudinary, necesario para poder borrar la imagen real
   role: { type: String, enum: ['cliente', 'admin'], default: 'cliente' },
   birthdate: { type: Date },
   gender: { type: String, enum: ['masculino', 'femenino', 'otro'] },

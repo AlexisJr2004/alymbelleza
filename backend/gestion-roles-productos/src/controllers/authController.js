@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const cloudinary = require('../utils/cloudinary');
+const publicIdFromUrl = require('../utils/cloudinaryPublicId');
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_PASSWORD_LENGTH = 8;
@@ -215,6 +217,7 @@ exports.register = async (req, res) => {
   try {
     const { name, email, password, birthdate, gender, address, dni, phone } = req.body;
     let profileImage = req.file ? req.file.path : undefined;
+    let profileImagePublicId = req.file ? req.file.filename : undefined;
 
     if (!name?.trim() || typeof email !== 'string' || typeof password !== 'string') {
       return res.status(400).json({ error: 'Nombre, email y contraseña son requeridos.' });
@@ -238,6 +241,7 @@ exports.register = async (req, res) => {
       email,
       password: hashedPassword,
       profileImage,
+      profileImagePublicId,
       // El rol nunca se toma del cliente: todo registro público es 'cliente'.
       // Las cuentas admin se crean manualmente, nunca desde este endpoint.
       role: 'cliente',
@@ -280,11 +284,22 @@ exports.updateProfile = async (req, res) => {
       user.birthdate = new Date(birthdate);
     }
 
+    let oldProfileImagePublicId = null;
     if (req.file && req.file.path) {
+      oldProfileImagePublicId = user.profileImagePublicId || publicIdFromUrl(user.profileImage);
       user.profileImage = req.file.path;
+      user.profileImagePublicId = req.file.filename;
     }
 
     await user.save();
+
+    // La foto anterior queda huérfana en Cloudinary si no se borra; es un efecto
+    // secundario best-effort, no debe hacer fallar la respuesta si Cloudinary falla.
+    if (oldProfileImagePublicId) {
+      cloudinary.uploader.destroy(oldProfileImagePublicId).catch((err) =>
+        console.error('No se pudo borrar la foto de perfil anterior en Cloudinary:', err)
+      );
+    }
 
     res.json({ success: true, message: 'Perfil actualizado correctamente.', user });
   } catch (err) {
