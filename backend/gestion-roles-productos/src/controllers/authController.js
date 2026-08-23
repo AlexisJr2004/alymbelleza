@@ -14,8 +14,13 @@ const MIN_PASSWORD_LENGTH = 8;
 // solo para que se lean fácil; la contraseña real no los lleva. Se quitan aquí por si
 // EMAIL_PASS se copió tal cual se ve en pantalla, para no depender de que el valor en
 // Render esté guardado exactamente sin espacios.
+// "service: gmail" usa el puerto 465 (SSL) por defecto; se prueba el 587 (STARTTLS)
+// explícitamente porque el 465 se quedaba en ETIMEDOUT al conectar desde Render.
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  requireTLS: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: (process.env.EMAIL_PASS || "").replace(/\s+/g, ""),
