@@ -20,6 +20,11 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: (process.env.EMAIL_PASS || "").replace(/\s+/g, ""),
   },
+  // Sin esto, si Gmail no responde, nodemailer puede tardar hasta 2 minutos en
+  // fallar y la petición se queda "colgada" en vez de devolver un error rápido.
+  connectionTimeout: 15000,
+  greetingTimeout: 15000,
+  socketTimeout: 20000,
 });
 
 // Controlador para enviar un correo de contacto
@@ -91,7 +96,8 @@ exports.sendContactEmail = async (req, res) => {
       `,
     };
 
-    await transporter.verify();
+    // sendMail ya intenta la conexión y autenticación; no hace falta un verify()
+    // previo, que solo duplicaba el tiempo de espera ante cualquier problema de red.
     const info = await transporter.sendMail(mailOptions);
 
     res.json({
