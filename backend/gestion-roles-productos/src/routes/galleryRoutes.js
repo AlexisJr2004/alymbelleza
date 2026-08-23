@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const GalleryItem = require('../models/galleryItem');
-const { verifyToken } = require('../middlewares/authMiddleware');
-const roleMiddleware = require('../middlewares/roleMiddleware');
+const { verifyToken, authorize } = require('../middlewares/authMiddleware');
 const cloudinary = require('../utils/cloudinary');
 const multer = require('multer');
 
@@ -34,7 +33,7 @@ router.get('/', async (req, res) => {
 router.post(
   '/',
   verifyToken,
-  roleMiddleware(['admin']),
+  authorize('admin'),
   galleryStorage.single('file'),
   async (req, res) => {
     try {
@@ -81,7 +80,7 @@ router.post(
 router.delete(
   '/:id',
   verifyToken,
-  roleMiddleware(['admin']),
+  authorize('admin'),
   async (req, res) => {
     try {
       const item = await GalleryItem.findById(req.params.id);

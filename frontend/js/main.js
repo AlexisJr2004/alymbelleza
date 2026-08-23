@@ -27,6 +27,17 @@ function formatImageUrl(url) {
   return `${baseUrl}${url.startsWith("/") ? "" : "/"}${url}`;
 }
 
+// Escapa texto de usuario antes de insertarlo en HTML (evita XSS almacenado, p. ej. en testimonios)
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  }[char]));
+}
+
 function showNotification(type, title, message) {
   const notification = document.createElement("div");
   notification.className = `notification ${
@@ -334,19 +345,19 @@ async function loadTestimonials() {
         <br>
         <p class="text-gray-600 italic mb-8 comment-text" data-id="${
           testimonial._id
-        }">${testimonial.comment}</p>
+        }">${escapeHtml(testimonial.comment)}</p>
         <p class="text-xs text-gray-500 mt-2">
           Publicado el <span>${fecha}</span> a las <span>${hora}</span>
         </p>
       </div>
       <div class="flex items-center mt-auto">
-        <img src="${formatImageUrl(testimonial.avatar)}" alt="${
+        <img src="${escapeHtml(formatImageUrl(testimonial.avatar))}" alt="${escapeHtml(
           testimonial.name
-        }" class="h-12 w-12 rounded-full object-cover"
+        )}" class="h-12 w-12 rounded-full object-cover"
           onerror="this.onerror=null;this.src='https://us.123rf.com/450wm/thesomeday123/thesomeday1231712/thesomeday123171200009/91087331-icono-de-perfil-de-avatar-predeterminado-para-hombre-marcador-de-posici%C3%B3n-de-foto-gris-vector-de.jpg?ver=6'">
         <div class="ml-4">
-          <h4 class="font-semibold text-gray-900">${testimonial.name}</h4>
-          <p class="text-gray-500 text-sm">${testimonial.role}</p>
+          <h4 class="font-semibold text-gray-900">${escapeHtml(testimonial.name)}</h4>
+          <p class="text-gray-500 text-sm">${escapeHtml(testimonial.role)}</p>
         </div>
       </div>
       ${
@@ -360,7 +371,7 @@ async function loadTestimonials() {
             </button>
             <div class="testimonial-menu hidden absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg z-10">
               <button class="edit-testimonial-btn block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                data-id="${testimonial._id}" data-role="${testimonial.role}">Editar</button>
+                data-id="${testimonial._id}" data-role="${escapeHtml(testimonial.role)}">Editar</button>
               <button class="delete-testimonial-btn block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
                 data-id="${testimonial._id}">Eliminar</button>
             </div>

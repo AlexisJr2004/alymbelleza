@@ -21,7 +21,8 @@ exports.createProduct = async (req, res) => {
         await newProduct.save();
         res.status(201).json({ success: true, data: newProduct });
     } catch (error) {
-        res.status(500).json({ success: false, error: 'Error al crear el producto', details: error.message });
+        console.error('Error al crear el producto:', error);
+        res.status(500).json({ success: false, error: 'Error al crear el producto' });
     }
 };
 
@@ -30,7 +31,8 @@ exports.getProducts = async (req, res) => {
         const products = await Product.find();
         res.status(200).json({ success: true, data: products });
     } catch (error) {
-        res.status(500).json({ success: false, error: 'Error al obtener los productos', details: error.message });
+        console.error('Error al obtener los productos:', error);
+        res.status(500).json({ success: false, error: 'Error al obtener los productos' });
     }
 };
 
@@ -42,7 +44,8 @@ exports.getProductById = async (req, res) => {
         }
         res.status(200).json({ success: true, data: product });
     } catch (error) {
-        res.status(500).json({ success: false, error: 'Error al obtener el producto', details: error.message });
+        console.error('Error al obtener el producto:', error);
+        res.status(500).json({ success: false, error: 'Error al obtener el producto' });
     }
 };
 
@@ -62,7 +65,8 @@ exports.updateProduct = async (req, res) => {
         }
         res.status(200).json({ success: true, data: updatedProduct });
     } catch (error) {
-        res.status(500).json({ success: false, error: 'Error al actualizar el producto', details: error.message });
+        console.error('Error al actualizar el producto:', error);
+        res.status(500).json({ success: false, error: 'Error al actualizar el producto' });
     }
 };
 
@@ -75,6 +79,7 @@ exports.deleteProduct = async (req, res) => {
         }
         res.status(200).json({ success: true, message: 'Producto eliminado exitosamente' });
     } catch (error) {
-        res.status(500).json({ success: false, error: 'Error al eliminar el producto', details: error.message });
+        console.error('Error al eliminar el producto:', error);
+        res.status(500).json({ success: false, error: 'Error al eliminar el producto' });
     }
 };

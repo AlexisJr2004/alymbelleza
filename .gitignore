@@ -1,4 +1,24 @@
+# Dependencias
 node_modules/
+
+# Variables de entorno (usar backend/.env.example como referencia)
 .env
-backend/uploads/
+.env.local
+.env.*.local
+
+# Pruebas
+coverage/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Editores / IDE
+.vscode/
+.idea/
+*.swp
+
+# Sistema operativo
 .DS_Store
+Thumbs.db

@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Appointment = require('../models/appointment');
-const { authMiddleware } = require('../middlewares/auth');
+const { verifyToken } = require('../middlewares/authMiddleware');
 
 // Crear cita
-router.post('/', authMiddleware, async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
   const { date } = req.body;
   if (!date) return res.status(400).json({ success: false, message: 'Fecha requerida' });
   const appointment = new Appointment({ user: req.user._id, date });
@@ -13,13 +13,13 @@ router.post('/', authMiddleware, async (req, res) => {
 });
 
 // Listar citas del usuario
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
   const appointments = await Appointment.find({ user: req.user._id }).sort({ date: 1 });
   res.json({ success: true, appointments });
 });
 
 // Cambiar estado
-router.patch('/:id', authMiddleware, async (req, res) => {
+router.patch('/:id', verifyToken, async (req, res) => {
   const { status } = req.body;
   if (!['pendiente', 'realizada', 'cancelada'].includes(status)) {
     return res.status(400).json({ success: false, message: 'Estado inválido' });
@@ -33,7 +33,7 @@ router.patch('/:id', authMiddleware, async (req, res) => {
 });
 
 // Eliminar cita
-router.delete('/:id', authMiddleware, async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
   const deleted = await Appointment.findOneAndDelete({ _id: req.params.id, user: req.user._id });
   if (!deleted) {
     return res.status(404).json({ success: false, message: 'Cita no encontrada' });

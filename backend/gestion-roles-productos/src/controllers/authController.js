@@ -4,6 +4,9 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MIN_PASSWORD_LENGTH = 8;
+
 // Configuración de Nodemailer (usa tu configuración existente)
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -25,7 +28,7 @@ exports.sendContactEmail = async (req, res) => {
       });
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!EMAIL_REGEX.test(email)) {
       return res.status(400).json({
         success: false,
         error: "El email no es válido",
@@ -73,8 +76,8 @@ exports.sendContactEmail = async (req, res) => {
           <div style="padding: 20px; background-color: #f9fafb; text-align: center; border-top: 1px solid #eaeaea; font-size: 13px; color: #6b7280;">
             <p style="margin: 0 0 10px 0;">Este mensaje fue enviado desde el formulario de contacto de Bella Beauty</p>
             <p style="margin: 0;">
-              <a href="https://bellabeauty.com" style="color: #7e22ce; text-decoration: none;">bellabeauty.com</a> | 
-              <a href="tel:+1234567890" style="color: #7e22ce; text-decoration: none;">+1 234 567 890</a> | 
+              <a href="https://bellabeauty.com" style="color: #7e22ce; text-decoration: none;">bellabeauty.com</a> |
+              <a href="tel:+1234567890" style="color: #7e22ce; text-decoration: none;">+1 234 567 890</a> |
               <a href="mailto:info@bellabeauty.com" style="color: #7e22ce; text-decoration: none;">info@bellabeauty.com</a>
             </p>
           </div>
@@ -111,93 +114,119 @@ exports.sendContactEmail = async (req, res) => {
 
 // Solicitud de recuperación
 exports.forgotPassword = async (req, res) => {
-  const { email } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) return res.status(404).json({ error: 'Usuario no encontrado.' });
+  try {
+    const { email } = req.body;
+    if (typeof email !== 'string' || !EMAIL_REGEX.test(email)) {
+      return res.status(400).json({ error: 'El email no es válido.' });
+    }
 
-  const token = crypto.randomBytes(20).toString('hex');
-  user.resetPasswordToken = token;
-  user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
-  await user.save();
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ error: 'Usuario no encontrado.' });
 
-  const resetUrl = `https://aly-mbelleza-backend.onrender.com/reset-password.html?token=${token}`;
+    const token = crypto.randomBytes(20).toString('hex');
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
+    await user.save();
 
-  const mailOptions = {
-    to: user.email,
-    from: `"Bella Beauty Contacto" <${process.env.EMAIL_USER}>`,
-    subject: 'Recuperación de contraseña - Bella Beauty',
-    html: `
-      <div style="font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: 0 auto; color: #333;">
-        <div style="text-align: center; padding: 20px 0; border-bottom: 1px solid #eaeaea;">
-          <img src="https://res.cloudinary.com/dokmxt0ja/image/upload/v1752727246/logo_mybdvl.png" alt="Bella Beauty Logo" style="max-width: 80px; height: auto;">
-          <h1 style="color: #7e22ce; font-size: 24px; margin-top: 15px; font-weight: 600;">Recuperación de Contraseña</h1>
-        </div>
-        <div style="padding: 25px 30px;">
-          <p style="font-size: 16px; color: #374151;">Hola <b>${user.name}</b>,</p>
-          <p style="font-size: 16px; color: #374151;">
-            Hemos recibido una solicitud para restablecer tu contraseña en <b>Bella Beauty</b>.
-          </p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${resetUrl}" style="display: inline-block; background-color: #7e22ce; color: white; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-weight: 500; font-size: 16px; box-shadow: 0 2px 5px rgba(126, 34, 206, 0.12);">
-              Restablecer Contraseña
-            </a>
+    const frontendUrl = process.env.FRONTEND_URL;
+    const resetUrl = `${frontendUrl}/reset-password.html?token=${token}`;
+
+    const mailOptions = {
+      to: user.email,
+      from: `"Bella Beauty Contacto" <${process.env.EMAIL_USER}>`,
+      subject: 'Recuperación de contraseña - Bella Beauty',
+      html: `
+        <div style="font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: 0 auto; color: #333;">
+          <div style="text-align: center; padding: 20px 0; border-bottom: 1px solid #eaeaea;">
+            <img src="https://res.cloudinary.com/dokmxt0ja/image/upload/v1752727246/logo_mybdvl.png" alt="Bella Beauty Logo" style="max-width: 80px; height: auto;">
+            <h1 style="color: #7e22ce; font-size: 24px; margin-top: 15px; font-weight: 600;">Recuperación de Contraseña</h1>
           </div>
-          <p style="font-size: 15px; color: #6b7280;">
-            Si no solicitaste este cambio, puedes ignorar este correo. El enlace expirará en 1 hora por seguridad.
-          </p>
-          <div style="margin-top: 30px; font-size: 13px; color: #6b7280;">
-            <p>¿Tienes problemas? Copia y pega este enlace en tu navegador:</p>
-            <a href="${resetUrl}" style="color: #7e22ce; word-break: break-all;">${resetUrl}</a>
+          <div style="padding: 25px 30px;">
+            <p style="font-size: 16px; color: #374151;">Hola <b>${user.name}</b>,</p>
+            <p style="font-size: 16px; color: #374151;">
+              Hemos recibido una solicitud para restablecer tu contraseña en <b>Bella Beauty</b>.
+            </p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${resetUrl}" style="display: inline-block; background-color: #7e22ce; color: white; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-weight: 500; font-size: 16px; box-shadow: 0 2px 5px rgba(126, 34, 206, 0.12);">
+                Restablecer Contraseña
+              </a>
+            </div>
+            <p style="font-size: 15px; color: #6b7280;">
+              Si no solicitaste este cambio, puedes ignorar este correo. El enlace expirará en 1 hora por seguridad.
+            </p>
+            <div style="margin-top: 30px; font-size: 13px; color: #6b7280;">
+              <p>¿Tienes problemas? Copia y pega este enlace en tu navegador:</p>
+              <a href="${resetUrl}" style="color: #7e22ce; word-break: break-all;">${resetUrl}</a>
+            </div>
+          </div>
+          <div style="padding: 20px; background-color: #f9fafb; text-align: center; border-top: 1px solid #eaeaea; font-size: 13px; color: #6b7280;">
+            <p style="margin: 0 0 10px 0;">Este mensaje fue enviado desde Bella Beauty</p>
+            <p style="margin: 0;">
+              <a href="${frontendUrl}" style="color: #7e22ce; text-decoration: none;">${frontendUrl}</a>
+            </p>
           </div>
         </div>
-        <div style="padding: 20px; background-color: #f9fafb; text-align: center; border-top: 1px solid #eaeaea; font-size: 13px; color: #6b7280;">
-          <p style="margin: 0 0 10px 0;">Este mensaje fue enviado desde Bella Beauty</p>
-          <p style="margin: 0;">
-            <a href="https://aly-mbelleza-frontend.onrender.com" style="color: #7e22ce; text-decoration: none;">aly-mbelleza-frontend.onrender.com</a>
-          </p>
-        </div>
-      </div>
-    `
-  };
+      `
+    };
 
-  await transporter.sendMail(mailOptions);
-  res.json({ message: 'Correo enviado con instrucciones.' });
+    await transporter.sendMail(mailOptions);
+    res.json({ message: 'Correo enviado con instrucciones.' });
+  } catch (err) {
+    console.error('Error al solicitar recuperación de contraseña:', err);
+    res.status(500).json({ error: 'No se pudo enviar el correo de recuperación.' });
+  }
 };
 
 // Restablecer contraseña
 exports.resetPassword = async (req, res) => {
-  const { token } = req.params;
-  const { password } = req.body;
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
 
-  const user = await User.findOne({
-    resetPasswordToken: token,
-    resetPasswordExpires: { $gt: Date.now() }
-  });
+    if (typeof password !== 'string' || password.length < MIN_PASSWORD_LENGTH) {
+      return res.status(400).json({ error: `La contraseña debe tener al menos ${MIN_PASSWORD_LENGTH} caracteres.` });
+    }
 
-  if (!user) return res.status(400).json({ error: 'Token inválido o expirado.' });
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() }
+    });
 
-  user.password = await bcrypt.hash(password, 10);
-  user.resetPasswordToken = undefined;
-  user.resetPasswordExpires = undefined;
-  await user.save();
+    if (!user) return res.status(400).json({ error: 'Token inválido o expirado.' });
 
-  res.json({ message: 'Contraseña actualizada correctamente.' });
+    user.password = await bcrypt.hash(password, 10);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.json({ message: 'Contraseña actualizada correctamente.' });
+  } catch (err) {
+    console.error('Error al restablecer contraseña:', err);
+    res.status(500).json({ error: 'No se pudo restablecer la contraseña.' });
+  }
 };
 
 exports.me = async (req, res) => {
-  try {
-    const user = await User.findById(req.user.userId || req.user.id).select('-password -resetPasswordToken -resetPasswordExpires');
-    if (!user) return res.status(404).json({ error: 'Usuario no encontrado.' });
-    res.json({ user });
-  } catch (err) {
-    res.status(500).json({ error: 'Error al obtener el perfil.' });
-  }
+  // verifyToken ya adjuntó el usuario sin password ni datos de reseteo
+  res.json({ user: req.user });
 };
 
 exports.register = async (req, res) => {
   try {
-    const { name, email, password, role, birthdate, gender, address, dni, phone } = req.body;
+    const { name, email, password, birthdate, gender, address, dni, phone } = req.body;
     let profileImage = req.file ? req.file.path : undefined;
+
+    if (!name?.trim() || typeof email !== 'string' || typeof password !== 'string') {
+      return res.status(400).json({ error: 'Nombre, email y contraseña son requeridos.' });
+    }
+
+    if (!EMAIL_REGEX.test(email)) {
+      return res.status(400).json({ error: 'El email no es válido.' });
+    }
+
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      return res.status(400).json({ error: `La contraseña debe tener al menos ${MIN_PASSWORD_LENGTH} caracteres.` });
+    }
 
     if (await User.findOne({ email })) {
       return res.status(400).json({ error: 'El correo ya está registrado.' });
@@ -209,7 +238,9 @@ exports.register = async (req, res) => {
       email,
       password: hashedPassword,
       profileImage,
-      role: role || 'cliente',
+      // El rol nunca se toma del cliente: todo registro público es 'cliente'.
+      // Las cuentas admin se crean manualmente, nunca desde este endpoint.
+      role: 'cliente',
       birthdate,
       gender,
       address,
@@ -220,50 +251,56 @@ exports.register = async (req, res) => {
 
     res.status(201).json({ message: 'Usuario registrado correctamente.' });
   } catch (err) {
+    console.error('Error al registrar usuario:', err);
     res.status(500).json({ error: 'Error al registrar usuario.' });
   }
 };
 
 exports.updateProfile = async (req, res) => {
-    try {
-        const { name, email, phone, address, gender, birthdate, dni } = req.body;
+  try {
+    const { name, email, phone, address, gender, birthdate, dni } = req.body;
 
-        // Buscar al usuario autenticado
-        const user = await User.findById(req.user._id);
-        if (!user) {
-            return res.status(404).json({ error: 'Usuario no encontrado.' });
-        }
-
-        // Actualizar los campos permitidos
-        user.name = name || user.name;
-        user.email = email || user.email;
-        user.phone = phone || user.phone;
-        user.address = address || user.address;
-        user.gender = gender || user.gender;
-        user.dni = dni || user.dni;
-
-        // Convertir la fecha de nacimiento a UTC
-        if (birthdate) {
-            user.birthdate = new Date(birthdate);
-        }
-
-        // Si se subió una nueva imagen de perfil
-        if (req.file && req.file.path) {
-            user.profileImage = req.file.path;
-        }
-
-        await user.save();
-
-        res.json({ success: true, message: 'Perfil actualizado correctamente.', user });
-    } catch (err) {
-        console.error('Error al actualizar el perfil:', err);
-        res.status(500).json({ error: 'Error al actualizar el perfil.' });
+    if (email && !EMAIL_REGEX.test(email)) {
+      return res.status(400).json({ error: 'El email no es válido.' });
     }
+
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado.' });
+    }
+
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.phone = phone || user.phone;
+    user.address = address || user.address;
+    user.gender = gender || user.gender;
+    user.dni = dni || user.dni;
+
+    if (birthdate) {
+      user.birthdate = new Date(birthdate);
+    }
+
+    if (req.file && req.file.path) {
+      user.profileImage = req.file.path;
+    }
+
+    await user.save();
+
+    res.json({ success: true, message: 'Perfil actualizado correctamente.', user });
+  } catch (err) {
+    console.error('Error al actualizar el perfil:', err);
+    res.status(500).json({ error: 'Error al actualizar el perfil.' });
+  }
 };
 
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    if (typeof email !== 'string' || typeof password !== 'string') {
+      return res.status(400).json({ error: 'Email y contraseña son requeridos.' });
+    }
+
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ error: 'Usuario no encontrado.' });
 
@@ -277,6 +314,7 @@ exports.login = async (req, res) => {
     );
     res.json({ token, user: { name: user.name, email: user.email, role: user.role, profileImage: user.profileImage } });
   } catch (err) {
-    res.status(500).json({ error: 'Error al registrar usuario.', details: err.message });
+    console.error('Error al iniciar sesión:', err);
+    res.status(500).json({ error: 'Error al iniciar sesión.' });
   }
 };

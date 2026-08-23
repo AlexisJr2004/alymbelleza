@@ -1,29 +1,15 @@
 const express = require("express");
 const multer = require("multer");
-const path = require("path");
 const Testimonial = require("../models/Testimonial");
-const { authMiddleware } = require("../middlewares/auth");
+const { verifyToken } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-const uploadDir = path.join(__dirname, "../../../uploads");
-const testimonialStorage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadDir),
-  filename: (req, file, cb) =>
-    cb(null, `testimonial-${Date.now()}${path.extname(file.originalname)}`),
-});
-const testimonialUpload = multer({
-  storage: testimonialStorage,
-  limits: { fileSize: 15 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
-    if (allowedTypes.includes(file.mimetype)) cb(null, true);
-    else cb(new Error("Tipo de archivo no permitido. Solo imágenes."), false);
-  },
-});
+// Los testimonios solo llevan campos de texto (el avatar es una URL), no archivos
+const upload = multer();
 
 // Crear testimonio
-router.post("/", authMiddleware, testimonialUpload.none(), async (req, res) => {
+router.post("/", verifyToken, upload.none(), async (req, res) => {
   try {
     const { name, role, comment, avatar } = req.body;
     if (!name || !role || !comment || !avatar) {
@@ -37,7 +23,7 @@ router.post("/", authMiddleware, testimonialUpload.none(), async (req, res) => {
       role,
       comment,
       avatar,
-      userId: req.user._id, //
+      userId: req.user._id,
     });
     await newTestimonial.save();
     res.status(201).json({
@@ -82,7 +68,7 @@ router.get("/", async (req, res) => {
 });
 
 // Editar testimonio
-router.put("/:id", authMiddleware, testimonialUpload.none(), async (req, res) => {
+router.put("/:id", verifyToken, upload.none(), async (req, res) => {
   try {
     const { name, role, comment, avatar } = req.body;
     const testimonial = await Testimonial.findById(req.params.id);
@@ -105,7 +91,7 @@ router.put("/:id", authMiddleware, testimonialUpload.none(), async (req, res) =>
 });
 
 // Eliminar testimonio
-router.delete("/:id", authMiddleware, async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const testimonial = await Testimonial.findById(req.params.id);
     if (!testimonial) {
