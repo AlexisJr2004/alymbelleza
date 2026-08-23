@@ -778,6 +778,157 @@ function setupContactForm() {
 }
 
 // =============================================
+// MODAL DE VISTA RÁPIDA DE PRODUCTO
+// =============================================
+
+function buildProductQuickViewModal() {
+  const existing = document.getElementById("productQuickViewModal");
+  if (existing) return existing;
+
+  const modal = document.createElement("div");
+  modal.id = "productQuickViewModal";
+  modal.className =
+    "fixed inset-0 bg-black/40 hidden z-[9999] flex items-center justify-center p-4";
+  modal.innerHTML = `
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-auto overflow-hidden max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 sticky top-0 bg-white">
+        <h3 class="text-lg font-semibold text-gray-900">Detalle del producto</h3>
+        <button id="closeProductQuickView" class="text-gray-400 hover:text-gray-700 transition-colors" aria-label="Cerrar">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6 p-6">
+        <img id="quickViewImage" src="" alt="" class="w-full h-64 md:h-full object-cover rounded-xl">
+        <div class="flex flex-col">
+          <span id="quickViewCategoryTag" class="inline-block w-fit text-white px-3 py-1 rounded-full text-xs font-semibold tracking-wide mb-3"></span>
+          <h2 id="quickViewName" class="text-2xl font-bold text-gray-900 mb-2"></h2>
+          <div class="flex items-center mb-4">
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+            </svg>
+            <span id="quickViewRating" class="text-gray-600 text-sm ml-1"></span>
+            <span id="quickViewAvailability" class="text-xs font-medium ml-3"></span>
+          </div>
+          <p id="quickViewDescription" class="text-gray-600 text-sm leading-relaxed mb-6"></p>
+          <div class="mt-auto flex items-center justify-between pt-4 border-t border-gray-100">
+            <div>
+              <span id="quickViewPrice" class="text-gray-900 font-bold text-2xl"></span>
+              <span id="quickViewOriginalPrice" class="text-gray-400 text-sm line-through ml-2"></span>
+            </div>
+            <button id="quickViewAddToCart" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+              Agregar al carrito
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  const close = () => modal.classList.add("hidden");
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) close();
+  });
+  modal.querySelector("#closeProductQuickView").addEventListener("click", close);
+
+  return modal;
+}
+
+// Agrega un producto al carrito desde el modal de vista rápida (misma lógica que
+// los botones "Agregar al carrito" de las tarjetas, autocontenida para no depender
+// de funciones definidas en el script inline de cada página).
+async function addProductToCartFromQuickView(product, modal) {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user || !user.token) {
+    window.location.href = "login.html";
+    return;
+  }
+  try {
+    const res = await fetch(`${API_URL}/api/cart/add`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+      body: JSON.stringify({ productId: product._id, cantidad: 1 }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(data.message || data.error || "No se pudo agregar al carrito");
+    }
+    Swal.fire({
+      icon: "success",
+      title: "¡Agregado!",
+      text: "Producto agregado al carrito",
+      timer: 1200,
+      showConfirmButton: false,
+    });
+    if (window.actualizarContadorCarrito) window.actualizarContadorCarrito();
+    modal.classList.add("hidden");
+  } catch (err) {
+    Swal.fire("Error", err.message || "No se pudo agregar al carrito", "error");
+  }
+}
+
+function openProductQuickView(product) {
+  const modal = buildProductQuickViewModal();
+
+  const categoriaTag = product.featured
+    ? "DESTACADO"
+    : product.category === "capilar"
+    ? "CAPILAR"
+    : "FACIAL";
+  const categoriaColor = product.featured
+    ? "bg-blue-500"
+    : product.category === "capilar"
+    ? "bg-yellow-500"
+    : "bg-pink-500";
+
+  modal.querySelector("#quickViewImage").src = product.image || "./img/default.jpg";
+  modal.querySelector("#quickViewImage").alt = product.name;
+
+  const tag = modal.querySelector("#quickViewCategoryTag");
+  tag.textContent = categoriaTag;
+  tag.className = `inline-block w-fit text-white px-3 py-1 rounded-full text-xs font-semibold tracking-wide mb-3 ${categoriaColor}`;
+
+  modal.querySelector("#quickViewName").textContent = product.name;
+  modal.querySelector("#quickViewRating").textContent = product.rating || "N/A";
+
+  const availability = modal.querySelector("#quickViewAvailability");
+  availability.textContent = product.availability ? "Disponible" : "Agotado";
+  availability.className = `text-xs font-medium ml-3 ${
+    product.availability ? "text-green-600" : "text-red-500"
+  }`;
+
+  modal.querySelector("#quickViewDescription").textContent = product.description;
+  modal.querySelector("#quickViewPrice").textContent = `$${product.price}`;
+  modal.querySelector("#quickViewOriginalPrice").textContent = product.originalPrice
+    ? `$${product.originalPrice}`
+    : "";
+
+  const addBtn = modal.querySelector("#quickViewAddToCart");
+  if (product.availability) {
+    addBtn.classList.remove("hidden");
+    addBtn.onclick = () => addProductToCartFromQuickView(product, modal);
+  } else {
+    addBtn.classList.add("hidden");
+  }
+
+  modal.classList.remove("hidden");
+}
+
+// Delegado en document: funciona sin importar cuándo se insertaron las tarjetas al DOM
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".ver-detalle-btn");
+  if (!btn) return;
+  const producto = JSON.parse(decodeURIComponent(btn.getAttribute("data-producto")));
+  openProductQuickView(producto);
+});
+
+// =============================================
 // ELEMENTOS DE INTERFAZ
 // =============================================
 
@@ -961,10 +1112,10 @@ document.addEventListener("DOMContentLoaded", () => {
     loadTestimonials();
   }
 
-  // Avatar preview
-  document
-    .getElementById("avatar")
-    .addEventListener("change", function (event) {
+  // Avatar preview (solo existe en las páginas con formulario de perfil/registro)
+  const avatarInput = document.getElementById("avatar");
+  if (avatarInput) {
+    avatarInput.addEventListener("change", function (event) {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
@@ -979,13 +1130,12 @@ document.addEventListener("DOMContentLoaded", () => {
             "mb-4",
             "shadow-md"
           );
-          document
-            .getElementById("avatar")
-            .insertAdjacentElement("afterend", imgPreview);
+          avatarInput.insertAdjacentElement("afterend", imgPreview);
         };
         reader.readAsDataURL(file);
       }
     });
+  }
 });
 
 window.addEventListener("load", setupCookieConsent);

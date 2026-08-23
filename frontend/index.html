@@ -3168,7 +3168,7 @@
                     let imageUrl = p.image || "./img/default.jpg";
                     return `
                         <div class="xl:w-1/4 md:w-1/2 p-4">
-                            <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-gray-100">
+                            <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-gray-100 h-full flex flex-col">
                                 <div class="relative">
                                     <img class="h-48 w-full object-cover object-center" src="${imageUrl}" alt="${p.name}">
                                     <div class="absolute top-4 left-4">
@@ -3177,14 +3177,14 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="p-5">
+                                <div class="p-5 flex flex-col flex-1">
                                     <h3 class="text-blue-600 text-xs font-medium tracking-wider uppercase mb-1">
                                         ${p.category === 'capilar' ? 'Productos Capilares' : 'Productos Faciales'}
                                     </h3>
                                     <h2 class="text-lg font-bold text-gray-900 mb-2 hover:text-blue-600 transition-colors duration-200">
                                         ${p.name}
                                     </h2>
-                                    <p class="text-gray-500 text-sm mb-4">
+                                    <p class="text-gray-500 text-sm mb-4 line-clamp-4">
                                         ${p.description}
                                     </p>
                                     <div class="flex items-center justify-between mb-3">
@@ -3198,25 +3198,36 @@
                                             ${p.availability ? 'Disponible' : 'Agotado'}
                                         </span>
                                     </div>
-                                    <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+                                    <div class="flex items-center justify-between pt-3 border-t border-gray-100 mt-auto">
                                         <div>
                                             <span class="text-gray-900 font-bold text-lg">$${p.price}</span>
                                             ${p.originalPrice ? `<span class="text-gray-400 text-sm line-through ml-2">$${p.originalPrice}</span>` : ''}
                                         </div>
-                                        ${p.availability ? `
-                                            <button 
-                                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center agregar-carrito-btn"
-                                                data-producto="${encodeURIComponent(JSON.stringify(p))}">
-                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                        <div class="flex items-center gap-2">
+                                            <button
+                                                class="ver-detalle-btn w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:text-blue-600 hover:border-blue-300 transition-colors duration-200"
+                                                data-producto="${encodeURIComponent(JSON.stringify(p))}"
+                                                aria-label="Ver detalles de ${p.name}">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                 </svg>
-                                                Agregar al carrito
                                             </button>
-                                        ` : `
-                                            <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded-lg text-sm font-medium cursor-not-allowed" disabled>
-                                                Agotado
-                                            </button>
-                                        `}
+                                            ${p.availability ? `
+                                                <button
+                                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center agregar-carrito-btn"
+                                                    data-producto="${encodeURIComponent(JSON.stringify(p))}">
+                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                                    </svg>
+                                                    Agregar al carrito
+                                                </button>
+                                            ` : `
+                                                <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded-lg text-sm font-medium cursor-not-allowed" disabled>
+                                                    Agotado
+                                                </button>
+                                            `}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
