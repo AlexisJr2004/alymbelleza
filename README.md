@@ -6,6 +6,7 @@
 <p align="center"><em>Plataforma web para la gestión integral de un centro de belleza</em></p>
 
 <p align="center">
+  <img alt="CI" src="https://github.com/AlexisJr2004/alymbelleza/actions/workflows/ci.yml/badge.svg">
   <img alt="Node.js" src="https://img.shields.io/badge/Node.js-20.x-339933?style=flat-square&logo=nodedotjs&logoColor=white">
   <img alt="Express" src="https://img.shields.io/badge/Express-4.x-000000?style=flat-square&logo=express&logoColor=white">
   <img alt="MongoDB" src="https://img.shields.io/badge/MongoDB-Atlas-47A248?style=flat-square&logo=mongodb&logoColor=white">
@@ -191,6 +192,8 @@ npm test
 ```
 
 La suite usa Jest y Supertest sobre la app de Express (`app.js`) sin depender de una conexión real a MongoDB, cubriendo las validaciones de entrada de autenticación (formato de email, longitud de contraseña, rechazo de payloads no textuales) y el healthcheck.
+
+Un workflow de GitHub Actions (`.github/workflows/ci.yml`) corre estas pruebas y el build de Tailwind en cada push a `master` y en cada pull request, como aviso temprano si algo se rompe. Render despliega por separado, de forma automática, en cuanto detecta el push — el Action no lo bloquea ni lo dispara, son dos cosas independientes.
 
 ---
 

@@ -254,7 +254,7 @@ function setupUserProfile() {
 // =============================================
 // TESTIMONIOS
 // =============================================
-function initTestimonialSwiper() {
+function initTestimonialSwiper(isEmpty = false) {
   if (typeof Swiper === "undefined") {
     console.error("Swiper no está disponible");
     return;
@@ -264,20 +264,33 @@ function initTestimonialSwiper() {
     testimonialSwiper.destroy(true, true);
   }
 
-  testimonialSwiper = new Swiper(".testimonials-swiper", {
-    loop: true,
-    autoplay: { delay: 5000, disableOnInteraction: false },
-    pagination: { el: ".swiper-pagination", clickable: true },
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
-    breakpoints: {
-      640: { slidesPerView: 1, spaceBetween: 20 },
-      768: { slidesPerView: 2, spaceBetween: 30 },
-      1024: { slidesPerView: 3, spaceBetween: 40 },
-    },
-  });
+  // Con un solo slide (estado "sin testimonios"), slidesPerView: 3 deja dos columnas
+  // vacías y el slide único queda pegado a la izquierda del carrusel en vez de
+  // centrado. En ese caso se usa un layout simple de una sola columna centrada.
+  testimonialSwiper = new Swiper(
+    ".testimonials-swiper",
+    isEmpty
+      ? {
+          loop: false,
+          centeredSlides: true,
+          slidesPerView: 1,
+          pagination: { el: ".swiper-pagination", clickable: true },
+        }
+      : {
+          loop: true,
+          autoplay: { delay: 5000, disableOnInteraction: false },
+          pagination: { el: ".swiper-pagination", clickable: true },
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+          breakpoints: {
+            640: { slidesPerView: 1, spaceBetween: 20 },
+            768: { slidesPerView: 2, spaceBetween: 30 },
+            1024: { slidesPerView: 3, spaceBetween: 40 },
+          },
+        }
+  );
 }
  
 async function loadTestimonials() {
@@ -386,7 +399,7 @@ async function loadTestimonials() {
       });
     }
 
-    initTestimonialSwiper();
+    initTestimonialSwiper(testimonials.length === 0);
     // Al final de loadTestimonials(), después de initTestimonialSwiper();
     if (testimonialSwiper && user && user._id) {
       const myIndex = testimonials.findIndex(
