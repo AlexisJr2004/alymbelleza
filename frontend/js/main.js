@@ -304,14 +304,14 @@ async function loadTestimonials() {
     if (testimonials.length === 0) {
       swiperWrapper.innerHTML = `
         <div class="swiper-slide flex items-center justify-center h-full w-full">
-          <div class="text-center p-8 max-w-sm mx-auto">
-            <div class="inline-flex items-center justify-center rounded-full bg-gray-100 p-4 mb-4">
+          <div class="w-full max-w-sm mx-auto text-center p-8">
+            <div class="mx-auto flex items-center justify-center rounded-full bg-gray-100 p-4 mb-4 w-16 h-16">
               <svg class="h-10 w-10 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
             </div>
-            <h3 class="text-xl font-semibold text-gray-800 mb-2">No hay testimonios aún</h3>
-            <p class="text-gray-600 mb-6">Parece que nadie ha compartido su experiencia todavía.</p>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2 text-center">No hay testimonios aún</h3>
+            <p class="text-gray-600 mb-6 text-center">Parece que nadie ha compartido su experiencia todavía.</p>
           </div>
         </div>`;
     } else {

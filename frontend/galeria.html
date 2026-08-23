@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/tailwind.css">
-    <title>Bella Beauty - Reservas de Citas</title>
+    <title>Bella Beauty - Galería del Recuerdo</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <link rel="icon" href="/img/mujer-con-pelo-largo.png" type="image/x-icon">
@@ -140,7 +140,7 @@
                             class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50">
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a href="index3.html" id="reserva-btn"
+                        <a href="citas.html" id="reserva-btn"
                             class="text-sm text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition duration-200 px-4 py-2 rounded-full shadow hover:shadow-md">
                             Reserva Online
                         </a>
@@ -269,7 +269,7 @@
                         class="nav-link-hover px-3 py-2 rounded-md hover:text-purple-700 hover:bg-purple-50 transition duration-300">
                         Contacto
                     </a>
-                    <a href="index2.html"
+                    <a href="galeria.html"
                         class="nav-link-hover px-3 py-2 rounded-md hover:text-purple-700 hover:bg-purple-50 transition duration-300">
                         Galeria
                     </a>
@@ -458,7 +458,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="index2.html"
+                        <a href="galeria.html"
                             class="flex items-center px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50">
                             <i class="fas fa-images w-5 h-5 text-purple-500 mr-3"></i>
                             Galeria
@@ -481,7 +481,7 @@
                     </a>
                 </div>
                 <!-- Reservation Button -->
-                <a href="index3.html" id="reserva-btn"
+                <a href="citas.html" id="reserva-btn"
                     class="block w-full text-center py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-full transition duration-300 shadow-md hover:shadow-lg">
                     Reserva Online
                 </a>
@@ -490,103 +490,151 @@
         </aside>
     </header>
 
-    <div class="flex flex-col items-center justify-center text-center mb-16 animate-fade-in">
-        <br>
-        <h2 class="font-display text-4xl md:text-5xl mb-6 leading-tight text-gray-900">
-            Escoge un día, para agendar una cita conmigo ✨
-        </h2>
-        <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mt-4"></div>
-    </div>
+    <!-- Modal para subir contenido (solo admin) -->
+    <div id="uploadModal" class="fixed inset-0 bg-black/40 hidden z-[9999] flex items-center justify-center transition-opacity duration-300">
+        <div class="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <!-- Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-gray-900">Subir Contenido a Galería</h3>
+                    <button id="closeUploadModal" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
 
-    <div class="mt-8 mx-auto p-4 w-full max-w-6xl">
-        <div class="bg-white rounded-3xl p-6 md:p-10 shadow-sm border border-gray-100">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <!-- Calendario -->
-                <section aria-labelledby="calendar-heading" class="flex flex-col">
-                    <header class="flex items-center mb-6">
-                        <h3 id="calendar-heading" class="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                            <i class="fas fa-calendar-alt text-purple-500"></i>
-                            <span>Calendario</span>
-                        </h3>
-                    </header>
-                    <div class="flex justify-between items-center mb-6 px-2">
-                        <button id="prevMonth"
-                            class="p-2 text-gray-500 hover:text-gray-700 rounded-full transition-all duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-300"
-                            aria-label="Mes anterior">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </button>
-                        <h2 id="monthYear" class="text-xl font-medium text-gray-800 mx-4 tracking-wide"
-                            aria-live="polite"></h2>
-                        <button id="nextMonth"
-                            class="p-2 text-gray-500 hover:text-gray-700 rounded-full transition-all duration-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-300"
-                            aria-label="Mes siguiente">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 5l7 7-7 7" />
-                            </svg>
-                        </button>
+                <!-- Form -->
+                <form id="uploadForm" enctype="multipart/form-data" class="space-y-6">
+                    <!-- Categoría -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Categoría</label>
+                        <select name="category" required
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                            <option value="">Seleccionar categoría...</option>
+                            <option value="local">Local</option>
+                            <option value="especialidades">Especialidades</option>
+                            <option value="tratamiento_capilar">Tratamientos capilares</option>
+                            <option value="tratamiento_facial">Tratamientos faciales</option>
+                        </select>
                     </div>
-                    <div class="grid grid-cols-7 gap-1 mb-4" role="rowgroup">
-                        <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider">Dom
-                        </div>
-                        <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider">Lun
-                        </div>
-                        <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider">Mar
-                        </div>
-                        <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider">Mié
-                        </div>
-                        <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider">Jue
-                        </div>
-                        <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider">Vie
-                        </div>
-                        <div class="text-center text-gray-500 font-medium py-2 text-xs uppercase tracking-wider">Sáb
-                        </div>
-                    </div>
-                    <div id="calendar" class="grid grid-cols-7 gap-1 flex-1" role="grid"></div>
-                    <div class="mt-8 pt-6 border-t border-gray-100 flex justify-center">
-                        <button id="todayBtn"
-                            class="px-5 py-2 bg-white text-blue-600 font-medium rounded-full hover:bg-blue-50 transition-all duration-200 border border-blue-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2"
-                            aria-label="Volver al día actual">
-                            Hoy
-                        </button>
-                    </div>
-                </section>
 
-                <!-- Citas -->
-                <section aria-labelledby="appointments-heading" class="flex flex-col">
-                    <header class="flex items-center mb-6">
-                        <h3 id="appointments-heading"
-                            class="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                            <i class="fas fa-list-check text-pink-500"></i>
-                            <span>Tus Citas</span>
-                        </h3>
-                    </header>
-                    <div
-                        class="bg-gray-50 rounded-2xl p-4 shadow-inner border border-gray-100 max-h-[520px] overflow-y-auto flex-1">
-                        <!-- Estado de carga -->
-                        <div id="appointments-loading" class="hidden text-center py-12">
-                            <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-pink-500 mx-auto mb-3">
-                            </div>
-                            <p class="font-medium text-gray-500">Cargando citas...</p>
+                    <!-- Archivo -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Archivo</label>
+                        <div class="relative">
+                            <input type="file" name="file" id="galleryFile" accept="image/*,video/*" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
                         </div>
-                        <!-- Lista de citas -->
-                        <ul id="appointments-panel-list" class="divide-y divide-gray-200" aria-live="polite"></ul>
-                        <!-- Estado vacío -->
-                        <div id="appointments-empty" class="hidden text-center py-12 text-gray-400">
-                            <i class="fas fa-calendar-times text-4xl mb-3" aria-hidden="true"></i>
-                            <p class="font-medium">No tienes citas agendadas</p>
-                            <p class="text-sm mt-1">Selecciona una fecha para agregar una nueva cita</p>
+                        <p class="text-xs text-gray-500 mt-1">
+                            Imágenes: JPG, PNG, GIF, WEBP (máx. 10MB)<br>
+                            Videos: MP4, MOV, AVI (máx. 50MB)
+                        </p>
+                    </div>
+
+                    <!-- Vista previa -->
+                    <div id="filePreview" class="hidden">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Vista previa</label>
+                        <div class="border border-gray-200 rounded-lg p-3">
+                            <img id="imagePreview" class="hidden max-w-full h-48 object-cover rounded-lg mx-auto">
+                            <video id="videoPreview" class="hidden max-w-full h-48 object-cover rounded-lg mx-auto"
+                                controls></video>
+                            <div id="fileInfo" class="text-sm text-gray-600 mt-2"></div>
                         </div>
                     </div>
-                </section>
+
+                    <!-- Botones -->
+                    <div class="flex gap-3 pt-4">
+                        <button type="button" id="cancelUpload"
+                            class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                            Cancelar
+                        </button>
+                        <button type="submit" id="submitUpload"
+                            class="flex-1 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span class="upload-text">Subir</span>
+                            <span class="upload-loading hidden">
+                                <i class="fas fa-spinner fa-spin mr-2"></i>Subiendo...
+                            </span>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+
+    <!-- Modal para mostrar imagen/video en grande -->
+    <div id="galleryPopupModal" class="fixed inset-0 z-[99999] bg-black/70 flex items-center justify-center hidden">
+        <div class="relative bg-transparent max-w-3xl w-full flex flex-col items-center">
+            <button id="closeGalleryPopup" class="absolute top-2 right-2 text-white text-3xl z-10 hover:text-pink-300">
+                &times;
+            </button>
+            <div id="galleryPopupContent" class="w-full flex items-center justify-center"></div>
+            <div id="galleryPopupDate" class="mt-4 text-white text-sm"></div>
+        </div>
+    </div>
+
+    <!-- Galeria de Fotos -->
+    <section
+        class="relative overflow-hidden before:absolute before:top-0 before:start-1/2 before:bg-[url('https://preline.co/assets/svg/examples/polygon-bg-element.svg')] before:bg-no-repeat before:bg-top before:bg-cover before:size-full before:-z-[1] before:transform before:-translate-x-1/2">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div
+                class="absolute -top-32 -left-32 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30">
+            </div>
+            <div
+                class="absolute top-32 -right-32 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30">
+            </div>
+        </div>
+
+        <div id="galeria" class="relative mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-24">
+            <div class="flex flex-col items-center mb-10">
+                <div
+                    class="mb-6 inline-block rounded-full bg-gray-100/80 backdrop-blur-sm px-4 py-1.5 text-sm font-semibold">
+                    📸 Nuestros Momentos
+                </div>
+                <h2
+                    class="text-center text-3xl font-bold md:text-5xl bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+                    Galeria de <span class="text-purple-600"> Fotos</span>
+                </h2>
+                <p class="mb-8 mt-4 text-center text-base text-gray-600 max-w-xl">
+                    Explora los momentos más memorables de nuestro trabajo
+                </p>
+
+                <!-- Botón para admin subir contenido -->
+                <div id="admin-upload-section" class="hidden mb-6">
+                    <button id="upload-btn"
+                        class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-2">
+                        <i class="fas fa-plus"></i>
+                        <i class="fas fa-image"></i>
+                        Subir Contenido
+                    </button>
+                </div>
+
+                <div id="filter-buttons" class="flex items-center justify-center py-2 md:py-2 flex-wrap">
+                    <button data-filter="all"
+                        class="filter-btn text-blue-700 hover:text-white border border-blue-600 bg-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
+                        Todas las categorías
+                    </button>
+                    <button data-filter="tratamiento_capilar"
+                        class="filter-btn text-gray-900 border border-white hover:border-gray-200 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
+                        Tratamientos capilares
+                    </button>
+                    <button data-filter="tratamiento_facial"
+                        class="filter-btn text-gray-900 border border-white hover:border-gray-200 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
+                        Tratamientos faciales
+                    </button>
+                    <button data-filter="especialidades"
+                        class="filter-btn text-gray-900 border border-white hover:border-gray-200 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
+                        Especialidades
+                    </button>
+                    <button data-filter="local"
+                        class="filter-btn text-gray-900 border border-white hover:border-gray-200 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3">
+                        Local
+                    </button>
+                </div>
+
+                <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <!-- Los elementos de la galería se insertarán aquí dinámicamente -->
+                </div>
+            </div>
+    </section>
 
     <!-- Boton Ir Arriba -->
     <div class="z-50 fixed bottom-36 right-4 flex flex-col space-y-6 items-center">
@@ -787,6 +835,529 @@
         </svg>
     </section>
 
+    <!-- Script para Subir las imagenes y videos a galeria -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const adminUploadSection = document.getElementById('admin-upload-section');
+            const uploadModal = document.getElementById('uploadModal');
+            const uploadBtn = document.getElementById('upload-btn');
+            const closeUploadModal = document.getElementById('closeUploadModal');
+            const cancelUpload = document.getElementById('cancelUpload');
+            const uploadForm = document.getElementById('uploadForm');
+            const galleryFile = document.getElementById('galleryFile');
+            const filePreview = document.getElementById('filePreview');
+            const imagePreview = document.getElementById('imagePreview');
+            const videoPreview = document.getElementById('videoPreview');
+            const fileInfo = document.getElementById('fileInfo');
+            const submitUpload = document.getElementById('submitUpload');
+            const GALLERY_API_URL = "https://aly-mbelleza-backend.onrender.com/api/gallery";
+            const galleryGrid = document.getElementById("gallery-grid");
+            const filterButtons = document.querySelectorAll(".filter-btn");
+
+            // Mostrar botón de subida solo para administradores
+            if (user && user.role === 'admin') {
+                adminUploadSection.classList.remove('hidden');
+            }
+
+            // Abrir modal
+            if (uploadBtn) {
+                uploadBtn.addEventListener('click', () => {
+                    uploadModal.classList.remove('hidden');
+                });
+            }
+
+            // Cerrar modal
+            function closeModal() {
+                uploadModal.classList.add('hidden');
+                uploadForm.reset();
+                filePreview.classList.add('hidden');
+                imagePreview.classList.add('hidden');
+                videoPreview.classList.add('hidden');
+                isUploading = false; // <-- Añadido aquí
+            }
+            closeUploadModal.addEventListener('click', closeModal);
+            cancelUpload.addEventListener('click', closeModal);
+            uploadModal.addEventListener('click', (e) => {
+                if (e.target === uploadModal) closeModal();
+            });
+
+            // Vista previa del archivo
+            galleryFile.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) {
+                    filePreview.classList.add('hidden');
+                    return;
+                }
+                const maxSize = file.type.startsWith('video/') ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
+                if (file.size > maxSize) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Archivo muy grande',
+                        text: `El archivo es muy grande. Máximo ${file.type.startsWith('video/') ? '50MB' : '10MB'}.`,
+                        confirmButtonColor: '#7e22ce'
+                    });
+                    galleryFile.value = '';
+                    return;
+                }
+                const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                fileInfo.textContent = `${file.name} (${fileSizeMB} MB)`;
+                filePreview.classList.remove('hidden');
+                imagePreview.classList.add('hidden');
+                videoPreview.classList.add('hidden');
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        imagePreview.src = e.target.result;
+                        imagePreview.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                } else if (file.type.startsWith('video/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        videoPreview.src = e.target.result;
+                        videoPreview.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Manejar envío del formulario
+            let isUploading = false;
+            uploadForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (isUploading) return;
+                isUploading = true;
+
+                if (!user || !user.token || user.role !== 'admin') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'No autorizado',
+                        text: 'Solo los administradores pueden subir contenido.',
+                        confirmButtonColor: '#7e22ce'
+                    });
+                    isUploading = false;
+                    return;
+                }
+                const formData = new FormData(uploadForm);
+                submitUpload.disabled = true;
+                document.querySelector('.upload-text').classList.add('hidden');
+                document.querySelector('.upload-loading').classList.remove('hidden');
+                try {
+                    const response = await fetch(GALLERY_API_URL, {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${user.token}` },
+                        body: formData
+                    });
+                    const result = await response.json();
+                    if (!response.ok) throw new Error(result.error || 'Error al subir el archivo');
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Éxito!',
+                        text: result.message,
+                        confirmButtonColor: '#7e22ce',
+                        timer: 2000,
+                        timerProgressBar: true
+                    });
+                    closeModal();
+                    loadGalleryFromDatabase();
+                } catch (error) {
+                    console.error('Error al subir archivo:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error.message || 'Error al subir el archivo',
+                        confirmButtonColor: '#7e22ce'
+                    });
+                } finally {
+                    submitUpload.disabled = false;
+                    document.querySelector('.upload-text').classList.remove('hidden');
+                    document.querySelector('.upload-loading').classList.add('hidden');
+                    isUploading = false;
+                }
+            });
+
+            // Cargar galería desde la base de datos
+            async function loadGalleryFromDatabase() {
+                try {
+                    const user = JSON.parse(localStorage.getItem('user'));
+                    const headers = user && user.token ? { 'Authorization': `Bearer ${user.token}` } : {};
+                    const response = await fetch(GALLERY_API_URL, { headers });
+                    if (!response.ok) throw new Error(`Error HTTP ${response.status}`);
+                    const result = await response.json();
+                    if (result.success) {
+                        renderDatabaseGallery(result.data);
+                    } else {
+                        galleryGrid.innerHTML = `<div class="text-center text-red-500">Error al cargar la galería.</div>`;
+                    }
+                } catch (error) {
+                    console.error("Error al cargar galería:", error);
+                    galleryGrid.innerHTML = `<div class="text-center text-red-500">Error al cargar la galería.</div>`;
+                }
+            }
+
+            // Renderizar galería
+            function renderDatabaseGallery(items) {
+                galleryGrid.innerHTML = "";
+                items.forEach((item) => {
+                    const itemDiv = document.createElement("div");
+                    itemDiv.className = `
+                        gallery-item relative group rounded-xl overflow-hidden shadow-md bg-white
+                        transition-all duration-500 ease-in-out cursor-pointer
+                        hover:shadow-2xl hover:-translate-y-1
+                    `.replace(/\s+/g, ' ');
+
+                    itemDiv.setAttribute("data-category", item.category);
+                    itemDiv.style.opacity = "1";
+                    itemDiv.style.transform = "scale(1)";
+                    itemDiv.style.transition = "opacity 0.4s, transform 0.4s";
+
+                    // Asegura la URL correcta (Cloudinary o local)
+                    let url = item.url;
+                    if (!/^https?:\/\//.test(url)) {
+                        url = "https://aly-mbelleza-backend.onrender.com" + (url.startsWith("/") ? "" : "/") + url;
+                    }
+
+                    // Fecha de subida
+                    const fecha = new Date(item.createdAt).toLocaleDateString("es-ES", {
+                        year: "numeric", month: "short", day: "numeric"
+                    });
+
+                    let mediaElement;
+                    if (item.type === 'video') {
+                        mediaElement = document.createElement("video");
+                        mediaElement.src = url;
+                        mediaElement.controls = false;
+                        mediaElement.className = `
+                            w-full h-48 md:h-64 object-cover
+                            transition-transform duration-300 group-hover:scale-105
+                            rounded-xl
+                        `.replace(/\s+/g, ' ');
+                    } else {
+                        mediaElement = document.createElement("img");
+                        mediaElement.src = url;
+                        mediaElement.alt = item.category;
+                        mediaElement.className = `
+                            w-full h-48 md:h-64 object-cover
+                            transition-transform duration-300 group-hover:scale-105
+                            rounded-xl
+                        `.replace(/\s+/g, ' ');
+                    }
+                    // Evento para abrir el popup
+                    mediaElement.addEventListener("click", () => openGalleryPopup(item));
+
+                    // Hover info
+                    const hoverInfo = document.createElement("div");
+                    hoverInfo.className = `
+                        gallery-hover-info absolute inset-0 flex items-center justify-center
+                        opacity-0 group-hover:opacity-100
+                        transition-opacity duration-300 pointer-events-none
+                        bg-gradient-to-t from-black/80 via-black/40 to-transparent
+                    `.replace(/\s+/g, ' ');
+                    hoverInfo.innerHTML = `
+                        <span class="text-white text-base font-semibold px-4 py-2 rounded-lg bg-black/70 shadow-lg backdrop-blur-sm">
+                            <i class="fas fa-calendar-alt mr-2"></i>${fecha}
+                        </span>
+                    `;
+
+                    itemDiv.appendChild(mediaElement);
+                    itemDiv.appendChild(hoverInfo);
+
+                    // Botón eliminar solo para admin
+                    const user = JSON.parse(localStorage.getItem('user'));
+                    if (user && user.role === 'admin') {
+                        const deleteBtn = document.createElement("button");
+                        deleteBtn.className = `
+                            absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center
+                            opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg
+                        `.replace(/\s+/g, ' ');
+                        deleteBtn.innerHTML = '<i class="fas fa-trash text-xs"></i>';
+                        deleteBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            deleteGalleryItem(item._id);
+                        };
+                        itemDiv.appendChild(deleteBtn);
+                    }
+                    galleryGrid.appendChild(itemDiv);
+                });
+            }
+            // Transición suave al filtrar
+            function applyFilter(filter) {
+                const galleryItems = document.querySelectorAll(".gallery-item");
+                galleryItems.forEach((item) => {
+                    const category = item.getAttribute("data-category");
+                    if (filter === "all" || category === filter) {
+                        item.style.pointerEvents = "auto";
+                        item.style.opacity = "1";
+                        item.style.transform = "scale(1)";
+                        setTimeout(() => { item.style.display = "block"; }, 400);
+                    } else {
+                        item.style.pointerEvents = "none";
+                        item.style.opacity = "0";
+                        item.style.transform = "scale(0.95)";
+                        setTimeout(() => { item.style.display = "none"; }, 400);
+                    }
+                });
+            }
+
+            // Eliminar elemento de galería
+            async function deleteGalleryItem(itemId) {
+                const user = JSON.parse(localStorage.getItem('user'));
+                if (!user || !user.token || user.role !== 'admin') return;
+                const result = await Swal.fire({
+                    title: '¿Eliminar elemento?',
+                    text: 'Esta acción no se puede deshacer.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc2626',
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                });
+                if (result.isConfirmed) {
+                    try {
+                        const response = await fetch(`${GALLERY_API_URL}/${itemId}`, {
+                            method: 'DELETE',
+                            headers: { 'Authorization': `Bearer ${user.token}` }
+                        });
+                        const deleteResult = await response.json();
+                        if (!response.ok) throw new Error(deleteResult.error || 'Error al eliminar');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Eliminado',
+                            text: deleteResult.message,
+                            confirmButtonColor: '#7e22ce',
+                            timer: 1500,
+                            timerProgressBar: true
+                        });
+                        loadGalleryFromDatabase();
+                    } catch (error) {
+                        console.error('Error al eliminar:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: error.message || 'Error al eliminar el elemento',
+                            confirmButtonColor: '#7e22ce'
+                        });
+                    }
+                }
+            }
+
+            // Filtros de galería
+            filterButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    const filter = button.getAttribute("data-filter");
+                    filterButtons.forEach((btn) => {
+                        btn.classList.remove("text-blue-700", "bg-blue-700", "text-white");
+                        btn.classList.add("text-gray-900", "bg-white");
+                    });
+                    button.classList.remove("text-gray-900", "bg-white");
+                    button.classList.add("text-blue-700", "bg-blue-700", "text-white");
+                    applyFilter(filter);
+                });
+            });
+
+            function applyFilter(filter) {
+                const galleryItems = document.querySelectorAll(".gallery-item");
+                galleryItems.forEach((item) => {
+                    const category = item.getAttribute("data-category");
+                    item.style.display = filter === "all" || category === filter ? "block" : "none";
+                });
+            }
+
+            // Cargar galería al iniciar
+            loadGalleryFromDatabase();
+        });
+
+        // Popup para imagen/video
+        function openGalleryPopup(item) {
+            const modal = document.getElementById("galleryPopupModal");
+            const content = document.getElementById("galleryPopupContent");
+            const date = document.getElementById("galleryPopupDate");
+            let url = item.url;
+            if (!/^https?:\/\//.test(url)) {
+                url = "https://aly-mbelleza-backend.onrender.com" + (url.startsWith("/") ? "" : "/") + url;
+            }
+            content.innerHTML = "";
+            if (item.type === "video") {
+                const video = document.createElement("video");
+                video.src = url;
+                video.controls = true;
+                video.autoplay = true;
+                video.className = "max-h-[70vh] max-w-full rounded-lg shadow-lg";
+                content.appendChild(video);
+            } else {
+                const img = document.createElement("img");
+                img.src = url;
+                img.alt = item.category;
+                img.className = "max-h-[70vh] max-w-full rounded-lg shadow-lg";
+                content.appendChild(img);
+            }
+            date.textContent = "Subido el " + new Date(item.createdAt).toLocaleDateString("es-ES", {
+                year: "numeric", month: "long", day: "numeric"
+            });
+            modal.classList.remove("hidden");
+        }
+
+        // Cerrar popup
+        document.addEventListener("DOMContentLoaded", () => {
+            const modal = document.getElementById("galleryPopupModal");
+            const closeBtn = document.getElementById("closeGalleryPopup");
+            if (closeBtn) {
+                closeBtn.onclick = () => modal.classList.add("hidden");
+            }
+            modal.onclick = (e) => {
+                if (e.target === modal) modal.classList.add("hidden");
+            };
+        });
+    </script>
+
+    <!-- Script para la funcionalidad del botón de Usuario y Reservas en línea -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const profileLinkContainer = document.getElementById('profile-link-container');
+            const profileImg = document.getElementById('profile-img');
+            const dropdownProfileImg = document.getElementById('dropdown-profile-img');
+            const profileName = document.getElementById('profile-name');
+            const profileEmail = document.getElementById('profile-email');
+            const logoutBtn = document.getElementById('logout-btn');
+            const userMenuBtn = document.getElementById('user-menu-button');
+            const userDropdown = document.getElementById('user-dropdown');
+            const adminLinkContainer = document.getElementById('admin-link-container');
+            const loginRegisterLinks = document.getElementById('login-register-links');
+            const mobileProfileLink = document.getElementById('mobile-profile-link-container');
+
+
+            // --- Lógica para el botón de Reserva Online ---
+            const reservaBtn = document.getElementById('reserva-btn');
+            // Selecciona el botón de reserva en el menú móvil por el texto y href
+            const mobileReservaBtn = Array.from(document.querySelectorAll('aside a')).find(
+                a => a.href && a.href.includes('citas.html') && a.textContent.trim().toLowerCase().includes('reserva online')
+            );
+
+            if (reservaBtn) {
+                if (!user) {
+                    reservaBtn.classList.add('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
+                    reservaBtn.setAttribute('title', 'Debes iniciar sesión para reservar');
+                    reservaBtn.href = "login.html";
+                    reservaBtn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        window.location.href = "login.html";
+                    });
+                } else {
+                    reservaBtn.classList.remove('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
+                    reservaBtn.removeAttribute('title');
+                    reservaBtn.href = "citas.html";
+                }
+            }
+            if (mobileReservaBtn) {
+                if (!user) {
+                    mobileReservaBtn.classList.add('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
+                    mobileReservaBtn.setAttribute('title', 'Debes iniciar sesión para reservar');
+                    mobileReservaBtn.href = "login.html";
+                    mobileReservaBtn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        window.location.href = "login.html";
+                    });
+                } else {
+                    mobileReservaBtn.classList.remove('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
+                    mobileReservaBtn.removeAttribute('title');
+                    mobileReservaBtn.href = "citas.html";
+                }
+            }
+            // --- Fin lógica Reserva Online ---
+
+            // Función para abrir/cerrar el dropdown
+            const toggleDropdown = (open) => {
+                if (open) {
+                    userDropdown.classList.remove('opacity-0', 'scale-95', 'translate-y-1', 'invisible');
+                    userDropdown.classList.add('opacity-100', 'scale-100', 'translate-y-0', 'visible');
+                    userMenuBtn.setAttribute('aria-expanded', 'true');
+                } else {
+                    userDropdown.classList.remove('opacity-100', 'scale-100', 'translate-y-0', 'visible');
+                    userDropdown.classList.add('opacity-0', 'scale-95', 'translate-y-1', 'invisible');
+                    userMenuBtn.setAttribute('aria-expanded', 'false');
+                }
+            };
+
+            if (user) {
+                // Mostrar datos del usuario
+                profileLinkContainer.classList.remove('hidden');
+                profileName.textContent = user.name || 'Usuario';
+                profileEmail.textContent = user.email || '';
+
+                // Mostrar opción admin si corresponde
+                if (user.role === 'admin') {
+                    adminLinkContainer.classList.remove('hidden');
+                    mobileProfileLink.classList.remove('hidden');
+                }
+
+                // Imagen de perfil
+                const profileImageUrl = user.profileImage && user.profileImage.startsWith('http') ? user.profileImage :
+                    user.profileImage && user.profileImage.startsWith('/uploads/') ?
+                        'https://aly-mbelleza-backend.onrender.com' + user.profileImage :
+                        `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'U')}&background=random&length=1`;
+
+                profileImg.src = profileImageUrl;
+                dropdownProfileImg.src = profileImageUrl;
+
+                // Evento para el botón de usuario
+                userMenuBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isExpanded = userMenuBtn.getAttribute('aria-expanded') === 'true';
+                    toggleDropdown(!isExpanded);
+                });
+
+                // Cerrar dropdown al hacer click fuera
+                document.addEventListener('click', (e) => {
+                    if (!userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                        toggleDropdown(false);
+                    }
+                });
+
+                // Logout con SweetAlert
+                logoutBtn.addEventListener('click', () => {
+                    Swal.fire({
+                        title: '¿Cerrar sesión?',
+                        text: '¿Estás seguro de que deseas salir de tu cuenta?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#7e22ce',
+                        cancelButtonColor: '#6b7280',
+                        confirmButtonText: 'Sí, cerrar sesión',
+                        cancelButtonText: 'Cancelar',
+                        backdrop: ``,
+                        customClass: {
+                            popup: 'border border-purple-200 rounded-lg shadow-lg',
+                            confirmButton: 'bg-purple-600 hover:bg-purple-700 focus:ring-4 focus:ring-purple-300',
+                            cancelButton: 'bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:ring-gray-300'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            localStorage.removeItem('user');
+                            Swal.fire({
+                                title: 'Sesión cerrada',
+                                text: 'Has cerrado sesión correctamente',
+                                icon: 'success',
+                                confirmButtonColor: '#7e22ce',
+                                timer: 1500,
+                                timerProgressBar: true
+                            }).then(() => {
+                                window.location.href = 'index.html';
+                            });
+                        }
+                    });
+                });
+            } else {
+                // Mostrar opciones de login/registro
+                profileLinkContainer.classList.add('hidden');
+                loginRegisterLinks.classList.remove('hidden');
+                userMenuBtn.parentElement.style.display = 'none';
+            }
+        });
+    </script>
+
     <!-- Script para la reserva en linea -->
     <script>
         const NOTIFICATION_API_URL = "https://aly-mbelleza-backend.onrender.com/api/appointments";
@@ -851,112 +1422,65 @@
                     headers: { "Authorization": `Bearer ${user.token}` }
                 });
                 const data = await res.json();
+                console.log("CITAS QUE LLEGAN DEL BACKEND:", data);
                 if (data.success) {
-                    renderAppointmentsPanel(data.appointments);
+                    renderAppointments(data.appointments);
                     renderNotifications(data.appointments);
                 }
-            } catch (err) { }
+            } catch (err) {
+                // Puedes mostrar un error si quieres
+            }
         }
 
-        // NUEVA función para el panel lateral "Tus Citas"
-        function renderAppointmentsPanel(appointments) {
-            const panelList = document.getElementById('appointments-panel-list');
-            const emptyState = document.getElementById('appointments-empty');
-            const loading = document.getElementById('appointments-loading');
-            panelList.innerHTML = '';
+        // Renderizar citas en el panel
+        function renderAppointments(appointments) {
+            const list = document.getElementById('appointments-list');
+            list.innerHTML = '';
             if (!appointments.length) {
-                emptyState.classList.remove('hidden');
+                list.innerHTML = '<li class="text-gray-500">No tienes citas pendientes.</li>';
                 return;
             }
-            emptyState.classList.add('hidden');
             appointments.forEach(app => {
-                let estado = app.status || 'pendiente';
-                let estadoColor = 'text-yellow-500';
-                let estadoBg = 'bg-yellow-50';
-                let estadoIcon = `<i class="fas fa-clock"></i>`;
-                let estadoText = 'Pendiente';
-                if (estado === 'realizada') {
-                    estadoColor = 'text-emerald-500';
-                    estadoBg = 'bg-emerald-50';
-                    estadoIcon = `<i class="fas fa-check-circle"></i>`;
-                    estadoText = 'Realizada';
-                } else if (estado === 'cancelada') {
-                    estadoColor = 'text-rose-500';
-                    estadoBg = 'bg-rose-50';
-                    estadoIcon = `<i class="fas fa-times-circle"></i>`;
-                    estadoText = 'Cancelada';
-                }
-                const fecha = new Date(app.date);
-                const fechaStr = fecha.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-
                 const li = document.createElement('li');
-                li.className = "flex items-center justify-between gap-3 bg-white rounded-xl shadow-sm px-4 py-4 my-2 border border-gray-100 hover:bg-blue-50 transition";
+                li.className = "flex justify-between items-center bg-purple-50 rounded-lg px-4 py-2";
                 li.innerHTML = `
-                <div class="flex items-center gap-4">
-                    <div class="flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center ${estadoBg}">
-                        <span class="text-2xl ${estadoColor}">${estadoIcon}</span>
+                    <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-200">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-blue-100 p-2 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            </div>
+                            <span class="font-medium text-gray-700">
+                            ${new Date(app.date).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}
+                            </span>
+                        </div>
+                        
+                        <div class="flex gap-2">
+                            <button class="realizada-btn px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-md text-sm font-medium flex items-center gap-1 transition-colors" data-id="${app._id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            Realizada
+                            </button>
+                            <button class="cancelar-btn px-3 py-1.5 bg-rose-500 hover:bg-rose-600 text-white rounded-md text-sm font-medium flex items-center gap-1 transition-colors" data-id="${app._id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Cancelar
+                            </button>
+                        </div>
                     </div>
-                    <div>
-                        <div class="font-semibold text-gray-800">${fechaStr}</div>
-                        <div class="text-xs mt-1 ${estadoColor}">${estadoText}</div>
-                    </div>
-                </div>
-                <div class="flex gap-2">
-                    ${estado === 'pendiente' ? `
-                        <button class="realizada-btn px-3 py-1 rounded-lg bg-emerald-100 text-emerald-700 font-semibold text-xs hover:bg-emerald-200 transition" data-id="${app._id}">
-                            <i class="fas fa-check mr-1"></i> Realizada
-                        </button>
-                        <button class="cancelar-btn px-3 py-1 rounded-lg bg-rose-100 text-rose-700 font-semibold text-xs hover:bg-rose-200 transition" data-id="${app._id}">
-                            <i class="fas fa-times mr-1"></i> Cancelar
-                        </button>
-                    ` : ''}
-                    <button class="eliminar-btn px-3 py-1 rounded-lg bg-gray-100 text-gray-500 font-semibold text-xs hover:bg-gray-200 transition" data-id="${app._id}">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            `;
-                panelList.appendChild(li);
+                `;
+                list.appendChild(li);
             });
 
-            // Botón marcar como realizada
-            panelList.querySelectorAll('.realizada-btn').forEach(btn => {
+            // Eventos para los botones
+            document.querySelectorAll('.realizada-btn').forEach(btn => {
                 btn.onclick = () => updateAppointmentStatus(btn.dataset.id, 'realizada');
             });
-            // Botón cancelar
-            panelList.querySelectorAll('.cancelar-btn').forEach(btn => {
+            document.querySelectorAll('.cancelar-btn').forEach(btn => {
                 btn.onclick = () => cancelAppointment(btn.dataset.id);
-            });
-            // Botón eliminar
-            panelList.querySelectorAll('.eliminar-btn').forEach(btn => {
-                btn.onclick = async () => {
-                    const id = btn.dataset.id;
-                    const confirm = await Swal.fire({
-                        title: '¿Eliminar cita?',
-                        text: 'Esta acción no se puede deshacer.',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#e3342f',
-                        cancelButtonColor: '#6b7280',
-                        confirmButtonText: 'Sí, eliminar',
-                        cancelButtonText: 'Cancelar'
-                    });
-                    if (confirm.isConfirmed) {
-                        await deleteAppointment(id);
-                        loadAppointments();
-                    }
-                };
-            });
-        }
-
-        // Función para eliminar cita
-        async function deleteAppointment(id) {
-            const user = JSON.parse(localStorage.getItem('user'));
-            if (!user || !user.token) return;
-            await fetch(`${NOTIFICATION_API_URL}/${id}`, {
-                method: "DELETE",
-                headers: {
-                    "Authorization": `Bearer ${user.token}`
-                }
             });
         }
 
@@ -1118,233 +1642,6 @@
         });
     </script>
 
-    <!-- Script para el calendario -->
-    <script>
-        const calendar = document.getElementById('calendar');
-        const monthYear = document.getElementById('monthYear');
-        const prevMonth = document.getElementById('prevMonth');
-        const nextMonth = document.getElementById('nextMonth');
-        const todayBtn = document.getElementById('todayBtn');
-
-        let currentDate = new Date();
-        let selectedDate = null;
-
-        function generateCalendar(date) {
-            calendar.innerHTML = '';
-            const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-            const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-            const startingDay = firstDay.getDay();
-
-            monthYear.textContent = date.toLocaleString('es-ES', {
-                month: 'long',
-                year: 'numeric'
-            }).replace(/^\w/, c => c.toUpperCase());
-
-            // Días vacíos para alinear el primer día
-            for (let i = 0; i < startingDay; i++) {
-                calendar.appendChild(createDateCell(''));
-            }
-
-            // Días del mes
-            for (let day = 1; day <= lastDay.getDate(); day++) {
-                const cell = createDateCell(day);
-                const cellDate = new Date(date.getFullYear(), date.getMonth(), day);
-
-                if (isToday(cellDate)) {
-                    cell.classList.add('bg-blue-100', 'font-medium');
-                }
-
-                if (isWeekend(cellDate)) {
-                    cell.classList.add('text-red-500');
-                }
-
-                cell.addEventListener('click', () => handleDateClick(cellDate));
-                calendar.appendChild(cell);
-            }
-        }
-
-        function createDateCell(content) {
-            const cell = document.createElement('div');
-            cell.className = 'h-16 flex items-center justify-center rounded-lg cursor-pointer hover:bg-gray-100 transition-colors duration-200 text-lg';
-            cell.textContent = content;
-            return cell;
-        }
-
-        function isToday(date) {
-            const today = new Date();
-            return date.getDate() === today.getDate() &&
-                date.getMonth() === today.getMonth() &&
-                date.getFullYear() === today.getFullYear();
-        }
-
-        function isWeekend(date) {
-            return date.getDay() === 0 || date.getDay() === 6;
-        }
-
-        prevMonth.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            generateCalendar(currentDate);
-        });
-
-        nextMonth.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            generateCalendar(currentDate);
-        });
-
-        todayBtn.addEventListener('click', () => {
-            currentDate = new Date();
-            generateCalendar(currentDate);
-        });
-
-        generateCalendar(currentDate);
-    </script>
-
-    <!-- Script para la funcionalidad del botón de Usuario y Reservas en línea -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const user = JSON.parse(localStorage.getItem('user'));
-            const profileLinkContainer = document.getElementById('profile-link-container');
-            const profileImg = document.getElementById('profile-img');
-            const dropdownProfileImg = document.getElementById('dropdown-profile-img');
-            const profileName = document.getElementById('profile-name');
-            const profileEmail = document.getElementById('profile-email');
-            const logoutBtn = document.getElementById('logout-btn');
-            const userMenuBtn = document.getElementById('user-menu-button');
-            const userDropdown = document.getElementById('user-dropdown');
-            const adminLinkContainer = document.getElementById('admin-link-container');
-            const loginRegisterLinks = document.getElementById('login-register-links');
-            const mobileProfileLink = document.getElementById('mobile-profile-link-container');
-
-
-            // --- Lógica para el botón de Reserva Online ---
-            const reservaBtn = document.getElementById('reserva-btn');
-            // Selecciona el botón de reserva en el menú móvil por el texto y href
-            const mobileReservaBtn = Array.from(document.querySelectorAll('aside a')).find(
-                a => a.href && a.href.includes('index3.html') && a.textContent.trim().toLowerCase().includes('reserva online')
-            );
-
-            if (reservaBtn) {
-                if (!user) {
-                    reservaBtn.classList.add('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
-                    reservaBtn.setAttribute('title', 'Debes iniciar sesión para reservar');
-                    reservaBtn.href = "login.html";
-                    reservaBtn.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        window.location.href = "login.html";
-                    });
-                } else {
-                    reservaBtn.classList.remove('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
-                    reservaBtn.removeAttribute('title');
-                    reservaBtn.href = "index3.html";
-                }
-            }
-            if (mobileReservaBtn) {
-                if (!user) {
-                    mobileReservaBtn.classList.add('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
-                    mobileReservaBtn.setAttribute('title', 'Debes iniciar sesión para reservar');
-                    mobileReservaBtn.href = "login.html";
-                    mobileReservaBtn.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        window.location.href = "login.html";
-                    });
-                } else {
-                    mobileReservaBtn.classList.remove('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
-                    mobileReservaBtn.removeAttribute('title');
-                    mobileReservaBtn.href = "index3.html";
-                }
-            }
-            // --- Fin lógica Reserva Online ---
-
-            // Función para abrir/cerrar el dropdown
-            const toggleDropdown = (open) => {
-                if (open) {
-                    userDropdown.classList.remove('opacity-0', 'scale-95', 'translate-y-1', 'invisible');
-                    userDropdown.classList.add('opacity-100', 'scale-100', 'translate-y-0', 'visible');
-                    userMenuBtn.setAttribute('aria-expanded', 'true');
-                } else {
-                    userDropdown.classList.remove('opacity-100', 'scale-100', 'translate-y-0', 'visible');
-                    userDropdown.classList.add('opacity-0', 'scale-95', 'translate-y-1', 'invisible');
-                    userMenuBtn.setAttribute('aria-expanded', 'false');
-                }
-            };
-
-            if (user) {
-                // Mostrar datos del usuario
-                profileLinkContainer.classList.remove('hidden');
-                profileName.textContent = user.name || 'Usuario';
-                profileEmail.textContent = user.email || '';
-
-                // Mostrar opción admin si corresponde
-                if (user.role === 'admin') {
-                    adminLinkContainer.classList.remove('hidden');
-                    mobileProfileLink.classList.remove('hidden');
-                }
-
-                // Imagen de perfil
-                const profileImageUrl = user.profileImage && user.profileImage.startsWith('http') ? user.profileImage :
-                    user.profileImage && user.profileImage.startsWith('/uploads/') ?
-                        'https://aly-mbelleza-backend.onrender.com' + user.profileImage :
-                        `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'U')}&background=random&length=1`;
-
-                profileImg.src = profileImageUrl;
-                dropdownProfileImg.src = profileImageUrl;
-
-                // Evento para el botón de usuario
-                userMenuBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const isExpanded = userMenuBtn.getAttribute('aria-expanded') === 'true';
-                    toggleDropdown(!isExpanded);
-                });
-
-                // Cerrar dropdown al hacer click fuera
-                document.addEventListener('click', (e) => {
-                    if (!userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) {
-                        toggleDropdown(false);
-                    }
-                });
-
-                // Logout con SweetAlert
-                logoutBtn.addEventListener('click', () => {
-                    Swal.fire({
-                        title: '¿Cerrar sesión?',
-                        text: '¿Estás seguro de que deseas salir de tu cuenta?',
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonColor: '#7e22ce',
-                        cancelButtonColor: '#6b7280',
-                        confirmButtonText: 'Sí, cerrar sesión',
-                        cancelButtonText: 'Cancelar',
-                        backdrop: ``,
-                        customClass: {
-                            popup: 'border border-purple-200 rounded-lg shadow-lg',
-                            confirmButton: 'bg-purple-600 hover:bg-purple-700 focus:ring-4 focus:ring-purple-300',
-                            cancelButton: 'bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:ring-gray-300'
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            localStorage.removeItem('user');
-                            Swal.fire({
-                                title: 'Sesión cerrada',
-                                text: 'Has cerrado sesión correctamente',
-                                icon: 'success',
-                                confirmButtonColor: '#7e22ce',
-                                timer: 1500,
-                                timerProgressBar: true
-                            }).then(() => {
-                                window.location.href = 'index.html';
-                            });
-                        }
-                    });
-                });
-            } else {
-                // Mostrar opciones de login/registro
-                profileLinkContainer.classList.add('hidden');
-                loginRegisterLinks.classList.remove('hidden');
-                userMenuBtn.parentElement.style.display = 'none';
-            }
-        });
-    </script>
-
     <!-- Script global para actualizar el contador del carrito en todas las páginas -->
     <script>
         window.actualizarContadorCarrito = async function () {
@@ -1387,6 +1684,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/main.js"></script>
 
+
 </body>
+
 
 </html>

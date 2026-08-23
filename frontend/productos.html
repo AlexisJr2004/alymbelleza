@@ -137,7 +137,7 @@
                             class="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50">
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a href="index3.html" id="reserva-btn"
+                        <a href="citas.html" id="reserva-btn"
                             class="text-sm text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition duration-200 px-4 py-2 rounded-full shadow hover:shadow-md">
                             Reserva Online
                         </a>
@@ -266,7 +266,7 @@
                         class="nav-link-hover px-3 py-2 rounded-md hover:text-purple-700 hover:bg-purple-50 transition duration-300">
                         Contacto
                     </a>
-                    <a href="index2.html"
+                    <a href="galeria.html"
                         class="nav-link-hover px-3 py-2 rounded-md hover:text-purple-700 hover:bg-purple-50 transition duration-300">
                         Galeria
                     </a>
@@ -455,7 +455,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="index2.html"
+                        <a href="galeria.html"
                             class="flex items-center px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50">
                             <i class="fas fa-images w-5 h-5 text-purple-500 mr-3"></i>
                             Galeria
@@ -478,7 +478,7 @@
                     </a>
                 </div>
                 <!-- Reservation Button -->
-                <a href="index3.html" id="reserva-btn"
+                <a href="citas.html" id="reserva-btn"
                     class="block w-full text-center py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-full transition duration-300 shadow-md hover:shadow-lg">
                     Reserva Online
                 </a>
@@ -730,7 +730,7 @@
             const reservaBtn = document.getElementById('reserva-btn');
             // Selecciona el botón de reserva en el menú móvil por el texto y href
             const mobileReservaBtn = Array.from(document.querySelectorAll('aside a')).find(
-                a => a.href && a.href.includes('index3.html') && a.textContent.trim().toLowerCase().includes('reserva online')
+                a => a.href && a.href.includes('citas.html') && a.textContent.trim().toLowerCase().includes('reserva online')
             );
 
             if (reservaBtn) {
@@ -745,7 +745,7 @@
                 } else {
                     reservaBtn.classList.remove('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
                     reservaBtn.removeAttribute('title');
-                    reservaBtn.href = "index3.html";
+                    reservaBtn.href = "citas.html";
                 }
             }
             if (mobileReservaBtn) {
@@ -760,7 +760,7 @@
                 } else {
                     mobileReservaBtn.classList.remove('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
                     mobileReservaBtn.removeAttribute('title');
-                    mobileReservaBtn.href = "index3.html";
+                    mobileReservaBtn.href = "citas.html";
                 }
             }
             // --- Fin lógica Reserva Online ---

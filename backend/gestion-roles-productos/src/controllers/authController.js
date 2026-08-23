@@ -9,12 +9,16 @@ const publicIdFromUrl = require('../utils/cloudinaryPublicId');
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_PASSWORD_LENGTH = 8;
 
-// Configuración de Nodemailer (usa tu configuración existente)
+// Configuración de Nodemailer
+// Google muestra las contraseñas de aplicación agrupadas con espacios (ej. "abcd efgh ijkl mnop")
+// solo para que se lean fácil; la contraseña real no los lleva. Se quitan aquí por si
+// EMAIL_PASS se copió tal cual se ve en pantalla, para no depender de que el valor en
+// Render esté guardado exactamente sin espacios.
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    pass: (process.env.EMAIL_PASS || "").replace(/\s+/g, ""),
   },
 });
 
