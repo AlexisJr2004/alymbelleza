@@ -1,6 +1,12 @@
 require("dotenv").config();
+const dns = require("dns");
 const mongoose = require("mongoose");
 const app = require("./app");
+
+// En Render (y otras plataformas similares) las conexiones salientes por IPv6 a veces se
+// quedan esperando sin responder, aunque el host sí resuelva por IPv6 (ej. smtp.gmail.com).
+// Esto hace que Node prefiera IPv4 al resolver dominios, evitando timeouts de conexión.
+dns.setDefaultResultOrder("ipv4first");
 
 // Variables de entorno obligatorias: sin ellas el servidor no puede operar de forma segura
 const REQUIRED_ENV_VARS = ["MONGODB_URI", "JWT_SECRET"];
