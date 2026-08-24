@@ -557,7 +557,7 @@
     </div>
 
     <!-- Modal para mostrar imagen/video en grande -->
-    <div id="galleryPopupModal" class="fixed inset-0 z-[99999] bg-black/70 flex items-center justify-center hidden p-4">
+    <div id="galleryPopupModal" class="fixed inset-0 z-[99999] bg-black/70 backdrop-blur-sm flex items-center justify-center hidden opacity-0 transition-opacity duration-300 p-4">
         <div class="relative bg-transparent max-w-3xl w-full flex flex-col items-center">
             <!-- Navegación: anterior / siguiente elemento -->
             <button id="galleryPopupPrev"
@@ -1266,6 +1266,22 @@
             updateActiveThumb();
         }
 
+        // El fondo (oscurecido + difuminado) aparece/desaparece con transición en vez de
+        // un cambio instantáneo: se quita "hidden" primero, se fuerza un reflow para que
+        // el navegador registre el estado inicial (opacity-0), y recién ahí se anima a 100.
+        function showGalleryPopup() {
+            const modal = document.getElementById("galleryPopupModal");
+            modal.classList.remove("hidden");
+            void modal.offsetWidth;
+            modal.classList.remove("opacity-0");
+        }
+
+        function hideGalleryPopup() {
+            const modal = document.getElementById("galleryPopupModal");
+            modal.classList.add("opacity-0");
+            setTimeout(() => modal.classList.add("hidden"), 300);
+        }
+
         function openGalleryPopup(item) {
             popupItems = currentGalleryFilter === "all"
                 ? currentGalleryItems
@@ -1275,7 +1291,7 @@
             buildPopupThumbs();
             const idx = popupItems.findIndex((i) => i._id === item._id);
             renderGalleryPopup(idx === -1 ? 0 : idx);
-            document.getElementById("galleryPopupModal").classList.remove("hidden");
+            showGalleryPopup();
         }
 
         // Cerrar popup (clic afuera o Escape) y navegación anterior/siguiente
@@ -1288,14 +1304,14 @@
             if (nextBtn) nextBtn.onclick = () => renderGalleryPopup(popupIndex + 1);
 
             modal.onclick = (e) => {
-                if (e.target === modal) modal.classList.add("hidden");
+                if (e.target === modal) hideGalleryPopup();
             };
 
             document.addEventListener("keydown", (e) => {
                 if (modal.classList.contains("hidden")) return;
                 if (e.key === "ArrowLeft") renderGalleryPopup(popupIndex - 1);
                 if (e.key === "ArrowRight") renderGalleryPopup(popupIndex + 1);
-                if (e.key === "Escape") modal.classList.add("hidden");
+                if (e.key === "Escape") hideGalleryPopup();
             });
         });
     </script>
