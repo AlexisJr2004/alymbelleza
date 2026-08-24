@@ -79,13 +79,13 @@
 
                             <!-- Centro de notificaciones -->
                             <div id="notification-dropdown"
-                                class="absolute right-0 mt-3 w-96 bg-white rounded-3xl shadow-2xl z-50 border border-gray-100 overflow-hidden transition-all duration-200 origin-top-right transform opacity-0 scale-95 hidden">
+                                class="absolute right-0 mt-3 w-96 bg-white rounded-3xl z-50 border border-gray-200 overflow-hidden transition-all duration-200 origin-top-right transform opacity-0 scale-95 hidden">
 
                                 <!-- Header -->
                                 <div
-                                    class="px-5 py-4 bg-white/60 backdrop-blur-md shadow-sm flex justify-between items-center rounded-t-3xl border-b border-blue-100">
+                                    class="px-5 py-4 bg-white/60 backdrop-blur-md flex justify-between items-center rounded-t-3xl border-b border-blue-100">
                                     <div class="flex items-center gap-3">
-                                        <div class="bg-blue-100/60 p-2 rounded-2xl shadow-sm">
+                                        <div class="bg-blue-100/60 p-2 rounded-2xl">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600"
                                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -995,7 +995,7 @@
                 const mensaje = `Tienes una reservación con tu estilista el <span class="font-semibold">${fechaStr}</span>`;
 
                 const li = document.createElement('li');
-                li.className = "bg-white rounded-2xl shadow flex items-center gap-4 px-5 py-4 mb-2 border border-gray-100 hover:bg-blue-50 transition";
+                li.className = "bg-white rounded-2xl flex items-center gap-4 px-5 py-4 mb-2 border border-gray-200 hover:bg-blue-50 transition";
                 li.innerHTML = `
                     <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-2xl ${estado === 'realizada' ? 'bg-emerald-100' : estado === 'cancelada' ? 'bg-rose-100' : 'bg-blue-100'}">
                         <span class="text-2xl ${estadoColor}">${estadoIcon}</span>
