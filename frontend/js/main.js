@@ -350,7 +350,7 @@ async function loadTestimonials() {
         const slide = document.createElement("div");
         slide.className = "swiper-slide";
         slide.innerHTML = `
-    <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col relative group">
+    <div class="bg-white/70 backdrop-blur-md border border-white/60 rounded-xl p-8 shadow-sm transition-all duration-300 h-full flex flex-col relative group">
       <div class="relative flex-grow">
         <svg class="absolute -top-4 -left-4 h-8 w-8 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
           <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.999v10h-9.999z"/>
@@ -643,6 +643,12 @@ function setupTestimonialModal() {
   if (closeModalBtn && testimonialModal) {
     closeModalBtn.addEventListener("click", () => {
       hideModal(testimonialModal);
+    });
+  }
+
+  if (testimonialModal) {
+    testimonialModal.addEventListener("click", (e) => {
+      if (e.target === testimonialModal) hideModal(testimonialModal);
     });
   }
 
