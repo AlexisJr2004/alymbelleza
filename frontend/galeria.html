@@ -572,6 +572,11 @@
             </button>
             <div id="galleryPopupContent" class="w-full flex items-center justify-center"></div>
             <div id="galleryPopupDate" class="mt-4 text-white text-sm"></div>
+
+            <!-- Mini carrusel de miniaturas -->
+            <div id="galleryPopupThumbs" class="hidden mt-4 max-w-full">
+                <div id="galleryPopupThumbsTrack" class="flex items-center gap-2 overflow-x-auto px-2 py-2 bg-white/5 backdrop-blur-sm rounded-xl"></div>
+            </div>
         </div>
     </div>
 
@@ -1181,6 +1186,53 @@
         let popupItems = [];
         let popupIndex = -1;
 
+        function resolveMediaUrl(url) {
+            if (!/^https?:\/\//.test(url)) {
+                return "https://aly-mbelleza-backend.onrender.com" + (url.startsWith("/") ? "" : "/") + url;
+            }
+            return url;
+        }
+
+        // Genera las miniaturas del carrusel inferior (solo cuando se abre el popup, no en cada clic de siguiente/anterior)
+        function buildPopupThumbs() {
+            const wrap = document.getElementById("galleryPopupThumbs");
+            const track = document.getElementById("galleryPopupThumbsTrack");
+            const multiple = popupItems.length > 1;
+            wrap.classList.toggle("hidden", !multiple);
+            if (!multiple) return;
+
+            track.innerHTML = "";
+            popupItems.forEach((it, i) => {
+                const thumbBtn = document.createElement("button");
+                thumbBtn.type = "button";
+                thumbBtn.className = "gallery-thumb-btn shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 border-transparent opacity-50 hover:opacity-90 transition-all";
+                thumbBtn.setAttribute("aria-label", `Ver elemento ${i + 1} de ${popupItems.length}`);
+                thumbBtn.onclick = () => renderGalleryPopup(i);
+
+                const media = it.type === "video" ? document.createElement("video") : document.createElement("img");
+                media.src = resolveMediaUrl(it.url);
+                media.className = "w-full h-full object-cover pointer-events-none";
+                if (it.type === "video") media.muted = true;
+                else media.alt = "";
+                thumbBtn.appendChild(media);
+                track.appendChild(thumbBtn);
+            });
+        }
+
+        // Resalta la miniatura activa y la centra en el carrusel
+        function updateActiveThumb() {
+            const track = document.getElementById("galleryPopupThumbsTrack");
+            const thumbs = track.querySelectorAll(".gallery-thumb-btn");
+            thumbs.forEach((thumb, i) => {
+                thumb.classList.toggle("border-white", i === popupIndex);
+                thumb.classList.toggle("opacity-100", i === popupIndex);
+                thumb.classList.toggle("border-transparent", i !== popupIndex);
+                thumb.classList.toggle("opacity-50", i !== popupIndex);
+            });
+            const active = thumbs[popupIndex];
+            if (active) active.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        }
+
         function renderGalleryPopup(index) {
             if (!popupItems.length) return;
             popupIndex = (index + popupItems.length) % popupItems.length;
@@ -1188,10 +1240,7 @@
 
             const content = document.getElementById("galleryPopupContent");
             const date = document.getElementById("galleryPopupDate");
-            let url = item.url;
-            if (!/^https?:\/\//.test(url)) {
-                url = "https://aly-mbelleza-backend.onrender.com" + (url.startsWith("/") ? "" : "/") + url;
-            }
+            const url = resolveMediaUrl(item.url);
             content.innerHTML = "";
             if (item.type === "video") {
                 const video = document.createElement("video");
@@ -1214,6 +1263,7 @@
             const multiple = popupItems.length > 1;
             document.getElementById("galleryPopupPrev").classList.toggle("hidden", !multiple);
             document.getElementById("galleryPopupNext").classList.toggle("hidden", !multiple);
+            updateActiveThumb();
         }
 
         function openGalleryPopup(item) {
@@ -1222,6 +1272,7 @@
                 : currentGalleryItems.filter((i) => i.category === currentGalleryFilter);
             if (!popupItems.length) popupItems = [item];
 
+            buildPopupThumbs();
             const idx = popupItems.findIndex((i) => i._id === item._id);
             renderGalleryPopup(idx === -1 ? 0 : idx);
             document.getElementById("galleryPopupModal").classList.remove("hidden");
