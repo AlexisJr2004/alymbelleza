@@ -1007,7 +1007,15 @@
             // Renderiza productos según filtro y búsqueda
             function renderProductos(lista) {
                 if (!lista.length) {
-                    contenedor.innerHTML = `<div class="w-full text-center text-red-500 py-8">No se encontraron productos.</div>`;
+                    contenedor.innerHTML = `
+                        <div class="w-full flex flex-col items-center justify-center text-center py-16">
+                            <div class="w-16 h-16 rounded-full bg-purple-50 flex items-center justify-center mb-4">
+                                <i class="fas fa-magnifying-glass text-2xl text-purple-300"></i>
+                            </div>
+                            <p class="font-medium text-gray-600">No se encontraron productos</p>
+                            <p class="text-sm text-gray-400 mt-1">Prueba a ajustar los filtros o el término de búsqueda</p>
+                        </div>
+                    `;
                     return;
                 }
                 contenedor.innerHTML = lista.map((p, idx) => {
