@@ -491,7 +491,7 @@
     </header>
 
     <!-- Modal para subir contenido (solo admin) -->
-    <div id="uploadModal" class="fixed inset-0 bg-black/40 hidden z-[9999] flex items-center justify-center p-4">
+    <div id="uploadModal" class="fixed inset-0 bg-black/40 hidden opacity-0 transition-opacity duration-300 z-[9999] flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto overflow-hidden max-h-[90vh] overflow-y-auto">
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 sticky top-0 bg-white">
@@ -871,14 +871,12 @@
 
             // Abrir modal
             if (uploadBtn) {
-                uploadBtn.addEventListener('click', () => {
-                    uploadModal.classList.remove('hidden');
-                });
+                uploadBtn.addEventListener('click', () => showModal(uploadModal));
             }
 
             // Cerrar modal
             function closeModal() {
-                uploadModal.classList.add('hidden');
+                hideModal(uploadModal);
                 uploadForm.reset();
                 filePreview.classList.add('hidden');
                 imagePreview.classList.add('hidden');
@@ -1266,22 +1264,8 @@
             updateActiveThumb();
         }
 
-        // El fondo (oscurecido + difuminado) aparece/desaparece con transición en vez de
-        // un cambio instantáneo: se quita "hidden" primero, se fuerza un reflow para que
-        // el navegador registre el estado inicial (opacity-0), y recién ahí se anima a 100.
-        function showGalleryPopup() {
-            const modal = document.getElementById("galleryPopupModal");
-            modal.classList.remove("hidden");
-            void modal.offsetWidth;
-            modal.classList.remove("opacity-0");
-        }
-
-        function hideGalleryPopup() {
-            const modal = document.getElementById("galleryPopupModal");
-            modal.classList.add("opacity-0");
-            setTimeout(() => modal.classList.add("hidden"), 300);
-        }
-
+        // showModal/hideModal (definidas en main.js) animan la aparición/cierre; se
+        // reutilizan aquí para que el visor de galería anime igual que el resto del sitio.
         function openGalleryPopup(item) {
             popupItems = currentGalleryFilter === "all"
                 ? currentGalleryItems
@@ -1291,7 +1275,7 @@
             buildPopupThumbs();
             const idx = popupItems.findIndex((i) => i._id === item._id);
             renderGalleryPopup(idx === -1 ? 0 : idx);
-            showGalleryPopup();
+            showModal(document.getElementById("galleryPopupModal"));
         }
 
         // Cerrar popup (clic afuera o Escape) y navegación anterior/siguiente
@@ -1304,14 +1288,14 @@
             if (nextBtn) nextBtn.onclick = () => renderGalleryPopup(popupIndex + 1);
 
             modal.onclick = (e) => {
-                if (e.target === modal) hideGalleryPopup();
+                if (e.target === modal) hideModal(modal);
             };
 
             document.addEventListener("keydown", (e) => {
                 if (modal.classList.contains("hidden")) return;
                 if (e.key === "ArrowLeft") renderGalleryPopup(popupIndex - 1);
                 if (e.key === "ArrowRight") renderGalleryPopup(popupIndex + 1);
-                if (e.key === "Escape") hideGalleryPopup();
+                if (e.key === "Escape") hideModal(modal);
             });
         });
     </script>

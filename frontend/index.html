@@ -1059,7 +1059,7 @@
 
     <!-- Modal para agregar testimonio minimalista -->
     <div id="testimonialModal"
-        class="fixed inset-0 bg-black/40 hidden z-[9999] flex items-center justify-center transition-opacity duration-300">
+        class="fixed inset-0 bg-black/40 hidden opacity-0 z-[9999] flex items-center justify-center transition-opacity duration-300">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-auto overflow-hidden">
             <!-- Encabezado minimalista -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
@@ -1399,7 +1399,7 @@
     </div>
 
     <!-- Modal de Políticas de Cookies -->
-    <div id="cookiesPolicyModal" class="fixed inset-0 bg-black/40 z-[99999] hidden flex items-center justify-center transition-opacity duration-300">
+    <div id="cookiesPolicyModal" class="fixed inset-0 bg-black/40 z-[99999] hidden opacity-0 flex items-center justify-center transition-opacity duration-300">
         <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 relative animate-fade-in">
             <button id="closeCookiesPolicyModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl focus:outline-none">
                 &times;
@@ -1423,7 +1423,7 @@
     </div>
 
     <!-- Modal de Gestión de Cookies -->
-    <div id="manageCookiesModal" class="fixed inset-0 bg-black/40 z-[99999] hidden flex items-center justify-center transition-opacity duration-300">
+    <div id="manageCookiesModal" class="fixed inset-0 bg-black/40 z-[99999] hidden opacity-0 flex items-center justify-center transition-opacity duration-300">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative animate-fade-in">
             <button id="closeManageCookiesModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl focus:outline-none">
                 &times;
@@ -3317,16 +3317,16 @@
                 policyLink.classList.add('cookies-policy-link');
                 policyLink.addEventListener('click', function (e) {
                     e.preventDefault();
-                    document.getElementById('cookiesPolicyModal').classList.remove('hidden');
+                    showModal(document.getElementById('cookiesPolicyModal'));
                 });
             }
 
             // Cerrar el modal
             document.getElementById('closeCookiesPolicyModal').onclick = function () {
-                document.getElementById('cookiesPolicyModal').classList.add('hidden');
+                hideModal(document.getElementById('cookiesPolicyModal'));
             };
             document.getElementById('cookiesPolicyModal').onclick = function (e) {
-                if (e.target === this) this.classList.add('hidden');
+                if (e.target === this) hideModal(this);
             };
         });
     </script>
@@ -3335,7 +3335,7 @@
         document.addEventListener('DOMContentLoaded', function () {
         // Abrir modal de gestión de cookies
         document.getElementById('manage-cookies').onclick = function () {
-            document.getElementById('manageCookiesModal').classList.remove('hidden');
+            showModal(document.getElementById('manageCookiesModal'));
             // Cargar preferencias guardadas
             document.getElementById('performanceCookies').checked = localStorage.getItem('performanceCookies') === 'true';
             document.getElementById('personalizationCookies').checked = localStorage.getItem('personalizationCookies') === 'true';
@@ -3344,10 +3344,10 @@
 
         // Cerrar modal
         document.getElementById('closeManageCookiesModal').onclick = function () {
-            document.getElementById('manageCookiesModal').classList.add('hidden');
+            hideModal(document.getElementById('manageCookiesModal'));
         };
         document.getElementById('manageCookiesModal').onclick = function (e) {
-            if (e.target === this) this.classList.add('hidden');
+            if (e.target === this) hideModal(this);
         };
 
         // Guardar preferencias
@@ -3356,7 +3356,7 @@
             localStorage.setItem('performanceCookies', document.getElementById('performanceCookies').checked);
             localStorage.setItem('personalizationCookies', document.getElementById('personalizationCookies').checked);
             localStorage.setItem('thirdPartyCookies', document.getElementById('thirdPartyCookies').checked);
-            document.getElementById('manageCookiesModal').classList.add('hidden');
+            hideModal(document.getElementById('manageCookiesModal'));
             Swal.fire({
                 icon: 'success',
                 title: 'Preferencias guardadas',

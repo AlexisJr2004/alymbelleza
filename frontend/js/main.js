@@ -598,6 +598,26 @@ async function deleteTestimonial(id) {
   }
 }
 
+// =============================================
+// APERTURA/CIERRE DE MODALES CON TRANSICIÓN
+// =============================================
+// Uso común para todos los modales del sitio: la base debe tener las clases
+// "hidden opacity-0 transition-opacity duration-300". Se quita "hidden" primero
+// y se fuerza un reflow antes de quitar "opacity-0" para que el navegador sí
+// anime la aparición en vez de saltar directo al estado final.
+function showModal(modal) {
+  if (!modal) return;
+  modal.classList.remove("hidden");
+  void modal.offsetWidth;
+  modal.classList.remove("opacity-0");
+}
+
+function hideModal(modal) {
+  if (!modal) return;
+  modal.classList.add("opacity-0");
+  setTimeout(() => modal.classList.add("hidden"), 300);
+}
+
 function setupTestimonialModal() {
   const testimonialModal = document.getElementById("testimonialModal");
   const openModalBtn = document.getElementById("openTestimonialModal");
@@ -616,13 +636,13 @@ function setupTestimonialModal() {
         });
         return;
       }
-      if (testimonialModal) testimonialModal.classList.remove("hidden");
+      showModal(testimonialModal);
     });
   }
 
   if (closeModalBtn && testimonialModal) {
     closeModalBtn.addEventListener("click", () => {
-      testimonialModal.classList.add("hidden");
+      hideModal(testimonialModal);
     });
   }
 
@@ -676,7 +696,7 @@ function setupTestimonialModal() {
 
         const result = await response.json().catch(() => ({}));
 
-        testimonialModal.classList.add("hidden");
+        hideModal(testimonialModal);
         testimonialForm.reset();
         setTimeout(loadTestimonials, 500);
 
@@ -788,7 +808,7 @@ function buildProductQuickViewModal() {
   const modal = document.createElement("div");
   modal.id = "productQuickViewModal";
   modal.className =
-    "fixed inset-0 bg-black/40 hidden z-[9999] flex items-center justify-center p-4";
+    "fixed inset-0 bg-black/40 hidden opacity-0 transition-opacity duration-300 z-[9999] flex items-center justify-center p-4";
   modal.innerHTML = `
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-auto overflow-hidden max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 sticky top-0 bg-white">
@@ -828,7 +848,7 @@ function buildProductQuickViewModal() {
   `;
   document.body.appendChild(modal);
 
-  const close = () => modal.classList.add("hidden");
+  const close = () => hideModal(modal);
   modal.addEventListener("click", (e) => {
     if (e.target === modal) close();
   });
@@ -917,7 +937,7 @@ function openProductQuickView(product) {
     addBtn.classList.add("hidden");
   }
 
-  modal.classList.remove("hidden");
+  showModal(modal);
 }
 
 // Delegado en document: funciona sin importar cuándo se insertaron las tarjetas al DOM
