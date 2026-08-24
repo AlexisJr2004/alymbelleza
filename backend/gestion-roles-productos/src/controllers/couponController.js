@@ -1,4 +1,5 @@
 const Coupon = require('../models/coupon');
+const CouponRedemption = require('../models/couponRedemption');
 
 // Calcula el descuento de un cupón sobre un subtotal dado
 function calculateDiscount(coupon, subtotal) {
@@ -7,6 +8,7 @@ function calculateDiscount(coupon, subtotal) {
   }
   return Math.min(coupon.value, subtotal);
 }
+exports.calculateDiscount = calculateDiscount;
 
 // Valida un código de descuento contra el subtotal del carrito (uso público de clientes)
 exports.validateCoupon = async (req, res) => {
@@ -33,6 +35,11 @@ exports.validateCoupon = async (req, res) => {
         success: false,
         error: `Este código requiere una compra mínima de $${coupon.minPurchase.toFixed(2)}.`,
       });
+    }
+
+    const yaUsado = await CouponRedemption.findOne({ coupon: coupon._id, user: req.user._id });
+    if (yaUsado) {
+      return res.status(400).json({ success: false, error: 'Ya usaste este código de descuento antes.' });
     }
 
     res.json({

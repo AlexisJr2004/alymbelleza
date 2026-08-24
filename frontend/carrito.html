@@ -773,12 +773,14 @@
         if (btnCompra) {
             btnCompra.addEventListener("click", async function (e) {
                 e.preventDefault();
-                // Obtén los datos del carrito y usuario
+                // Guarda los datos del usuario y el cupón aplicado para pagos.html
                 const user = JSON.parse(localStorage.getItem("user"));
-                const carrito = await getCart(user.token);
-                // Guarda en localStorage para la factura
-                localStorage.setItem("factura_carrito", JSON.stringify(carrito.items || []));
                 localStorage.setItem("factura_usuario", JSON.stringify(user));
+                if (window.cuponAplicadoActual) {
+                    localStorage.setItem("factura_cupon", window.cuponAplicadoActual.code);
+                } else {
+                    localStorage.removeItem("factura_cupon");
+                }
                 // Redirige a pagos.html
                 window.location.href = "pagos.html";
             });
@@ -1298,6 +1300,7 @@
 
             let items = [];
             let cuponAplicado = null; // { code, type, value, minPurchase }
+            window.cuponAplicadoActual = null; // puente para el script de "Continuar con la compra"
 
             function calcularDescuento(subtotal) {
                 if (!cuponAplicado) return 0;
@@ -1375,6 +1378,7 @@
                 // cupón, se quita solo y se avisa (en vez de dejar un descuento inválido)
                 if (cuponAplicado && subtotal < (cuponAplicado.minPurchase || 0)) {
                     cuponAplicado = null;
+                    window.cuponAplicadoActual = null;
                     actualizarUiCupon();
                     Swal.fire({
                         icon: "info",
@@ -1478,6 +1482,7 @@
                     if (!res.ok) throw new Error(data.error || "No se pudo aplicar el código.");
 
                     cuponAplicado = data.coupon;
+                    window.cuponAplicadoActual = data.coupon;
                     cuponInput.value = "";
                     actualizarUiCupon();
                     renderVistaCarrito(items);
@@ -1504,6 +1509,7 @@
 
             cuponQuitarBtn.addEventListener("click", () => {
                 cuponAplicado = null;
+                window.cuponAplicadoActual = null;
                 actualizarUiCupon();
                 renderVistaCarrito(items);
             });

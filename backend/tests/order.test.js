@@ -1,0 +1,99 @@
+process.env.JWT_SECRET = process.env.JWT_SECRET || 'clave-de-pruebas';
+
+jest.mock('../gestion-roles-productos/src/models/cart');
+jest.mock('../gestion-roles-productos/src/models/order');
+jest.mock('../gestion-roles-productos/src/models/coupon');
+jest.mock('../gestion-roles-productos/src/models/couponRedemption');
+
+const Cart = require('../gestion-roles-productos/src/models/cart');
+const Order = require('../gestion-roles-productos/src/models/order');
+const Coupon = require('../gestion-roles-productos/src/models/coupon');
+const CouponRedemption = require('../gestion-roles-productos/src/models/couponRedemption');
+const orderController = require('../gestion-roles-productos/src/controllers/orderController');
+
+// Prueba el controlador con los modelos de Mongoose simulados (sin conexión real a la
+// base de datos), para cubrir el flujo completo de creación de orden y la regla de que
+// un mismo cliente no puede redimir dos veces el mismo cupón.
+function mockRes() {
+  const res = {};
+  res.status = jest.fn().mockReturnValue(res);
+  res.json = jest.fn().mockReturnValue(res);
+  return res;
+}
+
+const userId = 'user123';
+const coupon10 = {
+  _id: 'c1',
+  code: 'BELLA10',
+  type: 'percentage',
+  value: 10,
+  minPurchase: 0,
+  active: true,
+  expiresAt: null,
+};
+
+describe('orderController.createOrder', () => {
+  afterEach(() => jest.clearAllMocks());
+
+  it('rechaza un carrito vacío', async () => {
+    Cart.findOne.mockReturnValue({ populate: jest.fn().mockResolvedValue({ items: [] }) });
+    const res = mockRes();
+    await orderController.createOrder({ body: {}, user: { _id: userId } }, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  it('rechaza un código de cupón inexistente', async () => {
+    Cart.findOne.mockReturnValue({
+      populate: jest.fn().mockResolvedValue({
+        items: [{ product: { _id: 'p1', name: 'Shampoo', price: 20 }, cantidad: 1 }],
+      }),
+    });
+    Coupon.findOne.mockResolvedValue(null);
+    const res = mockRes();
+    await orderController.createOrder({ body: { couponCode: 'NOPE' }, user: { _id: userId } }, res);
+    expect(res.status).toHaveBeenCalledWith(404);
+  });
+
+  it('crea la orden, aplica el descuento y vacía el carrito', async () => {
+    const cartDoc = {
+      items: [{ product: { _id: 'p1', name: 'Shampoo', price: 20 }, cantidad: 2 }],
+      save: jest.fn().mockResolvedValue(true),
+    };
+    Cart.findOne.mockReturnValue({ populate: jest.fn().mockResolvedValue(cartDoc) });
+    Coupon.findOne.mockResolvedValue(coupon10);
+    CouponRedemption.create.mockResolvedValue({ _id: 'r1', save: jest.fn().mockResolvedValue(true) });
+    Order.create.mockResolvedValue({ _id: 'o1', subtotal: 40, discount: 4, total: 36 });
+
+    const res = mockRes();
+    await orderController.createOrder({ body: { couponCode: 'bella10' }, user: { _id: userId } }, res);
+
+    expect(Order.create).toHaveBeenCalledWith(expect.objectContaining({
+      subtotal: 40,
+      discount: 4,
+      total: 36,
+      couponCode: 'BELLA10',
+    }));
+    expect(cartDoc.items).toEqual([]);
+    expect(cartDoc.save).toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(201);
+  });
+
+  it('rechaza un cupón ya usado antes por el mismo cliente', async () => {
+    const cartDoc = {
+      items: [{ product: { _id: 'p1', name: 'Shampoo', price: 20 }, cantidad: 1 }],
+      save: jest.fn().mockResolvedValue(true),
+    };
+    Cart.findOne.mockReturnValue({ populate: jest.fn().mockResolvedValue(cartDoc) });
+    Coupon.findOne.mockResolvedValue(coupon10);
+    const dupError = new Error('duplicate key');
+    dupError.code = 11000;
+    CouponRedemption.create.mockRejectedValue(dupError);
+
+    const res = mockRes();
+    await orderController.createOrder({ body: { couponCode: 'BELLA10' }, user: { _id: userId } }, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ error: expect.stringContaining('Ya usaste') }));
+    expect(Order.create).not.toHaveBeenCalled();
+  });
+});

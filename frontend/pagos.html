@@ -1259,13 +1259,11 @@
 
     <!-- Script para la factura PDF -->
     <script>
-        function renderFacturaHTML(usuario, items) {
-            // Calcula total directo sin IVA
-            let total = 0;
-            items.forEach(item => {
-                const prod = item.product || item;
-                total += (prod.price * item.cantidad);
-            });
+        function renderFacturaHTML(usuario, order) {
+            const items = order.items || [];
+            const subtotal = order.subtotal;
+            const descuento = order.discount || 0;
+            const total = order.total;
 
             // Fecha actual
             const fecha = new Date();
@@ -1348,23 +1346,31 @@
                         </thead>
                         <tbody>
                             ${items.map((item, idx) => {
-                                const prod = item.product || item;
-                                const subtotalItem = (prod.price * item.cantidad);
+                                const subtotalItem = (item.price * item.cantidad);
                                 return `<tr style="${idx < items.length - 1 ? 'border-bottom:1px solid #f0f0f0;' : ''}">
                                     <td style="padding:10px;">
-                                        <strong style="font-size:13px;">${prod.name}</strong><br>
-                                        <small style="color:#666;font-size:12px;">${prod.description || 'Producto de belleza premium'}</small>
+                                        <strong style="font-size:13px;">${item.name}</strong><br>
+                                        <small style="color:#666;font-size:12px;">Producto de belleza premium</small>
                                     </td>
                                     <td style="padding:10px;text-align:center;">${item.cantidad}</td>
-                                    <td style="padding:10px;text-align:center;">$${prod.price.toFixed(2)}</td>
+                                    <td style="padding:10px;text-align:center;">$${item.price.toFixed(2)}</td>
                                     <td style="padding:10px;text-align:right;color:#7e22ce;font-weight:600;">$${subtotalItem.toFixed(2)}</td>
                                 </tr>`;
                             }).join('')}
                         </tbody>
                     </table>
-                    
+
                     <!-- Total compacto -->
                     <div style="background:#f8f9fa;border-top:1px solid #e9ecef;padding:12px 15px;">
+                        ${descuento > 0 ? `
+                        <div style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:6px;">
+                            <span style="font-size:13px;color:#666;margin-right:15px;">Subtotal:</span>
+                            <span style="font-size:13px;color:#666;">$${subtotal.toFixed(2)}</span>
+                        </div>
+                        <div style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:6px;">
+                            <span style="font-size:13px;color:#10b981;margin-right:15px;">Descuento${order.couponCode ? ` (${order.couponCode})` : ''}:</span>
+                            <span style="font-size:13px;color:#10b981;">-$${descuento.toFixed(2)}</span>
+                        </div>` : ''}
                         <div style="display:flex;justify-content:flex-end;align-items:center;">
                             <span style="font-weight:bold;font-size:14px;color:#7e22ce;margin-right:15px;">TOTAL:</span>
                             <span style="font-weight:bold;font-size:16px;color:#7e22ce;">$${total.toFixed(2)}</span>
@@ -1392,36 +1398,76 @@
         document.addEventListener("DOMContentLoaded", function () {
             const descargarBtn = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Descargar Factura"));
             if (descargarBtn) {
-                descargarBtn.addEventListener("click", function () {
-                    const items = JSON.parse(localStorage.getItem("factura_carrito") || "[]");
+                descargarBtn.addEventListener("click", async function () {
                     const usuario = JSON.parse(localStorage.getItem("factura_usuario") || "{}");
-                    const html = renderFacturaHTML(usuario, items);
+                    const cuponCode = localStorage.getItem("factura_cupon") || undefined;
+
+                    if (!usuario || !usuario.token) {
+                        Swal.fire('Error', 'Debes iniciar sesión para completar la compra.', 'error');
+                        return;
+                    }
+
+                    descargarBtn.disabled = true;
+                    const textoOriginal = descargarBtn.textContent;
+                    descargarBtn.textContent = "Procesando...";
+
+                    let order;
+                    try {
+                        const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/orders", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${usuario.token}`,
+                            },
+                            body: JSON.stringify({ couponCode: cuponCode }),
+                        });
+                        const data = await res.json().catch(() => ({}));
+                        if (!res.ok || !data.success) {
+                            throw new Error(data.error || "No se pudo procesar la compra.");
+                        }
+                        order = data.data;
+                    } catch (err) {
+                        Swal.fire('No se pudo completar la compra', err.message || 'Ocurrió un error al procesar tu pedido.', 'error');
+                        descargarBtn.disabled = false;
+                        descargarBtn.textContent = textoOriginal;
+                        return;
+                    }
+
+                    const html = renderFacturaHTML(usuario, order);
                     const facturaDiv = document.getElementById("factura-pdf");
                     facturaDiv.innerHTML = html;
                     facturaDiv.style.display = "block";
-                    
+
                     // Configuración para html2pdf
                     const opt = {
                         margin: [10, 10, 10, 10],
                         filename: `factura_bellabeauty_${Date.now()}.pdf`,
                         image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: { 
-                            scale: 2, 
-                            logging: false, 
-                            dpi: 300, 
+                        html2canvas: {
+                            scale: 2,
+                            logging: false,
+                            dpi: 300,
                             letterRendering: true,
                             useCORS: true
                         },
-                        jsPDF: { 
-                            unit: 'mm', 
-                            format: 'a4', 
+                        jsPDF: {
+                            unit: 'mm',
+                            format: 'a4',
                             orientation: 'portrait'
                         }
                     };
-                    
+
                     // Generar PDF
                     html2pdf().set(opt).from(facturaDiv).save().then(() => {
                         facturaDiv.style.display = "none";
+                        descargarBtn.disabled = false;
+                        descargarBtn.textContent = textoOriginal;
+
+                        // La compra ya se registró y el carrito se vació en el backend
+                        localStorage.removeItem("factura_cupon");
+                        if (typeof window.actualizarContadorCarrito === "function") {
+                            window.actualizarContadorCarrito();
+                        }
                     });
                 });
             }
