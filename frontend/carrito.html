@@ -490,14 +490,16 @@
     <div class="flex flex-col items-center justify-center text-center mb-16 animate-fade-in">
         <br>
         <h2 class="font-display text-4xl md:text-5xl mb-6 leading-tight text-gray-900">
-            Lista de Productos ✨
+            Lista de Productos
         </h2>
         <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mt-4"></div>
     </div>
 
     <!-- Section Shopping Cart -->
-    <section class="bg-white py-8 antialiased md:py-16">
-        <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+    <section class="relative overflow-hidden bg-white py-8 antialiased md:py-16">
+        <div class="absolute -top-24 -left-24 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-40 pointer-events-none"></div>
+        <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-40 pointer-events-none"></div>
+        <div class="relative mx-auto max-w-screen-xl px-4 2xl:px-0">
             <h2 class="text-xl font-semibold text-gray-900 sm:text-2xl">Carrito de Compras</h2>
 
             <div class="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
@@ -535,6 +537,15 @@
             </div>
         </div>
     </section>
+
+    <!-- Vista previa de la imagen de un producto del carrito -->
+    <div id="cartImagePreviewModal"
+        class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300 z-[9999] flex items-center justify-center p-4">
+        <div class="relative max-w-lg w-full">
+            <img id="cartImagePreviewImg" src="" alt="" class="w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl bg-white">
+            <p id="cartImagePreviewName" class="mt-4 text-center text-white text-lg font-semibold"></p>
+        </div>
+    </div>
 
     <!-- Boton Ir Arriba -->
     <div class="z-50 fixed bottom-36 right-4 flex flex-col space-y-6 items-center">
@@ -1285,9 +1296,10 @@
 
                 contenedor.innerHTML = itemsVista.map(item => {
                     const prod = item.product || item;
+                    const imageUrl = prod.image || './img/default.jpg';
                     return `
-                        <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
-                            <img class="h-20 w-20 object-cover rounded" src="${prod.image || './img/default.jpg'}" alt="${prod.name}" />
+                        <div class="rounded-lg border border-white/60 bg-white/70 backdrop-blur-md p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                            <img class="cart-item-image h-20 w-20 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity" src="${imageUrl}" data-image="${imageUrl}" data-name="${prod.name}" alt="${prod.name}" />
                             <div class="flex-1 min-w-0">
                                 <h3 class="font-bold text-gray-900 mb-1">${prod.name}</h3>
                                 <p class="text-gray-500 text-sm mb-2">${prod.description || ''}</p>
@@ -1359,6 +1371,13 @@
                         }
                     };
                 });
+
+                // Vista previa ampliada al hacer clic en la imagen del producto
+                contenedor.querySelectorAll(".cart-item-image").forEach(img => {
+                    img.onclick = function () {
+                        openCartImagePreview(img.dataset.image, img.dataset.name);
+                    };
+                });
             }
 
             async function renderizarCarrito() {
@@ -1369,6 +1388,41 @@
             }
 
             await renderizarCarrito();
+        });
+    </script>
+
+    <!-- Vista previa de imagen del carrito: mismo patrón de aparición/cierre que el resto del sitio -->
+    <script>
+        function showModal(modal) {
+            if (!modal) return;
+            modal.classList.remove("hidden");
+            void modal.offsetWidth;
+            modal.classList.remove("opacity-0");
+        }
+
+        function hideModal(modal) {
+            if (!modal) return;
+            modal.classList.add("opacity-0");
+            setTimeout(() => modal.classList.add("hidden"), 300);
+        }
+
+        function openCartImagePreview(src, name) {
+            document.getElementById("cartImagePreviewImg").src = src;
+            document.getElementById("cartImagePreviewImg").alt = name || "";
+            document.getElementById("cartImagePreviewName").textContent = name || "";
+            showModal(document.getElementById("cartImagePreviewModal"));
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const previewModal = document.getElementById("cartImagePreviewModal");
+            previewModal.addEventListener("click", (e) => {
+                if (e.target === previewModal) hideModal(previewModal);
+            });
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape" && !previewModal.classList.contains("hidden")) {
+                    hideModal(previewModal);
+                }
+            });
         });
     </script>
 
