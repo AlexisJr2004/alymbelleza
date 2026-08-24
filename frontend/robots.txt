@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /admin-productos.html
+Disallow: /login.html
+Disallow: /register.html
+Disallow: /forgot-password.html
+Disallow: /reset-password.html
+Disallow: /carrito.html
+Disallow: /pagos.html
+Disallow: /perfil.html
+
+Sitemap: https://aly-mbelleza-backend.onrender.com/sitemap.xml
