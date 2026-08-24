@@ -559,9 +559,6 @@
     <!-- Modal para mostrar imagen/video en grande -->
     <div id="galleryPopupModal" class="fixed inset-0 z-[99999] bg-black/70 flex items-center justify-center hidden p-4">
         <div class="relative bg-transparent max-w-3xl w-full flex flex-col items-center">
-            <button id="closeGalleryPopup" class="absolute top-2 right-2 text-white text-3xl z-10 hover:text-pink-300 transition-colors" aria-label="Cerrar">
-                &times;
-            </button>
             <!-- Navegación: anterior / siguiente elemento -->
             <button id="galleryPopupPrev"
                 class="hidden absolute left-2 md:-left-16 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center backdrop-blur-sm transition-colors"
@@ -1230,14 +1227,12 @@
             document.getElementById("galleryPopupModal").classList.remove("hidden");
         }
 
-        // Cerrar popup y navegación anterior/siguiente
+        // Cerrar popup (clic afuera o Escape) y navegación anterior/siguiente
         document.addEventListener("DOMContentLoaded", () => {
             const modal = document.getElementById("galleryPopupModal");
-            const closeBtn = document.getElementById("closeGalleryPopup");
             const prevBtn = document.getElementById("galleryPopupPrev");
             const nextBtn = document.getElementById("galleryPopupNext");
 
-            if (closeBtn) closeBtn.onclick = () => modal.classList.add("hidden");
             if (prevBtn) prevBtn.onclick = () => renderGalleryPopup(popupIndex - 1);
             if (nextBtn) nextBtn.onclick = () => renderGalleryPopup(popupIndex + 1);
 
