@@ -288,6 +288,61 @@
     display: flex;
 }
 
+/* Flechas de navegación del carrusel de testimonios: mismo estilo "glass" que el
+   visor de la galería, adaptado a un fondo claro (blanco translúcido en vez de
+   negro translúcido). El contenedor tiene overflow: hidden, así que en vez de
+   sacarlas del carrusel se les reserva espacio propio con padding lateral, para
+   que no queden encima de las tarjetas. */
+.testimonials-swiper {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+@media (min-width: 640px) {
+    .testimonials-swiper {
+        padding-left: 56px;
+        padding-right: 56px;
+    }
+}
+
+.testimonials-swiper .swiper-button-next,
+.testimonials-swiper .swiper-button-prev {
+    width: 44px;
+    height: 44px;
+    border-radius: 9999px;
+    background-color: rgba(255, 255, 255, 0.8);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    color: #7e22ce;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.testimonials-swiper .swiper-button-next:hover,
+.testimonials-swiper .swiper-button-prev:hover {
+    background-color: #ffffff;
+    color: #6b21a8;
+}
+
+.testimonials-swiper .swiper-button-prev {
+    left: 0;
+}
+
+.testimonials-swiper .swiper-button-next {
+    right: 0;
+}
+
+.testimonials-swiper .swiper-button-next::after,
+.testimonials-swiper .swiper-button-prev::after {
+    content: none;
+}
+
+.testimonials-swiper .swiper-button-next i,
+.testimonials-swiper .swiper-button-prev i {
+    font-size: 15px;
+}
+
 .bg-white.dark\:bg-gray-800 {
     transition: all 0.3s ease;
 }
