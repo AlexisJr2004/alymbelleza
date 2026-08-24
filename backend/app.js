@@ -97,13 +97,13 @@ app.use("/api", (req, res) => {
 app.use(
   express.static(path.join(__dirname, "../frontend"), {
     extensions: ["html", "htm"],
-    index: "login.html",
+    index: "index.html",
   })
 );
 
 // 9. Catch-all para SPA (debe ir al final)
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/login.html"));
+  res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
 
 // 10. Manejo centralizado de errores
