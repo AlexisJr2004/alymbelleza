@@ -498,14 +498,14 @@
                     <h1 class="text-3xl font-bold text-gray-900">Hola, <span id="admin-nombre-saludo">Administrador</span></h1>
                     <p class="text-gray-500 mt-1">Aquí tienes un resumen de la actividad de Bella Beauty.</p>
                 </div>
-                <div class="bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-600 shadow-sm capitalize" id="admin-fecha-actual"></div>
+                <div class="bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-600 capitalize" id="admin-fecha-actual"></div>
             </div>
 
             <div class="flex flex-col lg:flex-row gap-6 items-start">
 
                 <!-- Navegación lateral -->
                 <aside class="w-full lg:w-64 shrink-0 lg:sticky lg:top-24">
-                    <nav id="admin-tabs-nav" class="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-visible bg-white rounded-xl border border-gray-200 shadow-sm p-2">
+                    <nav id="admin-tabs-nav" class="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-visible bg-white rounded-xl border border-gray-200 p-2">
                         <button type="button" data-tab="resumen" class="admin-tab-btn text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors">
                             <i class="fas fa-chart-line w-4 text-center"></i> Resumen
                         </button>
@@ -535,12 +535,12 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" id="kpi-cards"></div>
 
                         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                            <div class="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                            <div class="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-6">
                                 <h3 class="text-lg font-semibold text-gray-800 mb-1">Ingresos de los últimos 6 meses</h3>
                                 <p class="text-sm text-gray-500 mb-6">Total facturado por mes según los pedidos registrados.</p>
                                 <div id="grafico-ingresos" class="flex items-end gap-3 h-48"></div>
                             </div>
-                            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                            <div class="bg-white rounded-xl border border-gray-200 p-6">
                                 <h3 class="text-lg font-semibold text-gray-800 mb-1">Estado de las citas</h3>
                                 <p class="text-sm text-gray-500 mb-6">Distribución de todas las citas registradas.</p>
                                 <div id="grafico-citas" class="space-y-4"></div>
@@ -548,14 +548,14 @@
                         </div>
 
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                            <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
                                 <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                                     <h3 class="text-lg font-semibold text-gray-800">Últimos pedidos</h3>
                                     <button type="button" data-tab-link="pedidos" class="text-sm text-purple-600 hover:text-purple-800 font-medium">Ver todos</button>
                                 </div>
                                 <div id="tabla-ultimos-pedidos" class="divide-y divide-gray-100"></div>
                             </div>
-                            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                            <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
                                 <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                                     <h3 class="text-lg font-semibold text-gray-800">Últimos usuarios registrados</h3>
                                     <button type="button" data-tab-link="usuarios" class="text-sm text-purple-600 hover:text-purple-800 font-medium">Ver todos</button>
@@ -567,7 +567,7 @@
 
                     <!-- Productos -->
                     <div id="tab-productos" class="admin-tab-panel hidden">
-                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 md:p-8">
+                    <div class="bg-white rounded-xl border border-gray-200 p-6 md:p-8">
                         <div class="flex justify-between items-center mb-8">
             <h2 class="text-2xl font-bold text-gray-800">
                 <i class="fas fa-box-open mr-2 text-purple-600"></i> Gestión de Productos
@@ -759,7 +759,7 @@
 
                     <!-- Cupones -->
                     <div id="tab-cupones" class="admin-tab-panel hidden">
-                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 md:p-8">
+                    <div class="bg-white rounded-xl border border-gray-200 p-6 md:p-8">
                         <div class="flex justify-between items-center mb-8">
             <h2 class="text-2xl font-bold text-gray-800">
                 <i class="fas fa-tags mr-2 text-purple-600"></i> Gestión de Cupones
@@ -866,7 +866,7 @@
 
                     <!-- Pedidos -->
                     <div id="tab-pedidos" class="admin-tab-panel hidden">
-                        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 md:p-8">
+                        <div class="bg-white rounded-xl border border-gray-200 p-6 md:p-8">
                             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                                 <h2 class="text-2xl font-bold text-gray-800">
                                     <i class="fas fa-receipt mr-2 text-purple-600"></i> Pedidos
@@ -904,7 +904,7 @@
 
                     <!-- Usuarios -->
                     <div id="tab-usuarios" class="admin-tab-panel hidden">
-                        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 md:p-8">
+                        <div class="bg-white rounded-xl border border-gray-200 p-6 md:p-8">
                             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                                 <div>
                                     <h2 class="text-2xl font-bold text-gray-800"><i class="fas fa-users mr-2 text-purple-600"></i>Usuarios registrados</h2>
@@ -936,7 +936,7 @@
 
                     <!-- Citas -->
                     <div id="tab-citas" class="admin-tab-panel hidden">
-                        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 md:p-8">
+                        <div class="bg-white rounded-xl border border-gray-200 p-6 md:p-8">
                             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                                 <h2 class="text-2xl font-bold text-gray-800"><i class="fas fa-calendar-check mr-2 text-purple-600"></i>Citas</h2>
                                 <div class="flex flex-wrap gap-3 text-sm">
@@ -1630,7 +1630,7 @@
                 indigo: 'bg-indigo-50 text-indigo-600',
             };
             document.getElementById('kpi-cards').innerHTML = tarjetas.map(t => `
-                <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex items-start gap-4">
+                <div class="bg-white rounded-xl border border-gray-200 p-5 flex items-start gap-4">
                     <div class="w-11 h-11 rounded-lg flex items-center justify-center shrink-0 ${colores[t.color]}">
                         <i class="fas ${t.icono}"></i>
                     </div>
