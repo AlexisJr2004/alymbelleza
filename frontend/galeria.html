@@ -574,8 +574,8 @@
             <div id="galleryPopupDate" class="mt-4 text-white text-sm"></div>
 
             <!-- Mini carrusel de miniaturas -->
-            <div id="galleryPopupThumbs" class="hidden mt-4 max-w-full">
-                <div id="galleryPopupThumbsTrack" class="flex items-center gap-2 overflow-x-auto px-2 py-2 bg-white/5 backdrop-blur-sm rounded-xl"></div>
+            <div id="galleryPopupThumbs" class="hidden mt-8 max-w-full">
+                <div id="galleryPopupThumbsTrack" class="flex items-center gap-3 overflow-x-auto px-3 py-3 bg-white/5 backdrop-blur-sm rounded-xl"></div>
             </div>
         </div>
     </div>
@@ -1205,7 +1205,7 @@
             popupItems.forEach((it, i) => {
                 const thumbBtn = document.createElement("button");
                 thumbBtn.type = "button";
-                thumbBtn.className = "gallery-thumb-btn shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 border-transparent opacity-50 hover:opacity-90 transition-all";
+                thumbBtn.className = "gallery-thumb-btn shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 border-transparent opacity-50 hover:opacity-90 transition-all";
                 thumbBtn.setAttribute("aria-label", `Ver elemento ${i + 1} de ${popupItems.length}`);
                 thumbBtn.onclick = () => renderGalleryPopup(i);
 
