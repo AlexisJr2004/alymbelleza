@@ -310,19 +310,16 @@
     width: 44px;
     height: 44px;
     border-radius: 9999px;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.1);
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    color: #7e22ce;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    color: #ffffff;
+    transition: background-color 0.2s ease;
 }
 
 .testimonials-swiper .swiper-button-next:hover,
 .testimonials-swiper .swiper-button-prev:hover {
-    background-color: #ffffff;
-    color: #6b21a8;
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 .testimonials-swiper .swiper-button-prev {
