@@ -14,6 +14,7 @@ const testimonialRoutes = require("./gestion-roles-productos/src/routes/testimon
 const contactRoutes = require("./gestion-roles-productos/src/routes/contactRoutes");
 const cartRoutes = require("./gestion-roles-productos/src/routes/cartRoutes");
 const appointmentRoutes = require("./gestion-roles-productos/src/routes/appointmentRoutes");
+const couponRoutes = require("./gestion-roles-productos/src/routes/couponRoutes");
 
 const app = express();
 
@@ -65,6 +66,14 @@ const contactLimiter = rateLimit({
   legacyHeaders: false,
   message: { success: false, error: "Demasiadas solicitudes. Intenta de nuevo más tarde." },
 });
+// Evita que alguien intente adivinar códigos de cupón por fuerza bruta
+const couponLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: "Demasiados intentos. Intenta de nuevo en unos minutos." },
+});
 
 // 6. Rutas de la API
 app.use("/api/auth", authLimiter, authRoutes);
@@ -74,6 +83,8 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/testimonials", testimonialRoutes);
+app.use("/api/coupons/validate", couponLimiter);
+app.use("/api/coupons", couponRoutes);
 
 // 7. Cualquier ruta /api no reconocida devuelve 404 en JSON, no el SPA fallback
 app.use("/api", (req, res) => {

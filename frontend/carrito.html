@@ -526,6 +526,26 @@
                                 <dd id="carrito-total" class="text-base font-bold text-gray-900">$0</dd>
                             </dl>
                         </div>
+
+                        <!-- Código de descuento -->
+                        <div id="carrito-cupon-aplicado" class="hidden items-center justify-between gap-2 rounded-lg bg-green-50 border border-green-200 px-3 py-2 text-sm">
+                            <span class="text-green-700 truncate">
+                                <i class="fas fa-tag mr-1"></i>
+                                Código <strong id="carrito-cupon-codigo"></strong> aplicado
+                            </span>
+                            <button type="button" id="carrito-cupon-quitar" class="text-green-700 hover:text-green-900 font-medium shrink-0">
+                                Quitar
+                            </button>
+                        </div>
+                        <form id="carrito-cupon-form" class="flex gap-2">
+                            <input type="text" id="carrito-cupon-input" placeholder="Código de descuento" autocomplete="off"
+                                class="flex-1 min-w-0 px-3 py-2 border border-gray-300 rounded-lg text-sm uppercase focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition" />
+                            <button type="submit" id="carrito-cupon-btn"
+                                class="px-4 py-2 text-sm font-medium text-purple-700 border border-purple-300 rounded-lg hover:bg-purple-50 transition shrink-0">
+                                Aplicar
+                            </button>
+                        </form>
+
                         <div class="flex items-center justify-center gap-2">
                             <a href="pagos.html"
                                 class="inline-flex items-center gap-2 text-sm font-medium text-primary-700 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-full shadow hover:from-purple-700 hover:to-pink-700 transition">
@@ -1277,6 +1297,32 @@
             }
 
             let items = [];
+            let cuponAplicado = null; // { code, type, value, minPurchase }
+
+            function calcularDescuento(subtotal) {
+                if (!cuponAplicado) return 0;
+                if (subtotal < (cuponAplicado.minPurchase || 0)) return 0;
+                if (cuponAplicado.type === "percentage") {
+                    return Math.round(subtotal * (cuponAplicado.value / 100) * 100) / 100;
+                }
+                return Math.min(cuponAplicado.value, subtotal);
+            }
+
+            function actualizarUiCupon() {
+                const banner = document.getElementById("carrito-cupon-aplicado");
+                const form = document.getElementById("carrito-cupon-form");
+                const codigoElem = document.getElementById("carrito-cupon-codigo");
+                if (cuponAplicado) {
+                    codigoElem.textContent = cuponAplicado.code;
+                    banner.classList.remove("hidden");
+                    banner.classList.add("flex");
+                    form.classList.add("hidden");
+                } else {
+                    banner.classList.add("hidden");
+                    banner.classList.remove("flex");
+                    form.classList.remove("hidden");
+                }
+            }
 
             function renderVistaCarrito(itemsVista) {
                 const contenedor = document.getElementById("carrito-lista");
@@ -1324,8 +1370,22 @@
                     const prod = item.product || item;
                     return sum + (prod.price * item.cantidad);
                 }, 0);
-                const descuento = 0;
-                const total = subtotal - descuento;
+
+                // Si al bajar cantidades el subtotal ya no alcanza la compra mínima del
+                // cupón, se quita solo y se avisa (en vez de dejar un descuento inválido)
+                if (cuponAplicado && subtotal < (cuponAplicado.minPurchase || 0)) {
+                    cuponAplicado = null;
+                    actualizarUiCupon();
+                    Swal.fire({
+                        icon: "info",
+                        title: "Cupón quitado",
+                        text: "Tu compra ya no alcanza el mínimo requerido para ese código.",
+                        confirmButtonColor: "#7e22ce",
+                    });
+                }
+
+                const descuento = calcularDescuento(subtotal);
+                const total = Math.max(0, subtotal - descuento);
 
                 subtotalElem.textContent = `$${subtotal.toFixed(2)}`;
                 descuentoElem.textContent = `-$${descuento.toFixed(2)}`;
@@ -1386,6 +1446,67 @@
                 renderVistaCarrito(items);
                 await actualizarContadorCarrito();
             }
+
+            // Aplicar código de descuento
+            const cuponForm = document.getElementById("carrito-cupon-form");
+            const cuponInput = document.getElementById("carrito-cupon-input");
+            const cuponBtn = document.getElementById("carrito-cupon-btn");
+            const cuponQuitarBtn = document.getElementById("carrito-cupon-quitar");
+
+            cuponForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const code = cuponInput.value.trim();
+                if (!code) return;
+
+                const subtotal = items.reduce((sum, item) => {
+                    const prod = item.product || item;
+                    return sum + (prod.price * item.cantidad);
+                }, 0);
+
+                cuponBtn.disabled = true;
+                cuponBtn.textContent = "Validando...";
+                try {
+                    const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/coupons/validate", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                        body: JSON.stringify({ code, subtotal }),
+                    });
+                    const data = await res.json().catch(() => ({}));
+                    if (!res.ok) throw new Error(data.error || "No se pudo aplicar el código.");
+
+                    cuponAplicado = data.coupon;
+                    cuponInput.value = "";
+                    actualizarUiCupon();
+                    renderVistaCarrito(items);
+                    Swal.fire({
+                        icon: "success",
+                        title: "¡Código aplicado!",
+                        text: "El descuento ya se refleja en tu resumen.",
+                        confirmButtonColor: "#7e22ce",
+                        timer: 1500,
+                        showConfirmButton: false,
+                    });
+                } catch (err) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Código no válido",
+                        text: err.message || "No se pudo aplicar el código.",
+                        confirmButtonColor: "#7e22ce",
+                    });
+                } finally {
+                    cuponBtn.disabled = false;
+                    cuponBtn.textContent = "Aplicar";
+                }
+            });
+
+            cuponQuitarBtn.addEventListener("click", () => {
+                cuponAplicado = null;
+                actualizarUiCupon();
+                renderVistaCarrito(items);
+            });
 
             await renderizarCarrito();
         });
