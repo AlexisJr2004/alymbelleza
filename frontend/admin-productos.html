@@ -622,6 +622,25 @@
                 </div>
 
                 <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Tipo de producto</label>
+                    <div class="relative">
+                        <i class="fas fa-flask absolute left-3 top-3 text-gray-400"></i>
+                        <select id="tipo" name="type"
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
+                            <option value="shampoo">Shampoo</option>
+                            <option value="acondicionador">Acondicionador</option>
+                            <option value="mascarilla">Mascarilla</option>
+                            <option value="crema">Crema</option>
+                            <option value="serum">Sérum</option>
+                            <option value="aceite">Aceite</option>
+                            <option value="tratamiento">Tratamiento</option>
+                            <option value="otro" selected>Otro</option>
+                        </select>
+                        <i class="fas fa-chevron-down absolute right-3 top-3 text-gray-400"></i>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
                     <label class="block text-sm font-medium text-gray-700">¿Producto Destacado?</label>
                     <div>
                         <label class="inline-flex items-center">
@@ -1142,6 +1161,7 @@
             document.getElementById('precio-anterior').value = data.originalPrice || '';
             document.getElementById('calificacion').value = data.rating;
             document.getElementById('categoria').value = data.category;
+            document.getElementById('tipo').value = data.type || 'otro';
             document.getElementById('destacado').checked = !!data.featured;
             document.querySelector(`input[name="availability"][value="${data.availability ? 'true' : 'false'}"]`).checked = true;
             cancelarBtn.classList.remove('hidden');

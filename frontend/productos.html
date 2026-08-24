@@ -495,25 +495,113 @@
         <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mt-4"></div>
     </div>
 
-    <!-- Filtros -->
-    <div class="container mx-auto px-5 mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <!-- Buscador -->
-        <input
-            id="buscador-productos"
-            type="text"
-            placeholder="Buscar producto por nombre..."
-            class="w-full md:w-1/2 px-4 py-2 border border-purple-200 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-400 focus:outline-none transition"
-        />
-        <!-- Filtros de categoría -->
-        <div class="flex gap-2 mt-2 md:mt-0 justify-center md:justify-start flex-wrap">
-            <button class="filtro-categoria px-4 py-2 rounded-lg text-sm font-semibold bg-purple-100 text-purple-700 hover:bg-purple-200 transition" data-categoria="all">Todos</button>
-            <button class="filtro-categoria px-4 py-2 rounded-lg text-sm font-semibold bg-blue-100 text-blue-700 hover:bg-blue-200 transition" data-categoria="DESTACADO">Destacado</button>
-            <button class="filtro-categoria px-4 py-2 rounded-lg text-sm font-semibold bg-pink-100 text-pink-700 hover:bg-pink-200 transition" data-categoria="FACIAL">Facial</button>
-            <button class="filtro-categoria px-4 py-2 rounded-lg text-sm font-semibold bg-yellow-100 text-yellow-700 hover:bg-yellow-200 transition" data-categoria="CAPILAR">Capilar</button>
+    <div class="container mx-auto px-5 pb-20">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- Sidebar de filtros -->
+            <aside class="lg:w-72 shrink-0">
+                <button id="toggle-filtros" type="button"
+                    class="lg:hidden w-full flex items-center justify-between px-4 py-2.5 mb-4 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700">
+                    <span><i class="fas fa-sliders-h mr-2 text-purple-500"></i>Filtros</span>
+                    <i id="toggle-filtros-icon" class="fas fa-chevron-down text-xs transition-transform"></i>
+                </button>
+
+                <div id="panel-filtros" class="hidden lg:block space-y-6 border border-gray-200 rounded-xl p-5 lg:sticky lg:top-24">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide">Filtros</h3>
+                        <button id="limpiar-filtros" type="button"
+                            class="text-xs font-medium text-purple-600 hover:text-purple-800">Limpiar</button>
+                    </div>
+
+                    <!-- Categoría -->
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-700 mb-3">Categoría</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                <input type="radio" name="filtro-categoria" value="all" checked
+                                    class="text-purple-600 focus:ring-purple-400"> Todas
+                            </label>
+                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                <input type="radio" name="filtro-categoria" value="capilar"
+                                    class="text-purple-600 focus:ring-purple-400"> Capilar
+                            </label>
+                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                <input type="radio" name="filtro-categoria" value="facial"
+                                    class="text-purple-600 focus:ring-purple-400"> Facial
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Tipo de producto -->
+                    <div class="pt-5 border-t border-gray-100">
+                        <h4 class="text-sm font-medium text-gray-700 mb-3">Tipo de producto</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="filtro-tipo rounded text-purple-600 focus:ring-purple-400" data-tipo="shampoo"> Shampoo
+                            </label>
+                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="filtro-tipo rounded text-purple-600 focus:ring-purple-400" data-tipo="acondicionador"> Acondicionador
+                            </label>
+                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="filtro-tipo rounded text-purple-600 focus:ring-purple-400" data-tipo="mascarilla"> Mascarilla
+                            </label>
+                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="filtro-tipo rounded text-purple-600 focus:ring-purple-400" data-tipo="crema"> Crema
+                            </label>
+                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="filtro-tipo rounded text-purple-600 focus:ring-purple-400" data-tipo="serum"> Sérum
+                            </label>
+                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="filtro-tipo rounded text-purple-600 focus:ring-purple-400" data-tipo="aceite"> Aceite
+                            </label>
+                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="filtro-tipo rounded text-purple-600 focus:ring-purple-400" data-tipo="tratamiento"> Tratamiento
+                            </label>
+                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="filtro-tipo rounded text-purple-600 focus:ring-purple-400" data-tipo="otro"> Otro
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Rango de precio -->
+                    <div class="pt-5 border-t border-gray-100">
+                        <h4 class="text-sm font-medium text-gray-700 mb-3">Rango de precio</h4>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="precio-min" min="0" placeholder="Mín"
+                                class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-400 focus:outline-none">
+                            <span class="text-gray-400">–</span>
+                            <input type="number" id="precio-max" min="0" placeholder="Máx"
+                                class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-400 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <!-- Otros -->
+                    <div class="pt-5 border-t border-gray-100 space-y-2">
+                        <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                            <input type="checkbox" id="filtro-destacado" class="rounded text-purple-600 focus:ring-purple-400"> Solo destacados
+                        </label>
+                        <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                            <input type="checkbox" id="filtro-disponible" class="rounded text-purple-600 focus:ring-purple-400"> Solo disponibles
+                        </label>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Contenido -->
+            <div class="flex-1 min-w-0">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                    <input
+                        id="buscador-productos"
+                        type="text"
+                        placeholder="Buscar producto por nombre..."
+                        class="w-full md:max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none transition"
+                    />
+                    <p id="contador-resultados" class="text-sm text-gray-500 whitespace-nowrap"></p>
+                </div>
+                <div id="productos-lista" class="flex flex-wrap -m-4"></div>
+            </div>
         </div>
     </div>
-
-    <div id="productos-lista" class="container px-5 py-20 mx-auto flex flex-wrap -m-4"></div>
 
     <!-- Boton Ir Arriba -->
     <div class="z-50 fixed bottom-36 right-4 flex flex-col space-y-6 items-center">
@@ -906,8 +994,15 @@
         document.addEventListener("DOMContentLoaded", async () => {
             const contenedor = document.getElementById("productos-lista");
             const buscador = document.getElementById("buscador-productos");
-            const filtroBtns = document.querySelectorAll(".filtro-categoria");
+            const contadorResultados = document.getElementById("contador-resultados");
+            const tipoChecks = document.querySelectorAll(".filtro-tipo");
+            const destacadoCheck = document.getElementById("filtro-destacado");
+            const disponibleCheck = document.getElementById("filtro-disponible");
+            const precioMinInput = document.getElementById("precio-min");
+            const precioMaxInput = document.getElementById("precio-max");
             let productos = [];
+            let categoriaActual = "all";
+            const tiposSeleccionados = new Set();
 
             // Renderiza productos según filtro y búsqueda
             function renderProductos(lista) {
@@ -920,7 +1015,7 @@
                     let categoriaTag = p.featured ? 'DESTACADO' : (p.category === 'capilar' ? 'CAPILAR' : 'FACIAL');
                     let categoriaColor = p.featured ? 'bg-blue-500' : (p.category === 'capilar' ? 'bg-yellow-500' : 'bg-pink-500');
                     return `
-                        <div class="xl:w-1/4 md:w-1/2 p-4">
+                        <div class="xl:w-1/3 md:w-1/2 p-4">
                             <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-gray-100 h-full flex flex-col">
                                 <div class="relative">
                                     <img class="h-48 w-full object-cover object-center" src="${imageUrl}" alt="${p.name}">
@@ -1019,37 +1114,85 @@
                 const res = await fetch("https://aly-mbelleza-backend.onrender.com/api/products");
                 const { data } = await res.json();
                 productos = data;
-                renderProductos(productos);
+                filtrarYRenderizar();
             } catch (err) {
                 contenedor.innerHTML = `<div class="w-full text-center text-red-500 py-8">No se pudieron cargar los productos.</div>`;
             }
 
-            // Filtrado en tiempo real por nombre y categoría
-            let categoriaActual = "all";
-            buscador.addEventListener("input", () => {
-                filtrarYRenderizar();
-            });
-            filtroBtns.forEach(btn => {
-                btn.addEventListener("click", () => {
-                    categoriaActual = btn.getAttribute("data-categoria");
-                    filtroBtns.forEach(b => b.classList.remove("ring-2", "ring-purple-400"));
-                    btn.classList.add("ring-2", "ring-purple-400");
+            // Filtrado en tiempo real por nombre y filtros del sidebar
+            buscador.addEventListener("input", filtrarYRenderizar);
+
+            document.querySelectorAll('input[name="filtro-categoria"]').forEach(radio => {
+                radio.addEventListener("change", () => {
+                    categoriaActual = radio.value;
                     filtrarYRenderizar();
                 });
             });
 
+            tipoChecks.forEach(chk => {
+                chk.addEventListener("change", () => {
+                    if (chk.checked) tiposSeleccionados.add(chk.dataset.tipo);
+                    else tiposSeleccionados.delete(chk.dataset.tipo);
+                    filtrarYRenderizar();
+                });
+            });
+
+            destacadoCheck.addEventListener("change", filtrarYRenderizar);
+            disponibleCheck.addEventListener("change", filtrarYRenderizar);
+            precioMinInput.addEventListener("input", filtrarYRenderizar);
+            precioMaxInput.addEventListener("input", filtrarYRenderizar);
+
+            document.getElementById("limpiar-filtros").addEventListener("click", () => {
+                categoriaActual = "all";
+                tiposSeleccionados.clear();
+                buscador.value = "";
+                document.querySelector('input[name="filtro-categoria"][value="all"]').checked = true;
+                tipoChecks.forEach(chk => chk.checked = false);
+                destacadoCheck.checked = false;
+                disponibleCheck.checked = false;
+                precioMinInput.value = "";
+                precioMaxInput.value = "";
+                filtrarYRenderizar();
+            });
+
+            // Panel de filtros plegable en móvil
+            const toggleFiltros = document.getElementById("toggle-filtros");
+            const panelFiltros = document.getElementById("panel-filtros");
+            const toggleFiltrosIcon = document.getElementById("toggle-filtros-icon");
+            if (toggleFiltros) {
+                toggleFiltros.addEventListener("click", () => {
+                    panelFiltros.classList.toggle("hidden");
+                    toggleFiltrosIcon.classList.toggle("rotate-180");
+                });
+            }
+
             function filtrarYRenderizar() {
                 const texto = buscador.value.trim().toLowerCase();
                 let filtrados = productos.filter(p => p.name.toLowerCase().includes(texto));
+
                 if (categoriaActual !== "all") {
-                    filtrados = filtrados.filter(p => {
-                        if (categoriaActual === "DESTACADO") return p.featured;
-                        if (categoriaActual === "FACIAL") return p.category === "facial";
-                        if (categoriaActual === "CAPILAR") return p.category === "capilar";
-                        return true;
-                    });
+                    filtrados = filtrados.filter(p => p.category === categoriaActual);
                 }
+                if (tiposSeleccionados.size > 0) {
+                    filtrados = filtrados.filter(p => tiposSeleccionados.has(p.type || "otro"));
+                }
+                if (destacadoCheck.checked) {
+                    filtrados = filtrados.filter(p => p.featured);
+                }
+                if (disponibleCheck.checked) {
+                    filtrados = filtrados.filter(p => p.availability);
+                }
+                const precioMin = precioMinInput.value === "" ? null : Number(precioMinInput.value);
+                const precioMax = precioMaxInput.value === "" ? null : Number(precioMaxInput.value);
+                if (precioMin !== null && !Number.isNaN(precioMin)) {
+                    filtrados = filtrados.filter(p => p.price >= precioMin);
+                }
+                if (precioMax !== null && !Number.isNaN(precioMax)) {
+                    filtrados = filtrados.filter(p => p.price <= precioMax);
+                }
+
                 renderProductos(filtrados);
+                contadorResultados.textContent = `${filtrados.length} producto${filtrados.length === 1 ? "" : "s"} encontrado${filtrados.length === 1 ? "" : "s"}`;
             }
         });
     </script>

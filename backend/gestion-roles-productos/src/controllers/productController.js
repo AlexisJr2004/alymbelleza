@@ -4,7 +4,7 @@ const publicIdFromUrl = require('../utils/cloudinaryPublicId');
 
 exports.createProduct = async (req, res) => {
     try {
-        const { name, description, rating, availability, price, category, featured, originalPrice } = req.body;
+        const { name, description, rating, availability, price, category, type, featured, originalPrice } = req.body;
         let image = '';
         let imagePublicId;
         if (req.file && req.file.path) {
@@ -18,6 +18,7 @@ exports.createProduct = async (req, res) => {
             availability,
             price,
             category,
+            type,
             featured: featured === 'true' || featured === true,
             originalPrice,
             image,

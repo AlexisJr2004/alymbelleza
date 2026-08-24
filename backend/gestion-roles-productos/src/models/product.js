@@ -10,6 +10,11 @@ const productSchema = new mongoose.Schema({
     image: { type: String },
     imagePublicId: { type: String }, // public_id de Cloudinary, necesario para poder borrar la imagen real
     category: { type: String, enum: ['capilar', 'facial'], required: true },
+    type: {
+        type: String,
+        enum: ['shampoo', 'acondicionador', 'mascarilla', 'crema', 'serum', 'aceite', 'tratamiento', 'otro'],
+        default: 'otro',
+    },
     featured: { type: Boolean, default: false },
 }, { timestamps: true });
 
