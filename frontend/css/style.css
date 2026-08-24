@@ -310,16 +310,16 @@
     width: 44px;
     height: 44px;
     border-radius: 9999px;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(17, 24, 39, 0.08);
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
-    color: #ffffff;
+    color: #374151;
     transition: background-color 0.2s ease;
 }
 
 .testimonials-swiper .swiper-button-next:hover,
 .testimonials-swiper .swiper-button-prev:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(17, 24, 39, 0.14);
 }
 
 .testimonials-swiper .swiper-button-prev {
@@ -330,9 +330,11 @@
     right: 0;
 }
 
-.testimonials-swiper .swiper-button-next::after,
-.testimonials-swiper .swiper-button-prev::after {
-    content: none;
+/* Swiper inyecta su propio SVG de flecha como hijo del botón (no vía ::after);
+   se oculta porque el ícono real es el <i> de Font Awesome agregado en el HTML. */
+.testimonials-swiper .swiper-button-next .swiper-navigation-icon,
+.testimonials-swiper .swiper-button-prev .swiper-navigation-icon {
+    display: none;
 }
 
 .testimonials-swiper .swiper-button-next i,
