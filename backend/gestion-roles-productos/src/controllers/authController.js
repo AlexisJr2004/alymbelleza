@@ -228,6 +228,19 @@ exports.me = async (req, res) => {
   res.json({ user: req.user });
 };
 
+// Lista de usuarios registrados (panel de administrador)
+exports.getUsers = async (req, res) => {
+  try {
+    const users = await User.find()
+      .select('-password -resetPasswordToken -resetPasswordExpires')
+      .sort({ createdAt: -1 });
+    res.json({ success: true, data: users });
+  } catch (err) {
+    console.error('Error al obtener usuarios:', err);
+    res.status(500).json({ success: false, error: 'Error al obtener los usuarios.' });
+  }
+};
+
 exports.register = async (req, res) => {
   try {
     const { name, email, password, birthdate, gender, address, dni, phone } = req.body;

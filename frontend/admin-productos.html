@@ -487,10 +487,89 @@
         </aside>
     </header>
 
-    <!-- admin-productos.html -->
-    <section id="admin-productos" class="max-w-7xl mx-auto my-10 p-8 bg-white rounded-xl shadow-lg">
-        <div class="flex justify-between items-center mb-8">
-            <h2 class="text-3xl font-bold text-gray-800">
+    <!-- Panel de Administrador -->
+    <section id="admin-dashboard" class="bg-gray-50 min-h-screen py-10">
+        <div class="max-w-[1600px] mx-auto px-4 lg:px-8">
+
+            <!-- Encabezado -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+                <div>
+                    <p class="text-sm font-semibold text-purple-600 mb-1 tracking-wide uppercase">Panel de administrador</p>
+                    <h1 class="text-3xl font-bold text-gray-900">Hola, <span id="admin-nombre-saludo">Administrador</span></h1>
+                    <p class="text-gray-500 mt-1">Aquí tienes un resumen de la actividad de Bella Beauty.</p>
+                </div>
+                <div class="bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-600 shadow-sm capitalize" id="admin-fecha-actual"></div>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-6 items-start">
+
+                <!-- Navegación lateral -->
+                <aside class="w-full lg:w-64 shrink-0 lg:sticky lg:top-24">
+                    <nav id="admin-tabs-nav" class="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-visible bg-white rounded-xl border border-gray-200 shadow-sm p-2">
+                        <button type="button" data-tab="resumen" class="admin-tab-btn text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors">
+                            <i class="fas fa-chart-line w-4 text-center"></i> Resumen
+                        </button>
+                        <button type="button" data-tab="productos" class="admin-tab-btn text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors">
+                            <i class="fas fa-box-open w-4 text-center"></i> Productos
+                        </button>
+                        <button type="button" data-tab="cupones" class="admin-tab-btn text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors">
+                            <i class="fas fa-tags w-4 text-center"></i> Cupones
+                        </button>
+                        <button type="button" data-tab="pedidos" class="admin-tab-btn text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors">
+                            <i class="fas fa-receipt w-4 text-center"></i> Pedidos
+                        </button>
+                        <button type="button" data-tab="usuarios" class="admin-tab-btn text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors">
+                            <i class="fas fa-users w-4 text-center"></i> Usuarios
+                        </button>
+                        <button type="button" data-tab="citas" class="admin-tab-btn text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors">
+                            <i class="fas fa-calendar-check w-4 text-center"></i> Citas
+                        </button>
+                    </nav>
+                </aside>
+
+                <!-- Contenido -->
+                <div class="flex-1 min-w-0 w-full space-y-6">
+
+                    <!-- Resumen -->
+                    <div id="tab-resumen" class="admin-tab-panel space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" id="kpi-cards"></div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <div class="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-1">Ingresos de los últimos 6 meses</h3>
+                                <p class="text-sm text-gray-500 mb-6">Total facturado por mes según los pedidos registrados.</p>
+                                <div id="grafico-ingresos" class="flex items-end gap-3 h-48"></div>
+                            </div>
+                            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-1">Estado de las citas</h3>
+                                <p class="text-sm text-gray-500 mb-6">Distribución de todas las citas registradas.</p>
+                                <div id="grafico-citas" class="space-y-4"></div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                                <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                                    <h3 class="text-lg font-semibold text-gray-800">Últimos pedidos</h3>
+                                    <button type="button" data-tab-link="pedidos" class="text-sm text-purple-600 hover:text-purple-800 font-medium">Ver todos</button>
+                                </div>
+                                <div id="tabla-ultimos-pedidos" class="divide-y divide-gray-100"></div>
+                            </div>
+                            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                                <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                                    <h3 class="text-lg font-semibold text-gray-800">Últimos usuarios registrados</h3>
+                                    <button type="button" data-tab-link="usuarios" class="text-sm text-purple-600 hover:text-purple-800 font-medium">Ver todos</button>
+                                </div>
+                                <div id="tabla-ultimos-usuarios" class="divide-y divide-gray-100"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Productos -->
+                    <div id="tab-productos" class="admin-tab-panel hidden">
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 md:p-8">
+                        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-bold text-gray-800">
                 <i class="fas fa-box-open mr-2 text-purple-600"></i> Gestión de Productos
             </h2>
         </div>
@@ -625,15 +704,15 @@
         </form>
 
         <!-- Tabla mejorada -->
+        <div class="mb-4">
+            <div class="relative">
+                <input type="text" id="buscador-productos" placeholder="Buscar producto..."
+                    class="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full max-w-md">
+                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+            </div>
+        </div>
         <div class="overflow-x-auto rounded-xl border border-gray-200 shadow">
             <table class="min-w-full divide-y divide-gray-200">
-                <div class="mb-4">
-                    <div class="relative">
-                        <input type="text" id="buscador-productos" placeholder="Buscar producto..."
-                            class="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full max-w-md">
-                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                    </div>
-                </div>
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -656,12 +735,14 @@
             </table>
         </div>
         <div class="flex justify-center mt-4" id="paginacion-productos"></div>
-    </section>
+                    </div>
+                    </div> <!-- /tab-productos -->
 
-    <!-- Gestión de cupones de descuento -->
-    <section id="admin-cupones" class="max-w-7xl mx-auto my-10 p-8 bg-white rounded-xl shadow-lg">
-        <div class="flex justify-between items-center mb-8">
-            <h2 class="text-3xl font-bold text-gray-800">
+                    <!-- Cupones -->
+                    <div id="tab-cupones" class="admin-tab-panel hidden">
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 md:p-8">
+                        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-bold text-gray-800">
                 <i class="fas fa-tags mr-2 text-purple-600"></i> Gestión de Cupones
             </h2>
         </div>
@@ -761,6 +842,113 @@
                 <tbody id="tabla-cupones" class="bg-white divide-y divide-gray-200"></tbody>
             </table>
         </div>
+                    </div>
+                    </div> <!-- /tab-cupones -->
+
+                    <!-- Pedidos -->
+                    <div id="tab-pedidos" class="admin-tab-panel hidden">
+                        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 md:p-8">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                                <h2 class="text-2xl font-bold text-gray-800">
+                                    <i class="fas fa-receipt mr-2 text-purple-600"></i> Pedidos
+                                </h2>
+                                <div class="flex flex-wrap gap-3 text-sm">
+                                    <div class="bg-emerald-50 text-emerald-700 rounded-lg px-4 py-2">
+                                        <span class="font-semibold" id="pedidos-ingresos-total">$0.00</span> en ingresos
+                                    </div>
+                                    <div class="bg-purple-50 text-purple-700 rounded-lg px-4 py-2">
+                                        <span class="font-semibold" id="pedidos-total-count">0</span> pedidos
+                                    </div>
+                                    <div class="bg-pink-50 text-pink-700 rounded-lg px-4 py-2">
+                                        <span class="font-semibold" id="pedidos-descuentos-total">$0.00</span> en descuentos
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto rounded-xl border border-gray-200">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Productos</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cupón</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descuento</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla-pedidos" class="bg-white divide-y divide-gray-200"></tbody>
+                                </table>
+                            </div>
+                            <div class="flex justify-center mt-4" id="paginacion-pedidos"></div>
+                        </div>
+                    </div> <!-- /tab-pedidos -->
+
+                    <!-- Usuarios -->
+                    <div id="tab-usuarios" class="admin-tab-panel hidden">
+                        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 md:p-8">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                                <div>
+                                    <h2 class="text-2xl font-bold text-gray-800"><i class="fas fa-users mr-2 text-purple-600"></i>Usuarios registrados</h2>
+                                    <p class="text-sm text-gray-500 mt-1"><span id="usuarios-total-label">0</span> usuarios en total</p>
+                                </div>
+                                <div class="relative">
+                                    <input type="text" id="buscador-usuarios" placeholder="Buscar por nombre o email..."
+                                        class="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full md:w-72">
+                                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto rounded-xl border border-gray-200">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usuario</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teléfono</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rol</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registrado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla-usuarios" class="bg-white divide-y divide-gray-200"></tbody>
+                                </table>
+                            </div>
+                            <div class="flex justify-center mt-4" id="paginacion-usuarios"></div>
+                        </div>
+                    </div> <!-- /tab-usuarios -->
+
+                    <!-- Citas -->
+                    <div id="tab-citas" class="admin-tab-panel hidden">
+                        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 md:p-8">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                                <h2 class="text-2xl font-bold text-gray-800"><i class="fas fa-calendar-check mr-2 text-purple-600"></i>Citas</h2>
+                                <div class="flex flex-wrap gap-3 text-sm">
+                                    <div class="bg-amber-50 text-amber-700 rounded-lg px-4 py-2">
+                                        <span class="font-semibold" id="citas-pendientes-count">0</span> pendientes
+                                    </div>
+                                    <div class="bg-purple-50 text-purple-700 rounded-lg px-4 py-2">
+                                        <span class="font-semibold" id="citas-total-count">0</span> en total
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto rounded-xl border border-gray-200">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla-citas" class="bg-white divide-y divide-gray-200"></tbody>
+                                </table>
+                            </div>
+                            <div class="flex justify-center mt-4" id="paginacion-citas"></div>
+                        </div>
+                    </div> <!-- /tab-citas -->
+
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- Boton Ir Arriba -->
@@ -848,119 +1036,15 @@
         </div>
     </div>
 
-    <!-- Footer Section -->
-    <section
-        class="relative overflow-hidden before:absolute before:top-0 before:start-1/2 before:bg-[url('https://preline.co/assets/svg/examples/polygon-bg-element.svg')] before:bg-no-repeat before:bg-top before:bg-cover before:size-full before:-z-[1] before:transform before:-translate-x-1/2">
-        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-            <div class="space-y-8">
-                <!-- Logo and Newsletter -->
-                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-                    <div class="flex items-center space-x-3">
-                        <span
-                            class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                            Bella Beauty
-                        </span>
-                    </div>
-
-                    <div class="mt-8 lg:mt-0">
-                        <form class="flex flex-col sm:flex-row sm:gap-2">
-                            <input type="email"
-                                class="w-full rounded-full border-gray-300 bg-gray-100 px-5 py-3 placeholder-gray-500 focus:outline-none sm:max-w-xs"
-                                placeholder="Ingresa tu email para novedades">
-                            <button type="submit"
-                                class="mt-3 sm:mt-0 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition duration-300 px-4 py-2 rounded-full shadow-md hover:shadow-lg text-white">
-                                Suscribirse
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Links Section -->
-                <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
-                    <div class="space-y-3">
-                        <h3 class="text-sm font-semibold text-gray-900">Sobre Nosotros</h3>
-                        <p class="text-sm text-gray-600 leading-relaxed">
-                            Transformando la belleza en una experiencia única y personalizada.
-                        </p>
-                    </div>
-
-                    <div class="space-y-3">
-                        <h3 class="text-sm font-semibold text-gray-900">Navegación</h3>
-                        <ul class="space-y-2">
-                            <li><a href="#"
-                                    class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Inicio</a></li>
-                            <li><a href="#"
-                                    class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Servicios</a>
-                            </li>
-                            <li><a href="#"
-                                    class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Productos</a>
-                            </li>
-                            <li><a href="#"
-                                    class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Contacto</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="space-y-3">
-                        <h3 class="text-sm font-semibold text-gray-900">Servicios</h3>
-                        <ul class="space-y-2">
-                            <li><a href="#"
-                                    class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Tratamientos
-                                    Faciales</a></li>
-                            <li><a href="#" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Masajes
-                                    Terapéuticos</a></li>
-                            <li><a href="#"
-                                    class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Maquillaje
-                                    Profesional</a></li>
-                            <li><a href="#"
-                                    class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Consultoría</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="space-y-3">
-                        <h3 class="text-sm font-semibold text-gray-900">Contacto</h3>
-                        <ul class="space-y-2">
-                            <li class="text-sm text-gray-600">Av. Principal 123, Ciudad</li>
-                            <li class="text-sm text-gray-600">info@bellabeauty.com</li>
-                            <li class="text-sm text-gray-600">+1 234 567 890</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Footer Bottom -->
-                <div class="border-t border-gray-200 pt-8">
-                    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                        <p class="text-sm text-gray-500">
-                            © 2024 Bella Beauty. Todos los derechos reservados.
-                        </p>
-                        <div class="flex space-x-6 text-sm text-gray-500">
-                            <a href="#" class="hover:text-gray-900 transition-colors">Privacidad</a>
-                            <a href="#" class="hover:text-gray-900 transition-colors">Términos</a>
-                            <a href="#" class="hover:text-gray-900 transition-colors">Cookies</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- Footer del panel de administrador -->
+    <footer class="bg-white border-t border-gray-200">
+        <div class="max-w-[1600px] mx-auto px-4 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p class="text-sm text-gray-500">© 2024 Bella Beauty. Panel de administrador.</p>
+            <a href="index.html" class="text-sm text-purple-600 hover:text-purple-800 font-medium flex items-center gap-1.5">
+                <i class="fas fa-arrow-left text-xs"></i> Volver al sitio
+            </a>
         </div>
-        <svg width="100%" height="100%" id="svg" viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg"
-            class="transition duration-300 ease-in-out delay-150">
-            <defs>
-                <linearGradient id="gradient" x1="0%" y1="50%" x2="100%" y2="50%">
-                    <stop offset="5%" stop-color="#f7affa"></stop>
-                    <stop offset="95%" stop-color="#6dd5ed"></stop>
-                </linearGradient>
-            </defs>
-            <path
-                d="M 0,500 C 0,500 0,166 0,166 C 107.2153110047847,190.9665071770335 214.4306220095694,215.93301435406698 317,210 C 419.5693779904306,204.06698564593302 517.4928229665072,167.23444976076556 606,157 C 694.5071770334928,146.76555023923444 773.598086124402,163.12918660287082 866,164 C 958.401913875598,164.87081339712918 1064.1148325358852,150.2488038277512 1162,148 C 1259.8851674641148,145.7511961722488 1349.9425837320573,155.8755980861244 1440,166 C 1440,166 1440,500 1440,500 Z"
-                stroke="none" stroke-width="0" fill="url(#gradient)" fill-opacity="0.53"
-                class="transition-all duration-300 ease-in-out delay-150 path-0"></path>
-            <path
-                d="M 0,500 C 0,500 0,333 0,333 C 77.34928229665073,329.6794258373206 154.69856459330146,326.3588516746412 247,319 C 339.30143540669854,311.6411483253588 446.555023923445,300.24401913875596 540,316 C 633.444976076555,331.75598086124404 713.0813397129187,374.6650717703349 820,394 C 926.9186602870813,413.3349282296651 1061.1196172248804,409.0956937799043 1169,395 C 1276.8803827751196,380.9043062200957 1358.44019138756,356.95215311004785 1440,333 C 1440,333 1440,500 1440,500 Z"
-                stroke="none" stroke-width="0" fill="url(#gradient)" fill-opacity="1"
-                class="transition-all duration-300 ease-in-out delay-150 path-1"></path>
-        </svg>
-    </section>
+    </footer>
 
     <!-- Scripts para agregar productos nuevos -->
     <script>
@@ -1129,13 +1213,8 @@
             editandoId = null;
         };
 
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', () => {
-            paginaActual = Number(localStorage.getItem('paginaProductos')) || 1;
-            cargarProductos();
-        });
+        // La carga inicial de productos se dispara desde el bootstrap general del panel
 
-        // Cargar productos y DOMContentLoaded
         document.getElementById('buscador-productos').addEventListener('input', function () {
             const texto = this.value.toLowerCase();
             const filtrados = productosData.filter(p =>
@@ -1279,8 +1358,362 @@
         };
 
         cancelarCuponBtn.addEventListener('click', resetFormCupon);
+        // La carga inicial de cupones se dispara desde el bootstrap general del panel
+    </script>
 
-        document.addEventListener('DOMContentLoaded', cargarCupones);
+    <!-- Script del panel: pestañas, métricas del resumen, usuarios, pedidos y citas -->
+    <script>
+        const USERS_API_URL = "https://aly-mbelleza-backend.onrender.com/api/auth/users";
+        const ORDERS_API_URL = "https://aly-mbelleza-backend.onrender.com/api/orders";
+        const APPOINTMENTS_ADMIN_API_URL = "https://aly-mbelleza-backend.onrender.com/api/appointments/admin/all";
+
+        let usuariosData = [];
+        let pedidosData = [];
+        let citasAdminData = [];
+
+        let paginaUsuarios = 1;
+        const usuariosPorPagina = 8;
+        let paginaPedidos = 1;
+        const pedidosPorPagina = 6;
+        let paginaCitasAdmin = 1;
+        const citasAdminPorPagina = 8;
+
+        function formatoMoneda(valor) {
+            return `$${Number(valor || 0).toFixed(2)}`;
+        }
+
+        function formatoFechaCorta(fecha) {
+            return new Date(fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        function renderizarPaginacionGenerica(contenedorId, totalItems, porPagina, paginaActiva, onClick) {
+            const totalPaginas = Math.ceil(totalItems / porPagina);
+            const contenedor = document.getElementById(contenedorId);
+            contenedor.innerHTML = '';
+            if (totalPaginas <= 1) return;
+            for (let i = 1; i <= totalPaginas; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                btn.className = `mx-1 px-3 py-1 rounded ${i === paginaActiva ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'} transition`;
+                btn.addEventListener('click', () => onClick(i));
+                contenedor.appendChild(btn);
+            }
+        }
+
+        // ---------- Pestañas ----------
+        const INACTIVE_TAB_CLASSES = ['text-gray-600', 'hover:bg-gray-50', 'hover:text-gray-900'];
+        const ACTIVE_TAB_CLASSES = ['bg-purple-50', 'text-purple-700'];
+
+        function activarTab(nombre) {
+            document.querySelectorAll('.admin-tab-panel').forEach(panel => {
+                panel.classList.toggle('hidden', panel.id !== `tab-${nombre}`);
+            });
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+                const activo = btn.dataset.tab === nombre;
+                btn.classList.remove(...INACTIVE_TAB_CLASSES, ...ACTIVE_TAB_CLASSES);
+                btn.classList.add(...(activo ? ACTIVE_TAB_CLASSES : INACTIVE_TAB_CLASSES));
+            });
+            localStorage.setItem('adminTabActiva', nombre);
+        }
+
+        document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => activarTab(btn.dataset.tab));
+        });
+        document.querySelectorAll('[data-tab-link]').forEach(btn => {
+            btn.addEventListener('click', () => activarTab(btn.dataset.tabLink));
+        });
+
+        // ---------- Usuarios ----------
+        async function cargarUsuariosAdmin() {
+            try {
+                const res = await fetch(USERS_API_URL, { headers: { Authorization: `Bearer ${user.token}` } });
+                const data = await res.json().catch(() => ({}));
+                usuariosData = data.data || [];
+            } catch (err) {
+                usuariosData = [];
+            }
+            document.getElementById('usuarios-total-label').textContent = usuariosData.length;
+            mostrarPaginaUsuarios(1);
+        }
+
+        function mostrarPaginaUsuarios(pagina, lista = usuariosData) {
+            paginaUsuarios = pagina;
+            const tabla = document.getElementById('tabla-usuarios');
+            const inicio = (pagina - 1) * usuariosPorPagina;
+            const usuariosPagina = lista.slice(inicio, inicio + usuariosPorPagina);
+            tabla.innerHTML = usuariosPagina.length ? usuariosPagina.map(u => {
+                const rolBadge = u.role === 'admin'
+                    ? '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-700">Administrador</span>'
+                    : '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600">Cliente</span>';
+                return `
+                    <tr>
+                        <td class="p-3 pl-6 font-semibold">${u.name || '—'}</td>
+                        <td class="p-3">${u.email || '—'}</td>
+                        <td class="p-3">${u.phone || '—'}</td>
+                        <td class="p-3">${rolBadge}</td>
+                        <td class="p-3">${formatoFechaCorta(u.createdAt)}</td>
+                    </tr>
+                `;
+            }).join('') : `<tr><td colspan="5" class="p-6 text-center text-gray-400">No se encontraron usuarios.</td></tr>`;
+            renderizarPaginacionGenerica('paginacion-usuarios', lista.length, usuariosPorPagina, paginaUsuarios, (p) => mostrarPaginaUsuarios(p, lista));
+        }
+
+        document.getElementById('buscador-usuarios').addEventListener('input', function () {
+            const texto = this.value.toLowerCase();
+            const filtrados = usuariosData.filter(u =>
+                (u.name || '').toLowerCase().includes(texto) || (u.email || '').toLowerCase().includes(texto)
+            );
+            mostrarPaginaUsuarios(1, filtrados);
+        });
+
+        // ---------- Pedidos ----------
+        async function cargarPedidosAdmin() {
+            try {
+                const res = await fetch(ORDERS_API_URL, { headers: { Authorization: `Bearer ${user.token}` } });
+                const data = await res.json().catch(() => ({}));
+                pedidosData = data.data || [];
+            } catch (err) {
+                pedidosData = [];
+            }
+            const ingresos = pedidosData.reduce((sum, o) => sum + (o.total || 0), 0);
+            const descuentos = pedidosData.reduce((sum, o) => sum + (o.discount || 0), 0);
+            document.getElementById('pedidos-ingresos-total').textContent = formatoMoneda(ingresos);
+            document.getElementById('pedidos-total-count').textContent = pedidosData.length;
+            document.getElementById('pedidos-descuentos-total').textContent = formatoMoneda(descuentos);
+            mostrarPaginaPedidos(1);
+        }
+
+        function mostrarPaginaPedidos(pagina, lista = pedidosData) {
+            paginaPedidos = pagina;
+            const tabla = document.getElementById('tabla-pedidos');
+            const inicio = (pagina - 1) * pedidosPorPagina;
+            const pedidosPagina = lista.slice(inicio, inicio + pedidosPorPagina);
+            tabla.innerHTML = pedidosPagina.length ? pedidosPagina.map(o => {
+                const cliente = o.user
+                    ? `${o.user.name || 'Cliente'}<br><span class="text-xs text-gray-400">${o.user.email || ''}</span>`
+                    : 'Cliente eliminado';
+                const productos = (o.items || []).map(i => `${i.cantidad}× ${i.name}`).join(', ');
+                return `
+                    <tr>
+                        <td class="p-3 pl-6">${cliente}</td>
+                        <td class="p-3 max-w-xs truncate" title="${productos.replace(/"/g, '&quot;')}">${productos}</td>
+                        <td class="p-3">${o.couponCode ? `<span class="px-2 py-1 text-xs font-semibold rounded-full bg-pink-100 text-pink-700">${o.couponCode}</span>` : '—'}</td>
+                        <td class="p-3">${o.discount ? '-' + formatoMoneda(o.discount) : '—'}</td>
+                        <td class="p-3 font-semibold text-purple-700">${formatoMoneda(o.total)}</td>
+                        <td class="p-3">${formatoFechaCorta(o.createdAt)}</td>
+                    </tr>
+                `;
+            }).join('') : `<tr><td colspan="6" class="p-6 text-center text-gray-400">Todavía no hay pedidos registrados.</td></tr>`;
+            renderizarPaginacionGenerica('paginacion-pedidos', lista.length, pedidosPorPagina, paginaPedidos, (p) => mostrarPaginaPedidos(p, lista));
+        }
+
+        // ---------- Citas (vista de administrador) ----------
+        function badgeEstadoCita(estado) {
+            if (estado === 'realizada') return '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700">Realizada</span>';
+            if (estado === 'cancelada') return '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-rose-100 text-rose-700">Cancelada</span>';
+            return '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-amber-100 text-amber-700">Pendiente</span>';
+        }
+
+        async function cargarCitasAdmin() {
+            try {
+                const res = await fetch(APPOINTMENTS_ADMIN_API_URL, { headers: { Authorization: `Bearer ${user.token}` } });
+                const data = await res.json().catch(() => ({}));
+                citasAdminData = data.appointments || [];
+            } catch (err) {
+                citasAdminData = [];
+            }
+            document.getElementById('citas-pendientes-count').textContent = citasAdminData.filter(c => (c.status || 'pendiente') === 'pendiente').length;
+            document.getElementById('citas-total-count').textContent = citasAdminData.length;
+            mostrarPaginaCitasAdmin(1);
+        }
+
+        function mostrarPaginaCitasAdmin(pagina, lista = citasAdminData) {
+            paginaCitasAdmin = pagina;
+            const tabla = document.getElementById('tabla-citas');
+            const inicio = (pagina - 1) * citasAdminPorPagina;
+            const citasPagina = lista.slice(inicio, inicio + citasAdminPorPagina);
+            tabla.innerHTML = citasPagina.length ? citasPagina.map(c => {
+                const cliente = c.user
+                    ? `${c.user.name || 'Cliente'}<br><span class="text-xs text-gray-400">${c.user.email || ''}</span>`
+                    : 'Cliente eliminado';
+                const estado = c.status || 'pendiente';
+                const acciones = estado === 'pendiente' ? `
+                    <div class="flex items-center gap-2 justify-end">
+                        <button type="button" class="cita-admin-realizada text-emerald-600 hover:text-emerald-800 p-2 rounded-full bg-emerald-50 hover:bg-emerald-100 transition" data-id="${c._id}" title="Marcar como realizada">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button type="button" class="cita-admin-cancelar text-rose-600 hover:text-rose-800 p-2 rounded-full bg-rose-50 hover:bg-rose-100 transition" data-id="${c._id}" title="Cancelar">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                ` : '<span class="text-gray-300 text-sm">—</span>';
+                return `
+                    <tr>
+                        <td class="p-3 pl-6">${cliente}</td>
+                        <td class="p-3">${formatoFechaCorta(c.date)}</td>
+                        <td class="p-3">${badgeEstadoCita(estado)}</td>
+                        <td class="p-3 text-right pr-6">${acciones}</td>
+                    </tr>
+                `;
+            }).join('') : `<tr><td colspan="4" class="p-6 text-center text-gray-400">No hay citas registradas.</td></tr>`;
+
+            document.querySelectorAll('.cita-admin-realizada').forEach(btn => {
+                btn.addEventListener('click', () => cambiarEstadoCitaAdmin(btn.dataset.id, 'realizada'));
+            });
+            document.querySelectorAll('.cita-admin-cancelar').forEach(btn => {
+                btn.addEventListener('click', () => cambiarEstadoCitaAdmin(btn.dataset.id, 'cancelada'));
+            });
+            renderizarPaginacionGenerica('paginacion-citas', lista.length, citasAdminPorPagina, paginaCitasAdmin, (p) => mostrarPaginaCitasAdmin(p, lista));
+        }
+
+        async function cambiarEstadoCitaAdmin(id, status) {
+            await fetch(`https://aly-mbelleza-backend.onrender.com/api/appointments/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.token}` },
+                body: JSON.stringify({ status }),
+            });
+            const cita = citasAdminData.find(c => c._id === id);
+            if (cita) cita.status = status;
+            document.getElementById('citas-pendientes-count').textContent = citasAdminData.filter(c => (c.status || 'pendiente') === 'pendiente').length;
+            mostrarPaginaCitasAdmin(paginaCitasAdmin);
+            renderizarResumen();
+        }
+
+        // ---------- Resumen (dashboard) ----------
+        function renderizarResumen() {
+            const ingresos = pedidosData.reduce((sum, o) => sum + (o.total || 0), 0);
+            const descuentos = pedidosData.reduce((sum, o) => sum + (o.discount || 0), 0);
+            const productosAgotados = productosData.filter(p => !p.availability).length;
+            const cuponesActivos = cuponesData.filter(c => c.active).length;
+            const citasPendientes = citasAdminData.filter(c => (c.status || 'pendiente') === 'pendiente').length;
+
+            const hoy = new Date();
+            const usuariosEsteMes = usuariosData.filter(u => {
+                const f = new Date(u.createdAt);
+                return f.getMonth() === hoy.getMonth() && f.getFullYear() === hoy.getFullYear();
+            }).length;
+
+            const tarjetas = [
+                { icono: 'fa-sack-dollar', color: 'emerald', valor: formatoMoneda(ingresos), etiqueta: 'Ingresos totales', sub: `${pedidosData.length} pedidos registrados` },
+                { icono: 'fa-receipt', color: 'purple', valor: pedidosData.length, etiqueta: 'Pedidos', sub: `${formatoMoneda(descuentos)} en descuentos aplicados` },
+                { icono: 'fa-users', color: 'blue', valor: usuariosData.length, etiqueta: 'Usuarios registrados', sub: `${usuariosEsteMes} nuevos este mes` },
+                { icono: 'fa-box-open', color: 'pink', valor: productosData.length, etiqueta: 'Productos', sub: `${productosAgotados} agotados` },
+                { icono: 'fa-tags', color: 'amber', valor: `${cuponesActivos}/${cuponesData.length}`, etiqueta: 'Cupones activos', sub: `${cuponesData.length} creados en total` },
+                { icono: 'fa-calendar-check', color: 'indigo', valor: citasAdminData.length, etiqueta: 'Citas registradas', sub: `${citasPendientes} pendientes` },
+            ];
+            const colores = {
+                emerald: 'bg-emerald-50 text-emerald-600',
+                purple: 'bg-purple-50 text-purple-600',
+                blue: 'bg-blue-50 text-blue-600',
+                pink: 'bg-pink-50 text-pink-600',
+                amber: 'bg-amber-50 text-amber-600',
+                indigo: 'bg-indigo-50 text-indigo-600',
+            };
+            document.getElementById('kpi-cards').innerHTML = tarjetas.map(t => `
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex items-start gap-4">
+                    <div class="w-11 h-11 rounded-lg flex items-center justify-center shrink-0 ${colores[t.color]}">
+                        <i class="fas ${t.icono}"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-2xl font-bold text-gray-900 leading-tight">${t.valor}</p>
+                        <p class="text-sm font-medium text-gray-700">${t.etiqueta}</p>
+                        <p class="text-xs text-gray-400 mt-0.5">${t.sub}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Ingresos de los últimos 6 meses
+            const meses = [];
+            for (let i = 5; i >= 0; i--) {
+                const d = new Date(hoy.getFullYear(), hoy.getMonth() - i, 1);
+                meses.push({ year: d.getFullYear(), month: d.getMonth(), label: d.toLocaleDateString('es-ES', { month: 'short' }), total: 0 });
+            }
+            pedidosData.forEach(o => {
+                const f = new Date(o.createdAt);
+                const mes = meses.find(m => m.year === f.getFullYear() && m.month === f.getMonth());
+                if (mes) mes.total += (o.total || 0);
+            });
+            const maxTotal = Math.max(...meses.map(m => m.total), 1);
+            document.getElementById('grafico-ingresos').innerHTML = meses.map(m => `
+                <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+                    <span class="text-xs font-semibold text-gray-600">${m.total > 0 ? formatoMoneda(m.total) : ''}</span>
+                    <div class="w-full bg-gradient-to-t from-purple-600 to-pink-500 rounded-t-md transition-all" style="height: ${Math.max((m.total / maxTotal) * 100, 3)}%"></div>
+                    <span class="text-xs text-gray-400 capitalize">${m.label}</span>
+                </div>
+            `).join('');
+
+            // Distribución de citas por estado
+            const estados = [
+                { key: 'pendiente', label: 'Pendientes', color: 'bg-amber-500' },
+                { key: 'realizada', label: 'Realizadas', color: 'bg-emerald-500' },
+                { key: 'cancelada', label: 'Canceladas', color: 'bg-rose-500' },
+            ];
+            const totalCitas = citasAdminData.length || 1;
+            document.getElementById('grafico-citas').innerHTML = estados.map(e => {
+                const count = citasAdminData.filter(c => (c.status || 'pendiente') === e.key).length;
+                const pct = Math.round((count / totalCitas) * 100);
+                return `
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-600">${e.label}</span>
+                            <span class="font-semibold text-gray-800">${count}</span>
+                        </div>
+                        <div class="w-full bg-gray-100 rounded-full h-2">
+                            <div class="${e.color} h-2 rounded-full transition-all" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Últimos pedidos
+            const ultimosPedidos = pedidosData.slice(0, 5);
+            document.getElementById('tabla-ultimos-pedidos').innerHTML = ultimosPedidos.length
+                ? ultimosPedidos.map(o => `
+                    <div class="flex items-center justify-between px-6 py-3">
+                        <div class="min-w-0">
+                            <p class="text-sm font-medium text-gray-800 truncate">${o.user?.name || 'Cliente'}</p>
+                            <p class="text-xs text-gray-400">${formatoFechaCorta(o.createdAt)}</p>
+                        </div>
+                        <span class="text-sm font-semibold text-purple-700">${formatoMoneda(o.total)}</span>
+                    </div>
+                `).join('')
+                : `<p class="text-sm text-gray-400 px-6 py-6 text-center">Todavía no hay pedidos.</p>`;
+
+            // Últimos usuarios registrados
+            const ultimosUsuarios = usuariosData.slice(0, 5);
+            document.getElementById('tabla-ultimos-usuarios').innerHTML = ultimosUsuarios.length
+                ? ultimosUsuarios.map(u => `
+                    <div class="flex items-center justify-between px-6 py-3">
+                        <div class="min-w-0">
+                            <p class="text-sm font-medium text-gray-800 truncate">${u.name || 'Usuario'}</p>
+                            <p class="text-xs text-gray-400 truncate">${u.email || ''}</p>
+                        </div>
+                        <span class="text-xs text-gray-400 shrink-0 ml-2">${formatoFechaCorta(u.createdAt)}</span>
+                    </div>
+                `).join('')
+                : `<p class="text-sm text-gray-400 px-6 py-6 text-center">Todavía no hay usuarios.</p>`;
+        }
+
+        // ---------- Arranque del panel ----------
+        document.addEventListener('DOMContentLoaded', async () => {
+            document.getElementById('admin-nombre-saludo').textContent = (user?.name || 'Administrador').split(' ')[0];
+            document.getElementById('admin-fecha-actual').textContent = new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+            activarTab(localStorage.getItem('adminTabActiva') || 'resumen');
+
+            try {
+                await Promise.all([
+                    cargarProductos(),
+                    cargarCupones(),
+                    cargarUsuariosAdmin(),
+                    cargarPedidosAdmin(),
+                    cargarCitasAdmin(),
+                ]);
+                renderizarResumen();
+            } catch (err) {
+                console.error('Error al inicializar el panel de administrador:', err);
+            }
+        });
     </script>
 
     <!-- Script para vista previa de imagen -->

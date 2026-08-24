@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Appointment = require('../models/appointment');
-const { verifyToken } = require('../middlewares/authMiddleware');
+const { verifyToken, authorize } = require('../middlewares/authMiddleware');
 
 // Crear cita
 router.post('/', verifyToken, async (req, res) => {
@@ -18,17 +18,22 @@ router.get('/', verifyToken, async (req, res) => {
   res.json({ success: true, appointments });
 });
 
-// Cambiar estado
+// Listar todas las citas de todos los clientes (panel de administrador)
+router.get('/admin/all', verifyToken, authorize('admin'), async (req, res) => {
+  const appointments = await Appointment.find().populate('user', 'name email').sort({ date: -1 });
+  res.json({ success: true, appointments });
+});
+
+// Cambiar estado (el admin puede cambiar el estado de la cita de cualquier cliente)
 router.patch('/:id', verifyToken, async (req, res) => {
   const { status } = req.body;
   if (!['pendiente', 'realizada', 'cancelada'].includes(status)) {
     return res.status(400).json({ success: false, message: 'Estado inválido' });
   }
-  const appointment = await Appointment.findOneAndUpdate(
-    { _id: req.params.id, user: req.user._id },
-    { status },
-    { new: true }
-  );
+  const filter = req.user.role === 'admin'
+    ? { _id: req.params.id }
+    : { _id: req.params.id, user: req.user._id };
+  const appointment = await Appointment.findOneAndUpdate(filter, { status }, { new: true });
   res.json({ success: true, appointment });
 });
 

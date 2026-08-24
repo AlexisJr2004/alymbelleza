@@ -85,3 +85,16 @@ exports.createOrder = async (req, res) => {
     res.status(500).json({ success: false, error: 'Error al procesar la orden.' });
   }
 };
+
+// Lista todas las órdenes (panel de administrador)
+exports.getOrders = async (req, res) => {
+  try {
+    const orders = await Order.find()
+      .populate('user', 'name email')
+      .sort({ createdAt: -1 });
+    res.json({ success: true, data: orders });
+  } catch (err) {
+    console.error('Error al obtener las órdenes:', err);
+    res.status(500).json({ success: false, error: 'Error al obtener las órdenes.' });
+  }
+};

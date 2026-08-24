@@ -97,3 +97,20 @@ describe('orderController.createOrder', () => {
     expect(Order.create).not.toHaveBeenCalled();
   });
 });
+
+describe('orderController.getOrders', () => {
+  afterEach(() => jest.clearAllMocks());
+
+  it('devuelve la lista de órdenes con los datos del cliente poblados', async () => {
+    const ordenes = [{ _id: 'o1', user: { name: 'Cliente', email: 'c@test.com' }, total: 36 }];
+    const sortMock = jest.fn().mockResolvedValue(ordenes);
+    const populateMock = jest.fn().mockReturnValue({ sort: sortMock });
+    Order.find.mockReturnValue({ populate: populateMock });
+
+    const res = mockRes();
+    await orderController.getOrders({}, res);
+
+    expect(populateMock).toHaveBeenCalledWith('user', 'name email');
+    expect(res.json).toHaveBeenCalledWith({ success: true, data: ordenes });
+  });
+});
