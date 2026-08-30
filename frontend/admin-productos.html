@@ -200,7 +200,7 @@
             </div>
         </header>
 
-        <main class="p-4 lg:p-6 max-w-[1600px] mx-auto">
+        <main class="p-4 lg:p-6 max-w-[1920px] mx-auto">
             <div class="mb-6">
                 <h1 class="text-2xl font-bold text-gray-900">Hola, <span id="admin-nombre-saludo">Administrador</span></h1>
                 <p class="text-gray-500 mt-1">Aquí tienes un resumen de la actividad de Bella Beauty.</p>
@@ -290,6 +290,27 @@
                             </div>
                             <div id="tabla-ultimos-pedidos" class="divide-y divide-gray-100"></div>
                         </div>
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 overflow-hidden">
+                            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                                <h3 class="text-base font-semibold text-gray-800">Tarjetas de pago</h3>
+                                <button type="button" data-tab-link="tarjetas"
+                                    class="text-sm text-purple-600 hover:text-purple-800 font-medium">Ver todas</button>
+                            </div>
+                            <div class="p-6">
+                                <div id="resumen-tarjeta-preview"></div>
+                                <div class="flex items-center justify-between mt-4">
+                                    <button type="button" id="resumen-tarjeta-prev"
+                                        class="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition">
+                                        <i class="fas fa-chevron-left text-xs"></i>
+                                    </button>
+                                    <span class="text-xs text-gray-400" id="resumen-tarjeta-contador">0 / 0</span>
+                                    <button type="button" id="resumen-tarjeta-next"
+                                        class="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition">
+                                        <i class="fas fa-chevron-right text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -354,389 +375,448 @@
 
             <!-- Productos -->
             <div id="tab-productos" class="admin-tab-panel hidden">
-                <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6 md:p-8">
-                    <div class="flex justify-between items-center mb-8">
-                        <h2 class="text-2xl font-bold text-gray-800">
-                            <i class="fas fa-box-open mr-2 text-purple-600"></i> Gestión de Productos
-                        </h2>
-                    </div>
+                <div class="flex flex-col lg:flex-row items-start gap-6">
+                    <!-- Formulario compacto -->
+                    <aside class="w-full lg:w-96 shrink-0">
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5 lg:sticky lg:top-20">
+                            <h2 class="text-lg font-bold text-gray-800 mb-4">
+                                <i class="fas fa-box-open mr-2 text-purple-600"></i> Nuevo Producto
+                            </h2>
+                            <form id="form-producto" enctype="multipart/form-data" class="space-y-4">
+                                <input type="hidden" id="producto-id" name="id">
 
-                    <!-- Formulario mejorado -->
-                    <form id="form-producto" enctype="multipart/form-data"
-                        class="mb-8 bg-gray-50 p-6 rounded-xl border border-gray-200">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <input type="hidden" id="producto-id" name="id">
-
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Nombre del Producto</label>
-                                <div class="relative">
-                                    <i class="fas fa-tag absolute left-3 top-3 text-gray-400"></i>
-                                    <input type="text" id="nombre" name="name" required
-                                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                                        placeholder="Ej: Camiseta Premium">
-                                </div>
-                            </div>
-
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Precio</label>
-                                <div class="relative">
-                                    <i class="fas fa-dollar-sign absolute left-3 top-3 text-gray-400"></i>
-                                    <input type="number" id="precio" name="price" required min="0" step="0.01"
-                                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                                        placeholder="0.00">
-                                </div>
-                            </div>
-
-                            <div class="md:col-span-2 space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Descripción</label>
-                                <textarea id="descripcion" name="description" required rows="3"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                                    placeholder="Descripción detallada del producto..."></textarea>
-                            </div>
-
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Categoría</label>
-                                <div class="relative">
-                                    <i class="fas fa-list-alt absolute left-3 top-3 text-gray-400"></i>
-                                    <select id="categoria" name="category" required
-                                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
-                                        <option value="">Seleccione categoría</option>
-                                        <option value="capilar">Productos Capilares</option>
-                                        <option value="facial">Productos Faciales</option>
-                                    </select>
-                                    <i class="fas fa-chevron-down absolute right-3 top-3 text-gray-400"></i>
-                                </div>
-                            </div>
-
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Tipo de producto</label>
-                                <div class="relative">
-                                    <i class="fas fa-flask absolute left-3 top-3 text-gray-400"></i>
-                                    <select id="tipo" name="type"
-                                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
-                                        <option value="shampoo">Shampoo</option>
-                                        <option value="acondicionador">Acondicionador</option>
-                                        <option value="mascarilla">Mascarilla</option>
-                                        <option value="crema">Crema</option>
-                                        <option value="serum">Sérum</option>
-                                        <option value="aceite">Aceite</option>
-                                        <option value="tratamiento">Tratamiento</option>
-                                        <option value="otro" selected>Otro</option>
-                                    </select>
-                                    <i class="fas fa-chevron-down absolute right-3 top-3 text-gray-400"></i>
-                                </div>
-                            </div>
-
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">¿Producto Destacado?</label>
-                                <div>
-                                    <label class="inline-flex items-center">
-                                        <input type="checkbox" id="destacado" name="featured" value="true"
-                                            class="text-blue-600 focus:ring-blue-500">
-                                        <span class="ml-2">Marcar como destacado</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Precio Anterior (opcional)</label>
-                                <input type="number" id="precio-anterior" name="originalPrice" min="0" step="0.01"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                                    placeholder="Precio anterior si está en oferta">
-                            </div>
-
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Calificación</label>
-                                <div class="flex items-center">
-                                    <input type="number" id="calificacion" name="rating" min="0" max="5" step="0.1"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                                        placeholder="0-5">
-                                    <div class="ml-2 flex text-yellow-400">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
+                                <div class="space-y-1.5">
+                                    <label class="block text-sm font-medium text-gray-700">Nombre del Producto</label>
+                                    <div class="relative">
+                                        <i class="fas fa-tag absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                                        <input type="text" id="nombre" name="name" required
+                                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                            placeholder="Ej: Camiseta Premium">
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Disponibilidad</label>
-                                <div class="flex items-center space-x-4">
-                                    <label class="inline-flex items-center">
-                                        <input type="radio" name="availability" value="true" checked
-                                            class="text-purple-600 focus:ring-purple-500">
-                                        <span class="ml-2">Disponible</span>
-                                    </label>
-                                    <label class="inline-flex items-center">
-                                        <input type="radio" name="availability" value="false"
-                                            class="text-purple-600 focus:ring-purple-500">
-                                        <span class="ml-2">Agotado</span>
-                                    </label>
+                                <div class="space-y-1.5">
+                                    <label class="block text-sm font-medium text-gray-700">Precio</label>
+                                    <div class="relative">
+                                        <i class="fas fa-dollar-sign absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                                        <input type="number" id="precio" name="price" required min="0" step="0.01"
+                                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                            placeholder="0.00">
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="md:col-span-2 space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Imagen del Producto</label>
-                                <div class="flex items-center justify-center w-full">
+                                <div class="space-y-1.5">
+                                    <label class="block text-sm font-medium text-gray-700">Descripción</label>
+                                    <textarea id="descripcion" name="description" required rows="2"
+                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                        placeholder="Descripción detallada del producto..."></textarea>
+                                </div>
+
+                                <div class="space-y-1.5">
+                                    <label class="block text-sm font-medium text-gray-700">Categoría</label>
+                                    <div class="relative">
+                                        <i class="fas fa-list-alt absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                                        <select id="categoria" name="category" required
+                                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
+                                            <option value="">Seleccione categoría</option>
+                                            <option value="capilar">Productos Capilares</option>
+                                            <option value="facial">Productos Faciales</option>
+                                        </select>
+                                        <i class="fas fa-chevron-down absolute right-3 top-2.5 text-gray-400 text-xs"></i>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-1.5">
+                                    <label class="block text-sm font-medium text-gray-700">Tipo de producto</label>
+                                    <div class="relative">
+                                        <i class="fas fa-flask absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                                        <select id="tipo" name="type"
+                                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
+                                            <option value="shampoo">Shampoo</option>
+                                            <option value="acondicionador">Acondicionador</option>
+                                            <option value="mascarilla">Mascarilla</option>
+                                            <option value="crema">Crema</option>
+                                            <option value="serum">Sérum</option>
+                                            <option value="aceite">Aceite</option>
+                                            <option value="tratamiento">Tratamiento</option>
+                                            <option value="otro" selected>Otro</option>
+                                        </select>
+                                        <i class="fas fa-chevron-down absolute right-3 top-2.5 text-gray-400 text-xs"></i>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-1.5">
+                                    <label class="block text-sm font-medium text-gray-700">Precio Anterior (opcional)</label>
+                                    <input type="number" id="precio-anterior" name="originalPrice" min="0" step="0.01"
+                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                        placeholder="Precio anterior si está en oferta">
+                                </div>
+
+                                <div class="space-y-1.5">
+                                    <label class="block text-sm font-medium text-gray-700">Calificación</label>
+                                    <input type="number" id="calificacion" name="rating" min="0" max="5" step="0.1"
+                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                        placeholder="0-5">
+                                </div>
+
+                                <div class="flex items-center justify-between pt-1">
+                                    <label class="inline-flex items-center text-sm">
+                                        <input type="checkbox" id="destacado" name="featured" value="true"
+                                            class="text-blue-600 focus:ring-blue-500">
+                                        <span class="ml-2">Destacado</span>
+                                    </label>
+                                    <div class="flex items-center gap-3 text-sm">
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="availability" value="true" checked
+                                                class="text-purple-600 focus:ring-purple-500">
+                                            <span class="ml-1.5">Disponible</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="availability" value="false"
+                                                class="text-purple-600 focus:ring-purple-500">
+                                            <span class="ml-1.5">Agotado</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-1.5">
+                                    <label class="block text-sm font-medium text-gray-700">Imagen del Producto</label>
                                     <label for="imagen"
-                                        class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
-                                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                            <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
-                                            <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click para
-                                                    subir</span> o arrastra la imagen</p>
-                                            <p class="text-xs text-gray-500">PNG, JPG o JPEG (MAX. 5MB)</p>
-                                        </div>
+                                        class="flex items-center gap-3 w-full px-3 py-2.5 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
+                                        <i class="fas fa-cloud-upload-alt text-xl text-gray-400"></i>
+                                        <span class="text-xs text-gray-500">Click para subir o arrastra la imagen (PNG/JPG, máx. 5MB)</span>
                                         <input id="imagen" name="image" type="file" accept="image/*" class="hidden">
                                     </label>
+                                    <div id="imagen-preview" class="hidden">
+                                        <img id="preview-img" src="#" alt="Vista previa" class="h-20 rounded-lg border">
+                                    </div>
                                 </div>
-                                <div id="imagen-preview" class="mt-2 hidden">
-                                    <img id="preview-img" src="#" alt="Vista previa" class="h-24 rounded-lg border">
+
+                                <div class="flex justify-end gap-2 pt-3 border-t border-gray-200">
+                                    <button type="button" id="cancelar-edicion"
+                                        class="px-4 py-2 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors hidden">
+                                        <i class="fas fa-times mr-1.5"></i> Cancelar
+                                    </button>
+                                    <button type="submit"
+                                        class="flex-1 px-4 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center">
+                                        <i class="fas fa-save mr-1.5"></i> Guardar Producto
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </aside>
+
+                    <!-- Listado -->
+                    <div class="flex-1 min-w-0 w-full">
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6 md:p-8">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                                <h2 class="text-2xl font-bold text-gray-800">
+                                    <i class="fas fa-box-open mr-2 text-purple-600"></i> Productos
+                                </h2>
+                                <div class="relative">
+                                    <input type="text" id="buscador-productos" placeholder="Buscar producto..."
+                                        class="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full md:w-72">
+                                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
-                            <button type="button" id="cancelar-edicion"
-                                class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors hidden">
-                                <i class="fas fa-times mr-2"></i> Cancelar
-                            </button>
-                            <button type="submit"
-                                class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center">
-                                <i class="fas fa-save mr-2"></i> Guardar Producto
-                            </button>
-                        </div>
-                    </form>
+                            <div class="flex flex-wrap items-center gap-3 mb-5">
+                                <select id="productos-filtro-categoria"
+                                    class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none">
+                                    <option value="">Todas las categorías</option>
+                                    <option value="capilar">Productos Capilares</option>
+                                    <option value="facial">Productos Faciales</option>
+                                </select>
+                                <select id="productos-filtro-tipo"
+                                    class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none">
+                                    <option value="">Todos los tipos</option>
+                                    <option value="shampoo">Shampoo</option>
+                                    <option value="acondicionador">Acondicionador</option>
+                                    <option value="mascarilla">Mascarilla</option>
+                                    <option value="crema">Crema</option>
+                                    <option value="serum">Sérum</option>
+                                    <option value="aceite">Aceite</option>
+                                    <option value="tratamiento">Tratamiento</option>
+                                    <option value="otro">Otro</option>
+                                </select>
+                                <select id="productos-filtro-estado"
+                                    class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none">
+                                    <option value="">Todos los estados</option>
+                                    <option value="true">Disponible</option>
+                                    <option value="false">Agotado</option>
+                                </select>
+                                <label class="inline-flex items-center text-sm text-gray-600 cursor-pointer">
+                                    <input type="checkbox" id="productos-filtro-destacado" class="text-purple-600 focus:ring-purple-400">
+                                    <span class="ml-1.5">Solo destacados</span>
+                                </label>
+                                <button id="productos-limpiar-filtros" type="button"
+                                    class="text-xs font-medium text-purple-600 hover:text-purple-800 ml-auto">Limpiar filtros</button>
+                            </div>
 
-                    <!-- Tabla mejorada -->
-                    <div class="mb-4">
-                        <div class="relative">
-                            <input type="text" id="buscador-productos" placeholder="Buscar producto..."
-                                class="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full max-w-md">
-                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                            <div class="overflow-x-auto rounded-xl border border-gray-200">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Producto</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Precio</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Descripción</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Calificación</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Imagen</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Estado</th>
+                                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla-productos" class="bg-white divide-y divide-gray-200"></tbody>
+                                </table>
+                            </div>
+                            <div class="flex justify-center mt-4" id="paginacion-productos"></div>
                         </div>
                     </div>
-                    <div class="overflow-x-auto rounded-xl border border-gray-200">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Producto</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Precio</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Descripción</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Calificación</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Imagen</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Estado</th>
-                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabla-productos" class="bg-white divide-y divide-gray-200"></tbody>
-                        </table>
-                    </div>
-                    <div class="flex justify-center mt-4" id="paginacion-productos"></div>
                 </div>
             </div> <!-- /tab-productos -->
 
             <!-- Cupones -->
             <div id="tab-cupones" class="admin-tab-panel hidden">
-                <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6 md:p-8">
-                    <div class="flex justify-between items-center mb-8">
-                        <h2 class="text-2xl font-bold text-gray-800">
-                            <i class="fas fa-tags mr-2 text-purple-600"></i> Gestión de Cupones
-                        </h2>
-                    </div>
+                <div class="flex flex-col lg:flex-row items-start gap-6">
+                    <!-- Formulario compacto -->
+                    <aside class="w-full lg:w-96 shrink-0">
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5 lg:sticky lg:top-20">
+                            <h2 class="text-lg font-bold text-gray-800 mb-4">
+                                <i class="fas fa-tags mr-2 text-purple-600"></i> Nuevo Cupón
+                            </h2>
+                            <form id="form-cupon" class="space-y-4">
+                                <input type="hidden" id="cupon-id" name="id">
 
-                    <form id="form-cupon" class="mb-8 bg-gray-50 p-6 rounded-xl border border-gray-200">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <input type="hidden" id="cupon-id" name="id">
-
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Código</label>
-                                <div class="relative">
-                                    <i class="fas fa-tag absolute left-3 top-3 text-gray-400"></i>
-                                    <input type="text" id="cupon-codigo" name="code" required
-                                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all uppercase"
-                                        placeholder="Ej: BELLA10">
+                                <div class="space-y-1.5">
+                                    <label class="block text-sm font-medium text-gray-700">Código</label>
+                                    <div class="relative">
+                                        <i class="fas fa-tag absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                                        <input type="text" id="cupon-codigo" name="code" required
+                                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all uppercase"
+                                            placeholder="Ej: BELLA10">
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Tipo de descuento</label>
-                                <div class="relative">
-                                    <i class="fas fa-percent absolute left-3 top-3 text-gray-400"></i>
-                                    <select id="cupon-tipo" name="type" required
-                                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
-                                        <option value="percentage">Porcentaje (%)</option>
-                                        <option value="fixed">Monto fijo ($)</option>
-                                    </select>
-                                    <i class="fas fa-chevron-down absolute right-3 top-3 text-gray-400"></i>
+                                <div class="space-y-1.5">
+                                    <label class="block text-sm font-medium text-gray-700">Tipo de descuento</label>
+                                    <div class="relative">
+                                        <i class="fas fa-percent absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                                        <select id="cupon-tipo" name="type" required
+                                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
+                                            <option value="percentage">Porcentaje (%)</option>
+                                            <option value="fixed">Monto fijo ($)</option>
+                                        </select>
+                                        <i class="fas fa-chevron-down absolute right-3 top-2.5 text-gray-400 text-xs"></i>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Valor</label>
-                                <div class="relative">
-                                    <i class="fas fa-dollar-sign absolute left-3 top-3 text-gray-400"></i>
-                                    <input type="number" id="cupon-valor" name="value" required min="0" step="0.01"
-                                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                                        placeholder="10">
+                                <div class="space-y-1.5">
+                                    <label class="block text-sm font-medium text-gray-700">Valor</label>
+                                    <div class="relative">
+                                        <i class="fas fa-dollar-sign absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                                        <input type="number" id="cupon-valor" name="value" required min="0" step="0.01"
+                                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                            placeholder="10">
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Compra mínima (opcional)</label>
-                                <input type="number" id="cupon-minimo" name="minPurchase" min="0" step="0.01"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                                    placeholder="0.00">
-                            </div>
+                                <div class="space-y-1.5">
+                                    <label class="block text-sm font-medium text-gray-700">Compra mínima (opcional)</label>
+                                    <input type="number" id="cupon-minimo" name="minPurchase" min="0" step="0.01"
+                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                        placeholder="0.00">
+                                </div>
 
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Fecha de expiración (opcional)</label>
-                                <input type="date" id="cupon-expira" name="expiresAt"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                            </div>
+                                <div class="space-y-1.5">
+                                    <label class="block text-sm font-medium text-gray-700">Fecha de expiración (opcional)</label>
+                                    <input type="date" id="cupon-expira" name="expiresAt"
+                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                </div>
 
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Estado</label>
                                 <div>
-                                    <label class="inline-flex items-center">
+                                    <label class="inline-flex items-center text-sm">
                                         <input type="checkbox" id="cupon-activo" name="active" checked
                                             class="text-purple-600 focus:ring-purple-500">
                                         <span class="ml-2">Activo</span>
                                     </label>
                                 </div>
+
+                                <div class="flex justify-end gap-2 pt-3 border-t border-gray-200">
+                                    <button type="button" id="cancelar-edicion-cupon"
+                                        class="px-4 py-2 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors hidden">
+                                        <i class="fas fa-times mr-1.5"></i> Cancelar
+                                    </button>
+                                    <button type="submit"
+                                        class="flex-1 px-4 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center">
+                                        <i class="fas fa-save mr-1.5"></i> Guardar Cupón
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </aside>
+
+                    <!-- Listado -->
+                    <div class="flex-1 min-w-0 w-full">
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6 md:p-8">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                                <h2 class="text-2xl font-bold text-gray-800">
+                                    <i class="fas fa-tags mr-2 text-purple-600"></i> Cupones
+                                </h2>
+                                <div class="relative">
+                                    <input type="text" id="buscador-cupones" placeholder="Buscar por código..."
+                                        class="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full md:w-72">
+                                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap items-center gap-3 mb-5">
+                                <select id="cupones-filtro-tipo"
+                                    class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none">
+                                    <option value="">Todos los tipos</option>
+                                    <option value="percentage">Porcentaje</option>
+                                    <option value="fixed">Monto fijo</option>
+                                </select>
+                                <select id="cupones-filtro-estado"
+                                    class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none">
+                                    <option value="">Todos los estados</option>
+                                    <option value="true">Activo</option>
+                                    <option value="false">Inactivo</option>
+                                </select>
+                                <button id="cupones-limpiar-filtros" type="button"
+                                    class="text-xs font-medium text-purple-600 hover:text-purple-800 ml-auto">Limpiar filtros</button>
+                            </div>
+
+                            <div class="overflow-x-auto rounded-xl border border-gray-200">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Código</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Descuento</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Compra mínima</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Expira</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Estado</th>
+                                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla-cupones" class="bg-white divide-y divide-gray-200"></tbody>
+                                </table>
                             </div>
                         </div>
-
-                        <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
-                            <button type="button" id="cancelar-edicion-cupon"
-                                class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors hidden">
-                                <i class="fas fa-times mr-2"></i> Cancelar
-                            </button>
-                            <button type="submit"
-                                class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center">
-                                <i class="fas fa-save mr-2"></i> Guardar Cupón
-                            </button>
-                        </div>
-                    </form>
-
-                    <div class="overflow-x-auto rounded-xl border border-gray-200">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Código</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Descuento</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Compra mínima</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Expira</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Estado</th>
-                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabla-cupones" class="bg-white divide-y divide-gray-200"></tbody>
-                        </table>
                     </div>
                 </div>
             </div> <!-- /tab-cupones -->
 
             <!-- Tarjetas de pago -->
             <div id="tab-tarjetas" class="admin-tab-panel hidden">
-                <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6 md:p-8">
-                    <div class="flex justify-between items-center mb-8">
-                        <h2 class="text-2xl font-bold text-gray-800">
-                            <i class="fas fa-credit-card mr-2 text-purple-600"></i> Tarjetas de Pago
-                        </h2>
-                    </div>
-                    <p class="text-sm text-gray-500 -mt-6 mb-8">Estas cuentas se muestran a los clientes en la página de pagos para transferencias bancarias.</p>
+                <div class="flex flex-col lg:flex-row items-start gap-6">
+                    <!-- Formulario compacto -->
+                    <aside class="w-full lg:w-96 shrink-0">
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5 lg:sticky lg:top-20">
+                            <h2 class="text-lg font-bold text-gray-800 mb-1">
+                                <i class="fas fa-credit-card mr-2 text-purple-600"></i> Nueva Tarjeta
+                            </h2>
+                            <p class="text-xs text-gray-500 mb-4">Se muestra a los clientes en pagos.html para transferencias bancarias.</p>
+                            <form id="form-tarjeta" class="space-y-4">
+                                <input type="hidden" id="tarjeta-id" name="id">
 
-                    <form id="form-tarjeta" class="mb-8 bg-gray-50 p-6 rounded-xl border border-gray-200">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <input type="hidden" id="tarjeta-id" name="id">
-
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Banco</label>
-                                <div class="relative">
-                                    <i class="fas fa-building-columns absolute left-3 top-3 text-gray-400"></i>
-                                    <select id="tarjeta-plantilla" name="plantilla" required
-                                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
-                                        <option value="pichincha">Banco Pichincha</option>
-                                        <option value="guayaquil">Banco Guayaquil</option>
-                                    </select>
-                                    <i class="fas fa-chevron-down absolute right-3 top-3 text-gray-400"></i>
+                                <div class="space-y-1.5">
+                                    <label class="block text-sm font-medium text-gray-700">Banco</label>
+                                    <div class="relative">
+                                        <i class="fas fa-building-columns absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                                        <select id="tarjeta-plantilla" name="plantilla" required
+                                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
+                                            <option value="pichincha">Banco Pichincha</option>
+                                            <option value="guayaquil">Banco Guayaquil</option>
+                                        </select>
+                                        <i class="fas fa-chevron-down absolute right-3 top-2.5 text-gray-400 text-xs"></i>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Tipo de cuenta</label>
-                                <input type="text" id="tarjeta-tipo-cuenta" name="tipoCuenta" required
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                                    placeholder="Ej: Ahorros">
-                            </div>
-
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Número de cuenta</label>
-                                <input type="text" id="tarjeta-numero" name="numeroCuenta" required
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                                    placeholder="Ej: 2209 0506 71">
-                            </div>
-
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Titular</label>
-                                <input type="text" id="tarjeta-titular" name="titular" required
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                                    placeholder="Nombre del titular de la cuenta">
-                            </div>
-
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Marca de tarjeta</label>
-                                <div class="relative">
-                                    <i class="fas fa-id-card absolute left-3 top-3 text-gray-400"></i>
-                                    <select id="tarjeta-marca" name="marca" required
-                                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
-                                        <option value="visa">Visa</option>
-                                        <option value="mastercard">MasterCard</option>
-                                    </select>
-                                    <i class="fas fa-chevron-down absolute right-3 top-3 text-gray-400"></i>
+                                <div class="space-y-1.5">
+                                    <label class="block text-sm font-medium text-gray-700">Tipo de cuenta</label>
+                                    <input type="text" id="tarjeta-tipo-cuenta" name="tipoCuenta" required
+                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                        placeholder="Ej: Ahorros">
                                 </div>
-                            </div>
 
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Estado</label>
+                                <div class="space-y-1.5">
+                                    <label class="block text-sm font-medium text-gray-700">Número de cuenta</label>
+                                    <input type="text" id="tarjeta-numero" name="numeroCuenta" required
+                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                        placeholder="Ej: 2209 0506 71">
+                                </div>
+
+                                <div class="space-y-1.5">
+                                    <label class="block text-sm font-medium text-gray-700">Titular</label>
+                                    <input type="text" id="tarjeta-titular" name="titular" required
+                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                        placeholder="Nombre del titular de la cuenta">
+                                </div>
+
+                                <div class="space-y-1.5">
+                                    <label class="block text-sm font-medium text-gray-700">Marca de tarjeta</label>
+                                    <div class="relative">
+                                        <i class="fas fa-id-card absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                                        <select id="tarjeta-marca" name="marca" required
+                                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
+                                            <option value="visa">Visa</option>
+                                            <option value="mastercard">MasterCard</option>
+                                        </select>
+                                        <i class="fas fa-chevron-down absolute right-3 top-2.5 text-gray-400 text-xs"></i>
+                                    </div>
+                                </div>
+
                                 <div>
-                                    <label class="inline-flex items-center">
+                                    <label class="inline-flex items-center text-sm">
                                         <input type="checkbox" id="tarjeta-activa" name="activa" checked
                                             class="text-purple-600 focus:ring-purple-500">
                                         <span class="ml-2">Visible en pagos.html</span>
                                     </label>
                                 </div>
+
+                                <div class="flex justify-end gap-2 pt-3 border-t border-gray-200">
+                                    <button type="button" id="cancelar-edicion-tarjeta"
+                                        class="px-4 py-2 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors hidden">
+                                        <i class="fas fa-times mr-1.5"></i> Cancelar
+                                    </button>
+                                    <button type="submit"
+                                        class="flex-1 px-4 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center">
+                                        <i class="fas fa-save mr-1.5"></i> Guardar Tarjeta
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </aside>
+
+                    <!-- Listado -->
+                    <div class="flex-1 min-w-0 w-full">
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6 md:p-8">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                                <h2 class="text-2xl font-bold text-gray-800">
+                                    <i class="fas fa-credit-card mr-2 text-purple-600"></i> Tarjetas
+                                </h2>
+                                <div class="relative">
+                                    <input type="text" id="buscador-tarjetas" placeholder="Buscar por banco, cuenta o titular..."
+                                        class="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full md:w-72">
+                                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                                </div>
                             </div>
+                            <div id="lista-tarjetas-pago" class="grid grid-cols-1 xl:grid-cols-2 gap-6"></div>
                         </div>
-
-                        <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
-                            <button type="button" id="cancelar-edicion-tarjeta"
-                                class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors hidden">
-                                <i class="fas fa-times mr-2"></i> Cancelar
-                            </button>
-                            <button type="submit"
-                                class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center">
-                                <i class="fas fa-save mr-2"></i> Guardar Tarjeta
-                            </button>
-                        </div>
-                    </form>
-
-                    <div id="lista-tarjetas-pago" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                    </div>
                 </div>
             </div> <!-- /tab-tarjetas -->
 
@@ -870,6 +950,7 @@
                                 <table class="min-w-full divide-y divide-gray-200">
                                     <thead class="bg-gray-50">
                                         <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usuario</th>
                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teléfono
@@ -991,8 +1072,7 @@
             const res = await fetch(PRODUCTS_API_URL);
             const { data } = await res.json();
             productosData = data;
-            mostrarPagina(paginaActual);
-            renderizarPaginacion();
+            aplicarFiltrosProductos();
         }
 
         // Mostrar productos de la página seleccionada
@@ -1139,13 +1219,39 @@
 
         // La carga inicial de productos se dispara desde el bootstrap general del panel
 
-        document.getElementById('buscador-productos').addEventListener('input', function () {
-            const texto = this.value.toLowerCase();
-            const filtrados = productosData.filter(p =>
-                p.name.toLowerCase().includes(texto) ||
-                p.description.toLowerCase().includes(texto)
+        function aplicarFiltrosProductos() {
+            const texto = document.getElementById('buscador-productos').value.trim().toLowerCase();
+            const categoria = document.getElementById('productos-filtro-categoria').value;
+            const tipo = document.getElementById('productos-filtro-tipo').value;
+            const estado = document.getElementById('productos-filtro-estado').value;
+            const soloDestacados = document.getElementById('productos-filtro-destacado').checked;
+
+            let filtrados = productosData.filter(p =>
+                p.name.toLowerCase().includes(texto) || p.description.toLowerCase().includes(texto)
             );
+            if (categoria) filtrados = filtrados.filter(p => p.category === categoria);
+            if (tipo) filtrados = filtrados.filter(p => (p.type || 'otro') === tipo);
+            if (estado) filtrados = filtrados.filter(p => String(!!p.availability) === estado);
+            if (soloDestacados) filtrados = filtrados.filter(p => !!p.featured);
+
             mostrarPagina(1, filtrados);
+            renderizarPaginacion(filtrados);
+        }
+
+        ['input', 'change'].forEach(evt => {
+            document.getElementById('buscador-productos').addEventListener(evt, aplicarFiltrosProductos);
+            document.getElementById('productos-filtro-categoria').addEventListener(evt, aplicarFiltrosProductos);
+            document.getElementById('productos-filtro-tipo').addEventListener(evt, aplicarFiltrosProductos);
+            document.getElementById('productos-filtro-estado').addEventListener(evt, aplicarFiltrosProductos);
+            document.getElementById('productos-filtro-destacado').addEventListener(evt, aplicarFiltrosProductos);
+        });
+        document.getElementById('productos-limpiar-filtros').addEventListener('click', () => {
+            document.getElementById('buscador-productos').value = '';
+            document.getElementById('productos-filtro-categoria').value = '';
+            document.getElementById('productos-filtro-tipo').value = '';
+            document.getElementById('productos-filtro-estado').value = '';
+            document.getElementById('productos-filtro-destacado').checked = false;
+            aplicarFiltrosProductos();
         });
     </script>
 
@@ -1164,7 +1270,7 @@
             });
             const data = await res.json().catch(() => ({}));
             cuponesData = data.data || [];
-            renderizarCupones(cuponesData);
+            aplicarFiltrosCupones();
         }
 
         function renderizarCupones(cupones) {
@@ -1282,6 +1388,30 @@
         };
 
         cancelarCuponBtn.addEventListener('click', resetFormCupon);
+
+        function aplicarFiltrosCupones() {
+            const texto = document.getElementById('buscador-cupones').value.trim().toLowerCase();
+            const tipo = document.getElementById('cupones-filtro-tipo').value;
+            const estado = document.getElementById('cupones-filtro-estado').value;
+
+            let filtrados = cuponesData.filter(c => c.code.toLowerCase().includes(texto));
+            if (tipo) filtrados = filtrados.filter(c => c.type === tipo);
+            if (estado) filtrados = filtrados.filter(c => String(!!c.active) === estado);
+
+            renderizarCupones(filtrados);
+        }
+
+        ['input', 'change'].forEach(evt => {
+            document.getElementById('buscador-cupones').addEventListener(evt, aplicarFiltrosCupones);
+            document.getElementById('cupones-filtro-tipo').addEventListener(evt, aplicarFiltrosCupones);
+            document.getElementById('cupones-filtro-estado').addEventListener(evt, aplicarFiltrosCupones);
+        });
+        document.getElementById('cupones-limpiar-filtros').addEventListener('click', () => {
+            document.getElementById('buscador-cupones').value = '';
+            document.getElementById('cupones-filtro-tipo').value = '';
+            document.getElementById('cupones-filtro-estado').value = '';
+            aplicarFiltrosCupones();
+        });
         // La carga inicial de cupones se dispara desde el bootstrap general del panel
     </script>
 
@@ -1338,15 +1468,25 @@
             });
             const data = await res.json().catch(() => ({}));
             tarjetasPagoData = data.data || [];
-            renderizarListaTarjetasPago();
+            aplicarFiltrosTarjetas();
         }
 
-        function renderizarListaTarjetasPago() {
-            if (!tarjetasPagoData.length) {
-                listaTarjetas.innerHTML = `<p class="md:col-span-2 text-center text-gray-400 py-6">No hay tarjetas de pago creadas todavía.</p>`;
+        function aplicarFiltrosTarjetas() {
+            const texto = document.getElementById('buscador-tarjetas').value.trim().toLowerCase();
+            const filtradas = tarjetasPagoData.filter(c =>
+                (c.banco || '').toLowerCase().includes(texto) ||
+                (c.numeroCuenta || '').toLowerCase().includes(texto) ||
+                (c.titular || '').toLowerCase().includes(texto)
+            );
+            renderizarListaTarjetasPago(filtradas);
+        }
+
+        function renderizarListaTarjetasPago(lista = tarjetasPagoData) {
+            if (!lista.length) {
+                listaTarjetas.innerHTML = `<p class="xl:col-span-2 text-center text-gray-400 py-6">No se encontraron tarjetas de pago.</p>`;
                 return;
             }
-            listaTarjetas.innerHTML = tarjetasPagoData.map(c => `
+            listaTarjetas.innerHTML = lista.map(c => `
                 <div class="space-y-3">
                     ${renderizarVistaPreviaTarjeta(c)}
                     <div class="flex items-center justify-between">
@@ -1452,6 +1592,7 @@
         };
 
         cancelarTarjetaBtn.addEventListener('click', resetFormTarjeta);
+        document.getElementById('buscador-tarjetas').addEventListener('input', aplicarFiltrosTarjetas);
         // La carga inicial de tarjetas se dispara desde el bootstrap general del panel
     </script>
 
@@ -1490,6 +1631,14 @@
 
         function formatoFechaCorta(fecha) {
             return new Date(fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        // Convierte un teléfono local (con o sin 0 inicial) al formato que espera wa.me (593 + número)
+        function numeroWhatsapp(phone) {
+            let digits = String(phone).replace(/\D/g, '');
+            if (digits.startsWith('0')) digits = digits.slice(1);
+            if (!digits.startsWith('593')) digits = '593' + digits;
+            return digits;
         }
 
         // Agrupa una lista en 6 cubetas mensuales (mes actual y los 5 anteriores)
@@ -1608,16 +1757,27 @@
                 const rolBadge = u.role === 'admin'
                     ? '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-700">Administrador</span>'
                     : '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600">Cliente</span>';
+                const foto = u.profileImage || 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
+                const emailHTML = u.email
+                    ? `<a href="mailto:${u.email}" class="text-purple-600 hover:text-purple-800 hover:underline">${u.email}</a>`
+                    : '—';
+                const telefonoHTML = u.phone
+                    ? `<a href="https://wa.me/${numeroWhatsapp(u.phone)}" target="_blank" rel="noopener" class="text-emerald-600 hover:text-emerald-800 hover:underline inline-flex items-center gap-1.5"><i class="fab fa-whatsapp"></i>${u.phone}</a>`
+                    : '—';
                 return `
                     <tr>
-                        <td class="p-3 pl-6 font-semibold">${u.name || '—'}</td>
-                        <td class="p-3">${u.email || '—'}</td>
-                        <td class="p-3">${u.phone || '—'}</td>
+                        <td class="p-3 pl-6">
+                            <img src="${foto}" alt="${u.name || 'Usuario'}" class="w-9 h-9 rounded-full object-cover border border-gray-200"
+                                onerror="this.onerror=null;this.src='https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';">
+                        </td>
+                        <td class="p-3 font-semibold">${u.name || '—'}</td>
+                        <td class="p-3">${emailHTML}</td>
+                        <td class="p-3">${telefonoHTML}</td>
                         <td class="p-3">${rolBadge}</td>
                         <td class="p-3">${formatoFechaCorta(u.createdAt)}</td>
                     </tr>
                 `;
-            }).join('') : `<tr><td colspan="5" class="p-6 text-center text-gray-400">No se encontraron usuarios.</td></tr>`;
+            }).join('') : `<tr><td colspan="6" class="p-6 text-center text-gray-400">No se encontraron usuarios.</td></tr>`;
             renderizarPaginacionGenerica('paginacion-usuarios', lista.length, usuariosPorPagina, paginaUsuarios, (p) => mostrarPaginaUsuarios(p, lista));
         }
 
@@ -1947,7 +2107,37 @@
                     </div>
                 `).join('')
                 : `<p class="text-sm text-gray-400 px-6 py-6 text-center">Todavía no hay usuarios.</p>`;
+
+            renderizarResumenTarjetas();
         }
+
+        // ---- Tarjetas de pago (mini carrusel estilo "My Cards") ----
+        let resumenTarjetaIndex = 0;
+        function renderizarResumenTarjetas() {
+            const activas = tarjetasPagoData.filter(c => c.activa);
+            const contenedor = document.getElementById('resumen-tarjeta-preview');
+            const contador = document.getElementById('resumen-tarjeta-contador');
+            if (!activas.length) {
+                contenedor.innerHTML = '<p class="text-sm text-gray-400 text-center py-10">Todavía no hay tarjetas visibles.</p>';
+                contador.textContent = '0 / 0';
+                return;
+            }
+            if (resumenTarjetaIndex >= activas.length) resumenTarjetaIndex = 0;
+            contenedor.innerHTML = renderizarVistaPreviaTarjeta(activas[resumenTarjetaIndex]);
+            contador.textContent = `${resumenTarjetaIndex + 1} / ${activas.length}`;
+        }
+        document.getElementById('resumen-tarjeta-prev').addEventListener('click', () => {
+            const total = tarjetasPagoData.filter(c => c.activa).length;
+            if (!total) return;
+            resumenTarjetaIndex = (resumenTarjetaIndex - 1 + total) % total;
+            renderizarResumenTarjetas();
+        });
+        document.getElementById('resumen-tarjeta-next').addEventListener('click', () => {
+            const total = tarjetasPagoData.filter(c => c.activa).length;
+            if (!total) return;
+            resumenTarjetaIndex = (resumenTarjetaIndex + 1) % total;
+            renderizarResumenTarjetas();
+        });
 
         // ---------- Arranque del panel ----------
         document.addEventListener('DOMContentLoaded', async () => {
