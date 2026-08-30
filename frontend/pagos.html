@@ -15,55 +15,86 @@
     <link rel="icon" href="/img/mujer-con-pelo-largo.png" type="image/x-icon">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
   <style>
-    /* Banco Guayaquil */
-    .tarjeta-guayaquil {
-      background: linear-gradient(45deg, #191851 50%, #29265d 50%);
-      border-radius: 1rem;
-      width: 100%;
-      height: 240px;
+    /* Envoltorio de cada tarjeta: da espacio para que las manchas difuminadas asomen detrás */
+    .tarjeta-glass-wrap {
       position: relative;
-      overflow: hidden;
+      padding: 18px;
     }
-    .curva-1 {
+    .tarjeta-blob {
       position: absolute;
-      top: -20%;
-      left: -30%;
-      width: 300%;
-      height: 300%;
-      background: transparent;
-      border: 40px solid rgba(100, 100, 200, 0.1);
-      border-radius: 50%;
-      transform: rotate(25deg);
-    }
-    .curva-2 {
-      position: absolute;
-      top: -10%;
-      left: -60%;
-      width: 300%;
-      height: 300%;
-      background: transparent;
-      border: 20px solid rgba(100, 100, 200, 0.15);
-      border-radius: 50%;
-      transform: rotate(30deg);
+      border-radius: 9999px;
+      filter: blur(30px);
+      z-index: 0;
+      pointer-events: none;
     }
 
-    /* Banco Pichincha */
-    .tarjeta-pichincha {
-      background: linear-gradient(to bottom right, #f7df00 0%, #f7df00 60%, #eec600 61%, #eec600 100%);
-      border-radius: 1rem;
+    /* Banco Guayaquil (azul/índigo oscuro, con vidrio esmerilado) */
+    .tarjeta-guayaquil {
+      background: linear-gradient(135deg, rgba(25, 24, 81, 0.82) 0%, rgba(41, 38, 93, 0.82) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 1.5rem;
       width: 100%;
       height: 240px;
       position: relative;
+      z-index: 1;
+      overflow: hidden;
+      box-shadow: 0 20px 40px -18px rgba(25, 24, 81, 0.6);
+    }
+    .tarjeta-glass-wrap .tarjeta-blob.blob-guayaquil-1 { top: -20px; right: -20px; width: 150px; height: 150px; background: #7c3aed; opacity: .55; }
+    .tarjeta-glass-wrap .tarjeta-blob.blob-guayaquil-2 { bottom: -25px; left: -25px; width: 130px; height: 130px; background: #db2777; opacity: .4; }
+
+    /* Banco Pichincha (amarillo, con vidrio esmerilado) */
+    .tarjeta-pichincha {
+      background: linear-gradient(135deg, rgba(247, 223, 0, 0.82) 0%, rgba(238, 198, 0, 0.86) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 1.5rem;
+      width: 100%;
+      height: 240px;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      box-shadow: 0 20px 40px -18px rgba(180, 150, 0, 0.5);
+    }
+    .tarjeta-glass-wrap .tarjeta-blob.blob-pichincha-1 { top: -20px; left: -20px; width: 150px; height: 150px; background: #f7df00; opacity: .7; }
+    .tarjeta-glass-wrap .tarjeta-blob.blob-pichincha-2 { bottom: -25px; right: -25px; width: 130px; height: 130px; background: #eec600; opacity: .6; }
+
+    /* Brillo diagonal (efecto vidrio) sobre cualquier tarjeta */
+    .tarjeta-sheen {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 35%, rgba(255, 255, 255, 0.35) 48%, rgba(255, 255, 255, 0.05) 62%, transparent 75%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Chip de tarjeta */
+    .tarjeta-chip {
+      width: 38px;
+      height: 28px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #fde68a, #f59e0b);
+      position: relative;
       overflow: hidden;
     }
-    .overlay-triangulo {
+    .tarjeta-chip::before {
+      content: "";
       position: absolute;
-      top: 0;
+      inset: 4px;
+      border: 1px solid rgba(0, 0, 0, 0.25);
+      border-radius: 3px;
+    }
+    .tarjeta-chip::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
       right: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, transparent 70%, rgba(0, 0, 0, 0.05) 70%);
-      z-index: 1;
+      height: 1px;
+      background: rgba(0, 0, 0, 0.25);
     }
   </style>
 </head>
@@ -1461,39 +1492,46 @@
     <script>
         const PAYMENT_CARDS_API_URL = "https://aly-mbelleza-backend.onrender.com/api/payment-cards";
         const TARJETA_MARCAS = {
-            visa: { logo: 'img/Visa_debit.svg', alto: 'h-12' },
-            mastercard: { logo: 'img/MasterCard.svg', alto: 'h-16' },
+            visa: { logo: 'img/Visa_debit.svg', alto: 'h-7' },
+            mastercard: { logo: 'img/MasterCard.svg', alto: 'h-9' },
         };
 
         function renderizarTarjetaPago(card) {
             const marca = TARJETA_MARCAS[card.marca] || TARJETA_MARCAS.visa;
             const esGuayaquil = card.plantilla === 'guayaquil';
             const logoBanco = esGuayaquil ? 'img/Banco_Guayaquil.png' : 'img/Banco_Pichincha.svg';
-            const claseTarjeta = esGuayaquil ? 'tarjeta-guayaquil text-white p-6 shadow-md' : 'tarjeta-pichincha relative text-black p-6 z-0 shadow-md';
-            const decoracion = esGuayaquil
-                ? '<div class="curva-1"></div><div class="curva-2"></div>'
-                : '<div class="overlay-triangulo"></div>';
+            const claseTarjeta = esGuayaquil ? 'tarjeta-guayaquil text-white p-6' : 'tarjeta-pichincha text-black p-6';
+            const blobs = esGuayaquil
+                ? '<div class="tarjeta-blob blob-guayaquil-1"></div><div class="tarjeta-blob blob-guayaquil-2"></div>'
+                : '<div class="tarjeta-blob blob-pichincha-1"></div><div class="tarjeta-blob blob-pichincha-2"></div>';
+            const subtitulo = esGuayaquil ? 'text-white/70' : 'text-black/60';
             return `
                 <div class="w-full md:w-1/2 px-4">
-                    <div class="${claseTarjeta}">
-                        ${decoracion}
-                        <div class="relative z-10 h-full flex flex-col justify-between">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <br>
-                                    <p class="text-sm font-light">Número de cuenta</p>
-                                    <p class="text-sm font-light">${card.banco} - ${card.tipoCuenta}</p>
-                                    <p class="text-xl font-semibold tracking-wider mt-2">${card.numeroCuenta}</p>
+                    <div class="tarjeta-glass-wrap">
+                        ${blobs}
+                        <div class="${claseTarjeta}">
+                            <div class="tarjeta-sheen"></div>
+                            <div class="relative z-10 h-full flex flex-col justify-between">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <img src="${logoBanco}" alt="Banco ${card.banco}" class="h-7">
+                                    </div>
+                                    <div class="tarjeta-chip"></div>
                                 </div>
-                                <img src="${logoBanco}" alt="Banco ${card.banco}" class="h-8">
-                            </div>
-                            <div>
-                                <p class="text-sm font-light">Titular</p>
-                                <p class="text-lg font-semibold tracking-wider">${card.titular}</p>
-                            </div>
-                            <div class="flex justify-between items-end">
-                                <div></div>
-                                <img src="${marca.logo}" alt="${card.marca}" class="${marca.alto}">
+                                <div>
+                                    <p class="text-xs font-light ${subtitulo}">Número de cuenta</p>
+                                    <p class="text-xl font-semibold tracking-wider mt-1">${card.numeroCuenta}</p>
+                                </div>
+                                <div class="flex justify-between items-end">
+                                    <div>
+                                        <p class="text-xs font-light ${subtitulo}">Titular</p>
+                                        <p class="text-base font-semibold tracking-wide">${card.titular}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-xs font-light ${subtitulo}">${card.banco} · ${card.tipoCuenta}</p>
+                                        <img src="${marca.logo}" alt="${card.marca}" class="${marca.alto} ml-auto mt-1">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
