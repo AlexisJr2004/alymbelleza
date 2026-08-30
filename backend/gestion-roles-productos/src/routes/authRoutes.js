@@ -24,6 +24,8 @@ router.post('/reset-password/:token', authController.resetPassword);
 router.put('/me', verifyToken, upload.single('profileImage'), authController.updateProfile);
 router.get('/me', verifyToken, authController.me);
 router.get('/users', verifyToken, authorize('admin'), authController.getUsers);
+router.put('/users/:id/toggle-active', verifyToken, authorize('admin'), authController.toggleUserActive);
+router.put('/users/:id/role', verifyToken, authorize('admin'), authController.setUserRole);
 
 
 module.exports = router;

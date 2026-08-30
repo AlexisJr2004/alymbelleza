@@ -26,4 +26,14 @@ describe('Rutas de administrador requieren token', () => {
     const res = await request(app).get('/api/payment-cards/admin');
     expect(res.status).toBe(401);
   });
+
+  it('PUT /api/auth/users/:id/toggle-active rechaza sin token', async () => {
+    const res = await request(app).put('/api/auth/users/000000000000000000000000/toggle-active');
+    expect(res.status).toBe(401);
+  });
+
+  it('PUT /api/auth/users/:id/role rechaza sin token', async () => {
+    const res = await request(app).put('/api/auth/users/000000000000000000000000/role').send({ role: 'admin' });
+    expect(res.status).toBe(401);
+  });
 });

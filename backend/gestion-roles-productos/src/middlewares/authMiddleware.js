@@ -21,6 +21,9 @@ exports.verifyToken = async (req, res, next) => {
     if (!user) {
       return res.status(401).json({ success: false, error: 'Usuario no encontrado.' });
     }
+    if (user.isActive === false) {
+      return res.status(403).json({ success: false, error: 'Tu cuenta ha sido deshabilitada. Contacta al administrador.' });
+    }
 
     req.user = user;
     next();

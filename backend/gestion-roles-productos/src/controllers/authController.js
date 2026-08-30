@@ -241,6 +241,50 @@ exports.getUsers = async (req, res) => {
   }
 };
 
+// Activa/desactiva la cuenta de un usuario (panel de administrador)
+exports.toggleUserActive = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (id === String(req.user._id)) {
+      return res.status(400).json({ success: false, error: 'No puedes deshabilitar tu propia cuenta.' });
+    }
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'Usuario no encontrado.' });
+    }
+    user.isActive = !user.isActive;
+    await user.save();
+    res.json({ success: true, data: { _id: user._id, isActive: user.isActive } });
+  } catch (err) {
+    console.error('Error al cambiar el estado del usuario:', err);
+    res.status(500).json({ success: false, error: 'Error al cambiar el estado del usuario.' });
+  }
+};
+
+// Cambia el rol de un usuario entre cliente y admin (panel de administrador)
+exports.setUserRole = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+    if (!['cliente', 'admin'].includes(role)) {
+      return res.status(400).json({ success: false, error: 'El rol debe ser "cliente" o "admin".' });
+    }
+    if (id === String(req.user._id)) {
+      return res.status(400).json({ success: false, error: 'No puedes cambiar tu propio rol.' });
+    }
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'Usuario no encontrado.' });
+    }
+    user.role = role;
+    await user.save();
+    res.json({ success: true, data: { _id: user._id, role: user.role } });
+  } catch (err) {
+    console.error('Error al cambiar el rol del usuario:', err);
+    res.status(500).json({ success: false, error: 'Error al cambiar el rol del usuario.' });
+  }
+};
+
 exports.register = async (req, res) => {
   try {
     const { name, email, password, birthdate, gender, address, dni, phone } = req.body;
@@ -349,6 +393,10 @@ exports.login = async (req, res) => {
 
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) return res.status(400).json({ error: 'Contraseña incorrecta.' });
+
+    if (user.isActive === false) {
+      return res.status(403).json({ error: 'Tu cuenta ha sido deshabilitada. Contacta al administrador.' });
+    }
 
     const token = jwt.sign(
       { userId: user._id, role: user.role, name: user.name, profileImage: user.profileImage },
