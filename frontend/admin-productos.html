@@ -209,13 +209,15 @@
         </header>
 
         <main class="p-4 lg:p-6 max-w-[1920px] mx-auto">
-            <div class="mb-6" id="saludo-admin">
-                <h1 class="text-2xl font-bold text-gray-900">Hola, <span id="admin-nombre-saludo">Administrador</span></h1>
-                <p class="text-gray-500 mt-1">Aquí tienes un resumen de la actividad de Bella Beauty.</p>
-            </div>
-
             <!-- Resumen -->
             <div id="tab-resumen" class="admin-tab-panel space-y-6">
+
+                <!-- Encabezado -->
+                <div class="max-w-2xl">
+                    <p class="text-xs font-semibold text-purple-600 uppercase tracking-wider mb-1">Panel de control</p>
+                    <h1 class="text-2xl font-bold text-gray-900">Resumen general</h1>
+                    <p class="text-sm text-gray-500 mt-2">Los pedidos, citas y usuarios de Bella Beauty se consolidan aquí para ver el estado del negocio de un vistazo.</p>
+                </div>
 
                 <!-- Fila 1: tarjeta hero de ingresos + cuadrícula de KPIs -->
                 <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
@@ -279,7 +281,7 @@
                     <div class="lg:col-span-2 bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-1">Ingresos de los últimos 6 meses</h3>
                         <p class="text-sm text-gray-500 mb-6">Total facturado por mes según los pedidos registrados.</p>
-                        <div id="grafico-ingresos" class="flex items-end gap-3 h-48"></div>
+                        <div id="grafico-ingresos" class="h-48"></div>
                     </div>
 
                     <div class="space-y-6">
@@ -325,18 +327,30 @@
                 <!-- Fila 3: distribución de citas + pedidos por mes -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6">
-                        <div class="flex items-center justify-between mb-1">
-                            <h3 class="text-lg font-semibold text-gray-800">Estado de las citas</h3>
-                            <span class="text-sm text-gray-400">Total: <span class="font-semibold text-gray-700" id="citas-total-resumen">0</span></span>
+                        <div class="flex items-start justify-between gap-3 mb-5">
+                            <div>
+                                <p class="text-xs uppercase tracking-wider text-purple-600 font-semibold">Estado general</p>
+                                <h3 class="text-lg font-semibold text-gray-800 mt-1">Estado de las citas</h3>
+                            </div>
+                            <span class="text-xs px-2 py-1 bg-purple-50 text-purple-600 rounded-full border border-purple-100 shrink-0">
+                                Total: <span class="font-semibold" id="citas-total-resumen">0</span>
+                            </span>
                         </div>
-                        <p class="text-sm text-gray-500 mb-5">Distribución de todas las citas registradas.</p>
-                        <div class="flex h-3 rounded-full overflow-hidden bg-gray-100 mb-5" id="citas-barra-segmentada"></div>
-                        <div class="grid grid-cols-2 gap-3" id="citas-leyenda"></div>
+                        <div class="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-6 items-center">
+                            <div class="relative mx-auto sm:mx-0" id="citas-donut-wrap">
+                                <div id="citas-donut"></div>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                    <span class="text-2xl font-bold text-gray-900" id="citas-donut-pct">0%</span>
+                                    <span class="text-xs text-gray-500">Realizadas</span>
+                                </div>
+                            </div>
+                            <div class="space-y-2.5" id="citas-leyenda"></div>
+                        </div>
                     </div>
                     <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-1">Pedidos de los últimos 6 meses</h3>
                         <p class="text-sm text-gray-500 mb-6">Cantidad de pedidos registrados por mes.</p>
-                        <div id="grafico-pedidos" class="flex items-end gap-3 h-40"></div>
+                        <div id="grafico-pedidos" class="h-40"></div>
                     </div>
                 </div>
 
@@ -368,7 +382,7 @@
                     <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-1">Usuarios nuevos por mes</h3>
                         <p class="text-sm text-gray-500 mb-6">Registros nuevos en los últimos 6 meses.</p>
-                        <div id="grafico-usuarios-nuevos" class="flex items-end gap-3 h-40"></div>
+                        <div id="grafico-usuarios-nuevos" class="h-40"></div>
                     </div>
                     <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
@@ -378,6 +392,30 @@
                         </div>
                         <div id="tabla-ultimos-usuarios" class="divide-y divide-gray-100"></div>
                     </div>
+                </div>
+
+                <!-- Fila 6: clientes más activos -->
+                <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6">
+                    <div class="flex items-center justify-between mb-4 gap-3">
+                        <div>
+                            <p class="text-xs uppercase tracking-wider text-purple-600 font-semibold">Usuarios</p>
+                            <h3 class="text-lg font-bold text-gray-800 mt-1">Clientes más activos</h3>
+                        </div>
+                        <span class="text-xs px-2 py-1 bg-purple-50 text-purple-600 rounded-full border border-purple-100" id="usuarios-activos-total"></span>
+                    </div>
+                    <div id="usuarios-activos-grid" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3"></div>
+                </div>
+
+                <!-- Fila 7: clientes en riesgo de abandono -->
+                <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6">
+                    <div class="flex items-center justify-between mb-4 gap-3">
+                        <div>
+                            <p class="text-xs uppercase tracking-wider text-amber-600 font-semibold">Retención</p>
+                            <h3 class="text-lg font-bold text-gray-800 mt-1">Clientes en riesgo de abandono</h3>
+                        </div>
+                        <span class="text-xs px-2 py-1 bg-amber-50 text-amber-700 rounded-full border border-amber-100 shrink-0">30+ días sin pedidos</span>
+                    </div>
+                    <div id="clientes-inactivos-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3"></div>
                 </div>
             </div>
 
@@ -1824,15 +1862,89 @@
             return meses;
         }
 
-        function renderizarGraficoBarras(contenedorId, meses, formatearValor) {
-            const maxTotal = Math.max(...meses.map(m => m.total), 1);
-            document.getElementById(contenedorId).innerHTML = meses.map(m => `
-                <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
-                    <span class="text-xs font-semibold text-gray-600">${m.total > 0 ? formatearValor(m.total) : ''}</span>
-                    <div class="w-full bg-gradient-to-t from-purple-600 to-pink-500 rounded-t-md transition-all" style="height: ${Math.max((m.total / maxTotal) * 100, 3)}%"></div>
-                    <span class="text-xs text-gray-400 capitalize">${m.label}</span>
-                </div>
-            `).join('');
+        // Gráfico de línea en SVG con tooltip al pasar el mouse (reemplaza las barras CSS)
+        function renderizarGraficoBarras(contenedorId, meses, formatearValor, color = '#9333ea') {
+            const contenedor = document.getElementById(contenedorId);
+            if (!meses.length) {
+                contenedor.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400 text-sm">Sin datos</div>';
+                return;
+            }
+            const W = 600, H = 170, PXL = 40, PXR = 10, PY = 18;
+            const max = Math.max(...meses.map(m => m.total), 1);
+            const pts = meses.map((m, i) => ({
+                x: PXL + (i / Math.max(meses.length - 1, 1)) * (W - PXL - PXR),
+                y: PY + (1 - m.total / max) * (H - PY * 2),
+                label: m.label,
+                valor: m.total,
+            }));
+            const linea = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+            const area = `${linea} L${pts[pts.length - 1].x.toFixed(1)},${H - PY} L${pts[0].x.toFixed(1)},${H - PY} Z`;
+            const gradId = `tl-grad-${contenedorId}`;
+
+            const lineasGuia = [0, 0.5, 1].map(f => {
+                const y = PY + (1 - f) * (H - PY * 2);
+                return `<line x1="${PXL}" y1="${y}" x2="${W - PXR}" y2="${y}" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3,3" />
+                        <text x="${PXL - 6}" y="${y + 3}" text-anchor="end" font-size="9" fill="#94a3b8">${formatearValor(Math.round(max * f))}</text>`;
+            }).join('');
+
+            const puntos = pts.map((p, i) => `<circle cx="${p.x}" cy="${p.y}" r="3.5" fill="${color}" stroke="#fff" stroke-width="1.5" class="tl-dot" data-i="${i}" />`).join('');
+            const zonasHover = pts.map((p, i) => `<circle cx="${p.x}" cy="${p.y}" r="12" fill="transparent" class="tl-hit" data-i="${i}" style="cursor:pointer" />`).join('');
+            const cadaEtiqueta = Math.max(1, Math.ceil(pts.length / 8));
+            const etiquetas = pts.map((p, i) => (i % cadaEtiqueta === 0 || i === pts.length - 1)
+                ? `<text x="${p.x}" y="${H - 3}" text-anchor="middle" font-size="9" fill="#94a3b8" class="capitalize">${p.label}</text>` : '').join('');
+
+            const tips = pts.map((p, i) => {
+                const tipW = 66;
+                const tipX = Math.min(Math.max(p.x - tipW / 2, 2), W - tipW - 2);
+                const arriba = p.y - 34 >= 0;
+                const tipY = arriba ? p.y - 34 : p.y + 12;
+                return `<g class="tl-tip" data-i="${i}" style="opacity:0; pointer-events:none; transition:opacity .12s;">
+                            <rect x="${tipX}" y="${tipY}" width="${tipW}" height="26" rx="6" fill="#1f2937" opacity="0.95" />
+                            <text x="${tipX + tipW / 2}" y="${tipY + 11}" text-anchor="middle" font-size="8.5" fill="#cbd5e1" class="capitalize">${p.label}</text>
+                            <text x="${tipX + tipW / 2}" y="${tipY + 21}" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">${formatearValor(p.valor)}</text>
+                        </g>`;
+            }).join('');
+
+            contenedor.innerHTML = `
+                <svg viewBox="0 0 ${W} ${H}" class="w-full h-full overflow-visible">
+                    <defs>
+                        <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="${color}" stop-opacity="0.18" />
+                            <stop offset="100%" stop-color="${color}" stop-opacity="0" />
+                        </linearGradient>
+                    </defs>
+                    ${lineasGuia}
+                    <path d="${area}" fill="url(#${gradId})" />
+                    <path d="${linea}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+                    <g class="tl-vline" style="opacity:0; pointer-events:none;"><line x1="0" y1="${PY}" x2="0" y2="${H - PY}" stroke="${color}" stroke-width="1" stroke-dasharray="2,2" opacity="0.5" /></g>
+                    ${puntos}
+                    ${etiquetas}
+                    ${zonasHover}
+                    ${tips}
+                </svg>
+            `;
+
+            const svg = contenedor.querySelector('svg');
+            const vline = svg.querySelector('.tl-vline');
+            const vlineInner = vline.querySelector('line');
+            svg.querySelectorAll('.tl-hit').forEach(hit => {
+                const i = hit.dataset.i;
+                hit.addEventListener('mouseenter', () => {
+                    svg.querySelectorAll('.tl-dot').forEach(d => d.setAttribute('r', d.dataset.i === i ? '5' : '3.5'));
+                    const tip = svg.querySelector(`.tl-tip[data-i="${i}"]`);
+                    if (tip) tip.style.opacity = '1';
+                    const p = pts[Number(i)];
+                    vlineInner.setAttribute('x1', p.x);
+                    vlineInner.setAttribute('x2', p.x);
+                    vline.style.opacity = '1';
+                });
+                hit.addEventListener('mouseleave', () => {
+                    svg.querySelectorAll('.tl-dot').forEach(d => d.setAttribute('r', '3.5'));
+                    const tip = svg.querySelector(`.tl-tip[data-i="${i}"]`);
+                    if (tip) tip.style.opacity = '0';
+                    vline.style.opacity = '0';
+                });
+            });
         }
 
         function renderizarPaginacionGenerica(contenedorId, totalItems, porPagina, paginaActiva, onClick) {
@@ -1862,7 +1974,6 @@
                 btn.classList.remove(...INACTIVE_TAB_CLASSES, ...ACTIVE_TAB_CLASSES);
                 btn.classList.add(...(activo ? ACTIVE_TAB_CLASSES : INACTIVE_TAB_CLASSES));
             });
-            document.getElementById('saludo-admin').classList.toggle('hidden', nombre !== 'resumen');
             localStorage.setItem('adminTabActiva', nombre);
         }
 
@@ -2197,36 +2308,51 @@
             `).join('');
 
             // Gráficos mensuales (ingresos, pedidos, usuarios nuevos)
-            renderizarGraficoBarras('grafico-ingresos', serieIngresos, formatoMoneda);
-            renderizarGraficoBarras('grafico-pedidos', construirSerieMensual(pedidosData, (o) => o.createdAt, () => 1), (v) => String(v));
-            renderizarGraficoBarras('grafico-usuarios-nuevos', construirSerieMensual(usuariosData, (u) => u.createdAt, () => 1), (v) => String(v));
+            renderizarGraficoBarras('grafico-ingresos', serieIngresos, formatoMoneda, '#9333ea');
+            renderizarGraficoBarras('grafico-pedidos', construirSerieMensual(pedidosData, (o) => o.createdAt, () => 1), (v) => String(v), '#db2777');
+            renderizarGraficoBarras('grafico-usuarios-nuevos', construirSerieMensual(usuariosData, (u) => u.createdAt, () => 1), (v) => String(v), '#4f46e5');
 
-            // ---- Distribución de citas: barra segmentada + leyenda ----
+            // ---- Distribución de citas: dona SVG + leyenda ----
             const estados = [
-                { key: 'pendiente', label: 'Pendientes', color: 'bg-amber-500' },
-                { key: 'realizada', label: 'Realizadas', color: 'bg-emerald-500' },
-                { key: 'cancelada', label: 'Canceladas', color: 'bg-rose-500' },
+                { key: 'pendiente', label: 'Pendientes', color: '#f59e0b', bg: 'bg-amber-500' },
+                { key: 'realizada', label: 'Realizadas', color: '#10b981', bg: 'bg-emerald-500' },
+                { key: 'cancelada', label: 'Canceladas', color: '#f43f5e', bg: 'bg-rose-500' },
             ];
             const totalCitas = citasAdminData.length;
             const totalCitasSeguro = totalCitas || 1;
             document.getElementById('citas-total-resumen').textContent = totalCitas;
             const hayPendientes = citasAdminData.some(c => (c.status || 'pendiente') === 'pendiente');
             document.getElementById('topbar-citas-dot').classList.toggle('hidden', !hayPendientes);
-            document.getElementById('citas-barra-segmentada').innerHTML = estados.map(e => {
-                const count = citasAdminData.filter(c => (c.status || 'pendiente') === e.key).length;
-                const pct = Math.round((count / totalCitasSeguro) * 100);
-                return pct > 0 ? `<div class="${e.color}" style="width:${pct}%"></div>` : '';
+
+            const conteosCitas = estados.map(e => ({ ...e, count: citasAdminData.filter(c => (c.status || 'pendiente') === e.key).length }));
+            const donutSize = 160, donutGrosor = 26;
+            const r = (donutSize - donutGrosor) / 2;
+            const circ = 2 * Math.PI * r;
+            const cx = donutSize / 2, cy = donutSize / 2;
+            let acumuladoCitas = 0;
+            const arcosCitas = conteosCitas.map(e => {
+                const dash = (e.count / totalCitasSeguro) * circ;
+                const offset = -acumuladoCitas;
+                acumuladoCitas += dash;
+                return e.count > 0 ? `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${e.color}" stroke-width="${donutGrosor}" stroke-dasharray="${dash} ${circ - dash}" stroke-dashoffset="${offset}" stroke-linecap="butt" />` : '';
             }).join('');
-            document.getElementById('citas-leyenda').innerHTML = estados.map(e => {
-                const count = citasAdminData.filter(c => (c.status || 'pendiente') === e.key).length;
-                return `
-                    <div class="flex items-center gap-2 text-sm text-gray-600">
-                        <span class="w-2.5 h-2.5 rounded-full ${e.color} shrink-0"></span>
-                        <span>${e.label}</span>
-                        <span class="ml-auto font-medium text-gray-800">${count}</span>
-                    </div>
-                `;
-            }).join('');
+            document.getElementById('citas-donut').innerHTML = `
+                <svg width="${donutSize}" height="${donutSize}" viewBox="0 0 ${donutSize} ${donutSize}" style="transform:rotate(-90deg)">
+                    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#f1f5f9" stroke-width="${donutGrosor}" />
+                    ${arcosCitas}
+                </svg>
+            `;
+            const realizadas = conteosCitas.find(e => e.key === 'realizada');
+            const pctRealizadas = totalCitas ? Math.round((realizadas.count / totalCitas) * 100) : 0;
+            document.getElementById('citas-donut-pct').textContent = `${pctRealizadas}%`;
+
+            document.getElementById('citas-leyenda').innerHTML = conteosCitas.map(e => `
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <span class="w-2.5 h-2.5 rounded-full ${e.bg} shrink-0"></span>
+                    <span>${e.label}</span>
+                    <span class="ml-auto font-medium text-gray-800">${e.count}</span>
+                </div>
+            `).join('');
 
             // ---- Últimos pedidos (lista compacta) ----
             const ultimosPedidos = pedidosData.slice(0, 5);
@@ -2277,6 +2403,96 @@
                 : `<p class="text-sm text-gray-400 px-6 py-6 text-center">Todavía no hay usuarios.</p>`;
 
             renderizarResumenTarjetas();
+            renderizarUsuariosActivos();
+            renderizarClientesInactivos();
+        }
+
+        // ---- Clientes más activos (por cantidad de pedidos) ----
+        function calcularClientesActivos() {
+            const porUsuario = {};
+            pedidosData.forEach(o => {
+                const email = o.user?.email;
+                if (!email) return;
+                if (!porUsuario[email]) porUsuario[email] = { nombre: o.user?.name || 'Cliente', email, total: 0, gastado: 0, ultimo: o.createdAt };
+                porUsuario[email].total += 1;
+                porUsuario[email].gastado += (o.total || 0);
+                if (new Date(o.createdAt) > new Date(porUsuario[email].ultimo)) porUsuario[email].ultimo = o.createdAt;
+            });
+            return Object.values(porUsuario).sort((a, b) => b.total - a.total).slice(0, 8);
+        }
+
+        function renderizarUsuariosActivos() {
+            const lista = calcularClientesActivos();
+            document.getElementById('usuarios-activos-total').textContent = `${lista.length} cliente${lista.length === 1 ? '' : 's'} con pedidos`;
+            const grid = document.getElementById('usuarios-activos-grid');
+            if (!lista.length) {
+                grid.innerHTML = '<p class="col-span-full text-center text-gray-400 py-6 text-sm">Todavía no hay pedidos de clientes.</p>';
+                return;
+            }
+            grid.innerHTML = lista.map((u, i) => `
+                <div class="rounded-2xl border border-gray-200 bg-white p-3">
+                    <p class="text-[10px] uppercase tracking-wide text-gray-400">Cliente ${i + 1}</p>
+                    <h4 class="mt-1 text-sm font-semibold text-gray-900 truncate">${u.nombre}</h4>
+                    <div class="mt-3 rounded-xl bg-purple-50/60 p-3">
+                        <div class="flex items-end justify-between gap-2">
+                            <div>
+                                <p class="text-[10px] uppercase tracking-wide text-gray-500">Pedidos</p>
+                                <p class="text-xl font-bold text-gray-900">${u.total}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[10px] uppercase tracking-wide text-gray-500">Gastado</p>
+                                <p class="text-sm font-semibold text-purple-700">${formatoMoneda(u.gastado)}</p>
+                            </div>
+                        </div>
+                        <p class="mt-1.5 text-[11px] text-gray-400">Último: ${formatoFechaCorta(u.ultimo)}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ---- Clientes en riesgo de abandono (30+ días sin pedidos, o nunca compraron) ----
+        function calcularClientesInactivos() {
+            const ultimoPorEmail = {};
+            pedidosData.forEach(o => {
+                const email = o.user?.email;
+                if (!email) return;
+                if (!ultimoPorEmail[email] || new Date(o.createdAt) > new Date(ultimoPorEmail[email])) ultimoPorEmail[email] = o.createdAt;
+            });
+            const ahora = new Date();
+            return usuariosData
+                .filter(u => u.role !== 'admin')
+                .map(u => {
+                    const ultimo = ultimoPorEmail[u.email] || null;
+                    const dias = ultimo ? Math.floor((ahora - new Date(ultimo)) / 86400000) : null;
+                    return { ...u, ultimoPedido: ultimo, dias };
+                })
+                .filter(u => u.dias == null || u.dias >= 30)
+                .sort((a, b) => {
+                    if (a.dias == null && b.dias == null) return 0;
+                    if (a.dias == null) return -1;
+                    if (b.dias == null) return 1;
+                    return b.dias - a.dias;
+                })
+                .slice(0, 8);
+        }
+
+        function renderizarClientesInactivos() {
+            const lista = calcularClientesInactivos();
+            const grid = document.getElementById('clientes-inactivos-grid');
+            if (!lista.length) {
+                grid.innerHTML = '<p class="col-span-full text-center text-gray-400 py-6 text-sm">Todos los clientes activos tienen pedidos recientes.</p>';
+                return;
+            }
+            grid.innerHTML = lista.map(u => `
+                <div class="rounded-2xl border border-amber-100 bg-amber-50/40 p-3">
+                    <h4 class="text-sm font-semibold text-gray-900 truncate">${u.name || 'Cliente'}</h4>
+                    <p class="text-xs text-gray-500 mt-1 truncate">${u.email || ''}</p>
+                    <div class="mt-2 flex items-center justify-between">
+                        <span class="text-xs text-gray-500">${u.ultimoPedido ? `Último: ${formatoFechaCorta(u.ultimoPedido)}` : 'Nunca ha comprado'}</span>
+                        ${u.dias != null ? `<span class="text-xs font-bold text-amber-700">${u.dias}d</span>` : ''}
+                    </div>
+                </div>
+            `).join('');
         }
 
         // ---- Tarjetas de pago (mini carrusel estilo "My Cards") ----
@@ -2309,7 +2525,6 @@
 
         // ---------- Arranque del panel ----------
         document.addEventListener('DOMContentLoaded', async () => {
-            document.getElementById('admin-nombre-saludo').textContent = (user?.name || 'Administrador').split(' ')[0];
             document.getElementById('admin-fecha-actual').textContent = new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
             activarTab(localStorage.getItem('adminTabActiva') || 'resumen');
