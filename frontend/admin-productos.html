@@ -1003,9 +1003,11 @@
     </div>
 
     <!-- Modal: Nueva/Editar Tarjeta (fuera del wrapper z-10 para quedar sobre el sidebar) -->
-    <div id="panel-form-tarjeta" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+    <div id="panel-form-tarjeta"
+        class="invisible opacity-0 fixed inset-0 z-[60] flex items-center justify-center p-4 transition-opacity duration-200 ease-out">
         <div id="overlay-form-tarjeta" class="absolute inset-0 bg-gray-900/50"></div>
-        <div class="relative bg-white rounded-xl border border-gray-200 p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div id="modal-tarjeta-box"
+            class="relative bg-white rounded-xl border border-gray-200 p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-200 ease-out">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-bold text-gray-800" id="form-tarjeta-titulo">Nueva Tarjeta</h3>
                 <button type="button" id="cerrar-modal-tarjeta" class="text-gray-400 hover:text-gray-600 transition-colors">
@@ -1476,12 +1478,24 @@
             return TARJETA_COLOR_BANCO[card.plantilla] || TARJETA_COLOR_BANCO.pichincha;
         }
 
+        const modalTarjetaBox = document.getElementById('modal-tarjeta-box');
         function abrirFormTarjeta(modo) {
             formTarjetaTitulo.textContent = modo === 'editar' ? 'Editar Tarjeta' : 'Nueva Tarjeta';
-            panelFormTarjeta.classList.remove('hidden');
+            panelFormTarjeta.classList.remove('invisible', 'opacity-0');
+            requestAnimationFrame(() => {
+                panelFormTarjeta.classList.add('opacity-100');
+                modalTarjetaBox.classList.remove('scale-95');
+                modalTarjetaBox.classList.add('scale-100');
+            });
         }
         function cerrarFormTarjeta() {
-            panelFormTarjeta.classList.add('hidden');
+            panelFormTarjeta.classList.remove('opacity-100');
+            panelFormTarjeta.classList.add('opacity-0');
+            modalTarjetaBox.classList.remove('scale-100');
+            modalTarjetaBox.classList.add('scale-95');
+            setTimeout(() => {
+                panelFormTarjeta.classList.add('invisible');
+            }, 200);
             resetFormTarjeta();
         }
         btnNuevaTarjeta.addEventListener('click', () => {
@@ -1549,36 +1563,7 @@
                 grid.innerHTML = `<p class="sm:col-span-2 xl:col-span-4 text-center text-gray-400 py-6">No hay tarjetas de pago creadas todavía.</p>`;
                 return;
             }
-            grid.innerHTML = tarjetasPagoData.map((c) => {
-                const color = colorDeTarjeta(c);
-                const circulo = color.texto === 'text-white' ? 'bg-white/50' : 'bg-black/20';
-                const circulo2 = color.texto === 'text-white' ? 'bg-white/25' : 'bg-black/10';
-                return `
-                    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br ${color.grad} p-5 ${color.texto}">
-                        <div class="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-white/10 pointer-events-none"></div>
-                        <div class="absolute -bottom-10 -left-6 w-28 h-28 rounded-full bg-white/10 pointer-events-none"></div>
-                        <div class="relative z-10">
-                            <p class="text-sm font-medium ${color.textoSuave}">${c.banco}</p>
-                            <p class="text-xl font-bold mt-1 tracking-wide">${c.numeroCuenta}</p>
-                            <div class="flex items-center gap-1.5 mt-4">
-                                <span class="w-6 h-6 rounded-full ${circulo}"></span>
-                                <span class="w-6 h-6 rounded-full ${circulo2} -ml-3"></span>
-                                <span class="text-xs font-semibold ml-2 uppercase tracking-wide">${c.marca}</span>
-                            </div>
-                            <div class="flex items-center justify-between mt-5 pt-3 border-t ${color.borde}">
-                                <div class="min-w-0">
-                                    <p class="text-[10px] ${color.textoSuave} uppercase tracking-wide">Tipo de cuenta</p>
-                                    <p class="text-sm font-semibold mt-0.5 truncate">${c.tipoCuenta}</p>
-                                </div>
-                                <div class="text-right min-w-0">
-                                    <p class="text-[10px] ${color.textoSuave} uppercase tracking-wide">Titular</p>
-                                    <p class="text-sm font-semibold mt-0.5 truncate">${c.titular}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+            grid.innerHTML = tarjetasPagoData.map((c) => renderizarVistaPreviaTarjeta(c)).join('');
         }
 
         function renderizarDonutTarjetas() {
