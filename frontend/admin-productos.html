@@ -130,6 +130,13 @@
             </div>
             <div class="flex items-center gap-3 lg:gap-4 shrink-0">
                 <span class="hidden md:block text-sm text-gray-500 capitalize" id="admin-fecha-actual"></span>
+                <button type="button" data-tab-link="citas" title="Citas pendientes"
+                    class="relative w-10 h-10 rounded-full bg-white/60 border border-white/60 flex items-center justify-center text-gray-500 hover:text-gray-800 hover:bg-white/90 transition-colors">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                    </svg>
+                    <span id="topbar-citas-dot" class="hidden absolute top-2 right-2.5 w-2 h-2 bg-rose-500 rounded-full border-2 border-white"></span>
+                </button>
                 <div class="w-px h-6 bg-gray-200 hidden md:block"></div>
                 <div class="flex items-center gap-3">
                     <img id="admin-profile-img" class="w-9 h-9 rounded-full object-cover border border-gray-200" src=""
@@ -145,7 +152,7 @@
 
         <main class="p-4 lg:p-6 max-w-[1600px] mx-auto">
             <div class="mb-6">
-                <h1 class="text-2xl font-bold text-gray-900">Hola, <span id="admin-nombre-saludo">Administrador</span> 👋</h1>
+                <h1 class="text-2xl font-bold text-gray-900">Hola, <span id="admin-nombre-saludo">Administrador</span></h1>
                 <p class="text-gray-500 mt-1">Aquí tienes un resumen de la actividad de Bella Beauty.</p>
             </div>
 
@@ -154,28 +161,53 @@
 
                 <!-- Fila 1: tarjeta hero de ingresos + cuadrícula de KPIs -->
                 <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
-                    <div class="lg:col-span-2 bg-white/70 backdrop-blur-md rounded-2xl border border-white/60 p-6">
-                        <h3 class="font-semibold text-gray-800">Ingresos totales</h3>
-                        <p class="text-sm text-gray-400">Resumen de tus ingresos actuales</p>
+                    <div class="lg:col-span-2 flex flex-col gap-4">
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-white/60 shadow-sm p-6">
+                            <h3 class="font-semibold text-gray-800">Ingresos totales</h3>
+                            <p class="text-sm text-gray-400">Resumen de tus ingresos actuales</p>
 
-                        <div class="flex items-end justify-between gap-4 mt-5">
-                            <div>
-                                <p class="text-3xl font-bold text-gray-900" id="hero-ingresos-valor">$0.00</p>
-                                <p class="text-sm font-medium mt-1 text-gray-400" id="hero-ingresos-trend"></p>
+                            <div class="flex items-end justify-between gap-4 mt-5">
+                                <div>
+                                    <p class="text-3xl font-bold text-gray-900" id="hero-ingresos-valor">$0.00</p>
+                                    <p class="text-sm font-medium mt-1 text-gray-400" id="hero-ingresos-trend"></p>
+                                </div>
+                                <svg id="hero-sparkline" viewBox="0 0 120 40" class="w-28 h-12 shrink-0"></svg>
                             </div>
-                            <svg id="hero-sparkline" viewBox="0 0 120 40" class="w-28 h-12 shrink-0"></svg>
+
+                            <div class="border-t border-dashed border-gray-300/70 my-5"></div>
+
+                            <div class="flex items-center justify-between">
+                                <p class="text-sm text-gray-500"><span class="font-semibold text-gray-800" id="hero-pedidos-count">0</span> pedidos
+                                    registrados</p>
+                                <button type="button" data-tab-link="pedidos"
+                                    class="text-sm font-medium text-purple-600 hover:text-purple-800 flex items-center gap-1">
+                                    Ver todos
+                                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
-                        <div class="border-t border-gray-200/60 my-5"></div>
-
-                        <div class="flex items-center justify-between">
-                            <p class="text-sm text-gray-500"><span class="font-semibold text-gray-800" id="hero-pedidos-count">0</span> pedidos
-                                registrados</p>
+                        <div class="flex gap-3">
                             <button type="button" data-tab-link="pedidos"
-                                class="text-sm font-medium text-purple-600 hover:text-purple-800 flex items-center gap-1">
-                                Ver todos
-                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                                class="flex-1 bg-purple-600 text-white py-2.5 rounded-lg text-sm font-medium flex items-center justify-center gap-2 hover:bg-purple-700 transition-colors shadow-sm">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                </svg>
+                                Ver pedidos
+                            </button>
+                            <button type="button" data-tab-link="citas"
+                                class="flex-1 bg-white/70 backdrop-blur-md border border-white/60 text-gray-700 py-2.5 rounded-lg text-sm font-medium flex items-center justify-center gap-2 hover:bg-white/90 transition-colors shadow-sm">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                                </svg>
+                                Ver citas
+                            </button>
+                            <button type="button" data-tab-link="productos" title="Agregar producto"
+                                class="w-11 h-11 shrink-0 bg-white/70 backdrop-blur-md border border-white/60 text-gray-700 rounded-lg flex items-center justify-center hover:bg-white/90 transition-colors shadow-sm">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                 </svg>
                             </button>
                         </div>
@@ -186,21 +218,21 @@
 
                 <!-- Fila 2: gráfico de ingresos + panel lateral -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 bg-white/70 backdrop-blur-md rounded-2xl border border-white/60 p-6">
+                    <div class="lg:col-span-2 bg-white/70 backdrop-blur-md rounded-xl border border-white/60 shadow-sm p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-1">Ingresos de los últimos 6 meses</h3>
                         <p class="text-sm text-gray-500 mb-6">Total facturado por mes según los pedidos registrados.</p>
                         <div id="grafico-ingresos" class="flex items-end gap-3 h-48"></div>
                     </div>
 
                     <div class="space-y-6">
-                        <div class="rounded-2xl bg-gradient-to-br from-purple-600 to-pink-600 p-6 text-white relative overflow-hidden">
+                        <div class="rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 p-6 text-white relative overflow-hidden shadow-md">
                             <div class="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full pointer-events-none"></div>
                             <div class="absolute -bottom-10 -left-6 w-28 h-28 bg-white/10 rounded-full pointer-events-none"></div>
                             <p class="text-sm text-white/80 relative">Ingresos de este mes</p>
                             <p class="text-3xl font-bold mt-1 relative" id="hero-mes-valor">$0.00</p>
                             <p class="text-sm text-white/80 mt-4 relative" id="hero-mes-sub"></p>
                         </div>
-                        <div class="bg-white/70 backdrop-blur-md rounded-2xl border border-white/60 overflow-hidden">
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-white/60 shadow-sm overflow-hidden">
                             <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                                 <h3 class="text-base font-semibold text-gray-800">Últimos pedidos</h3>
                                 <button type="button" data-tab-link="pedidos"
@@ -213,7 +245,7 @@
 
                 <!-- Fila 3: distribución de citas + pedidos por mes -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-white/70 backdrop-blur-md rounded-2xl border border-white/60 p-6">
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-white/60 shadow-sm p-6">
                         <div class="flex items-center justify-between mb-1">
                             <h3 class="text-lg font-semibold text-gray-800">Estado de las citas</h3>
                             <span class="text-sm text-gray-400">Total: <span class="font-semibold text-gray-700" id="citas-total-resumen">0</span></span>
@@ -222,7 +254,7 @@
                         <div class="flex h-3 rounded-full overflow-hidden bg-gray-100 mb-5" id="citas-barra-segmentada"></div>
                         <div class="grid grid-cols-2 gap-3" id="citas-leyenda"></div>
                     </div>
-                    <div class="bg-white/70 backdrop-blur-md rounded-2xl border border-white/60 p-6">
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-white/60 shadow-sm p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-1">Pedidos de los últimos 6 meses</h3>
                         <p class="text-sm text-gray-500 mb-6">Cantidad de pedidos registrados por mes.</p>
                         <div id="grafico-pedidos" class="flex items-end gap-3 h-40"></div>
@@ -230,7 +262,7 @@
                 </div>
 
                 <!-- Fila 4: tabla de pedidos recientes -->
-                <div class="bg-white/70 backdrop-blur-md rounded-2xl border border-white/60 overflow-hidden">
+                <div class="bg-white/70 backdrop-blur-md rounded-xl border border-white/60 shadow-sm overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                         <h3 class="text-lg font-semibold text-gray-800">Pedidos recientes</h3>
                         <button type="button" data-tab-link="pedidos" class="text-sm text-purple-600 hover:text-purple-800 font-medium">Ver
@@ -254,12 +286,12 @@
 
                 <!-- Fila 5: usuarios nuevos -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-white/70 backdrop-blur-md rounded-2xl border border-white/60 p-6">
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-white/60 shadow-sm p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-1">Usuarios nuevos por mes</h3>
                         <p class="text-sm text-gray-500 mb-6">Registros nuevos en los últimos 6 meses.</p>
                         <div id="grafico-usuarios-nuevos" class="flex items-end gap-3 h-40"></div>
                     </div>
-                    <div class="bg-white/70 backdrop-blur-md rounded-2xl border border-white/60 overflow-hidden">
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-white/60 shadow-sm overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                             <h3 class="text-lg font-semibold text-gray-800">Últimos usuarios registrados</h3>
                             <button type="button" data-tab-link="usuarios"
@@ -272,7 +304,7 @@
 
             <!-- Productos -->
             <div id="tab-productos" class="admin-tab-panel hidden">
-                <div class="bg-white/70 backdrop-blur-md rounded-2xl border border-white/60 p-6 md:p-8">
+                <div class="bg-white/70 backdrop-blur-md rounded-xl border border-white/60 shadow-sm p-6 md:p-8">
                     <div class="flex justify-between items-center mb-8">
                         <h2 class="text-2xl font-bold text-gray-800">
                             <i class="fas fa-box-open mr-2 text-purple-600"></i> Gestión de Productos
@@ -435,7 +467,7 @@
                             <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                         </div>
                     </div>
-                    <div class="overflow-x-auto rounded-2xl border border-gray-200">
+                    <div class="overflow-x-auto rounded-xl border border-gray-200">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
@@ -464,7 +496,7 @@
 
             <!-- Cupones -->
             <div id="tab-cupones" class="admin-tab-panel hidden">
-                <div class="bg-white/70 backdrop-blur-md rounded-2xl border border-white/60 p-6 md:p-8">
+                <div class="bg-white/70 backdrop-blur-md rounded-xl border border-white/60 shadow-sm p-6 md:p-8">
                     <div class="flex justify-between items-center mb-8">
                         <h2 class="text-2xl font-bold text-gray-800">
                             <i class="fas fa-tags mr-2 text-purple-600"></i> Gestión de Cupones
@@ -545,7 +577,7 @@
                         </div>
                     </form>
 
-                    <div class="overflow-x-auto rounded-2xl border border-gray-200">
+                    <div class="overflow-x-auto rounded-xl border border-gray-200">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
@@ -574,7 +606,7 @@
                 <div class="flex flex-col lg:flex-row items-start gap-6">
                     <!-- Filtros -->
                     <aside class="w-full lg:w-64 shrink-0">
-                        <div class="bg-white/70 backdrop-blur-md rounded-2xl border border-white/60 p-5 space-y-5">
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-white/60 shadow-sm p-5 space-y-5">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide">Filtros</h3>
                                 <button id="pedidos-limpiar-filtros" type="button"
@@ -600,7 +632,7 @@
 
                     <!-- Contenido -->
                     <div class="flex-1 min-w-0 w-full">
-                        <div class="bg-white/70 backdrop-blur-md rounded-2xl border border-white/60 p-6 md:p-8">
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-white/60 shadow-sm p-6 md:p-8">
                             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                                 <h2 class="text-2xl font-bold text-gray-800">
                                     <i class="fas fa-receipt mr-2 text-purple-600"></i> Pedidos
@@ -617,7 +649,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="overflow-x-auto rounded-2xl border border-gray-200">
+                            <div class="overflow-x-auto rounded-xl border border-gray-200">
                                 <table class="min-w-full divide-y divide-gray-200">
                                     <thead class="bg-gray-50">
                                         <tr>
@@ -645,7 +677,7 @@
                 <div class="flex flex-col lg:flex-row items-start gap-6">
                     <!-- Filtros -->
                     <aside class="w-full lg:w-64 shrink-0">
-                        <div class="bg-white/70 backdrop-blur-md rounded-2xl border border-white/60 p-5 space-y-5">
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-white/60 shadow-sm p-5 space-y-5">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide">Filtros</h3>
                                 <button id="usuarios-limpiar-filtros" type="button"
@@ -682,7 +714,7 @@
 
                     <!-- Contenido -->
                     <div class="flex-1 min-w-0 w-full">
-                        <div class="bg-white/70 backdrop-blur-md rounded-2xl border border-white/60 p-6 md:p-8">
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-white/60 shadow-sm p-6 md:p-8">
                             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                                 <div>
                                     <h2 class="text-2xl font-bold text-gray-800"><i class="fas fa-users mr-2 text-purple-600"></i>Usuarios
@@ -695,7 +727,7 @@
                                     <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                                 </div>
                             </div>
-                            <div class="overflow-x-auto rounded-2xl border border-gray-200">
+                            <div class="overflow-x-auto rounded-xl border border-gray-200">
                                 <table class="min-w-full divide-y divide-gray-200">
                                     <thead class="bg-gray-50">
                                         <tr>
@@ -722,7 +754,7 @@
                 <div class="flex flex-col lg:flex-row items-start gap-6">
                     <!-- Filtros -->
                     <aside class="w-full lg:w-64 shrink-0">
-                        <div class="bg-white/70 backdrop-blur-md rounded-2xl border border-white/60 p-5 space-y-5">
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-white/60 shadow-sm p-5 space-y-5">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide">Filtros</h3>
                                 <button id="citas-limpiar-filtros" type="button"
@@ -763,7 +795,7 @@
 
                     <!-- Contenido -->
                     <div class="flex-1 min-w-0 w-full">
-                        <div class="bg-white/70 backdrop-blur-md rounded-2xl border border-white/60 p-6 md:p-8">
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-white/60 shadow-sm p-6 md:p-8">
                             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                                 <h2 class="text-2xl font-bold text-gray-800"><i class="fas fa-calendar-check mr-2 text-purple-600"></i>Citas</h2>
                                 <div class="flex flex-wrap gap-3 text-sm">
@@ -775,7 +807,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="overflow-x-auto rounded-2xl border border-gray-200">
+                            <div class="overflow-x-auto rounded-xl border border-gray-200">
                                 <table class="min-w-full divide-y divide-gray-200">
                                     <thead class="bg-gray-50">
                                         <tr>
@@ -1515,11 +1547,11 @@
                 amber: 'bg-amber-100/70 text-amber-600',
             };
             document.getElementById('kpi-cards').innerHTML = tarjetas.map(t => `
-                <div class="bg-white/70 backdrop-blur-md rounded-2xl border border-white/60 p-5">
+                <div class="bg-white/70 backdrop-blur-md rounded-xl border border-white/60 shadow-sm p-5">
                     <div class="flex items-center justify-between mb-3">
                         <p class="text-sm text-gray-500">${t.etiqueta}</p>
-                        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${colores[t.color]}">
-                            ${iconoLinea(t.icono, 'w-5 h-5')}
+                        <div class="w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${colores[t.color]}">
+                            ${iconoLinea(t.icono, 'w-4 h-4')}
                         </div>
                     </div>
                     <p class="text-2xl font-bold text-gray-900 leading-tight">${t.valor}</p>
@@ -1541,6 +1573,8 @@
             const totalCitas = citasAdminData.length;
             const totalCitasSeguro = totalCitas || 1;
             document.getElementById('citas-total-resumen').textContent = totalCitas;
+            const hayPendientes = citasAdminData.some(c => (c.status || 'pendiente') === 'pendiente');
+            document.getElementById('topbar-citas-dot').classList.toggle('hidden', !hayPendientes);
             document.getElementById('citas-barra-segmentada').innerHTML = estados.map(e => {
                 const count = citasAdminData.filter(c => (c.status || 'pendiente') === e.key).length;
                 const pct = Math.round((count / totalCitasSeguro) * 100);
