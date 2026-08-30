@@ -76,7 +76,9 @@
                 <div class="relative hidden sm:block">
                     <i class="fas fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
                     <input type="search" placeholder="Buscar..."
-                        class="pl-9 pr-4 py-2 w-56 lg:w-72 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:ring-2 focus:ring-purple-400 focus:outline-none focus:bg-white transition">
+                        class="pl-9 pr-14 py-2 w-56 lg:w-72 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:ring-2 focus:ring-purple-400 focus:outline-none focus:bg-white transition">
+                    <kbd
+                        class="absolute right-2 top-1/2 -translate-y-1/2 px-1.5 py-0.5 text-[10px] font-medium text-gray-400 bg-white border border-gray-200 rounded">⌘K</kbd>
                 </div>
             </div>
             <div class="flex items-center gap-3 lg:gap-4 shrink-0">
@@ -102,13 +104,72 @@
 
             <!-- Resumen -->
             <div id="tab-resumen" class="admin-tab-panel space-y-6">
-                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" id="kpi-cards"></div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-white rounded-2xl border border-gray-200 p-6">
+                <!-- Fila 1: tarjeta hero de ingresos + cuadrícula de KPIs -->
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                    <div class="lg:col-span-2 bg-white rounded-2xl border border-gray-200 p-6">
+                        <h3 class="font-semibold text-gray-800">Ingresos totales</h3>
+                        <p class="text-sm text-gray-400">Resumen de tus ingresos actuales</p>
+
+                        <div class="flex items-end justify-between gap-4 mt-5">
+                            <div>
+                                <p class="text-3xl font-bold text-gray-900" id="hero-ingresos-valor">$0.00</p>
+                                <p class="text-sm font-medium mt-1 text-gray-400" id="hero-ingresos-trend"></p>
+                            </div>
+                            <svg id="hero-sparkline" viewBox="0 0 120 40" class="w-28 h-12 shrink-0"></svg>
+                        </div>
+
+                        <div class="border-t border-gray-100 my-5"></div>
+
+                        <div class="flex items-center justify-between">
+                            <p class="text-sm text-gray-500"><span class="font-semibold text-gray-800" id="hero-pedidos-count">0</span> pedidos
+                                registrados</p>
+                            <button type="button" data-tab-link="pedidos" class="text-sm font-medium text-purple-600 hover:text-purple-800">
+                                Ver todos <i class="fas fa-arrow-right text-xs ml-0.5"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-4" id="kpi-cards"></div>
+                </div>
+
+                <!-- Fila 2: gráfico de ingresos + panel lateral -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 bg-white rounded-2xl border border-gray-200 p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-1">Ingresos de los últimos 6 meses</h3>
                         <p class="text-sm text-gray-500 mb-6">Total facturado por mes según los pedidos registrados.</p>
-                        <div id="grafico-ingresos" class="flex items-end gap-3 h-40"></div>
+                        <div id="grafico-ingresos" class="flex items-end gap-3 h-48"></div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="rounded-2xl bg-gradient-to-br from-purple-600 to-pink-600 p-6 text-white relative overflow-hidden">
+                            <div class="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full pointer-events-none"></div>
+                            <div class="absolute -bottom-10 -left-6 w-28 h-28 bg-white/10 rounded-full pointer-events-none"></div>
+                            <p class="text-sm text-white/80 relative">Ingresos de este mes</p>
+                            <p class="text-3xl font-bold mt-1 relative" id="hero-mes-valor">$0.00</p>
+                            <p class="text-sm text-white/80 mt-4 relative" id="hero-mes-sub"></p>
+                        </div>
+                        <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+                            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                                <h3 class="text-base font-semibold text-gray-800">Últimos pedidos</h3>
+                                <button type="button" data-tab-link="pedidos"
+                                    class="text-sm text-purple-600 hover:text-purple-800 font-medium">Ver todos</button>
+                            </div>
+                            <div id="tabla-ultimos-pedidos" class="divide-y divide-gray-100"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fila 3: distribución de citas + pedidos por mes -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-2xl border border-gray-200 p-6">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="text-lg font-semibold text-gray-800">Estado de las citas</h3>
+                            <span class="text-sm text-gray-400">Total: <span class="font-semibold text-gray-700" id="citas-total-resumen">0</span></span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-5">Distribución de todas las citas registradas.</p>
+                        <div class="flex h-3 rounded-full overflow-hidden bg-gray-100 mb-5" id="citas-barra-segmentada"></div>
+                        <div class="grid grid-cols-2 gap-3" id="citas-leyenda"></div>
                     </div>
                     <div class="bg-white rounded-2xl border border-gray-200 p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-1">Pedidos de los últimos 6 meses</h3>
@@ -117,33 +178,41 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-white rounded-2xl border border-gray-200 p-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-1">Estado de las citas</h3>
-                        <p class="text-sm text-gray-500 mb-6">Distribución de todas las citas registradas.</p>
-                        <div id="grafico-citas" class="space-y-4"></div>
+                <!-- Fila 4: tabla de pedidos recientes -->
+                <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-800">Pedidos recientes</h3>
+                        <button type="button" data-tab-link="pedidos" class="text-sm text-purple-600 hover:text-purple-800 font-medium">Ver
+                            todos</button>
                     </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Cliente</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Productos</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Cupón</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Fecha</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-resumen-pedidos" class="bg-white divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Fila 5: usuarios nuevos -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="bg-white rounded-2xl border border-gray-200 p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-1">Usuarios nuevos por mes</h3>
                         <p class="text-sm text-gray-500 mb-6">Registros nuevos en los últimos 6 meses.</p>
                         <div id="grafico-usuarios-nuevos" class="flex items-end gap-3 h-40"></div>
                     </div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-                        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-                            <h3 class="text-lg font-semibold text-gray-800">Últimos pedidos</h3>
-                            <button type="button" data-tab-link="pedidos" class="text-sm text-purple-600 hover:text-purple-800 font-medium">Ver
-                                todos</button>
-                        </div>
-                        <div id="tabla-ultimos-pedidos" class="divide-y divide-gray-100"></div>
-                    </div>
                     <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                             <h3 class="text-lg font-semibold text-gray-800">Últimos usuarios registrados</h3>
-                            <button type="button" data-tab-link="usuarios" class="text-sm text-purple-600 hover:text-purple-800 font-medium">Ver
-                                todos</button>
+                            <button type="button" data-tab-link="usuarios"
+                                class="text-sm text-purple-600 hover:text-purple-800 font-medium">Ver todos</button>
                         </div>
                         <div id="tabla-ultimos-usuarios" class="divide-y divide-gray-100"></div>
                     </div>
@@ -1316,12 +1385,29 @@
         });
 
         // ---------- Resumen (dashboard) ----------
+        function renderizarSparkline(contenedorId, meses) {
+            const valores = meses.map(m => m.total);
+            const max = Math.max(...valores, 1);
+            const min = Math.min(...valores, 0);
+            const rango = (max - min) || 1;
+            const puntos = valores.map((v, i) => {
+                const x = (i / (valores.length - 1)) * 116 + 2;
+                const y = 36 - ((v - min) / rango) * 32;
+                return `${x},${y}`;
+            }).join(' ');
+            const primerX = 2;
+            const ultimoX = 118;
+            document.getElementById(contenedorId).innerHTML = `
+                <polyline points="${primerX},38 ${puntos} ${ultimoX},38" fill="#a855f7" fill-opacity="0.12" stroke="none"></polyline>
+                <polyline points="${puntos}" fill="none" stroke="#9333ea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            `;
+        }
+
         function renderizarResumen() {
             const ingresos = pedidosData.reduce((sum, o) => sum + (o.total || 0), 0);
             const descuentos = pedidosData.reduce((sum, o) => sum + (o.discount || 0), 0);
             const productosAgotados = productosData.filter(p => !p.availability).length;
             const cuponesActivos = cuponesData.filter(c => c.active).length;
-            const citasPendientes = citasAdminData.filter(c => (c.status || 'pendiente') === 'pendiente').length;
 
             const hoy = new Date();
             const usuariosEsteMes = usuariosData.filter(u => {
@@ -1329,21 +1415,38 @@
                 return f.getMonth() === hoy.getMonth() && f.getFullYear() === hoy.getFullYear();
             }).length;
 
+            // ---- Tarjeta hero de ingresos ----
+            const serieIngresos = construirSerieMensual(pedidosData, (o) => o.createdAt, (o) => o.total || 0);
+            const mesActualTotal = serieIngresos[5].total;
+            const mesAnteriorTotal = serieIngresos[4].total;
+            const cambioPct = mesAnteriorTotal > 0 ? Math.round(((mesActualTotal - mesAnteriorTotal) / mesAnteriorTotal) * 100) : null;
+            document.getElementById('hero-ingresos-valor').textContent = formatoMoneda(ingresos);
+            const trendEl = document.getElementById('hero-ingresos-trend');
+            if (cambioPct === null) {
+                trendEl.textContent = 'Sin datos del mes anterior';
+                trendEl.className = 'text-sm font-medium mt-1 text-gray-400';
+            } else {
+                trendEl.innerHTML = `<i class="fas fa-arrow-${cambioPct >= 0 ? 'up' : 'down'} text-xs"></i> ${Math.abs(cambioPct)}% que el mes anterior`;
+                trendEl.className = `text-sm font-medium mt-1 ${cambioPct >= 0 ? 'text-emerald-600' : 'text-rose-600'}`;
+            }
+            document.getElementById('hero-pedidos-count').textContent = pedidosData.length;
+            renderizarSparkline('hero-sparkline', serieIngresos);
+
+            document.getElementById('hero-mes-valor').textContent = formatoMoneda(mesActualTotal);
+            document.getElementById('hero-mes-sub').textContent = `${serieIngresos[5].label} de ${hoy.getFullYear()}`.replace(/^\w/, c => c.toUpperCase());
+
+            // ---- Tarjetas KPI (cuadrícula junto al hero) ----
             const tarjetas = [
-                { icono: 'fa-sack-dollar', color: 'emerald', valor: formatoMoneda(ingresos), etiqueta: 'Ingresos totales', sub: `${pedidosData.length} pedidos registrados` },
-                { icono: 'fa-receipt', color: 'purple', valor: pedidosData.length, etiqueta: 'Pedidos', sub: `${formatoMoneda(descuentos)} en descuentos aplicados` },
-                { icono: 'fa-users', color: 'blue', valor: usuariosData.length, etiqueta: 'Usuarios registrados', sub: `${usuariosEsteMes} nuevos este mes` },
+                { icono: 'fa-receipt', color: 'purple', valor: pedidosData.length, etiqueta: 'Pedidos', sub: `${formatoMoneda(descuentos)} en descuentos` },
+                { icono: 'fa-users', color: 'blue', valor: usuariosData.length, etiqueta: 'Usuarios', sub: `${usuariosEsteMes} nuevos este mes` },
                 { icono: 'fa-box-open', color: 'pink', valor: productosData.length, etiqueta: 'Productos', sub: `${productosAgotados} agotados` },
-                { icono: 'fa-tags', color: 'amber', valor: `${cuponesActivos}/${cuponesData.length}`, etiqueta: 'Cupones activos', sub: `${cuponesData.length} creados en total` },
-                { icono: 'fa-calendar-check', color: 'indigo', valor: citasAdminData.length, etiqueta: 'Citas registradas', sub: `${citasPendientes} pendientes` },
+                { icono: 'fa-tags', color: 'amber', valor: `${cuponesActivos}/${cuponesData.length}`, etiqueta: 'Cupones activos', sub: `${cuponesData.length} en total` },
             ];
             const colores = {
-                emerald: 'bg-emerald-50 text-emerald-600',
                 purple: 'bg-purple-50 text-purple-600',
                 blue: 'bg-blue-50 text-blue-600',
                 pink: 'bg-pink-50 text-pink-600',
                 amber: 'bg-amber-50 text-amber-600',
-                indigo: 'bg-indigo-50 text-indigo-600',
             };
             document.getElementById('kpi-cards').innerHTML = tarjetas.map(t => `
                 <div class="bg-white rounded-2xl border border-gray-200 p-5">
@@ -1359,34 +1462,36 @@
             `).join('');
 
             // Gráficos mensuales (ingresos, pedidos, usuarios nuevos)
-            renderizarGraficoBarras('grafico-ingresos', construirSerieMensual(pedidosData, (o) => o.createdAt, (o) => o.total || 0), formatoMoneda);
+            renderizarGraficoBarras('grafico-ingresos', serieIngresos, formatoMoneda);
             renderizarGraficoBarras('grafico-pedidos', construirSerieMensual(pedidosData, (o) => o.createdAt, () => 1), (v) => String(v));
             renderizarGraficoBarras('grafico-usuarios-nuevos', construirSerieMensual(usuariosData, (u) => u.createdAt, () => 1), (v) => String(v));
 
-            // Distribución de citas por estado
+            // ---- Distribución de citas: barra segmentada + leyenda ----
             const estados = [
                 { key: 'pendiente', label: 'Pendientes', color: 'bg-amber-500' },
                 { key: 'realizada', label: 'Realizadas', color: 'bg-emerald-500' },
                 { key: 'cancelada', label: 'Canceladas', color: 'bg-rose-500' },
             ];
-            const totalCitas = citasAdminData.length || 1;
-            document.getElementById('grafico-citas').innerHTML = estados.map(e => {
+            const totalCitas = citasAdminData.length;
+            const totalCitasSeguro = totalCitas || 1;
+            document.getElementById('citas-total-resumen').textContent = totalCitas;
+            document.getElementById('citas-barra-segmentada').innerHTML = estados.map(e => {
                 const count = citasAdminData.filter(c => (c.status || 'pendiente') === e.key).length;
-                const pct = Math.round((count / totalCitas) * 100);
+                const pct = Math.round((count / totalCitasSeguro) * 100);
+                return pct > 0 ? `<div class="${e.color}" style="width:${pct}%"></div>` : '';
+            }).join('');
+            document.getElementById('citas-leyenda').innerHTML = estados.map(e => {
+                const count = citasAdminData.filter(c => (c.status || 'pendiente') === e.key).length;
                 return `
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="text-gray-600">${e.label}</span>
-                            <span class="font-semibold text-gray-800">${count}</span>
-                        </div>
-                        <div class="w-full bg-gray-100 rounded-full h-2">
-                            <div class="${e.color} h-2 rounded-full transition-all" style="width: ${pct}%"></div>
-                        </div>
+                    <div class="flex items-center gap-2 text-sm text-gray-600">
+                        <span class="w-2.5 h-2.5 rounded-full ${e.color} shrink-0"></span>
+                        <span>${e.label}</span>
+                        <span class="ml-auto font-medium text-gray-800">${count}</span>
                     </div>
                 `;
             }).join('');
 
-            // Últimos pedidos
+            // ---- Últimos pedidos (lista compacta) ----
             const ultimosPedidos = pedidosData.slice(0, 5);
             document.getElementById('tabla-ultimos-pedidos').innerHTML = ultimosPedidos.length
                 ? ultimosPedidos.map(o => `
@@ -1400,7 +1505,27 @@
                 `).join('')
                 : `<p class="text-sm text-gray-400 px-6 py-6 text-center">Todavía no hay pedidos.</p>`;
 
-            // Últimos usuarios registrados
+            // ---- Pedidos recientes (tabla completa) ----
+            const pedidosTabla = pedidosData.slice(0, 6);
+            document.getElementById('tabla-resumen-pedidos').innerHTML = pedidosTabla.length
+                ? pedidosTabla.map(o => {
+                    const cliente = o.user
+                        ? `${o.user.name || 'Cliente'}<br><span class="text-xs text-gray-400">${o.user.email || ''}</span>`
+                        : 'Cliente eliminado';
+                    const productos = (o.items || []).map(i => `${i.cantidad}× ${i.name}`).join(', ');
+                    return `
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 text-sm text-gray-700">${cliente}</td>
+                            <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate" title="${productos.replace(/"/g, '&quot;')}">${productos}</td>
+                            <td class="px-6 py-4 text-sm">${o.couponCode ? `<span class="px-2 py-1 text-xs font-semibold rounded-full bg-pink-100 text-pink-700">${o.couponCode}</span>` : '—'}</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">${formatoFechaCorta(o.createdAt)}</td>
+                            <td class="px-6 py-4 text-sm font-semibold text-gray-900 text-right">${formatoMoneda(o.total)}</td>
+                        </tr>
+                    `;
+                }).join('')
+                : `<tr><td colspan="5" class="px-6 py-10 text-center text-gray-400">Todavía no hay pedidos registrados.</td></tr>`;
+
+            // ---- Últimos usuarios registrados ----
             const ultimosUsuarios = usuariosData.slice(0, 5);
             document.getElementById('tabla-ultimos-usuarios').innerHTML = ultimosUsuarios.length
                 ? ultimosUsuarios.map(u => `
