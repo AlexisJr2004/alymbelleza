@@ -16,6 +16,7 @@ const cartRoutes = require("./gestion-roles-productos/src/routes/cartRoutes");
 const appointmentRoutes = require("./gestion-roles-productos/src/routes/appointmentRoutes");
 const couponRoutes = require("./gestion-roles-productos/src/routes/couponRoutes");
 const orderRoutes = require("./gestion-roles-productos/src/routes/orderRoutes");
+const paymentCardRoutes = require("./gestion-roles-productos/src/routes/paymentCardRoutes");
 
 const app = express();
 
@@ -87,6 +88,7 @@ app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/coupons/validate", couponLimiter);
 app.use("/api/coupons", couponRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/payment-cards", paymentCardRoutes);
 
 // 7. Cualquier ruta /api no reconocida devuelve 404 en JSON, no el SPA fallback
 app.use("/api", (req, res) => {

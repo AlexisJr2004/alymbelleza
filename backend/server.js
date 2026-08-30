@@ -2,6 +2,7 @@ require("dotenv").config();
 const dns = require("dns");
 const mongoose = require("mongoose");
 const app = require("./app");
+const PaymentCard = require("./gestion-roles-productos/src/models/paymentCard");
 
 // En Render (y otras plataformas similares) las conexiones salientes por IPv6 a veces se
 // quedan esperando sin responder, aunque el host sí resuelva por IPv6 (ej. smtp.gmail.com).
@@ -41,9 +42,39 @@ const mongooseOptions = {
   authSource: "admin",
 };
 
+// Antes de esta función las tarjetas de pago (Pichincha, Guayaquil) estaban escritas a mano
+// en pagos.html. Al pasarlas a la base de datos, este bootstrap las crea una sola vez si la
+// colección está vacía, para que el sitio en producción no se quede sin tarjetas tras el deploy.
+const seedPaymentCardsIfEmpty = async () => {
+  const count = await PaymentCard.countDocuments();
+  if (count > 0) return;
+  await PaymentCard.insertMany([
+    {
+      plantilla: "pichincha",
+      banco: "Pichincha",
+      tipoCuenta: "Ahorros",
+      numeroCuenta: "2209 0506 71",
+      titular: "Merly Macias Cevallos",
+      marca: "visa",
+      orden: 0,
+    },
+    {
+      plantilla: "guayaquil",
+      banco: "Guayaquil",
+      tipoCuenta: "Ahorros",
+      numeroCuenta: "2209 0506 71",
+      titular: "Merly Macias Cevallos",
+      marca: "mastercard",
+      orden: 1,
+    },
+  ]);
+  console.log("✅ Tarjetas de pago iniciales creadas (Pichincha, Guayaquil).");
+};
+
 mongoose
   .connect(process.env.MONGODB_URI, mongooseOptions)
   .then(() => console.log("✅ MongoDB conectado exitosamente"))
+  .then(seedPaymentCardsIfEmpty)
   .catch((err) => {
     console.error("❌ Error de conexión a MongoDB:", err.message);
     process.exit(1);

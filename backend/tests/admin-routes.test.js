@@ -21,4 +21,9 @@ describe('Rutas de administrador requieren token', () => {
     const res = await request(app).get('/api/appointments/admin/all');
     expect(res.status).toBe(401);
   });
+
+  it('GET /api/payment-cards/admin rechaza sin token', async () => {
+    const res = await request(app).get('/api/payment-cards/admin');
+    expect(res.status).toBe(401);
+  });
 });
