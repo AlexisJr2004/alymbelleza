@@ -209,7 +209,7 @@
         </header>
 
         <main class="p-4 lg:p-6 max-w-[1920px] mx-auto">
-            <div class="mb-6">
+            <div class="mb-6" id="saludo-admin">
                 <h1 class="text-2xl font-bold text-gray-900">Hola, <span id="admin-nombre-saludo">Administrador</span></h1>
                 <p class="text-gray-500 mt-1">Aquí tienes un resumen de la actividad de Bella Beauty.</p>
             </div>
@@ -729,12 +729,11 @@
 
             <!-- Tarjetas de pago -->
             <div id="tab-tarjetas" class="admin-tab-panel hidden">
-                <div class="flex items-center justify-between gap-4 mb-6">
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-800">
-                            <i class="fas fa-credit-card mr-2 text-purple-600"></i> Centro de Tarjetas
-                        </h2>
-                        <p class="text-sm text-gray-500 mt-1">Cuentas bancarias que ven los clientes en pagos.html.</p>
+                <div class="flex items-start justify-between gap-4 mb-6">
+                    <div class="max-w-xl">
+                        <p class="text-xs font-semibold text-purple-600 uppercase tracking-wider mb-1">Gestión de pagos</p>
+                        <h2 class="text-2xl font-bold text-gray-800">Centro de Tarjetas</h2>
+                        <p class="text-sm text-gray-500 mt-2">Administra las cuentas bancarias que los clientes ven en la pasarela de pagos al finalizar su compra. Desde aquí puedes agregar, editar o desactivar una cuenta, y revisar cuántas hay activas por banco.</p>
                     </div>
                     <button type="button" id="btn-nueva-tarjeta"
                         class="inline-flex items-center gap-2 px-5 py-2.5 bg-purple-600 text-white rounded-full text-sm font-medium hover:bg-purple-700 transition-colors shrink-0">
@@ -743,82 +742,6 @@
                 </div>
 
                 <!-- Formulario (se muestra/oculta con el botón "Tarjeta nueva") -->
-                <div id="panel-form-tarjeta" class="hidden mb-6">
-                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4" id="form-tarjeta-titulo">Nueva Tarjeta</h3>
-                        <form id="form-tarjeta">
-                            <input type="hidden" id="tarjeta-id" name="id">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                <div class="space-y-1.5">
-                                    <label class="block text-sm font-medium text-gray-700">Banco</label>
-                                    <div class="relative">
-                                        <i class="fas fa-building-columns absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                                        <select id="tarjeta-plantilla" name="plantilla" required
-                                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
-                                            <option value="pichincha">Banco Pichincha</option>
-                                            <option value="guayaquil">Banco Guayaquil</option>
-                                        </select>
-                                        <i class="fas fa-chevron-down absolute right-3 top-2.5 text-gray-400 text-xs"></i>
-                                    </div>
-                                </div>
-
-                                <div class="space-y-1.5">
-                                    <label class="block text-sm font-medium text-gray-700">Tipo de cuenta</label>
-                                    <input type="text" id="tarjeta-tipo-cuenta" name="tipoCuenta" required
-                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                                        placeholder="Ej: Ahorros">
-                                </div>
-
-                                <div class="space-y-1.5">
-                                    <label class="block text-sm font-medium text-gray-700">Número de cuenta</label>
-                                    <input type="text" id="tarjeta-numero" name="numeroCuenta" required
-                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                                        placeholder="Ej: 2209 0506 71">
-                                </div>
-
-                                <div class="space-y-1.5">
-                                    <label class="block text-sm font-medium text-gray-700">Titular</label>
-                                    <input type="text" id="tarjeta-titular" name="titular" required
-                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                                        placeholder="Nombre del titular de la cuenta">
-                                </div>
-
-                                <div class="space-y-1.5">
-                                    <label class="block text-sm font-medium text-gray-700">Marca de tarjeta</label>
-                                    <div class="relative">
-                                        <i class="fas fa-id-card absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                                        <select id="tarjeta-marca" name="marca" required
-                                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
-                                            <option value="visa">Visa</option>
-                                            <option value="mastercard">MasterCard</option>
-                                        </select>
-                                        <i class="fas fa-chevron-down absolute right-3 top-2.5 text-gray-400 text-xs"></i>
-                                    </div>
-                                </div>
-
-                                <div class="flex items-end">
-                                    <label class="inline-flex items-center text-sm mb-2">
-                                        <input type="checkbox" id="tarjeta-activa" name="activa" checked
-                                            class="text-purple-600 focus:ring-purple-500">
-                                        <span class="ml-2">Visible en pagos.html</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="flex justify-end gap-2 pt-4 mt-4 border-t border-gray-200">
-                                <button type="button" id="cancelar-edicion-tarjeta"
-                                    class="px-4 py-2 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
-                                    <i class="fas fa-times mr-1.5"></i> Cancelar
-                                </button>
-                                <button type="submit"
-                                    class="px-5 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center">
-                                    <i class="fas fa-save mr-1.5"></i> Guardar Tarjeta
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
                 <!-- Fila de tarjetas resumen -->
                 <div id="resumen-tarjetas-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6"></div>
 
@@ -1079,6 +1002,88 @@
         </main>
     </div>
 
+    <!-- Modal: Nueva/Editar Tarjeta (fuera del wrapper z-10 para quedar sobre el sidebar) -->
+    <div id="panel-form-tarjeta" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+        <div id="overlay-form-tarjeta" class="absolute inset-0 bg-gray-900/50"></div>
+        <div class="relative bg-white rounded-xl border border-gray-200 p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-800" id="form-tarjeta-titulo">Nueva Tarjeta</h3>
+                <button type="button" id="cerrar-modal-tarjeta" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            <form id="form-tarjeta">
+                <input type="hidden" id="tarjeta-id" name="id">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-700">Banco</label>
+                        <div class="relative">
+                            <i class="fas fa-building-columns absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                            <select id="tarjeta-plantilla" name="plantilla" required
+                                class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
+                                <option value="pichincha">Banco Pichincha</option>
+                                <option value="guayaquil">Banco Guayaquil</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-3 top-2.5 text-gray-400 text-xs"></i>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-700">Tipo de cuenta</label>
+                        <input type="text" id="tarjeta-tipo-cuenta" name="tipoCuenta" required
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            placeholder="Ej: Ahorros">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-700">Número de cuenta</label>
+                        <input type="text" id="tarjeta-numero" name="numeroCuenta" required
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            placeholder="Ej: 2209 0506 71">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-700">Titular</label>
+                        <input type="text" id="tarjeta-titular" name="titular" required
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            placeholder="Nombre del titular de la cuenta">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-700">Marca de tarjeta</label>
+                        <div class="relative">
+                            <i class="fas fa-id-card absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                            <select id="tarjeta-marca" name="marca" required
+                                class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
+                                <option value="visa">Visa</option>
+                                <option value="mastercard">MasterCard</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-3 top-2.5 text-gray-400 text-xs"></i>
+                        </div>
+                    </div>
+
+                    <div class="flex items-end">
+                        <label class="inline-flex items-center text-sm mb-2">
+                            <input type="checkbox" id="tarjeta-activa" name="activa" checked
+                                class="text-purple-600 focus:ring-purple-500">
+                            <span class="ml-2">Visible en la pasarela de pagos</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-4 mt-4 border-t border-gray-200">
+                    <button type="button" id="cancelar-edicion-tarjeta"
+                        class="px-4 py-2 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-times mr-1.5"></i> Cancelar
+                    </button>
+                    <button type="submit"
+                        class="px-5 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center">
+                        <i class="fas fa-save mr-1.5"></i> Guardar Tarjeta
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
     <!-- Scripts para agregar productos nuevos -->
     <script>
         const PRODUCTS_API_URL = "https://aly-mbelleza-backend.onrender.com/api/products";
@@ -1462,18 +1467,18 @@
         let editandoTarjetaId = null;
         let tarjetasPagoData = [];
 
-        const RESUMEN_TARJETA_ESTILOS = [
-            { grad: 'from-emerald-500 to-emerald-600' },
-            { grad: 'from-violet-500 to-purple-600' },
-            { grad: 'from-orange-400 to-orange-500' },
-            { grad: 'from-sky-400 to-blue-500' },
-        ];
-        const DONUT_COLORES = ['#8b5cf6', '#f59e0b', '#10b981', '#3b82f6', '#ec4899', '#14b8a6'];
+        // Colores reales de cada banco (mismos que las tarjetas de pagos.html), no un ciclo arbitrario
+        const TARJETA_COLOR_BANCO = {
+            pichincha: { grad: 'from-[#f7df00] to-[#eec600]', texto: 'text-black', textoSuave: 'text-black/60', borde: 'border-black/10', dot: '#f7df00' },
+            guayaquil: { grad: 'from-[#191851] to-[#29265d]', texto: 'text-white', textoSuave: 'text-white/70', borde: 'border-white/15', dot: '#29265d' },
+        };
+        function colorDeTarjeta(card) {
+            return TARJETA_COLOR_BANCO[card.plantilla] || TARJETA_COLOR_BANCO.pichincha;
+        }
 
         function abrirFormTarjeta(modo) {
             formTarjetaTitulo.textContent = modo === 'editar' ? 'Editar Tarjeta' : 'Nueva Tarjeta';
             panelFormTarjeta.classList.remove('hidden');
-            panelFormTarjeta.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         function cerrarFormTarjeta() {
             panelFormTarjeta.classList.add('hidden');
@@ -1544,27 +1549,29 @@
                 grid.innerHTML = `<p class="sm:col-span-2 xl:col-span-4 text-center text-gray-400 py-6">No hay tarjetas de pago creadas todavía.</p>`;
                 return;
             }
-            grid.innerHTML = tarjetasPagoData.map((c, i) => {
-                const estilo = RESUMEN_TARJETA_ESTILOS[i % RESUMEN_TARJETA_ESTILOS.length];
+            grid.innerHTML = tarjetasPagoData.map((c) => {
+                const color = colorDeTarjeta(c);
+                const circulo = color.texto === 'text-white' ? 'bg-white/50' : 'bg-black/20';
+                const circulo2 = color.texto === 'text-white' ? 'bg-white/25' : 'bg-black/10';
                 return `
-                    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br ${estilo.grad} p-5 text-white">
+                    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br ${color.grad} p-5 ${color.texto}">
                         <div class="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-white/10 pointer-events-none"></div>
                         <div class="absolute -bottom-10 -left-6 w-28 h-28 rounded-full bg-white/10 pointer-events-none"></div>
                         <div class="relative z-10">
-                            <p class="text-sm font-medium text-white/80">${c.banco}</p>
+                            <p class="text-sm font-medium ${color.textoSuave}">${c.banco}</p>
                             <p class="text-xl font-bold mt-1 tracking-wide">${c.numeroCuenta}</p>
                             <div class="flex items-center gap-1.5 mt-4">
-                                <span class="w-6 h-6 rounded-full bg-white/50"></span>
-                                <span class="w-6 h-6 rounded-full bg-white/25 -ml-3"></span>
+                                <span class="w-6 h-6 rounded-full ${circulo}"></span>
+                                <span class="w-6 h-6 rounded-full ${circulo2} -ml-3"></span>
                                 <span class="text-xs font-semibold ml-2 uppercase tracking-wide">${c.marca}</span>
                             </div>
-                            <div class="flex items-center justify-between mt-5 pt-3 border-t border-white/20">
+                            <div class="flex items-center justify-between mt-5 pt-3 border-t ${color.borde}">
                                 <div class="min-w-0">
-                                    <p class="text-[10px] text-white/70 uppercase tracking-wide">Tipo de cuenta</p>
+                                    <p class="text-[10px] ${color.textoSuave} uppercase tracking-wide">Tipo de cuenta</p>
                                     <p class="text-sm font-semibold mt-0.5 truncate">${c.tipoCuenta}</p>
                                 </div>
                                 <div class="text-right min-w-0">
-                                    <p class="text-[10px] text-white/70 uppercase tracking-wide">Titular</p>
+                                    <p class="text-[10px] ${color.textoSuave} uppercase tracking-wide">Titular</p>
                                     <p class="text-sm font-semibold mt-0.5 truncate">${c.titular}</p>
                                 </div>
                             </div>
@@ -1585,21 +1592,25 @@
                 return;
             }
 
-            const conteoPorBanco = {};
-            tarjetasPagoData.forEach(c => { conteoPorBanco[c.banco] = (conteoPorBanco[c.banco] || 0) + 1; });
-            const entradas = Object.entries(conteoPorBanco);
+            const grupos = {};
+            tarjetasPagoData.forEach(c => {
+                const key = c.plantilla || 'pichincha';
+                if (!grupos[key]) grupos[key] = { banco: c.banco, count: 0 };
+                grupos[key].count += 1;
+            });
+            const entradas = Object.entries(grupos);
 
             let acumulado = 0;
-            const stops = entradas.map(([banco, count], i) => {
+            const stops = entradas.map(([plantilla, { count }]) => {
                 const inicio = acumulado;
                 acumulado += (count / total) * 100;
-                return `${DONUT_COLORES[i % DONUT_COLORES.length]} ${inicio}% ${acumulado}%`;
+                return `${colorDeTarjeta({ plantilla }).dot} ${inicio}% ${acumulado}%`;
             }).join(', ');
             donut.style.background = `conic-gradient(${stops})`;
 
-            leyenda.innerHTML = entradas.map(([banco, count], i) => `
+            leyenda.innerHTML = entradas.map(([plantilla, { banco, count }]) => `
                 <div class="flex items-center gap-2 text-sm">
-                    <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${DONUT_COLORES[i % DONUT_COLORES.length]}"></span>
+                    <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${colorDeTarjeta({ plantilla }).dot}"></span>
                     <span class="text-gray-600 truncate">${banco}</span>
                     <span class="ml-auto font-medium text-gray-800">${count}</span>
                 </div>
@@ -1612,14 +1623,13 @@
                 return;
             }
             listaTarjetas.innerHTML = lista.map((c) => {
-                const indiceOriginal = tarjetasPagoData.indexOf(c);
-                const estilo = RESUMEN_TARJETA_ESTILOS[indiceOriginal % RESUMEN_TARJETA_ESTILOS.length];
+                const color = colorDeTarjeta(c);
                 const estadoBadge = c.activa
                     ? '<span class="px-2 py-0.5 text-[11px] font-semibold rounded-full bg-green-100 text-green-700 whitespace-nowrap">Visible</span>'
                     : '<span class="px-2 py-0.5 text-[11px] font-semibold rounded-full bg-gray-100 text-gray-600 whitespace-nowrap">Oculta</span>';
                 return `
                     <div class="flex flex-wrap items-center gap-4 py-3.5">
-                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br ${estilo.grad} shrink-0"></div>
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br ${color.grad} shrink-0"></div>
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 flex-1 min-w-[200px] text-sm">
                             <div class="min-w-0">
                                 <p class="text-xs text-gray-400">Banco</p>
@@ -1737,6 +1747,11 @@
 
         cancelarTarjetaBtn.addEventListener('click', cerrarFormTarjeta);
         document.getElementById('buscador-tarjetas').addEventListener('input', aplicarFiltrosTarjetas);
+        document.getElementById('cerrar-modal-tarjeta').addEventListener('click', cerrarFormTarjeta);
+        document.getElementById('overlay-form-tarjeta').addEventListener('click', cerrarFormTarjeta);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !panelFormTarjeta.classList.contains('hidden')) cerrarFormTarjeta();
+        });
         // La carga inicial de tarjetas se dispara desde el bootstrap general del panel
     </script>
 
@@ -1839,6 +1854,7 @@
                 btn.classList.remove(...INACTIVE_TAB_CLASSES, ...ACTIVE_TAB_CLASSES);
                 btn.classList.add(...(activo ? ACTIVE_TAB_CLASSES : INACTIVE_TAB_CLASSES));
             });
+            document.getElementById('saludo-admin').classList.toggle('hidden', nombre !== 'resumen');
             localStorage.setItem('adminTabActiva', nombre);
         }
 
