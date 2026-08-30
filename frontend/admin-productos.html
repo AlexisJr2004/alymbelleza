@@ -10,6 +10,56 @@
     <link rel="stylesheet" href="/css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <link rel="icon" href="/img/mujer-con-pelo-largo.png" type="image/x-icon">
+    <style>
+        /* Vista previa de tarjetas de pago (mismo diseño que pagos.html) */
+        .tarjeta-guayaquil {
+            background: linear-gradient(45deg, #191851 50%, #29265d 50%);
+            border-radius: 1rem;
+            width: 100%;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+        .curva-1 {
+            position: absolute;
+            top: -20%;
+            left: -30%;
+            width: 300%;
+            height: 300%;
+            background: transparent;
+            border: 40px solid rgba(100, 100, 200, 0.1);
+            border-radius: 50%;
+            transform: rotate(25deg);
+        }
+        .curva-2 {
+            position: absolute;
+            top: -10%;
+            left: -60%;
+            width: 300%;
+            height: 300%;
+            background: transparent;
+            border: 20px solid rgba(100, 100, 200, 0.15);
+            border-radius: 50%;
+            transform: rotate(30deg);
+        }
+        .tarjeta-pichincha {
+            background: linear-gradient(to bottom right, #f7df00 0%, #f7df00 60%, #eec600 61%, #eec600 100%);
+            border-radius: 1rem;
+            width: 100%;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+        .overlay-triangulo {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 70%, rgba(0, 0, 0, 0.05) 70%);
+            z-index: 1;
+        }
+    </style>
 </head>
 
 <body class="bg-white font-body">
@@ -50,6 +100,14 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
                     </svg>
                     Cupones
+                </button>
+                <button type="button" data-tab="tarjetas"
+                    class="admin-tab-btn text-gray-600 hover:bg-white/70 hover:text-gray-900 w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
+                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a1.5 1.5 0 0 0 1.5-1.5V6.75a1.5 1.5 0 0 0-1.5-1.5h-15a1.5 1.5 0 0 0-1.5 1.5v10.5a1.5 1.5 0 0 0 1.5 1.5Z" />
+                    </svg>
+                    Tarjetas
                 </button>
                 <button type="button" data-tab="pedidos"
                     class="admin-tab-btn text-gray-600 hover:bg-white/70 hover:text-gray-900 w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors">
@@ -592,6 +650,95 @@
                     </div>
                 </div>
             </div> <!-- /tab-cupones -->
+
+            <!-- Tarjetas de pago -->
+            <div id="tab-tarjetas" class="admin-tab-panel hidden">
+                <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6 md:p-8">
+                    <div class="flex justify-between items-center mb-8">
+                        <h2 class="text-2xl font-bold text-gray-800">
+                            <i class="fas fa-credit-card mr-2 text-purple-600"></i> Tarjetas de Pago
+                        </h2>
+                    </div>
+                    <p class="text-sm text-gray-500 -mt-6 mb-8">Estas cuentas se muestran a los clientes en la página de pagos para transferencias bancarias.</p>
+
+                    <form id="form-tarjeta" class="mb-8 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <input type="hidden" id="tarjeta-id" name="id">
+
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700">Banco</label>
+                                <div class="relative">
+                                    <i class="fas fa-building-columns absolute left-3 top-3 text-gray-400"></i>
+                                    <select id="tarjeta-plantilla" name="plantilla" required
+                                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
+                                        <option value="pichincha">Banco Pichincha</option>
+                                        <option value="guayaquil">Banco Guayaquil</option>
+                                    </select>
+                                    <i class="fas fa-chevron-down absolute right-3 top-3 text-gray-400"></i>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700">Tipo de cuenta</label>
+                                <input type="text" id="tarjeta-tipo-cuenta" name="tipoCuenta" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                    placeholder="Ej: Ahorros">
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700">Número de cuenta</label>
+                                <input type="text" id="tarjeta-numero" name="numeroCuenta" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                    placeholder="Ej: 2209 0506 71">
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700">Titular</label>
+                                <input type="text" id="tarjeta-titular" name="titular" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                    placeholder="Nombre del titular de la cuenta">
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700">Marca de tarjeta</label>
+                                <div class="relative">
+                                    <i class="fas fa-id-card absolute left-3 top-3 text-gray-400"></i>
+                                    <select id="tarjeta-marca" name="marca" required
+                                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
+                                        <option value="visa">Visa</option>
+                                        <option value="mastercard">MasterCard</option>
+                                    </select>
+                                    <i class="fas fa-chevron-down absolute right-3 top-3 text-gray-400"></i>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700">Estado</label>
+                                <div>
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" id="tarjeta-activa" name="activa" checked
+                                            class="text-purple-600 focus:ring-purple-500">
+                                        <span class="ml-2">Visible en pagos.html</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+                            <button type="button" id="cancelar-edicion-tarjeta"
+                                class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors hidden">
+                                <i class="fas fa-times mr-2"></i> Cancelar
+                            </button>
+                            <button type="submit"
+                                class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center">
+                                <i class="fas fa-save mr-2"></i> Guardar Tarjeta
+                            </button>
+                        </div>
+                    </form>
+
+                    <div id="lista-tarjetas-pago" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                </div>
+            </div> <!-- /tab-tarjetas -->
 
             <!-- Pedidos -->
             <div id="tab-pedidos" class="admin-tab-panel hidden">
@@ -1138,6 +1285,176 @@
         // La carga inicial de cupones se dispara desde el bootstrap general del panel
     </script>
 
+    <!-- Script para la gestión de tarjetas de pago -->
+    <script>
+        const PAYMENT_CARDS_ADMIN_API_URL = "https://aly-mbelleza-backend.onrender.com/api/payment-cards/admin";
+        const PAYMENT_CARDS_API_URL = "https://aly-mbelleza-backend.onrender.com/api/payment-cards";
+        const TARJETA_NOMBRES_BANCO = { pichincha: 'Pichincha', guayaquil: 'Guayaquil' };
+        const TARJETA_MARCAS_ADMIN = {
+            visa: { logo: '/img/Visa_debit.svg', alto: 'h-10' },
+            mastercard: { logo: '/img/MasterCard.svg', alto: 'h-14' },
+        };
+        const formTarjeta = document.getElementById('form-tarjeta');
+        const listaTarjetas = document.getElementById('lista-tarjetas-pago');
+        const cancelarTarjetaBtn = document.getElementById('cancelar-edicion-tarjeta');
+        let editandoTarjetaId = null;
+        let tarjetasPagoData = [];
+
+        function renderizarVistaPreviaTarjeta(card) {
+            const marca = TARJETA_MARCAS_ADMIN[card.marca] || TARJETA_MARCAS_ADMIN.visa;
+            const esGuayaquil = card.plantilla === 'guayaquil';
+            const logoBanco = esGuayaquil ? '/img/Banco_Guayaquil.png' : '/img/Banco_Pichincha.svg';
+            const claseTarjeta = esGuayaquil ? 'tarjeta-guayaquil text-white p-5' : 'tarjeta-pichincha relative text-black p-5 z-0';
+            const decoracion = esGuayaquil
+                ? '<div class="curva-1"></div><div class="curva-2"></div>'
+                : '<div class="overlay-triangulo"></div>';
+            return `
+                <div class="${claseTarjeta}">
+                    ${decoracion}
+                    <div class="relative z-10 h-full flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-light">${card.banco} - ${card.tipoCuenta}</p>
+                                <p class="text-lg font-semibold tracking-wider mt-1">${card.numeroCuenta}</p>
+                            </div>
+                            <img src="${logoBanco}" alt="Banco ${card.banco}" class="h-7">
+                        </div>
+                        <div>
+                            <p class="text-xs font-light">Titular</p>
+                            <p class="text-base font-semibold tracking-wider">${card.titular}</p>
+                        </div>
+                        <div class="flex justify-between items-end">
+                            <div></div>
+                            <img src="${marca.logo}" alt="${card.marca}" class="${marca.alto}">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function cargarTarjetasPagoAdmin() {
+            const res = await fetch(PAYMENT_CARDS_ADMIN_API_URL, {
+                headers: { Authorization: `Bearer ${user.token}` }
+            });
+            const data = await res.json().catch(() => ({}));
+            tarjetasPagoData = data.data || [];
+            renderizarListaTarjetasPago();
+        }
+
+        function renderizarListaTarjetasPago() {
+            if (!tarjetasPagoData.length) {
+                listaTarjetas.innerHTML = `<p class="md:col-span-2 text-center text-gray-400 py-6">No hay tarjetas de pago creadas todavía.</p>`;
+                return;
+            }
+            listaTarjetas.innerHTML = tarjetasPagoData.map(c => `
+                <div class="space-y-3">
+                    ${renderizarVistaPreviaTarjeta(c)}
+                    <div class="flex items-center justify-between">
+                        ${c.activa
+                            ? '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">Visible en pagos.html</span>'
+                            : '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600">Oculta</span>'}
+                        <div class="flex items-center gap-2">
+                            <button type="button" title="Editar" class="btn-editar-tarjeta text-blue-600 hover:text-blue-800 p-2 rounded-full bg-blue-50 hover:bg-blue-100 transition" data-id="${c._id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button type="button" title="Eliminar" class="btn-eliminar-tarjeta text-red-600 hover:text-red-800 p-2 rounded-full bg-red-50 hover:bg-red-100 transition" data-id="${c._id}">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.btn-editar-tarjeta').forEach(btn => {
+                btn.addEventListener('click', () => editarTarjetaPago(btn.dataset.id));
+            });
+            document.querySelectorAll('.btn-eliminar-tarjeta').forEach(btn => {
+                btn.addEventListener('click', () => eliminarTarjetaPago(btn.dataset.id));
+            });
+        }
+
+        function editarTarjetaPago(id) {
+            const c = tarjetasPagoData.find(x => x._id === id);
+            if (!c) return;
+            document.getElementById('tarjeta-id').value = c._id;
+            document.getElementById('tarjeta-plantilla').value = c.plantilla;
+            document.getElementById('tarjeta-tipo-cuenta').value = c.tipoCuenta;
+            document.getElementById('tarjeta-numero').value = c.numeroCuenta;
+            document.getElementById('tarjeta-titular').value = c.titular;
+            document.getElementById('tarjeta-marca').value = c.marca;
+            document.getElementById('tarjeta-activa').checked = !!c.activa;
+            cancelarTarjetaBtn.classList.remove('hidden');
+            editandoTarjetaId = c._id;
+            formTarjeta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function resetFormTarjeta() {
+            formTarjeta.reset();
+            document.getElementById('tarjeta-plantilla').value = 'pichincha';
+            document.getElementById('tarjeta-marca').value = 'visa';
+            document.getElementById('tarjeta-activa').checked = true;
+            cancelarTarjetaBtn.classList.add('hidden');
+            editandoTarjetaId = null;
+        }
+
+        async function eliminarTarjetaPago(id) {
+            Swal.fire({
+                title: '¿Eliminar tarjeta?',
+                text: 'Dejará de mostrarse en la página de pagos.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e11d48',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then(async (result) => {
+                if (!result.isConfirmed) return;
+                const res = await fetch(`${PAYMENT_CARDS_API_URL}/${id}`, {
+                    method: 'DELETE',
+                    headers: { Authorization: `Bearer ${user.token}` }
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) {
+                    Swal.fire('Error', data.error || 'No se pudo eliminar la tarjeta.', 'error');
+                    return;
+                }
+                Swal.fire({ title: 'Eliminada', text: 'La tarjeta ha sido eliminada.', icon: 'success', timer: 1200, showConfirmButton: false });
+                cargarTarjetasPagoAdmin();
+            });
+        }
+
+        formTarjeta.onsubmit = async (e) => {
+            e.preventDefault();
+            const plantilla = document.getElementById('tarjeta-plantilla').value;
+            const payload = {
+                plantilla,
+                banco: TARJETA_NOMBRES_BANCO[plantilla],
+                tipoCuenta: document.getElementById('tarjeta-tipo-cuenta').value.trim(),
+                numeroCuenta: document.getElementById('tarjeta-numero').value.trim(),
+                titular: document.getElementById('tarjeta-titular').value.trim(),
+                marca: document.getElementById('tarjeta-marca').value,
+                activa: document.getElementById('tarjeta-activa').checked,
+            };
+            const method = editandoTarjetaId ? 'PUT' : 'POST';
+            const url = editandoTarjetaId ? `${PAYMENT_CARDS_API_URL}/${editandoTarjetaId}` : PAYMENT_CARDS_API_URL;
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.token}` },
+                body: JSON.stringify(payload),
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+                Swal.fire('Error', data.error || 'No se pudo guardar la tarjeta.', 'error');
+                return;
+            }
+            resetFormTarjeta();
+            cargarTarjetasPagoAdmin();
+        };
+
+        cancelarTarjetaBtn.addEventListener('click', resetFormTarjeta);
+        // La carga inicial de tarjetas se dispara desde el bootstrap general del panel
+    </script>
+
     <!-- Script del panel: pestañas, métricas del resumen, usuarios, pedidos y citas -->
     <script>
         const USERS_API_URL = "https://aly-mbelleza-backend.onrender.com/api/auth/users";
@@ -1643,6 +1960,7 @@
                 await Promise.all([
                     cargarProductos(),
                     cargarCupones(),
+                    cargarTarjetasPagoAdmin(),
                     cargarUsuariosAdmin(),
                     cargarPedidosAdmin(),
                     cargarCitasAdmin(),

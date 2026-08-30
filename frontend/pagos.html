@@ -554,67 +554,8 @@
         <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">
             Por favor transfiera el monto a cualquiera de nuestras cuentas y envíe el comprobante junto con la factura al WhatsApp: 099 793 2650.
         </p>  
-        <div class="flex flex-col md:flex-row justify-center gap-6 md:gap-8 max-w-5xl mx-auto">
-          <!-- Tarjeta Banco Pichincha -->
-          <div class="w-full md:w-1/2 px-4">
-            <div class="tarjeta-pichincha relative text-black p-6 z-0 shadow-md">
-              <div class="overlay-triangulo"></div>
-              <div class="relative z-10 h-full flex flex-col justify-between">
-                <div class="flex justify-between items-start">
-                  <div>
-                    <br>
-                    <p class="text-sm font-light">Número de cuenta</p>
-                    <p class="text-sm font-light">Pichincha - Ahorros</p>
-                    <p class="text-xl font-semibold tracking-wider mt-2">2209 0506 71</p>
-                  </div>
-                  <img src="img/Banco_Pichincha.svg" 
-                      alt="Banco Pichincha" 
-                      class="h-8">
-                </div>
-                <div>
-                  <p class="text-sm font-light">Titular</p>
-                  <p class="text-lg font-semibold tracking-wider">Merly Macias Cevallos</p>
-                </div>
-                <div class="flex justify-between items-end">
-                  <div></div>
-                  <img src="img/Visa_debit.svg" 
-                      alt="Visa" 
-                      class="h-12">
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Tarjeta Banco Guayaquil -->
-          <div class="w-full md:w-1/2 px-4">
-            <div class="tarjeta-guayaquil text-white p-6 shadow-md">
-              <div class="curva-1"></div>
-              <div class="curva-2"></div>
-              <div class="relative z-10 h-full flex flex-col justify-between">
-                <div class="flex justify-between items-start">
-                  <div>
-                    <br>
-                    <p class="text-sm font-light">Número de cuenta</p>
-                    <p class="text-sm font-light">Guayaquil - Ahorros</p>
-                    <p class="text-xl font-semibold tracking-wider mt-2">2209 0506 71</p>
-                  </div>
-                  <img src="img/Banco_Guayaquil.png" 
-                      alt="Banco Guayaquil" 
-                      class="h-8">
-                </div>
-                <div>
-                  <p class="text-sm font-light">Titular</p>
-                  <p class="text-lg font-semibold tracking-wider">Merly Macias Cevallos</p>
-                </div>
-                <div class="flex justify-between items-end">
-                  <div></div>
-                  <img src="img/MasterCard.svg" 
-                      alt="MasterCard" 
-                      class="h-16">
-                </div>
-              </div>
-            </div>
-          </div>
+        <div id="tarjetas-pago-lista" class="flex flex-col md:flex-row justify-center gap-6 md:gap-8 max-w-5xl mx-auto">
+          <p class="text-center text-gray-400 w-full">Cargando cuentas...</p>
         </div>
     </div>
     <div class="flex justify-center mt-6">
@@ -1515,6 +1456,69 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/main.js"></script>
+
+    <!-- Tarjetas de pago (cuentas bancarias) -->
+    <script>
+        const PAYMENT_CARDS_API_URL = "https://aly-mbelleza-backend.onrender.com/api/payment-cards";
+        const TARJETA_MARCAS = {
+            visa: { logo: 'img/Visa_debit.svg', alto: 'h-12' },
+            mastercard: { logo: 'img/MasterCard.svg', alto: 'h-16' },
+        };
+
+        function renderizarTarjetaPago(card) {
+            const marca = TARJETA_MARCAS[card.marca] || TARJETA_MARCAS.visa;
+            const esGuayaquil = card.plantilla === 'guayaquil';
+            const logoBanco = esGuayaquil ? 'img/Banco_Guayaquil.png' : 'img/Banco_Pichincha.svg';
+            const claseTarjeta = esGuayaquil ? 'tarjeta-guayaquil text-white p-6 shadow-md' : 'tarjeta-pichincha relative text-black p-6 z-0 shadow-md';
+            const decoracion = esGuayaquil
+                ? '<div class="curva-1"></div><div class="curva-2"></div>'
+                : '<div class="overlay-triangulo"></div>';
+            return `
+                <div class="w-full md:w-1/2 px-4">
+                    <div class="${claseTarjeta}">
+                        ${decoracion}
+                        <div class="relative z-10 h-full flex flex-col justify-between">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <br>
+                                    <p class="text-sm font-light">Número de cuenta</p>
+                                    <p class="text-sm font-light">${card.banco} - ${card.tipoCuenta}</p>
+                                    <p class="text-xl font-semibold tracking-wider mt-2">${card.numeroCuenta}</p>
+                                </div>
+                                <img src="${logoBanco}" alt="Banco ${card.banco}" class="h-8">
+                            </div>
+                            <div>
+                                <p class="text-sm font-light">Titular</p>
+                                <p class="text-lg font-semibold tracking-wider">${card.titular}</p>
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <div></div>
+                                <img src="${marca.logo}" alt="${card.marca}" class="${marca.alto}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function cargarTarjetasPago() {
+            const contenedor = document.getElementById('tarjetas-pago-lista');
+            try {
+                const res = await fetch(PAYMENT_CARDS_API_URL);
+                const data = await res.json().catch(() => ({}));
+                const tarjetas = data.data || [];
+                if (!tarjetas.length) {
+                    contenedor.innerHTML = '<p class="text-center text-gray-400 w-full">No hay cuentas disponibles en este momento. Contáctanos por WhatsApp: 099 793 2650.</p>';
+                    return;
+                }
+                contenedor.innerHTML = tarjetas.map(renderizarTarjetaPago).join('');
+            } catch (err) {
+                contenedor.innerHTML = '<p class="text-center text-gray-400 w-full">No se pudieron cargar las cuentas. Contáctanos por WhatsApp: 099 793 2650.</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', cargarTarjetasPago);
+    </script>
 
 </body>
 
