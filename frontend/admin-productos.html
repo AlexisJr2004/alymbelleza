@@ -883,6 +883,63 @@
 
             <!-- Usuarios -->
             <div id="tab-usuarios" class="admin-tab-panel hidden">
+                <div class="max-w-2xl mb-6">
+                    <p class="text-xs font-semibold text-purple-600 uppercase tracking-wider mb-1">Gestión de usuarios</p>
+                    <h1 class="text-2xl font-bold text-gray-900">Clientes registrados</h1>
+                    <p class="text-sm text-gray-500 mt-2">Administra los usuarios registrados en Bella Beauty. Puedes buscar, filtrar por rol o estado, habilitar/deshabilitar cuentas y cambiar el rol de administrador.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Total clientes</p>
+                                <p class="mt-2 text-3xl font-bold text-gray-900" id="usuarios-kpi-total">0</p>
+                                <p class="mt-1 text-xs text-gray-400">Usuarios registrados</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-purple-100/70 text-purple-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Activos</p>
+                                <p class="mt-2 text-3xl font-bold text-emerald-700" id="usuarios-kpi-activos">0</p>
+                                <p class="mt-1 text-xs text-gray-400">Cuentas habilitadas</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-emerald-100/70 text-emerald-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Administradores</p>
+                                <p class="mt-2 text-3xl font-bold text-sky-700" id="usuarios-kpi-admins">0</p>
+                                <p class="mt-1 text-xs text-gray-400">Con permisos totales</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-sky-100/70 text-sky-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Inactivos</p>
+                                <p class="mt-2 text-3xl font-bold text-gray-500" id="usuarios-kpi-inactivos">0</p>
+                                <p class="mt-1 text-xs text-gray-400">Cuentas deshabilitadas</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-gray-100 text-gray-500 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex flex-col lg:flex-row items-start gap-6">
                     <!-- Filtros -->
                     <aside class="w-full lg:w-64 shrink-0">
@@ -918,6 +975,29 @@
                                     </label>
                                 </div>
                             </div>
+                            <div class="pt-4 border-t border-gray-100">
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">Estado</h4>
+                                <div class="space-y-2">
+                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                        <input type="radio" name="usuarios-estado-filtro" value="all" checked
+                                            class="text-purple-600 focus:ring-purple-400"> Todos
+                                    </label>
+                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                        <input type="radio" name="usuarios-estado-filtro" value="activo" class="text-purple-600 focus:ring-purple-400">
+                                        Activos
+                                    </label>
+                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                        <input type="radio" name="usuarios-estado-filtro" value="inactivo" class="text-purple-600 focus:ring-purple-400">
+                                        Inactivos
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Distribución de cuentas -->
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5 mt-6">
+                            <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-4">Distribución de cuentas</h3>
+                            <div class="space-y-3" id="usuarios-distribucion"></div>
                         </div>
                     </aside>
 
@@ -946,8 +1026,10 @@
                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teléfono
                                             </th>
                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rol</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registrado
                                             </th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acción</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tabla-usuarios" class="bg-white divide-y divide-gray-200"></tbody>
@@ -2014,6 +2096,7 @@
         function aplicarFiltrosUsuarios() {
             const texto = document.getElementById('buscador-usuarios').value.trim().toLowerCase();
             const rolFiltro = document.querySelector('input[name="usuarios-rol-filtro"]:checked').value;
+            const estadoFiltro = document.querySelector('input[name="usuarios-estado-filtro"]:checked').value;
 
             let filtrados = usuariosData.filter(u =>
                 (u.name || '').toLowerCase().includes(texto) || (u.email || '').toLowerCase().includes(texto)
@@ -2022,9 +2105,96 @@
             if (rolFiltro !== 'all') {
                 filtrados = filtrados.filter(u => u.role === rolFiltro);
             }
+            if (estadoFiltro === 'activo') {
+                filtrados = filtrados.filter(u => u.isActive !== false);
+            } else if (estadoFiltro === 'inactivo') {
+                filtrados = filtrados.filter(u => u.isActive === false);
+            }
 
             document.getElementById('usuarios-total-label').textContent = `${filtrados.length} usuario${filtrados.length === 1 ? '' : 's'} encontrado${filtrados.length === 1 ? '' : 's'}`;
             mostrarPaginaUsuarios(1, filtrados);
+            renderizarKpisUsuarios();
+        }
+
+        function renderizarKpisUsuarios() {
+            const total = usuariosData.length;
+            const activos = usuariosData.filter(u => u.isActive !== false).length;
+            const inactivos = total - activos;
+            const admins = usuariosData.filter(u => u.role === 'admin').length;
+            document.getElementById('usuarios-kpi-total').textContent = total;
+            document.getElementById('usuarios-kpi-activos').textContent = activos;
+            document.getElementById('usuarios-kpi-admins').textContent = admins;
+            document.getElementById('usuarios-kpi-inactivos').textContent = inactivos;
+
+            const pct = (n) => total > 0 ? Math.round((n / total) * 100) : 0;
+            const filas = [
+                { label: 'Activos', valor: activos, pct: pct(activos), clase: 'text-emerald-700', borde: 'border-emerald-100' },
+                { label: 'Inactivos', valor: inactivos, pct: pct(inactivos), clase: 'text-gray-600', borde: 'border-gray-200' },
+                { label: 'Administradores', valor: admins, pct: pct(admins), clase: 'text-sky-700', borde: 'border-sky-100' },
+            ];
+            document.getElementById('usuarios-distribucion').innerHTML = filas.map(f => `
+                <div class="rounded-xl border ${f.borde} px-3 py-2.5 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-gray-500">${f.label}</p>
+                        <p class="text-base font-semibold ${f.clase} mt-0.5">${f.valor}</p>
+                    </div>
+                    <span class="text-sm font-medium ${f.clase}">${f.pct}%</span>
+                </div>
+            `).join('');
+        }
+
+        async function toggleUsuarioActivo(id, btn) {
+            btn.disabled = true;
+            const original = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            try {
+                const res = await fetch(`${USERS_API_URL}/${id}/toggle-active`, {
+                    method: 'PUT',
+                    headers: { Authorization: `Bearer ${user.token}` },
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) {
+                    Swal.fire('Error', data.error || 'No se pudo cambiar el estado del usuario.', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = original;
+                    return;
+                }
+                const u = usuariosData.find(x => x._id === id);
+                if (u) u.isActive = data.data.isActive;
+                aplicarFiltrosUsuarios();
+            } catch (err) {
+                Swal.fire('Error', 'No se pudo cambiar el estado del usuario.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = original;
+            }
+        }
+
+        async function cambiarRolUsuario(id, rolActual, btn) {
+            const nuevoRol = rolActual === 'admin' ? 'cliente' : 'admin';
+            btn.disabled = true;
+            const original = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            try {
+                const res = await fetch(`${USERS_API_URL}/${id}/role`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.token}` },
+                    body: JSON.stringify({ role: nuevoRol }),
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) {
+                    Swal.fire('Error', data.error || 'No se pudo cambiar el rol del usuario.', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = original;
+                    return;
+                }
+                const u = usuariosData.find(x => x._id === id);
+                if (u) u.role = data.data.role;
+                aplicarFiltrosUsuarios();
+            } catch (err) {
+                Swal.fire('Error', 'No se pudo cambiar el rol del usuario.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = original;
+            }
         }
 
         function mostrarPaginaUsuarios(pagina, lista = usuariosData) {
@@ -2036,6 +2206,10 @@
                 const rolBadge = u.role === 'admin'
                     ? '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-700">Administrador</span>'
                     : '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600">Cliente</span>';
+                const activo = u.isActive !== false;
+                const estadoBadge = activo
+                    ? '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700">Activo</span>'
+                    : '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-700">Inactivo</span>';
                 const foto = u.profileImage || 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
                 const emailHTML = u.email
                     ? `<a href="mailto:${u.email}" class="text-purple-600 hover:text-purple-800 hover:underline">${u.email}</a>`
@@ -2043,6 +2217,19 @@
                 const telefonoHTML = u.phone
                     ? `<a href="https://wa.me/${numeroWhatsapp(u.phone)}" target="_blank" rel="noopener" class="text-emerald-600 hover:text-emerald-800 hover:underline inline-flex items-center gap-1.5"><i class="fab fa-whatsapp"></i>${u.phone}</a>`
                     : '—';
+                const esYo = u.email === user.email;
+                const accionesHTML = esYo
+                    ? '<span class="text-xs text-gray-400">Tu cuenta</span>'
+                    : `
+                        <div class="flex flex-col gap-1.5">
+                            <button type="button" class="btn-toggle-activo text-xs font-semibold px-2 py-1 rounded-lg transition ${activo ? 'bg-red-50 text-red-600 hover:bg-red-100' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}" data-id="${u._id}">
+                                ${activo ? 'Deshabilitar' : 'Habilitar'}
+                            </button>
+                            <button type="button" class="btn-cambiar-rol text-xs font-semibold px-2 py-1 rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 transition" data-id="${u._id}" data-rol="${u.role}">
+                                Cambiar Rol
+                            </button>
+                        </div>
+                    `;
                 return `
                     <tr>
                         <td class="p-3 pl-6">
@@ -2053,11 +2240,20 @@
                         <td class="p-3">${emailHTML}</td>
                         <td class="p-3">${telefonoHTML}</td>
                         <td class="p-3">${rolBadge}</td>
+                        <td class="p-3">${estadoBadge}</td>
                         <td class="p-3">${formatoFechaCorta(u.createdAt)}</td>
+                        <td class="p-3">${accionesHTML}</td>
                     </tr>
                 `;
-            }).join('') : `<tr><td colspan="6" class="p-6 text-center text-gray-400">No se encontraron usuarios.</td></tr>`;
+            }).join('') : `<tr><td colspan="8" class="p-6 text-center text-gray-400">No se encontraron usuarios.</td></tr>`;
             renderizarPaginacionGenerica('paginacion-usuarios', lista.length, usuariosPorPagina, paginaUsuarios, (p) => mostrarPaginaUsuarios(p, lista));
+
+            document.querySelectorAll('.btn-toggle-activo').forEach(btn => {
+                btn.addEventListener('click', () => toggleUsuarioActivo(btn.dataset.id, btn));
+            });
+            document.querySelectorAll('.btn-cambiar-rol').forEach(btn => {
+                btn.addEventListener('click', () => cambiarRolUsuario(btn.dataset.id, btn.dataset.rol, btn));
+            });
         }
 
         document.getElementById('buscador-usuarios').addEventListener('input', aplicarFiltrosUsuarios);
@@ -2066,11 +2262,15 @@
         document.querySelectorAll('input[name="usuarios-rol-filtro"]').forEach(radio => {
             radio.addEventListener('change', aplicarFiltrosUsuarios);
         });
+        document.querySelectorAll('input[name="usuarios-estado-filtro"]').forEach(radio => {
+            radio.addEventListener('change', aplicarFiltrosUsuarios);
+        });
         document.getElementById('usuarios-limpiar-filtros').addEventListener('click', () => {
             document.getElementById('buscador-usuarios').value = '';
             document.getElementById('usuarios-fecha-desde').value = '';
             document.getElementById('usuarios-fecha-hasta').value = '';
             document.querySelector('input[name="usuarios-rol-filtro"][value="all"]').checked = true;
+            document.querySelector('input[name="usuarios-estado-filtro"][value="all"]').checked = true;
             aplicarFiltrosUsuarios();
         });
 
