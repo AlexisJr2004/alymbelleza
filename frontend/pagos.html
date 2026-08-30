@@ -15,19 +15,6 @@
     <link rel="icon" href="/img/mujer-con-pelo-largo.png" type="image/x-icon">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
   <style>
-    /* Envoltorio de cada tarjeta: da espacio para que las manchas difuminadas asomen detrás */
-    .tarjeta-glass-wrap {
-      position: relative;
-      padding: 18px;
-    }
-    .tarjeta-blob {
-      position: absolute;
-      border-radius: 9999px;
-      filter: blur(30px);
-      z-index: 0;
-      pointer-events: none;
-    }
-
     /* Banco Guayaquil (azul/índigo oscuro, con vidrio esmerilado) */
     .tarjeta-guayaquil {
       background: linear-gradient(135deg, rgba(25, 24, 81, 0.82) 0%, rgba(41, 38, 93, 0.82) 100%);
@@ -38,12 +25,9 @@
       width: 100%;
       height: 240px;
       position: relative;
-      z-index: 1;
       overflow: hidden;
       box-shadow: 0 20px 40px -18px rgba(25, 24, 81, 0.6);
     }
-    .tarjeta-glass-wrap .tarjeta-blob.blob-guayaquil-1 { top: -20px; right: -20px; width: 150px; height: 150px; background: #7c3aed; opacity: .55; }
-    .tarjeta-glass-wrap .tarjeta-blob.blob-guayaquil-2 { bottom: -25px; left: -25px; width: 130px; height: 130px; background: #db2777; opacity: .4; }
 
     /* Banco Pichincha (amarillo, con vidrio esmerilado) */
     .tarjeta-pichincha {
@@ -55,12 +39,9 @@
       width: 100%;
       height: 240px;
       position: relative;
-      z-index: 1;
       overflow: hidden;
       box-shadow: 0 20px 40px -18px rgba(180, 150, 0, 0.5);
     }
-    .tarjeta-glass-wrap .tarjeta-blob.blob-pichincha-1 { top: -20px; left: -20px; width: 150px; height: 150px; background: #f7df00; opacity: .7; }
-    .tarjeta-glass-wrap .tarjeta-blob.blob-pichincha-2 { bottom: -25px; right: -25px; width: 130px; height: 130px; background: #eec600; opacity: .6; }
 
     /* Brillo diagonal (efecto vidrio) sobre cualquier tarjeta */
     .tarjeta-sheen {
@@ -1501,36 +1482,30 @@
             const esGuayaquil = card.plantilla === 'guayaquil';
             const logoBanco = esGuayaquil ? 'img/Banco_Guayaquil.png' : 'img/Banco_Pichincha.svg';
             const claseTarjeta = esGuayaquil ? 'tarjeta-guayaquil text-white p-6' : 'tarjeta-pichincha text-black p-6';
-            const blobs = esGuayaquil
-                ? '<div class="tarjeta-blob blob-guayaquil-1"></div><div class="tarjeta-blob blob-guayaquil-2"></div>'
-                : '<div class="tarjeta-blob blob-pichincha-1"></div><div class="tarjeta-blob blob-pichincha-2"></div>';
             const subtitulo = esGuayaquil ? 'text-white/70' : 'text-black/60';
             return `
                 <div class="w-full md:w-1/2 px-4">
-                    <div class="tarjeta-glass-wrap">
-                        ${blobs}
-                        <div class="${claseTarjeta}">
-                            <div class="tarjeta-sheen"></div>
-                            <div class="relative z-10 h-full flex flex-col justify-between">
-                                <div class="flex justify-between items-start">
-                                    <div class="flex items-center gap-2">
-                                        <img src="${logoBanco}" alt="Banco ${card.banco}" class="h-7">
-                                    </div>
-                                    <div class="tarjeta-chip"></div>
+                    <div class="${claseTarjeta}">
+                        <div class="tarjeta-sheen"></div>
+                        <div class="relative z-10 h-full flex flex-col justify-between">
+                            <div class="flex justify-between items-start">
+                                <div class="flex items-center gap-2">
+                                    <img src="${logoBanco}" alt="Banco ${card.banco}" class="h-7">
                                 </div>
+                                <div class="tarjeta-chip"></div>
+                            </div>
+                            <div>
+                                <p class="text-xs font-light ${subtitulo}">Número de cuenta</p>
+                                <p class="text-xl font-semibold tracking-wider mt-1">${card.numeroCuenta}</p>
+                            </div>
+                            <div class="flex justify-between items-end">
                                 <div>
-                                    <p class="text-xs font-light ${subtitulo}">Número de cuenta</p>
-                                    <p class="text-xl font-semibold tracking-wider mt-1">${card.numeroCuenta}</p>
+                                    <p class="text-xs font-light ${subtitulo}">Titular</p>
+                                    <p class="text-base font-semibold tracking-wide">${card.titular}</p>
                                 </div>
-                                <div class="flex justify-between items-end">
-                                    <div>
-                                        <p class="text-xs font-light ${subtitulo}">Titular</p>
-                                        <p class="text-base font-semibold tracking-wide">${card.titular}</p>
-                                    </div>
-                                    <div class="text-right">
-                                        <p class="text-xs font-light ${subtitulo}">${card.banco} · ${card.tipoCuenta}</p>
-                                        <img src="${marca.logo}" alt="${card.marca}" class="${marca.alto} ml-auto mt-1">
-                                    </div>
+                                <div class="text-right">
+                                    <p class="text-xs font-light ${subtitulo}">${card.banco} · ${card.tipoCuenta}</p>
+                                    <img src="${marca.logo}" alt="${card.marca}" class="${marca.alto} ml-auto mt-1">
                                 </div>
                             </div>
                         </div>
