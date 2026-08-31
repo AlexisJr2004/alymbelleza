@@ -1441,22 +1441,23 @@
                             placeholder="0-5">
                     </div>
 
-                    <div class="flex items-center justify-between">
-                        <label class="inline-flex items-center gap-2.5 text-sm cursor-pointer">
-                            <input type="checkbox" id="destacado" name="featured" value="true" class="sr-only peer">
-                            <span class="relative w-9 h-5 shrink-0 bg-gray-200 peer-checked:bg-purple-600 rounded-full transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform after:shadow-sm peer-checked:after:translate-x-4"></span>
-                            <span>Destacado</span>
-                        </label>
-                        <div class="flex items-center gap-3 text-sm">
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="availability" value="true" checked
-                                    class="text-purple-600 focus:ring-purple-500">
-                                <span class="ml-1.5">Disponible</span>
+                    <div class="sm:col-span-2 pt-3 mt-1 border-t border-gray-100">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Estado del producto</label>
+                        <div class="flex flex-wrap items-center gap-x-10 gap-y-3">
+                            <label class="inline-flex items-center gap-2.5 text-sm cursor-pointer">
+                                <input type="checkbox" id="destacado" name="featured" value="true" class="sr-only peer">
+                                <span class="relative w-9 h-5 shrink-0 bg-gray-200 peer-checked:bg-purple-600 rounded-full transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform after:shadow-sm peer-checked:after:translate-x-4"></span>
+                                <span>Destacado</span>
                             </label>
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="availability" value="false"
-                                    class="text-purple-600 focus:ring-purple-500">
-                                <span class="ml-1.5">Agotado</span>
+                            <label class="inline-flex items-center gap-2.5 text-sm cursor-pointer">
+                                <input type="checkbox" id="producto-disponible-switch" checked class="sr-only peer">
+                                <span class="relative w-9 h-5 shrink-0 bg-gray-200 peer-checked:bg-purple-600 rounded-full transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform after:shadow-sm peer-checked:after:translate-x-4"></span>
+                                <span>Disponible</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2.5 text-sm cursor-pointer">
+                                <input type="checkbox" id="producto-agotado-switch" class="sr-only peer">
+                                <span class="relative w-9 h-5 shrink-0 bg-gray-200 peer-checked:bg-purple-600 rounded-full transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform after:shadow-sm peer-checked:after:translate-x-4"></span>
+                                <span>Agotado</span>
                             </label>
                         </div>
                     </div>
@@ -1624,6 +1625,16 @@
         });
         document.getElementById('cerrar-modal-producto').addEventListener('click', cerrarFormProducto);
         document.getElementById('overlay-form-producto').addEventListener('click', cerrarFormProducto);
+
+        const productoDisponibleSwitch = document.getElementById('producto-disponible-switch');
+        const productoAgotadoSwitch = document.getElementById('producto-agotado-switch');
+        productoDisponibleSwitch.addEventListener('change', () => {
+            productoAgotadoSwitch.checked = !productoDisponibleSwitch.checked;
+        });
+        productoAgotadoSwitch.addEventListener('change', () => {
+            productoDisponibleSwitch.checked = !productoAgotadoSwitch.checked;
+        });
+
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && !panelFormProducto.classList.contains('invisible')) cerrarFormProducto();
         });
@@ -1708,7 +1719,8 @@
             document.getElementById('categoria').value = data.category;
             document.getElementById('tipo').value = data.type || 'otro';
             document.getElementById('destacado').checked = !!data.featured;
-            document.querySelector(`input[name="availability"][value="${data.availability ? 'true' : 'false'}"]`).checked = true;
+            document.getElementById('producto-disponible-switch').checked = !!data.availability;
+            document.getElementById('producto-agotado-switch').checked = !data.availability;
             editandoId = data._id;
             abrirFormProducto('editar');
         }
@@ -1748,7 +1760,7 @@
             const formData = new FormData(form);
 
             // Corrige los campos booleanos
-            formData.set('availability', formData.get('availability') === 'true');
+            formData.set('availability', document.getElementById('producto-disponible-switch').checked);
             formData.set('featured', document.getElementById('destacado').checked);
 
             // Forzar el valor seleccionado de categoría
