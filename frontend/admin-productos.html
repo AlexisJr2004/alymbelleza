@@ -812,6 +812,63 @@
 
             <!-- Pedidos -->
             <div id="tab-pedidos" class="admin-tab-panel hidden">
+                <div class="max-w-2xl mb-6">
+                    <p class="text-xs font-semibold text-purple-600 uppercase tracking-wider mb-1">Gestión de pedidos</p>
+                    <h1 class="text-2xl font-bold text-gray-900">Pedidos registrados</h1>
+                    <p class="text-sm text-gray-500 mt-2">Revisa los pedidos realizados por los clientes, filtra por fecha o cupón, y consulta ingresos y descuentos aplicados.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Total pedidos</p>
+                                <p class="mt-2 text-3xl font-bold text-gray-900" id="pedidos-kpi-total">0</p>
+                                <p class="mt-1 text-xs text-gray-400">Pedidos registrados</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-purple-100/70 text-purple-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Ingresos</p>
+                                <p class="mt-2 text-3xl font-bold text-emerald-700" id="pedidos-kpi-ingresos">$0.00</p>
+                                <p class="mt-1 text-xs text-gray-400">Total facturado</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-emerald-100/70 text-emerald-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Descuentos</p>
+                                <p class="mt-2 text-3xl font-bold text-pink-700" id="pedidos-kpi-descuentos">$0.00</p>
+                                <p class="mt-1 text-xs text-gray-400">Aplicados con cupón</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-pink-100/70 text-pink-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.83.699 2.53 0l7.409-7.409a1.79 1.79 0 0 0 0-2.53L13.16 3.66A2.25 2.25 0 0 0 11.568 3H9.568Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Ticket promedio</p>
+                                <p class="mt-2 text-3xl font-bold text-sky-700" id="pedidos-kpi-promedio">$0.00</p>
+                                <p class="mt-1 text-xs text-gray-400">Por pedido</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-sky-100/70 text-sky-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex flex-col lg:flex-row items-start gap-6">
                     <!-- Filtros -->
                     <aside class="w-full lg:w-64 shrink-0">
@@ -837,6 +894,23 @@
                                 </label>
                             </div>
                         </div>
+
+                        <!-- Distribución de pedidos -->
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5 mt-6">
+                            <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-4">Uso de cupones</h3>
+                            <div class="flex justify-center">
+                                <div class="relative">
+                                    <div id="pedidos-donut" class="relative w-32 h-32 rounded-full bg-gray-100">
+                                        <div class="absolute inset-[13px] bg-white rounded-full"></div>
+                                    </div>
+                                    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                        <span class="text-xl font-bold text-gray-900" id="pedidos-donut-pct">0%</span>
+                                        <span class="text-[10px] text-gray-500">Con cupón</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 space-y-2.5" id="pedidos-donut-leyenda"></div>
+                        </div>
                     </aside>
 
                     <!-- Contenido -->
@@ -846,17 +920,6 @@
                                 <h2 class="text-2xl font-bold text-gray-800">
                                     <i class="fas fa-receipt mr-2 text-purple-600"></i> Pedidos
                                 </h2>
-                                <div class="flex flex-wrap gap-3 text-sm">
-                                    <div class="bg-emerald-50 text-emerald-700 rounded-lg px-4 py-2">
-                                        <span class="font-semibold" id="pedidos-ingresos-total">$0.00</span> en ingresos
-                                    </div>
-                                    <div class="bg-purple-50 text-purple-700 rounded-lg px-4 py-2">
-                                        <span class="font-semibold" id="pedidos-total-count">0</span> pedidos
-                                    </div>
-                                    <div class="bg-pink-50 text-pink-700 rounded-lg px-4 py-2">
-                                        <span class="font-semibold" id="pedidos-descuentos-total">$0.00</span> en descuentos
-                                    </div>
-                                </div>
                             </div>
                             <div class="overflow-x-auto rounded-xl border border-gray-200">
                                 <table class="min-w-full divide-y divide-gray-200">
@@ -1043,6 +1106,63 @@
 
             <!-- Citas -->
             <div id="tab-citas" class="admin-tab-panel hidden">
+                <div class="max-w-2xl mb-6">
+                    <p class="text-xs font-semibold text-purple-600 uppercase tracking-wider mb-1">Gestión de citas</p>
+                    <h1 class="text-2xl font-bold text-gray-900">Citas registradas</h1>
+                    <p class="text-sm text-gray-500 mt-2">Revisa las citas agendadas por los clientes, filtra por fecha o estado, y marca cada una como realizada o cancelada.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Total citas</p>
+                                <p class="mt-2 text-3xl font-bold text-gray-900" id="citas-kpi-total">0</p>
+                                <p class="mt-1 text-xs text-gray-400">Citas registradas</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-purple-100/70 text-purple-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Pendientes</p>
+                                <p class="mt-2 text-3xl font-bold text-amber-700" id="citas-kpi-pendientes">0</p>
+                                <p class="mt-1 text-xs text-gray-400">Por atender</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-amber-100/70 text-amber-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Realizadas</p>
+                                <p class="mt-2 text-3xl font-bold text-emerald-700" id="citas-kpi-realizadas">0</p>
+                                <p class="mt-1 text-xs text-gray-400">Atendidas</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-emerald-100/70 text-emerald-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Canceladas</p>
+                                <p class="mt-2 text-3xl font-bold text-rose-700" id="citas-kpi-canceladas">0</p>
+                                <p class="mt-1 text-xs text-gray-400">No atendidas</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-rose-100/70 text-rose-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex flex-col lg:flex-row items-start gap-6">
                     <!-- Filtros -->
                     <aside class="w-full lg:w-64 shrink-0">
@@ -1083,6 +1203,23 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Distribución de citas -->
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5 mt-6">
+                            <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-4">Distribución de citas</h3>
+                            <div class="flex justify-center">
+                                <div class="relative">
+                                    <div id="citas-tab-donut" class="relative w-32 h-32 rounded-full bg-gray-100">
+                                        <div class="absolute inset-[13px] bg-white rounded-full"></div>
+                                    </div>
+                                    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                        <span class="text-xl font-bold text-gray-900" id="citas-tab-donut-pct">0%</span>
+                                        <span class="text-[10px] text-gray-500">Realizadas</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 space-y-2.5" id="citas-tab-donut-leyenda"></div>
+                        </div>
                     </aside>
 
                     <!-- Contenido -->
@@ -1090,14 +1227,6 @@
                         <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6 md:p-8">
                             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                                 <h2 class="text-2xl font-bold text-gray-800"><i class="fas fa-calendar-check mr-2 text-purple-600"></i>Citas</h2>
-                                <div class="flex flex-wrap gap-3 text-sm">
-                                    <div class="bg-amber-50 text-amber-700 rounded-lg px-4 py-2">
-                                        <span class="font-semibold" id="citas-pendientes-count">0</span> pendientes
-                                    </div>
-                                    <div class="bg-purple-50 text-purple-700 rounded-lg px-4 py-2">
-                                        <span class="font-semibold" id="citas-total-count">0</span> en total
-                                    </div>
-                                </div>
                             </div>
                             <div class="overflow-x-auto rounded-xl border border-gray-200">
                                 <table class="min-w-full divide-y divide-gray-200">
@@ -2294,10 +2423,49 @@
 
             const ingresos = filtrados.reduce((sum, o) => sum + (o.total || 0), 0);
             const descuentos = filtrados.reduce((sum, o) => sum + (o.discount || 0), 0);
-            document.getElementById('pedidos-ingresos-total').textContent = formatoMoneda(ingresos);
-            document.getElementById('pedidos-total-count').textContent = filtrados.length;
-            document.getElementById('pedidos-descuentos-total').textContent = formatoMoneda(descuentos);
+            const promedio = filtrados.length ? ingresos / filtrados.length : 0;
+            document.getElementById('pedidos-kpi-total').textContent = filtrados.length;
+            document.getElementById('pedidos-kpi-ingresos').textContent = formatoMoneda(ingresos);
+            document.getElementById('pedidos-kpi-descuentos').textContent = formatoMoneda(descuentos);
+            document.getElementById('pedidos-kpi-promedio').textContent = formatoMoneda(promedio);
             mostrarPaginaPedidos(1, filtrados);
+            renderizarDonutPedidos(filtrados);
+        }
+
+        function renderizarDonutPedidos(filtrados) {
+            const donut = document.getElementById('pedidos-donut');
+            const leyenda = document.getElementById('pedidos-donut-leyenda');
+            const total = filtrados.length;
+            const conCupon = filtrados.filter(o => !!o.couponCode).length;
+            const sinCupon = total - conCupon;
+
+            if (!total) {
+                donut.style.background = '#e5e7eb';
+                document.getElementById('pedidos-donut-pct').textContent = '0%';
+                leyenda.innerHTML = '<p class="text-sm text-gray-400 text-center">Sin datos todavía.</p>';
+                return;
+            }
+
+            const grupos = [
+                { label: 'Con cupón', count: conCupon, color: '#db2777' },
+                { label: 'Sin cupón', count: sinCupon, color: '#e5e7eb' },
+            ];
+            let acumulado = 0;
+            const stops = grupos.map(g => {
+                const inicio = acumulado;
+                acumulado += (g.count / total) * 100;
+                return `${g.color} ${inicio}% ${acumulado}%`;
+            }).join(', ');
+            donut.style.background = `conic-gradient(${stops})`;
+            document.getElementById('pedidos-donut-pct').textContent = `${Math.round((conCupon / total) * 100)}%`;
+
+            leyenda.innerHTML = grupos.map(g => `
+                <div class="flex items-center gap-2 text-sm">
+                    <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${g.color}"></span>
+                    <span class="text-gray-600">${g.label}</span>
+                    <span class="ml-auto font-medium text-gray-800">${g.count}</span>
+                </div>
+            `).join('');
         }
 
         function mostrarPaginaPedidos(pagina, lista = pedidosData) {
@@ -2359,9 +2527,50 @@
                 filtrados = filtrados.filter(c => (c.status || 'pendiente') === estadoFiltro);
             }
 
-            document.getElementById('citas-pendientes-count').textContent = filtrados.filter(c => (c.status || 'pendiente') === 'pendiente').length;
-            document.getElementById('citas-total-count').textContent = filtrados.length;
+            const pendientes = filtrados.filter(c => (c.status || 'pendiente') === 'pendiente').length;
+            const realizadas = filtrados.filter(c => c.status === 'realizada').length;
+            const canceladas = filtrados.filter(c => c.status === 'cancelada').length;
+            document.getElementById('citas-kpi-total').textContent = filtrados.length;
+            document.getElementById('citas-kpi-pendientes').textContent = pendientes;
+            document.getElementById('citas-kpi-realizadas').textContent = realizadas;
+            document.getElementById('citas-kpi-canceladas').textContent = canceladas;
             mostrarPaginaCitasAdmin(1, filtrados);
+            renderizarDonutCitasTab(filtrados, { pendientes, realizadas, canceladas });
+        }
+
+        function renderizarDonutCitasTab(filtrados, conteos) {
+            const donut = document.getElementById('citas-tab-donut');
+            const leyenda = document.getElementById('citas-tab-donut-leyenda');
+            const total = filtrados.length;
+
+            if (!total) {
+                donut.style.background = '#e5e7eb';
+                document.getElementById('citas-tab-donut-pct').textContent = '0%';
+                leyenda.innerHTML = '<p class="text-sm text-gray-400 text-center">Sin datos todavía.</p>';
+                return;
+            }
+
+            const grupos = [
+                { label: 'Pendientes', count: conteos.pendientes, color: '#f59e0b' },
+                { label: 'Realizadas', count: conteos.realizadas, color: '#10b981' },
+                { label: 'Canceladas', count: conteos.canceladas, color: '#f43f5e' },
+            ];
+            let acumulado = 0;
+            const stops = grupos.map(g => {
+                const inicio = acumulado;
+                acumulado += (g.count / total) * 100;
+                return g.count > 0 ? `${g.color} ${inicio}% ${acumulado}%` : null;
+            }).filter(Boolean).join(', ');
+            donut.style.background = `conic-gradient(${stops})`;
+            document.getElementById('citas-tab-donut-pct').textContent = `${Math.round((conteos.realizadas / total) * 100)}%`;
+
+            leyenda.innerHTML = grupos.map(g => `
+                <div class="flex items-center gap-2 text-sm">
+                    <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${g.color}"></span>
+                    <span class="text-gray-600">${g.label}</span>
+                    <span class="ml-auto font-medium text-gray-800">${g.count}</span>
+                </div>
+            `).join('');
         }
 
         function mostrarPaginaCitasAdmin(pagina, lista = citasAdminData) {
