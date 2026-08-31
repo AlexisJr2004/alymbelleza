@@ -421,134 +421,142 @@
 
             <!-- Productos -->
             <div id="tab-productos" class="admin-tab-panel hidden">
+                <div class="flex items-start justify-between gap-4 mb-6">
+                    <div class="max-w-2xl">
+                        <p class="text-xs font-semibold text-purple-600 uppercase tracking-wider mb-1">Gestión de productos</p>
+                        <h1 class="text-2xl font-bold text-gray-900">Productos registrados</h1>
+                        <p class="text-sm text-gray-500 mt-2">Administra el catálogo de Bella Beauty. Puedes buscar, filtrar por categoría, tipo o estado, y crear o editar productos.</p>
+                    </div>
+                    <button type="button" id="btn-nuevo-producto"
+                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-purple-600 text-white rounded-full text-sm font-medium hover:bg-purple-700 transition-colors shrink-0">
+                        <i class="fas fa-plus"></i> Nuevo Producto
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Total productos</p>
+                                <p class="mt-2 text-3xl font-bold text-gray-900" id="productos-kpi-total">0</p>
+                                <p class="mt-1 text-xs text-gray-400">En el catálogo</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-purple-100/70 text-purple-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007Z" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Disponibles</p>
+                                <p class="mt-2 text-3xl font-bold text-emerald-700" id="productos-kpi-disponibles">0</p>
+                                <p class="mt-1 text-xs text-gray-400">Con stock</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-emerald-100/70 text-emerald-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Agotados</p>
+                                <p class="mt-2 text-3xl font-bold text-rose-700" id="productos-kpi-agotados">0</p>
+                                <p class="mt-1 text-xs text-gray-400">Sin stock</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-rose-100/70 text-rose-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Destacados</p>
+                                <p class="mt-2 text-3xl font-bold text-sky-700" id="productos-kpi-destacados">0</p>
+                                <p class="mt-1 text-xs text-gray-400">En vitrina</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-sky-100/70 text-sky-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex flex-col lg:flex-row items-start gap-6">
-                    <!-- Formulario compacto -->
-                    <aside class="w-full lg:w-96 shrink-0">
-                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5 lg:sticky lg:top-20">
-                            <h2 class="text-lg font-bold text-gray-800 mb-4">
-                                <i class="fas fa-box-open mr-2 text-purple-600"></i> Nuevo Producto
-                            </h2>
-                            <form id="form-producto" enctype="multipart/form-data" class="space-y-4">
-                                <input type="hidden" id="producto-id" name="id">
-
-                                <div class="space-y-1.5">
-                                    <label class="block text-sm font-medium text-gray-700">Nombre del Producto</label>
-                                    <div class="relative">
-                                        <i class="fas fa-tag absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                                        <input type="text" id="nombre" name="name" required
-                                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                                            placeholder="Ej: Camiseta Premium">
-                                    </div>
-                                </div>
-
-                                <div class="space-y-1.5">
-                                    <label class="block text-sm font-medium text-gray-700">Precio</label>
-                                    <div class="relative">
-                                        <i class="fas fa-dollar-sign absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                                        <input type="number" id="precio" name="price" required min="0" step="0.01"
-                                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                                            placeholder="0.00">
-                                    </div>
-                                </div>
-
-                                <div class="space-y-1.5">
-                                    <label class="block text-sm font-medium text-gray-700">Descripción</label>
-                                    <textarea id="descripcion" name="description" required rows="2"
-                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                                        placeholder="Descripción detallada del producto..."></textarea>
-                                </div>
-
-                                <div class="space-y-1.5">
-                                    <label class="block text-sm font-medium text-gray-700">Categoría</label>
-                                    <div class="relative">
-                                        <i class="fas fa-list-alt absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                                        <select id="categoria" name="category" required
-                                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
-                                            <option value="">Seleccione categoría</option>
-                                            <option value="capilar">Productos Capilares</option>
-                                            <option value="facial">Productos Faciales</option>
-                                        </select>
-                                        <i class="fas fa-chevron-down absolute right-3 top-2.5 text-gray-400 text-xs"></i>
-                                    </div>
-                                </div>
-
-                                <div class="space-y-1.5">
-                                    <label class="block text-sm font-medium text-gray-700">Tipo de producto</label>
-                                    <div class="relative">
-                                        <i class="fas fa-flask absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                                        <select id="tipo" name="type"
-                                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
-                                            <option value="shampoo">Shampoo</option>
-                                            <option value="acondicionador">Acondicionador</option>
-                                            <option value="mascarilla">Mascarilla</option>
-                                            <option value="crema">Crema</option>
-                                            <option value="serum">Sérum</option>
-                                            <option value="aceite">Aceite</option>
-                                            <option value="tratamiento">Tratamiento</option>
-                                            <option value="otro" selected>Otro</option>
-                                        </select>
-                                        <i class="fas fa-chevron-down absolute right-3 top-2.5 text-gray-400 text-xs"></i>
-                                    </div>
-                                </div>
-
-                                <div class="space-y-1.5">
-                                    <label class="block text-sm font-medium text-gray-700">Precio Anterior (opcional)</label>
-                                    <input type="number" id="precio-anterior" name="originalPrice" min="0" step="0.01"
-                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                                        placeholder="Precio anterior si está en oferta">
-                                </div>
-
-                                <div class="space-y-1.5">
-                                    <label class="block text-sm font-medium text-gray-700">Calificación</label>
-                                    <input type="number" id="calificacion" name="rating" min="0" max="5" step="0.1"
-                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                                        placeholder="0-5">
-                                </div>
-
-                                <div class="flex items-center justify-between pt-1">
-                                    <label class="inline-flex items-center text-sm">
-                                        <input type="checkbox" id="destacado" name="featured" value="true"
-                                            class="text-blue-600 focus:ring-blue-500">
-                                        <span class="ml-2">Destacado</span>
+                    <!-- Filtros -->
+                    <aside class="w-full lg:w-64 shrink-0">
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5 space-y-5">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide">Filtros</h3>
+                                <button id="productos-limpiar-filtros" type="button"
+                                    class="text-xs font-medium text-purple-600 hover:text-purple-800">Limpiar</button>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">Categoría</h4>
+                                <select id="productos-filtro-categoria"
+                                    class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-400 focus:outline-none">
+                                    <option value="">Todas</option>
+                                    <option value="capilar">Productos Capilares</option>
+                                    <option value="facial">Productos Faciales</option>
+                                </select>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">Tipo</h4>
+                                <select id="productos-filtro-tipo"
+                                    class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-400 focus:outline-none">
+                                    <option value="">Todos</option>
+                                    <option value="shampoo">Shampoo</option>
+                                    <option value="acondicionador">Acondicionador</option>
+                                    <option value="mascarilla">Mascarilla</option>
+                                    <option value="crema">Crema</option>
+                                    <option value="serum">Sérum</option>
+                                    <option value="aceite">Aceite</option>
+                                    <option value="tratamiento">Tratamiento</option>
+                                    <option value="otro">Otro</option>
+                                </select>
+                            </div>
+                            <div class="pt-4 border-t border-gray-100">
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">Estado</h4>
+                                <div class="space-y-2">
+                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                        <input type="radio" name="productos-estado-filtro" value="" checked
+                                            class="text-purple-600 focus:ring-purple-400"> Todos
                                     </label>
-                                    <div class="flex items-center gap-3 text-sm">
-                                        <label class="inline-flex items-center">
-                                            <input type="radio" name="availability" value="true" checked
-                                                class="text-purple-600 focus:ring-purple-500">
-                                            <span class="ml-1.5">Disponible</span>
-                                        </label>
-                                        <label class="inline-flex items-center">
-                                            <input type="radio" name="availability" value="false"
-                                                class="text-purple-600 focus:ring-purple-500">
-                                            <span class="ml-1.5">Agotado</span>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="space-y-1.5">
-                                    <label class="block text-sm font-medium text-gray-700">Imagen del Producto</label>
-                                    <label for="imagen"
-                                        class="flex items-center gap-3 w-full px-3 py-2.5 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
-                                        <i class="fas fa-cloud-upload-alt text-xl text-gray-400"></i>
-                                        <span class="text-xs text-gray-500">Click para subir o arrastra la imagen (PNG/JPG, máx. 5MB)</span>
-                                        <input id="imagen" name="image" type="file" accept="image/*" class="hidden">
+                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                        <input type="radio" name="productos-estado-filtro" value="true"
+                                            class="text-purple-600 focus:ring-purple-400"> Disponibles
                                     </label>
-                                    <div id="imagen-preview" class="hidden">
-                                        <img id="preview-img" src="#" alt="Vista previa" class="h-20 rounded-lg border">
+                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                        <input type="radio" name="productos-estado-filtro" value="false"
+                                            class="text-purple-600 focus:ring-purple-400"> Agotados
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="pt-4 border-t border-gray-100">
+                                <label class="inline-flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                    <input type="checkbox" id="productos-filtro-destacado" class="text-purple-600 focus:ring-purple-400">
+                                    Solo destacados
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Distribución de productos -->
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5 mt-6">
+                            <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-4">Disponibilidad</h3>
+                            <div class="flex justify-center">
+                                <div class="relative">
+                                    <div id="productos-donut" class="relative w-32 h-32 rounded-full bg-gray-100">
+                                        <div class="absolute inset-[13px] bg-white rounded-full"></div>
+                                    </div>
+                                    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                        <span class="text-xl font-bold text-gray-900" id="productos-donut-pct">0%</span>
+                                        <span class="text-[10px] text-gray-500">Disponibles</span>
                                     </div>
                                 </div>
-
-                                <div class="flex justify-end gap-2 pt-3 border-t border-gray-200">
-                                    <button type="button" id="cancelar-edicion"
-                                        class="px-4 py-2 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors hidden">
-                                        <i class="fas fa-times mr-1.5"></i> Cancelar
-                                    </button>
-                                    <button type="submit"
-                                        class="flex-1 px-4 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center">
-                                        <i class="fas fa-save mr-1.5"></i> Guardar Producto
-                                    </button>
-                                </div>
-                            </form>
+                            </div>
+                            <div class="mt-4 space-y-2.5" id="productos-donut-leyenda"></div>
                         </div>
                     </aside>
 
@@ -564,39 +572,6 @@
                                         class="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full md:w-72">
                                     <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                                 </div>
-                            </div>
-
-                            <div class="flex flex-wrap items-center gap-3 mb-5">
-                                <select id="productos-filtro-categoria"
-                                    class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none">
-                                    <option value="">Todas las categorías</option>
-                                    <option value="capilar">Productos Capilares</option>
-                                    <option value="facial">Productos Faciales</option>
-                                </select>
-                                <select id="productos-filtro-tipo"
-                                    class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none">
-                                    <option value="">Todos los tipos</option>
-                                    <option value="shampoo">Shampoo</option>
-                                    <option value="acondicionador">Acondicionador</option>
-                                    <option value="mascarilla">Mascarilla</option>
-                                    <option value="crema">Crema</option>
-                                    <option value="serum">Sérum</option>
-                                    <option value="aceite">Aceite</option>
-                                    <option value="tratamiento">Tratamiento</option>
-                                    <option value="otro">Otro</option>
-                                </select>
-                                <select id="productos-filtro-estado"
-                                    class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none">
-                                    <option value="">Todos los estados</option>
-                                    <option value="true">Disponible</option>
-                                    <option value="false">Agotado</option>
-                                </select>
-                                <label class="inline-flex items-center text-sm text-gray-600 cursor-pointer">
-                                    <input type="checkbox" id="productos-filtro-destacado" class="text-purple-600 focus:ring-purple-400">
-                                    <span class="ml-1.5">Solo destacados</span>
-                                </label>
-                                <button id="productos-limpiar-filtros" type="button"
-                                    class="text-xs font-medium text-purple-600 hover:text-purple-800 ml-auto">Limpiar filtros</button>
                             </div>
 
                             <div class="overflow-x-auto rounded-xl border border-gray-200">
@@ -630,81 +605,129 @@
 
             <!-- Cupones -->
             <div id="tab-cupones" class="admin-tab-panel hidden">
+                <div class="flex items-start justify-between gap-4 mb-6">
+                    <div class="max-w-2xl">
+                        <p class="text-xs font-semibold text-purple-600 uppercase tracking-wider mb-1">Gestión de cupones</p>
+                        <h1 class="text-2xl font-bold text-gray-900">Cupones registrados</h1>
+                        <p class="text-sm text-gray-500 mt-2">Crea y administra los códigos de descuento de Bella Beauty. Filtra por tipo, estado o vencimiento.</p>
+                    </div>
+                    <button type="button" id="btn-nuevo-cupon"
+                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-purple-600 text-white rounded-full text-sm font-medium hover:bg-purple-700 transition-colors shrink-0">
+                        <i class="fas fa-plus"></i> Nuevo Cupón
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Total cupones</p>
+                                <p class="mt-2 text-3xl font-bold text-gray-900" id="cupones-kpi-total">0</p>
+                                <p class="mt-1 text-xs text-gray-400">Creados en total</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-purple-100/70 text-purple-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.83.699 2.53 0l7.409-7.409a1.79 1.79 0 0 0 0-2.53L13.16 3.66A2.25 2.25 0 0 0 11.568 3H9.568Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Activos</p>
+                                <p class="mt-2 text-3xl font-bold text-emerald-700" id="cupones-kpi-activos">0</p>
+                                <p class="mt-1 text-xs text-gray-400">Disponibles para usar</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-emerald-100/70 text-emerald-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Inactivos</p>
+                                <p class="mt-2 text-3xl font-bold text-rose-700" id="cupones-kpi-inactivos">0</p>
+                                <p class="mt-1 text-xs text-gray-400">Deshabilitados</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-rose-100/70 text-rose-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Vencen pronto</p>
+                                <p class="mt-2 text-3xl font-bold text-amber-700" id="cupones-kpi-vencen">0</p>
+                                <p class="mt-1 text-xs text-gray-400">En los próximos 30 días</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-amber-100/70 text-amber-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex flex-col lg:flex-row items-start gap-6">
-                    <!-- Formulario compacto -->
-                    <aside class="w-full lg:w-96 shrink-0">
-                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5 lg:sticky lg:top-20">
-                            <h2 class="text-lg font-bold text-gray-800 mb-4">
-                                <i class="fas fa-tags mr-2 text-purple-600"></i> Nuevo Cupón
-                            </h2>
-                            <form id="form-cupon" class="space-y-4">
-                                <input type="hidden" id="cupon-id" name="id">
-
-                                <div class="space-y-1.5">
-                                    <label class="block text-sm font-medium text-gray-700">Código</label>
-                                    <div class="relative">
-                                        <i class="fas fa-tag absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                                        <input type="text" id="cupon-codigo" name="code" required
-                                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all uppercase"
-                                            placeholder="Ej: BELLA10">
-                                    </div>
-                                </div>
-
-                                <div class="space-y-1.5">
-                                    <label class="block text-sm font-medium text-gray-700">Tipo de descuento</label>
-                                    <div class="relative">
-                                        <i class="fas fa-percent absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                                        <select id="cupon-tipo" name="type" required
-                                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
-                                            <option value="percentage">Porcentaje (%)</option>
-                                            <option value="fixed">Monto fijo ($)</option>
-                                        </select>
-                                        <i class="fas fa-chevron-down absolute right-3 top-2.5 text-gray-400 text-xs"></i>
-                                    </div>
-                                </div>
-
-                                <div class="space-y-1.5">
-                                    <label class="block text-sm font-medium text-gray-700">Valor</label>
-                                    <div class="relative">
-                                        <i class="fas fa-dollar-sign absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                                        <input type="number" id="cupon-valor" name="value" required min="0" step="0.01"
-                                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                                            placeholder="10">
-                                    </div>
-                                </div>
-
-                                <div class="space-y-1.5">
-                                    <label class="block text-sm font-medium text-gray-700">Compra mínima (opcional)</label>
-                                    <input type="number" id="cupon-minimo" name="minPurchase" min="0" step="0.01"
-                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                                        placeholder="0.00">
-                                </div>
-
-                                <div class="space-y-1.5">
-                                    <label class="block text-sm font-medium text-gray-700">Fecha de expiración (opcional)</label>
-                                    <input type="date" id="cupon-expira" name="expiresAt"
-                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                                </div>
-
-                                <div>
-                                    <label class="inline-flex items-center text-sm">
-                                        <input type="checkbox" id="cupon-activo" name="active" checked
-                                            class="text-purple-600 focus:ring-purple-500">
-                                        <span class="ml-2">Activo</span>
+                    <!-- Filtros -->
+                    <aside class="w-full lg:w-64 shrink-0">
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5 space-y-5">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide">Filtros</h3>
+                                <button id="cupones-limpiar-filtros" type="button"
+                                    class="text-xs font-medium text-purple-600 hover:text-purple-800">Limpiar</button>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">Tipo de descuento</h4>
+                                <div class="space-y-2">
+                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                        <input type="radio" name="cupones-tipo-filtro" value="" checked
+                                            class="text-purple-600 focus:ring-purple-400"> Todos
+                                    </label>
+                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                        <input type="radio" name="cupones-tipo-filtro" value="percentage"
+                                            class="text-purple-600 focus:ring-purple-400"> Porcentaje
+                                    </label>
+                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                        <input type="radio" name="cupones-tipo-filtro" value="fixed"
+                                            class="text-purple-600 focus:ring-purple-400"> Monto fijo
                                     </label>
                                 </div>
-
-                                <div class="flex justify-end gap-2 pt-3 border-t border-gray-200">
-                                    <button type="button" id="cancelar-edicion-cupon"
-                                        class="px-4 py-2 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors hidden">
-                                        <i class="fas fa-times mr-1.5"></i> Cancelar
-                                    </button>
-                                    <button type="submit"
-                                        class="flex-1 px-4 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center">
-                                        <i class="fas fa-save mr-1.5"></i> Guardar Cupón
-                                    </button>
+                            </div>
+                            <div class="pt-4 border-t border-gray-100">
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">Estado</h4>
+                                <div class="space-y-2">
+                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                        <input type="radio" name="cupones-estado-filtro" value="" checked
+                                            class="text-purple-600 focus:ring-purple-400"> Todos
+                                    </label>
+                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                        <input type="radio" name="cupones-estado-filtro" value="true"
+                                            class="text-purple-600 focus:ring-purple-400"> Activos
+                                    </label>
+                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                        <input type="radio" name="cupones-estado-filtro" value="false"
+                                            class="text-purple-600 focus:ring-purple-400"> Inactivos
+                                    </label>
                                 </div>
-                            </form>
+                            </div>
+                        </div>
+
+                        <!-- Distribución de cupones -->
+                        <div class="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5 mt-6">
+                            <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-4">Distribución</h3>
+                            <div class="flex justify-center">
+                                <div class="relative">
+                                    <div id="cupones-donut" class="relative w-32 h-32 rounded-full bg-gray-100">
+                                        <div class="absolute inset-[13px] bg-white rounded-full"></div>
+                                    </div>
+                                    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                        <span class="text-xl font-bold text-gray-900" id="cupones-donut-pct">0%</span>
+                                        <span class="text-[10px] text-gray-500">Activos</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 space-y-2.5" id="cupones-donut-leyenda"></div>
                         </div>
                     </aside>
 
@@ -720,23 +743,6 @@
                                         class="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full md:w-72">
                                     <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                                 </div>
-                            </div>
-
-                            <div class="flex flex-wrap items-center gap-3 mb-5">
-                                <select id="cupones-filtro-tipo"
-                                    class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none">
-                                    <option value="">Todos los tipos</option>
-                                    <option value="percentage">Porcentaje</option>
-                                    <option value="fixed">Monto fijo</option>
-                                </select>
-                                <select id="cupones-filtro-estado"
-                                    class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none">
-                                    <option value="">Todos los estados</option>
-                                    <option value="true">Activo</option>
-                                    <option value="false">Inactivo</option>
-                                </select>
-                                <button id="cupones-limpiar-filtros" type="button"
-                                    class="text-xs font-medium text-purple-600 hover:text-purple-800 ml-auto">Limpiar filtros</button>
                             </div>
 
                             <div class="overflow-x-auto rounded-xl border border-gray-200">
@@ -1335,6 +1341,228 @@
             </form>
         </div>
     </div>
+
+    <!-- Modal: Nuevo/Editar Producto (fuera del wrapper z-10 para quedar sobre el sidebar) -->
+    <div id="panel-form-producto"
+        class="invisible opacity-0 fixed inset-0 z-[60] flex items-center justify-center p-4 transition-opacity duration-200 ease-out">
+        <div id="overlay-form-producto" class="absolute inset-0 bg-gray-900/50"></div>
+        <div id="modal-producto-box"
+            class="relative bg-white rounded-xl border border-gray-200 p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-200 ease-out">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-800" id="form-producto-titulo">Nuevo Producto</h3>
+                <button type="button" id="cerrar-modal-producto" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            <form id="form-producto" enctype="multipart/form-data">
+                <input type="hidden" id="producto-id" name="id">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="space-y-1.5 sm:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700">Nombre del Producto</label>
+                        <div class="relative">
+                            <i class="fas fa-tag absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                            <input type="text" id="nombre" name="name" required
+                                class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                placeholder="Ej: Camiseta Premium">
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-700">Precio</label>
+                        <div class="relative">
+                            <i class="fas fa-dollar-sign absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                            <input type="number" id="precio" name="price" required min="0" step="0.01"
+                                class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                placeholder="0.00">
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-700">Precio Anterior (opcional)</label>
+                        <input type="number" id="precio-anterior" name="originalPrice" min="0" step="0.01"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            placeholder="Precio anterior si está en oferta">
+                    </div>
+
+                    <div class="space-y-1.5 sm:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700">Descripción</label>
+                        <textarea id="descripcion" name="description" required rows="2"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                            placeholder="Descripción detallada del producto..."></textarea>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-700">Categoría</label>
+                        <div class="relative">
+                            <i class="fas fa-list-alt absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                            <select id="categoria" name="category" required
+                                class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
+                                <option value="">Seleccione categoría</option>
+                                <option value="capilar">Productos Capilares</option>
+                                <option value="facial">Productos Faciales</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-3 top-2.5 text-gray-400 text-xs"></i>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-700">Tipo de producto</label>
+                        <div class="relative">
+                            <i class="fas fa-flask absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                            <select id="tipo" name="type"
+                                class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
+                                <option value="shampoo">Shampoo</option>
+                                <option value="acondicionador">Acondicionador</option>
+                                <option value="mascarilla">Mascarilla</option>
+                                <option value="crema">Crema</option>
+                                <option value="serum">Sérum</option>
+                                <option value="aceite">Aceite</option>
+                                <option value="tratamiento">Tratamiento</option>
+                                <option value="otro" selected>Otro</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-3 top-2.5 text-gray-400 text-xs"></i>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-700">Calificación</label>
+                        <input type="number" id="calificacion" name="rating" min="0" max="5" step="0.1"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            placeholder="0-5">
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <label class="inline-flex items-center text-sm">
+                            <input type="checkbox" id="destacado" name="featured" value="true"
+                                class="text-blue-600 focus:ring-blue-500">
+                            <span class="ml-2">Destacado</span>
+                        </label>
+                        <div class="flex items-center gap-3 text-sm">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="availability" value="true" checked
+                                    class="text-purple-600 focus:ring-purple-500">
+                                <span class="ml-1.5">Disponible</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="availability" value="false"
+                                    class="text-purple-600 focus:ring-purple-500">
+                                <span class="ml-1.5">Agotado</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5 sm:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700">Imagen del Producto</label>
+                        <label for="imagen"
+                            class="flex items-center gap-3 w-full px-3 py-2.5 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <i class="fas fa-cloud-upload-alt text-xl text-gray-400"></i>
+                            <span class="text-xs text-gray-500">Click para subir o arrastra la imagen (PNG/JPG, máx. 5MB)</span>
+                            <input id="imagen" name="image" type="file" accept="image/*" class="hidden">
+                        </label>
+                        <div id="imagen-preview" class="hidden">
+                            <img id="preview-img" src="#" alt="Vista previa" class="h-20 rounded-lg border">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-4 mt-4 border-t border-gray-200">
+                    <button type="button" id="cancelar-edicion"
+                        class="px-4 py-2 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-times mr-1.5"></i> Cancelar
+                    </button>
+                    <button type="submit"
+                        class="px-5 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center">
+                        <i class="fas fa-save mr-1.5"></i> Guardar Producto
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Nuevo/Editar Cupón (fuera del wrapper z-10 para quedar sobre el sidebar) -->
+    <div id="panel-form-cupon"
+        class="invisible opacity-0 fixed inset-0 z-[60] flex items-center justify-center p-4 transition-opacity duration-200 ease-out">
+        <div id="overlay-form-cupon" class="absolute inset-0 bg-gray-900/50"></div>
+        <div id="modal-cupon-box"
+            class="relative bg-white rounded-xl border border-gray-200 p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-200 ease-out">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-800" id="form-cupon-titulo">Nuevo Cupón</h3>
+                <button type="button" id="cerrar-modal-cupon" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            <form id="form-cupon">
+                <input type="hidden" id="cupon-id" name="id">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="space-y-1.5 sm:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700">Código</label>
+                        <div class="relative">
+                            <i class="fas fa-tag absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                            <input type="text" id="cupon-codigo" name="code" required
+                                class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all uppercase"
+                                placeholder="Ej: BELLA10">
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-700">Tipo de descuento</label>
+                        <div class="relative">
+                            <i class="fas fa-percent absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                            <select id="cupon-tipo" name="type" required
+                                class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none">
+                                <option value="percentage">Porcentaje (%)</option>
+                                <option value="fixed">Monto fijo ($)</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-3 top-2.5 text-gray-400 text-xs"></i>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-700">Valor</label>
+                        <div class="relative">
+                            <i class="fas fa-dollar-sign absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                            <input type="number" id="cupon-valor" name="value" required min="0" step="0.01"
+                                class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                placeholder="10">
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-700">Compra mínima (opcional)</label>
+                        <input type="number" id="cupon-minimo" name="minPurchase" min="0" step="0.01"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            placeholder="0.00">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-700">Fecha de expiración (opcional)</label>
+                        <input type="date" id="cupon-expira" name="expiresAt"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+
+                    <div class="flex items-end">
+                        <label class="inline-flex items-center text-sm mb-2">
+                            <input type="checkbox" id="cupon-activo" name="active" checked
+                                class="text-purple-600 focus:ring-purple-500">
+                            <span class="ml-2">Activo</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-4 mt-4 border-t border-gray-200">
+                    <button type="button" id="cancelar-edicion-cupon"
+                        class="px-4 py-2 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-times mr-1.5"></i> Cancelar
+                    </button>
+                    <button type="submit"
+                        class="px-5 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center">
+                        <i class="fas fa-save mr-1.5"></i> Guardar Cupón
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Scripts para agregar productos nuevos -->
     <script>
         const PRODUCTS_API_URL = "https://aly-mbelleza-backend.onrender.com/api/products";
@@ -1346,11 +1574,49 @@
         const form = document.getElementById('form-producto');
         const tabla = document.getElementById('tabla-productos');
         const cancelarBtn = document.getElementById('cancelar-edicion');
+        const panelFormProducto = document.getElementById('panel-form-producto');
+        const modalProductoBox = document.getElementById('modal-producto-box');
+        const formProductoTitulo = document.getElementById('form-producto-titulo');
+        const btnNuevoProducto = document.getElementById('btn-nuevo-producto');
         let editandoId = null;
 
         let productosData = [];
         let paginaActual = Number(localStorage.getItem('paginaProductos')) || 1;
         const productosPorPagina = 5;
+
+        function abrirFormProducto(modo) {
+            formProductoTitulo.textContent = modo === 'editar' ? 'Editar Producto' : 'Nuevo Producto';
+            panelFormProducto.classList.remove('invisible', 'opacity-0');
+            requestAnimationFrame(() => {
+                panelFormProducto.classList.add('opacity-100');
+                modalProductoBox.classList.remove('scale-95');
+                modalProductoBox.classList.add('scale-100');
+            });
+        }
+        function cerrarFormProducto() {
+            panelFormProducto.classList.remove('opacity-100');
+            panelFormProducto.classList.add('opacity-0');
+            modalProductoBox.classList.remove('scale-100');
+            modalProductoBox.classList.add('scale-95');
+            setTimeout(() => {
+                panelFormProducto.classList.add('invisible');
+            }, 200);
+            resetFormProducto();
+        }
+        function resetFormProducto() {
+            form.reset();
+            document.getElementById('imagen-preview').classList.add('hidden');
+            editandoId = null;
+        }
+        btnNuevoProducto.addEventListener('click', () => {
+            resetFormProducto();
+            abrirFormProducto('nueva');
+        });
+        document.getElementById('cerrar-modal-producto').addEventListener('click', cerrarFormProducto);
+        document.getElementById('overlay-form-producto').addEventListener('click', cerrarFormProducto);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !panelFormProducto.classList.contains('invisible')) cerrarFormProducto();
+        });
 
         // Cargar todos los productos en la tabla
         async function cargarProductos() {
@@ -1433,8 +1699,8 @@
             document.getElementById('tipo').value = data.type || 'otro';
             document.getElementById('destacado').checked = !!data.featured;
             document.querySelector(`input[name="availability"][value="${data.availability ? 'true' : 'false'}"]`).checked = true;
-            cancelarBtn.classList.remove('hidden');
             editandoId = data._id;
+            abrirFormProducto('editar');
         }
 
         // Eliminar producto
@@ -1488,27 +1754,67 @@
                 headers: { Authorization: `Bearer ${user.token}` },
                 body: formData
             });
-            form.reset();
-            cancelarBtn.classList.add('hidden');
-            editandoId = null;
+            cerrarFormProducto();
             localStorage.setItem('paginaProductos', paginaActual);
             cargarProductos();
         };
 
         // Cancelar edición
-        cancelarBtn.onclick = () => {
-            form.reset();
-            cancelarBtn.classList.add('hidden');
-            editandoId = null;
-        };
+        cancelarBtn.onclick = cerrarFormProducto;
 
         // La carga inicial de productos se dispara desde el bootstrap general del panel
+
+        function renderizarKpisProductos() {
+            const disponibles = productosData.filter(p => !!p.availability).length;
+            const agotados = productosData.length - disponibles;
+            const destacados = productosData.filter(p => !!p.featured).length;
+            document.getElementById('productos-kpi-total').textContent = productosData.length;
+            document.getElementById('productos-kpi-disponibles').textContent = disponibles;
+            document.getElementById('productos-kpi-agotados').textContent = agotados;
+            document.getElementById('productos-kpi-destacados').textContent = destacados;
+        }
+
+        function renderizarDonutProductos() {
+            const donut = document.getElementById('productos-donut');
+            const leyenda = document.getElementById('productos-donut-leyenda');
+            const total = productosData.length;
+            const disponibles = productosData.filter(p => !!p.availability).length;
+            const agotados = total - disponibles;
+
+            if (!total) {
+                donut.style.background = '#e5e7eb';
+                document.getElementById('productos-donut-pct').textContent = '0%';
+                leyenda.innerHTML = '<p class="text-sm text-gray-400 text-center">Sin datos todavía.</p>';
+                return;
+            }
+
+            const grupos = [
+                { label: 'Disponibles', count: disponibles, color: '#059669' },
+                { label: 'Agotados', count: agotados, color: '#e11d48' },
+            ];
+            let acumulado = 0;
+            const stops = grupos.map(g => {
+                const inicio = acumulado;
+                acumulado += (g.count / total) * 100;
+                return `${g.color} ${inicio}% ${acumulado}%`;
+            }).join(', ');
+            donut.style.background = `conic-gradient(${stops})`;
+            document.getElementById('productos-donut-pct').textContent = `${Math.round((disponibles / total) * 100)}%`;
+
+            leyenda.innerHTML = grupos.map(g => `
+                <div class="flex items-center gap-2 text-sm">
+                    <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${g.color}"></span>
+                    <span class="text-gray-600">${g.label}</span>
+                    <span class="ml-auto font-medium text-gray-800">${g.count}</span>
+                </div>
+            `).join('');
+        }
 
         function aplicarFiltrosProductos() {
             const texto = document.getElementById('buscador-productos').value.trim().toLowerCase();
             const categoria = document.getElementById('productos-filtro-categoria').value;
             const tipo = document.getElementById('productos-filtro-tipo').value;
-            const estado = document.getElementById('productos-filtro-estado').value;
+            const estado = document.querySelector('input[name="productos-estado-filtro"]:checked').value;
             const soloDestacados = document.getElementById('productos-filtro-destacado').checked;
 
             let filtrados = productosData.filter(p =>
@@ -1521,20 +1827,24 @@
 
             mostrarPagina(1, filtrados);
             renderizarPaginacion(filtrados);
+            renderizarKpisProductos();
+            renderizarDonutProductos();
         }
 
         ['input', 'change'].forEach(evt => {
             document.getElementById('buscador-productos').addEventListener(evt, aplicarFiltrosProductos);
             document.getElementById('productos-filtro-categoria').addEventListener(evt, aplicarFiltrosProductos);
             document.getElementById('productos-filtro-tipo').addEventListener(evt, aplicarFiltrosProductos);
-            document.getElementById('productos-filtro-estado').addEventListener(evt, aplicarFiltrosProductos);
             document.getElementById('productos-filtro-destacado').addEventListener(evt, aplicarFiltrosProductos);
+        });
+        document.querySelectorAll('input[name="productos-estado-filtro"]').forEach(radio => {
+            radio.addEventListener('change', aplicarFiltrosProductos);
         });
         document.getElementById('productos-limpiar-filtros').addEventListener('click', () => {
             document.getElementById('buscador-productos').value = '';
             document.getElementById('productos-filtro-categoria').value = '';
             document.getElementById('productos-filtro-tipo').value = '';
-            document.getElementById('productos-filtro-estado').value = '';
+            document.querySelector('input[name="productos-estado-filtro"][value=""]').checked = true;
             document.getElementById('productos-filtro-destacado').checked = false;
             aplicarFiltrosProductos();
         });
@@ -1546,8 +1856,41 @@
         const formCupon = document.getElementById('form-cupon');
         const tablaCupones = document.getElementById('tabla-cupones');
         const cancelarCuponBtn = document.getElementById('cancelar-edicion-cupon');
+        const panelFormCupon = document.getElementById('panel-form-cupon');
+        const modalCuponBox = document.getElementById('modal-cupon-box');
+        const formCuponTitulo = document.getElementById('form-cupon-titulo');
+        const btnNuevoCupon = document.getElementById('btn-nuevo-cupon');
         let editandoCuponId = null;
         let cuponesData = [];
+
+        function abrirFormCupon(modo) {
+            formCuponTitulo.textContent = modo === 'editar' ? 'Editar Cupón' : 'Nuevo Cupón';
+            panelFormCupon.classList.remove('invisible', 'opacity-0');
+            requestAnimationFrame(() => {
+                panelFormCupon.classList.add('opacity-100');
+                modalCuponBox.classList.remove('scale-95');
+                modalCuponBox.classList.add('scale-100');
+            });
+        }
+        function cerrarFormCupon() {
+            panelFormCupon.classList.remove('opacity-100');
+            panelFormCupon.classList.add('opacity-0');
+            modalCuponBox.classList.remove('scale-100');
+            modalCuponBox.classList.add('scale-95');
+            setTimeout(() => {
+                panelFormCupon.classList.add('invisible');
+            }, 200);
+            resetFormCupon();
+        }
+        btnNuevoCupon.addEventListener('click', () => {
+            resetFormCupon();
+            abrirFormCupon('nueva');
+        });
+        document.getElementById('cerrar-modal-cupon').addEventListener('click', cerrarFormCupon);
+        document.getElementById('overlay-form-cupon').addEventListener('click', cerrarFormCupon);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !panelFormCupon.classList.contains('invisible')) cerrarFormCupon();
+        });
 
         async function cargarCupones() {
             const res = await fetch(COUPONS_API_URL, {
@@ -1608,15 +1951,14 @@
             document.getElementById('cupon-minimo').value = c.minPurchase || '';
             document.getElementById('cupon-expira').value = c.expiresAt ? c.expiresAt.substring(0, 10) : '';
             document.getElementById('cupon-activo').checked = !!c.active;
-            cancelarCuponBtn.classList.remove('hidden');
             editandoCuponId = c._id;
+            abrirFormCupon('editar');
         }
 
         function resetFormCupon() {
             formCupon.reset();
             document.getElementById('cupon-tipo').value = 'percentage';
             document.getElementById('cupon-activo').checked = true;
-            cancelarCuponBtn.classList.add('hidden');
             editandoCuponId = null;
         }
 
@@ -1668,33 +2010,86 @@
                 Swal.fire('Error', data.error || 'No se pudo guardar el cupón.', 'error');
                 return;
             }
-            resetFormCupon();
+            cerrarFormCupon();
             cargarCupones();
         };
 
-        cancelarCuponBtn.addEventListener('click', resetFormCupon);
+        cancelarCuponBtn.addEventListener('click', cerrarFormCupon);
+
+        function renderizarKpisCupones() {
+            const activos = cuponesData.filter(c => !!c.active).length;
+            const inactivos = cuponesData.length - activos;
+            const ahora = Date.now();
+            const treintaDias = ahora + 30 * 24 * 60 * 60 * 1000;
+            const vencenPronto = cuponesData.filter(c => {
+                if (!c.active || !c.expiresAt) return false;
+                const t = new Date(c.expiresAt).getTime();
+                return t >= ahora && t <= treintaDias;
+            }).length;
+            document.getElementById('cupones-kpi-total').textContent = cuponesData.length;
+            document.getElementById('cupones-kpi-activos').textContent = activos;
+            document.getElementById('cupones-kpi-inactivos').textContent = inactivos;
+            document.getElementById('cupones-kpi-vencen').textContent = vencenPronto;
+        }
+
+        function renderizarDonutCupones() {
+            const donut = document.getElementById('cupones-donut');
+            const leyenda = document.getElementById('cupones-donut-leyenda');
+            const total = cuponesData.length;
+            const activos = cuponesData.filter(c => !!c.active).length;
+            const inactivos = total - activos;
+
+            if (!total) {
+                donut.style.background = '#e5e7eb';
+                document.getElementById('cupones-donut-pct').textContent = '0%';
+                leyenda.innerHTML = '<p class="text-sm text-gray-400 text-center">Sin datos todavía.</p>';
+                return;
+            }
+
+            const grupos = [
+                { label: 'Activos', count: activos, color: '#059669' },
+                { label: 'Inactivos', count: inactivos, color: '#e11d48' },
+            ];
+            let acumulado = 0;
+            const stops = grupos.map(g => {
+                const inicio = acumulado;
+                acumulado += (g.count / total) * 100;
+                return `${g.color} ${inicio}% ${acumulado}%`;
+            }).join(', ');
+            donut.style.background = `conic-gradient(${stops})`;
+            document.getElementById('cupones-donut-pct').textContent = `${Math.round((activos / total) * 100)}%`;
+
+            leyenda.innerHTML = grupos.map(g => `
+                <div class="flex items-center gap-2 text-sm">
+                    <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${g.color}"></span>
+                    <span class="text-gray-600">${g.label}</span>
+                    <span class="ml-auto font-medium text-gray-800">${g.count}</span>
+                </div>
+            `).join('');
+        }
 
         function aplicarFiltrosCupones() {
             const texto = document.getElementById('buscador-cupones').value.trim().toLowerCase();
-            const tipo = document.getElementById('cupones-filtro-tipo').value;
-            const estado = document.getElementById('cupones-filtro-estado').value;
+            const tipo = document.querySelector('input[name="cupones-tipo-filtro"]:checked').value;
+            const estado = document.querySelector('input[name="cupones-estado-filtro"]:checked').value;
 
             let filtrados = cuponesData.filter(c => c.code.toLowerCase().includes(texto));
             if (tipo) filtrados = filtrados.filter(c => c.type === tipo);
             if (estado) filtrados = filtrados.filter(c => String(!!c.active) === estado);
 
             renderizarCupones(filtrados);
+            renderizarKpisCupones();
+            renderizarDonutCupones();
         }
 
-        ['input', 'change'].forEach(evt => {
-            document.getElementById('buscador-cupones').addEventListener(evt, aplicarFiltrosCupones);
-            document.getElementById('cupones-filtro-tipo').addEventListener(evt, aplicarFiltrosCupones);
-            document.getElementById('cupones-filtro-estado').addEventListener(evt, aplicarFiltrosCupones);
+        document.getElementById('buscador-cupones').addEventListener('input', aplicarFiltrosCupones);
+        document.querySelectorAll('input[name="cupones-tipo-filtro"], input[name="cupones-estado-filtro"]').forEach(radio => {
+            radio.addEventListener('change', aplicarFiltrosCupones);
         });
         document.getElementById('cupones-limpiar-filtros').addEventListener('click', () => {
             document.getElementById('buscador-cupones').value = '';
-            document.getElementById('cupones-filtro-tipo').value = '';
-            document.getElementById('cupones-filtro-estado').value = '';
+            document.querySelector('input[name="cupones-tipo-filtro"][value=""]').checked = true;
+            document.querySelector('input[name="cupones-estado-filtro"][value=""]').checked = true;
             aplicarFiltrosCupones();
         });
         // La carga inicial de cupones se dispara desde el bootstrap general del panel
