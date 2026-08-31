@@ -16,6 +16,10 @@ const productSchema = new mongoose.Schema({
         default: 'otro',
     },
     featured: { type: Boolean, default: false },
+    // Unidades disponibles. null/undefined = stock no controlado para este producto
+    // (no bloquea el checkout ni se muestra en productos.html), consistente con los
+    // productos ya existentes que nunca tuvieron este campo.
+    stock: { type: Number, min: 0, default: null },
 }, { timestamps: true });
 
 const Product = mongoose.model('Product', productSchema);

@@ -547,17 +547,13 @@
                     <div>
                         <h4 class="text-sm font-medium text-gray-700 mb-3">Categoría</h4>
                         <div class="space-y-2">
-                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                <input type="radio" name="filtro-categoria" value="all" checked
-                                    class="text-purple-600 focus:ring-purple-400"> Todas
+                            <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="filtro-categoria sr-only peer" data-categoria="capilar">
+                                <span class="switch-track"></span> Capilar
                             </label>
-                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                <input type="radio" name="filtro-categoria" value="capilar"
-                                    class="text-purple-600 focus:ring-purple-400"> Capilar
-                            </label>
-                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                <input type="radio" name="filtro-categoria" value="facial"
-                                    class="text-purple-600 focus:ring-purple-400"> Facial
+                            <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="filtro-categoria sr-only peer" data-categoria="facial">
+                                <span class="switch-track"></span> Facial
                             </label>
                         </div>
                     </div>
@@ -1037,13 +1033,14 @@
             const contenedor = document.getElementById("productos-lista");
             const buscador = document.getElementById("buscador-productos");
             const contadorResultados = document.getElementById("contador-resultados");
+            const categoriaChecks = document.querySelectorAll(".filtro-categoria");
             const tipoChecks = document.querySelectorAll(".filtro-tipo");
             const destacadoCheck = document.getElementById("filtro-destacado");
             const disponibleCheck = document.getElementById("filtro-disponible");
             const precioMinInput = document.getElementById("precio-min");
             const precioMaxInput = document.getElementById("precio-max");
             let productos = [];
-            let categoriaActual = "all";
+            const categoriasSeleccionadas = new Set();
             const tiposSeleccionados = new Set();
 
             // Dibuja la calificación del producto como estrellas llenas/vacías (0-5)
@@ -1079,6 +1076,9 @@
                     let imageUrl = p.image || "./img/default.jpg";
                     let categoriaTag = p.featured ? 'DESTACADO' : (p.category === 'capilar' ? 'CAPILAR' : 'FACIAL');
                     let categoriaColor = p.featured ? 'bg-blue-500' : (p.category === 'capilar' ? 'bg-yellow-500' : 'bg-pink-500');
+                    const stockControlado = typeof p.stock === 'number';
+                    const sinStock = stockControlado && p.stock <= 0;
+                    const puedeComprar = p.availability && !sinStock;
                     return `
                         <div class="xl:w-1/3 md:w-1/2 p-4">
                             <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-gray-100 h-full flex flex-col">
@@ -1105,10 +1105,15 @@
                                             <div class="flex items-center gap-0.5">${renderEstrellas(p.rating)}</div>
                                             <span class="text-gray-400 text-xs">${p.rating ? Number(p.rating).toFixed(1) : 'N/A'}</span>
                                         </div>
-                                        <span class="text-xs ${p.availability ? 'text-green-600' : 'text-red-500'} font-medium">
-                                            ${p.availability ? 'Disponible' : 'Agotado'}
+                                        <span class="text-xs ${puedeComprar ? 'text-green-600' : 'text-red-500'} font-medium">
+                                            ${puedeComprar ? 'Disponible' : 'Agotado'}
                                         </span>
                                     </div>
+                                    ${stockControlado ? `
+                                        <p class="text-xs ${sinStock ? 'text-red-500' : 'text-gray-400'} -mt-2 mb-3">
+                                            ${sinStock ? 'Sin unidades disponibles' : `Quedan ${p.stock} unidad${p.stock === 1 ? '' : 'es'}`}
+                                        </p>
+                                    ` : ''}
                                     <div class="flex items-center justify-between pt-3 border-t border-gray-100 mt-auto">
                                         <div>
                                             <span class="text-gray-900 font-bold text-lg">$${p.price}</span>
@@ -1124,7 +1129,7 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                 </svg>
                                             </button>
-                                            ${p.availability ? `
+                                            ${puedeComprar ? `
                                                 <button
                                                     class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center agregar-carrito-btn"
                                                     data-producto="${encodeURIComponent(JSON.stringify(p))}">
@@ -1185,9 +1190,10 @@
             // Filtrado en tiempo real por nombre y filtros del sidebar
             buscador.addEventListener("input", filtrarYRenderizar);
 
-            document.querySelectorAll('input[name="filtro-categoria"]').forEach(radio => {
-                radio.addEventListener("change", () => {
-                    categoriaActual = radio.value;
+            categoriaChecks.forEach(chk => {
+                chk.addEventListener("change", () => {
+                    if (chk.checked) categoriasSeleccionadas.add(chk.dataset.categoria);
+                    else categoriasSeleccionadas.delete(chk.dataset.categoria);
                     filtrarYRenderizar();
                 });
             });
@@ -1206,10 +1212,10 @@
             precioMaxInput.addEventListener("input", filtrarYRenderizar);
 
             document.getElementById("limpiar-filtros").addEventListener("click", () => {
-                categoriaActual = "all";
+                categoriasSeleccionadas.clear();
                 tiposSeleccionados.clear();
                 buscador.value = "";
-                document.querySelector('input[name="filtro-categoria"][value="all"]').checked = true;
+                categoriaChecks.forEach(chk => chk.checked = false);
                 tipoChecks.forEach(chk => chk.checked = false);
                 destacadoCheck.checked = false;
                 disponibleCheck.checked = false;
@@ -1233,8 +1239,8 @@
                 const texto = buscador.value.trim().toLowerCase();
                 let filtrados = productos.filter(p => p.name.toLowerCase().includes(texto));
 
-                if (categoriaActual !== "all") {
-                    filtrados = filtrados.filter(p => p.category === categoriaActual);
+                if (categoriasSeleccionadas.size > 0) {
+                    filtrados = filtrados.filter(p => categoriasSeleccionadas.has(p.category));
                 }
                 if (tiposSeleccionados.size > 0) {
                     filtrados = filtrados.filter(p => tiposSeleccionados.has(p.type || "otro"));

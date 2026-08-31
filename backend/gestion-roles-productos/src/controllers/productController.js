@@ -4,7 +4,7 @@ const publicIdFromUrl = require('../utils/cloudinaryPublicId');
 
 exports.createProduct = async (req, res) => {
     try {
-        const { name, description, rating, availability, price, category, type, featured, originalPrice } = req.body;
+        const { name, description, rating, availability, price, category, type, featured, originalPrice, stock } = req.body;
         let image = '';
         let imagePublicId;
         if (req.file && req.file.path) {
@@ -21,6 +21,8 @@ exports.createProduct = async (req, res) => {
             type,
             featured: featured === 'true' || featured === true,
             originalPrice,
+            // Cadena vacía = "sin controlar stock", no se debe intentar castear a Number.
+            stock: stock === '' || stock === undefined ? null : stock,
             image,
             imagePublicId
         });
@@ -71,6 +73,9 @@ exports.updateProduct = async (req, res) => {
         }
         if (typeof updates.featured !== "undefined") {
             updates.featured = updates.featured === 'true' || updates.featured === true;
+        }
+        if (typeof updates.stock !== "undefined" && updates.stock === '') {
+            updates.stock = null;
         }
         const updatedProduct = await Product.findByIdAndUpdate(id, updates, { new: true });
         if (!updatedProduct) {

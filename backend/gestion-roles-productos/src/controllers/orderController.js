@@ -2,6 +2,7 @@ const Cart = require('../models/cart');
 const Order = require('../models/order');
 const Coupon = require('../models/coupon');
 const CouponRedemption = require('../models/couponRedemption');
+const Product = require('../models/product');
 const { calculateDiscount } = require('./couponController');
 
 // Crea una orden a partir del carrito actual del usuario (confirmación de pago),
@@ -25,6 +26,18 @@ exports.createOrder = async (req, res) => {
       }));
     if (items.length === 0) {
       return res.status(400).json({ success: false, error: 'El carrito está vacío.' });
+    }
+
+    // Solo los productos con stock controlado (stock !== null) pueden bloquear el
+    // checkout; los que nunca configuraron stock se venden sin límite, como siempre.
+    const sinStockSuficiente = cart.items.filter(
+      (i) => i.product && typeof i.product.stock === 'number' && i.product.stock < i.cantidad
+    );
+    if (sinStockSuficiente.length > 0) {
+      return res.status(400).json({
+        success: false,
+        error: `No hay suficientes unidades disponibles de: ${sinStockSuficiente.map((i) => i.product.name).join(', ')}.`,
+      });
     }
 
     const subtotal = items.reduce((sum, i) => sum + i.price * i.cantidad, 0);
@@ -70,6 +83,25 @@ exports.createOrder = async (req, res) => {
       total,
       couponCode: coupon ? coupon.code : undefined,
     });
+
+    // Descuento atómico y guardado por producto (sin transacción multi-documento):
+    // si otro checkout concurrente ya consumió el stock entre la validación de
+    // arriba y este punto, se revierte la orden recién creada en vez de venderla.
+    for (const i of cart.items) {
+      if (!i.product || typeof i.product.stock !== 'number') continue;
+      const resultado = await Product.updateOne(
+        { _id: i.product._id, stock: { $gte: i.cantidad } },
+        { $inc: { stock: -i.cantidad } }
+      );
+      if (resultado.matchedCount === 0) {
+        await Order.deleteOne({ _id: order._id });
+        if (redemption) await CouponRedemption.deleteOne({ _id: redemption._id });
+        return res.status(409).json({
+          success: false,
+          error: `El producto "${i.product.name}" ya no tiene stock suficiente. Intenta de nuevo.`,
+        });
+      }
+    }
 
     if (redemption) {
       redemption.order = order._id;

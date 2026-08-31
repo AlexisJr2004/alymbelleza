@@ -4,11 +4,13 @@ jest.mock('../gestion-roles-productos/src/models/cart');
 jest.mock('../gestion-roles-productos/src/models/order');
 jest.mock('../gestion-roles-productos/src/models/coupon');
 jest.mock('../gestion-roles-productos/src/models/couponRedemption');
+jest.mock('../gestion-roles-productos/src/models/product');
 
 const Cart = require('../gestion-roles-productos/src/models/cart');
 const Order = require('../gestion-roles-productos/src/models/order');
 const Coupon = require('../gestion-roles-productos/src/models/coupon');
 const CouponRedemption = require('../gestion-roles-productos/src/models/couponRedemption');
+const Product = require('../gestion-roles-productos/src/models/product');
 const orderController = require('../gestion-roles-productos/src/controllers/orderController');
 
 // Prueba el controlador con los modelos de Mongoose simulados (sin conexión real a la
@@ -76,6 +78,73 @@ describe('orderController.createOrder', () => {
     expect(cartDoc.items).toEqual([]);
     expect(cartDoc.save).toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledWith(201);
+  });
+
+  it('rechaza la orden si un producto con stock controlado no tiene unidades suficientes', async () => {
+    const cartDoc = {
+      items: [{ product: { _id: 'p1', name: 'Shampoo', price: 20, stock: 1 }, cantidad: 2 }],
+      save: jest.fn().mockResolvedValue(true),
+    };
+    Cart.findOne.mockReturnValue({ populate: jest.fn().mockResolvedValue(cartDoc) });
+
+    const res = mockRes();
+    await orderController.createOrder({ body: {}, user: { _id: userId } }, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ error: expect.stringContaining('Shampoo') }));
+    expect(Order.create).not.toHaveBeenCalled();
+  });
+
+  it('no bloquea productos que nunca configuraron stock (stock null/undefined)', async () => {
+    const cartDoc = {
+      items: [{ product: { _id: 'p1', name: 'Shampoo', price: 20, stock: null }, cantidad: 50 }],
+      save: jest.fn().mockResolvedValue(true),
+    };
+    Cart.findOne.mockReturnValue({ populate: jest.fn().mockResolvedValue(cartDoc) });
+    Order.create.mockResolvedValue({ _id: 'o1', subtotal: 1000, discount: 0, total: 1000 });
+
+    const res = mockRes();
+    await orderController.createOrder({ body: {}, user: { _id: userId } }, res);
+
+    expect(Order.create).toHaveBeenCalled();
+    expect(Product.updateOne).not.toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(201);
+  });
+
+  it('descuenta el stock de forma atómica al crear la orden', async () => {
+    const cartDoc = {
+      items: [{ product: { _id: 'p1', name: 'Shampoo', price: 20, stock: 5 }, cantidad: 2 }],
+      save: jest.fn().mockResolvedValue(true),
+    };
+    Cart.findOne.mockReturnValue({ populate: jest.fn().mockResolvedValue(cartDoc) });
+    Order.create.mockResolvedValue({ _id: 'o1', subtotal: 40, discount: 0, total: 40 });
+    Product.updateOne.mockResolvedValue({ matchedCount: 1 });
+
+    const res = mockRes();
+    await orderController.createOrder({ body: {}, user: { _id: userId } }, res);
+
+    expect(Product.updateOne).toHaveBeenCalledWith(
+      { _id: 'p1', stock: { $gte: 2 } },
+      { $inc: { stock: -2 } }
+    );
+    expect(res.status).toHaveBeenCalledWith(201);
+  });
+
+  it('revierte la orden si el stock se agotó por una compra concurrente', async () => {
+    const cartDoc = {
+      items: [{ product: { _id: 'p1', name: 'Shampoo', price: 20, stock: 5 }, cantidad: 2 }],
+      save: jest.fn().mockResolvedValue(true),
+    };
+    Cart.findOne.mockReturnValue({ populate: jest.fn().mockResolvedValue(cartDoc) });
+    Order.create.mockResolvedValue({ _id: 'o1', subtotal: 40, discount: 0, total: 40 });
+    Order.deleteOne.mockResolvedValue(true);
+    Product.updateOne.mockResolvedValue({ matchedCount: 0 });
+
+    const res = mockRes();
+    await orderController.createOrder({ body: {}, user: { _id: userId } }, res);
+
+    expect(Order.deleteOne).toHaveBeenCalledWith({ _id: 'o1' });
+    expect(res.status).toHaveBeenCalledWith(409);
   });
 
   it('rechaza un cupón ya usado antes por el mismo cliente', async () => {
