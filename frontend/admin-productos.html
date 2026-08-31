@@ -17,6 +17,35 @@
             display: none;
         }
 
+        /* Switch reutilizable: <input type="checkbox" class="sr-only peer"> + <span class="switch-track"> */
+        .switch-track {
+            position: relative;
+            width: 2.25rem;
+            height: 1.25rem;
+            flex-shrink: 0;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            transition: background-color 150ms;
+        }
+        .switch-track::after {
+            content: '';
+            position: absolute;
+            top: 0.125rem;
+            left: 0.125rem;
+            width: 1rem;
+            height: 1rem;
+            background-color: #fff;
+            border-radius: 9999px;
+            transition: transform 150ms;
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        }
+        .peer:checked~.switch-track {
+            background-color: #9333ea;
+        }
+        .peer:checked~.switch-track::after {
+            transform: translateX(1rem);
+        }
+
         /* Vista previa de tarjetas de pago (mismo diseño que pagos.html, estilo glass) */
         .tarjeta-guayaquil {
             background: linear-gradient(135deg, rgba(25, 24, 81, 0.82) 0%, rgba(41, 38, 93, 0.82) 100%);
@@ -172,8 +201,8 @@
                 Volver al sitio
             </a>
             <button type="button" id="admin-logout-btn"
-                class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50/70 transition-colors">
-                <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                class="flex items-center justify-center gap-2 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 bg-white border border-gray-200 hover:bg-red-50 hover:border-red-200 transition-colors">
+                <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                 </svg>
@@ -529,24 +558,20 @@
                             <div class="pt-4 border-t border-gray-100">
                                 <h4 class="text-sm font-medium text-gray-700 mb-2">Estado</h4>
                                 <div class="space-y-2">
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="productos-estado-filtro" value="" checked
-                                            class="text-purple-600 focus:ring-purple-400"> Todos
+                                    <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                        <input type="checkbox" name="productos-estado-filtro" value="true" class="sr-only peer">
+                                        <span class="switch-track"></span> Disponibles
                                     </label>
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="productos-estado-filtro" value="true"
-                                            class="text-purple-600 focus:ring-purple-400"> Disponibles
-                                    </label>
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="productos-estado-filtro" value="false"
-                                            class="text-purple-600 focus:ring-purple-400"> Agotados
+                                    <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                        <input type="checkbox" name="productos-estado-filtro" value="false" class="sr-only peer">
+                                        <span class="switch-track"></span> Agotados
                                     </label>
                                 </div>
                             </div>
                             <div class="pt-4 border-t border-gray-100">
                                 <label class="inline-flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
                                     <input type="checkbox" id="productos-filtro-destacado" class="sr-only peer">
-                                    <span class="relative w-9 h-5 shrink-0 bg-gray-200 peer-checked:bg-purple-600 rounded-full transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform after:shadow-sm peer-checked:after:translate-x-4"></span>
+                                    <span class="switch-track"></span>
                                     Solo destacados
                                 </label>
                             </div>
@@ -690,34 +715,26 @@
                             <div>
                                 <h4 class="text-sm font-medium text-gray-700 mb-2">Tipo de descuento</h4>
                                 <div class="space-y-2">
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="cupones-tipo-filtro" value="" checked
-                                            class="text-purple-600 focus:ring-purple-400"> Todos
+                                    <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                        <input type="checkbox" name="cupones-tipo-filtro" value="percentage" class="sr-only peer">
+                                        <span class="switch-track"></span> Porcentaje
                                     </label>
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="cupones-tipo-filtro" value="percentage"
-                                            class="text-purple-600 focus:ring-purple-400"> Porcentaje
-                                    </label>
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="cupones-tipo-filtro" value="fixed"
-                                            class="text-purple-600 focus:ring-purple-400"> Monto fijo
+                                    <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                        <input type="checkbox" name="cupones-tipo-filtro" value="fixed" class="sr-only peer">
+                                        <span class="switch-track"></span> Monto fijo
                                     </label>
                                 </div>
                             </div>
                             <div class="pt-4 border-t border-gray-100">
                                 <h4 class="text-sm font-medium text-gray-700 mb-2">Estado</h4>
                                 <div class="space-y-2">
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="cupones-estado-filtro" value="" checked
-                                            class="text-purple-600 focus:ring-purple-400"> Todos
+                                    <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                        <input type="checkbox" name="cupones-estado-filtro" value="true" class="sr-only peer">
+                                        <span class="switch-track"></span> Activos
                                     </label>
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="cupones-estado-filtro" value="true"
-                                            class="text-purple-600 focus:ring-purple-400"> Activos
-                                    </label>
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="cupones-estado-filtro" value="false"
-                                            class="text-purple-600 focus:ring-purple-400"> Inactivos
+                                    <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                        <input type="checkbox" name="cupones-estado-filtro" value="false" class="sr-only peer">
+                                        <span class="switch-track"></span> Inactivos
                                     </label>
                                 </div>
                             </div>
@@ -904,8 +921,9 @@
                                 </div>
                             </div>
                             <div class="pt-4 border-t border-gray-100">
-                                <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                    <input type="checkbox" id="pedidos-solo-cupon" class="rounded text-purple-600 focus:ring-purple-400">
+                                <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                    <input type="checkbox" id="pedidos-solo-cupon" class="sr-only peer">
+                                    <span class="switch-track"></span>
                                     Solo con cupón
                                 </label>
                             </div>
@@ -1040,34 +1058,26 @@
                             <div class="pt-4 border-t border-gray-100">
                                 <h4 class="text-sm font-medium text-gray-700 mb-2">Rol</h4>
                                 <div class="space-y-2">
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="usuarios-rol-filtro" value="all" checked
-                                            class="text-purple-600 focus:ring-purple-400"> Todos
+                                    <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                        <input type="checkbox" name="usuarios-rol-filtro" value="cliente" class="sr-only peer">
+                                        <span class="switch-track"></span> Clientes
                                     </label>
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="usuarios-rol-filtro" value="cliente" class="text-purple-600 focus:ring-purple-400">
-                                        Clientes
-                                    </label>
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="usuarios-rol-filtro" value="admin" class="text-purple-600 focus:ring-purple-400">
-                                        Administradores
+                                    <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                        <input type="checkbox" name="usuarios-rol-filtro" value="admin" class="sr-only peer">
+                                        <span class="switch-track"></span> Administradores
                                     </label>
                                 </div>
                             </div>
                             <div class="pt-4 border-t border-gray-100">
                                 <h4 class="text-sm font-medium text-gray-700 mb-2">Estado</h4>
                                 <div class="space-y-2">
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="usuarios-estado-filtro" value="all" checked
-                                            class="text-purple-600 focus:ring-purple-400"> Todos
+                                    <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                        <input type="checkbox" name="usuarios-estado-filtro" value="activo" class="sr-only peer">
+                                        <span class="switch-track"></span> Activos
                                     </label>
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="usuarios-estado-filtro" value="activo" class="text-purple-600 focus:ring-purple-400">
-                                        Activos
-                                    </label>
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="usuarios-estado-filtro" value="inactivo" class="text-purple-600 focus:ring-purple-400">
-                                        Inactivos
+                                    <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                        <input type="checkbox" name="usuarios-estado-filtro" value="inactivo" class="sr-only peer">
+                                        <span class="switch-track"></span> Inactivos
                                     </label>
                                 </div>
                             </div>
@@ -1200,21 +1210,17 @@
                             <div class="pt-4 border-t border-gray-100">
                                 <h4 class="text-sm font-medium text-gray-700 mb-2">Estado</h4>
                                 <div class="space-y-2">
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="citas-estado-filtro" value="all" checked
-                                            class="text-purple-600 focus:ring-purple-400"> Todas
+                                    <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                        <input type="checkbox" name="citas-estado-filtro" value="pendiente" class="sr-only peer">
+                                        <span class="switch-track"></span> Pendientes
                                     </label>
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="citas-estado-filtro" value="pendiente"
-                                            class="text-purple-600 focus:ring-purple-400"> Pendientes
+                                    <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                        <input type="checkbox" name="citas-estado-filtro" value="realizada" class="sr-only peer">
+                                        <span class="switch-track"></span> Realizadas
                                     </label>
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="citas-estado-filtro" value="realizada"
-                                            class="text-purple-600 focus:ring-purple-400"> Realizadas
-                                    </label>
-                                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                        <input type="radio" name="citas-estado-filtro" value="cancelada"
-                                            class="text-purple-600 focus:ring-purple-400"> Canceladas
+                                    <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                        <input type="checkbox" name="citas-estado-filtro" value="cancelada" class="sr-only peer">
+                                        <span class="switch-track"></span> Canceladas
                                     </label>
                                 </div>
                             </div>
@@ -1332,7 +1338,7 @@
                     <div class="flex items-end">
                         <label class="inline-flex items-center gap-2.5 text-sm mb-2 cursor-pointer">
                             <input type="checkbox" id="tarjeta-activa" name="activa" checked class="sr-only peer">
-                            <span class="relative w-9 h-5 shrink-0 bg-gray-200 peer-checked:bg-purple-600 rounded-full transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform after:shadow-sm peer-checked:after:translate-x-4"></span>
+                            <span class="switch-track"></span>
                             <span>Visible en la pasarela de pagos</span>
                         </label>
                     </div>
@@ -1446,17 +1452,17 @@
                         <div class="flex flex-wrap items-center gap-x-10 gap-y-3">
                             <label class="inline-flex items-center gap-2.5 text-sm cursor-pointer">
                                 <input type="checkbox" id="destacado" name="featured" value="true" class="sr-only peer">
-                                <span class="relative w-9 h-5 shrink-0 bg-gray-200 peer-checked:bg-purple-600 rounded-full transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform after:shadow-sm peer-checked:after:translate-x-4"></span>
+                                <span class="switch-track"></span>
                                 <span>Destacado</span>
                             </label>
                             <label class="inline-flex items-center gap-2.5 text-sm cursor-pointer">
                                 <input type="checkbox" id="producto-disponible-switch" checked class="sr-only peer">
-                                <span class="relative w-9 h-5 shrink-0 bg-gray-200 peer-checked:bg-purple-600 rounded-full transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform after:shadow-sm peer-checked:after:translate-x-4"></span>
+                                <span class="switch-track"></span>
                                 <span>Disponible</span>
                             </label>
                             <label class="inline-flex items-center gap-2.5 text-sm cursor-pointer">
                                 <input type="checkbox" id="producto-agotado-switch" class="sr-only peer">
-                                <span class="relative w-9 h-5 shrink-0 bg-gray-200 peer-checked:bg-purple-600 rounded-full transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform after:shadow-sm peer-checked:after:translate-x-4"></span>
+                                <span class="switch-track"></span>
                                 <span>Agotado</span>
                             </label>
                         </div>
@@ -1554,7 +1560,7 @@
                     <div class="flex items-end">
                         <label class="inline-flex items-center gap-2.5 text-sm mb-2 cursor-pointer">
                             <input type="checkbox" id="cupon-activo" name="active" checked class="sr-only peer">
-                            <span class="relative w-9 h-5 shrink-0 bg-gray-200 peer-checked:bg-purple-600 rounded-full transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform after:shadow-sm peer-checked:after:translate-x-4"></span>
+                            <span class="switch-track"></span>
                             <span>Activo</span>
                         </label>
                     </div>
@@ -1576,6 +1582,12 @@
 
     <!-- Scripts para agregar productos nuevos -->
     <script>
+        // Devuelve los valores de los switches marcados de un grupo de filtro (name compartido).
+        // Ninguno marcado = sin filtro (se muestran todos).
+        function valoresMarcados(name) {
+            return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
+        }
+
         const PRODUCTS_API_URL = "https://aly-mbelleza-backend.onrender.com/api/products";
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user || user.role !== 'admin') {
@@ -1836,7 +1848,7 @@
             const texto = document.getElementById('buscador-productos').value.trim().toLowerCase();
             const categoria = document.getElementById('productos-filtro-categoria').value;
             const tipo = document.getElementById('productos-filtro-tipo').value;
-            const estado = document.querySelector('input[name="productos-estado-filtro"]:checked').value;
+            const estados = valoresMarcados('productos-estado-filtro');
             const soloDestacados = document.getElementById('productos-filtro-destacado').checked;
 
             let filtrados = productosData.filter(p =>
@@ -1844,7 +1856,7 @@
             );
             if (categoria) filtrados = filtrados.filter(p => p.category === categoria);
             if (tipo) filtrados = filtrados.filter(p => (p.type || 'otro') === tipo);
-            if (estado) filtrados = filtrados.filter(p => String(!!p.availability) === estado);
+            if (estados.length) filtrados = filtrados.filter(p => estados.includes(String(!!p.availability)));
             if (soloDestacados) filtrados = filtrados.filter(p => !!p.featured);
 
             mostrarPagina(1, filtrados);
@@ -1866,7 +1878,7 @@
             document.getElementById('buscador-productos').value = '';
             document.getElementById('productos-filtro-categoria').value = '';
             document.getElementById('productos-filtro-tipo').value = '';
-            document.querySelector('input[name="productos-estado-filtro"][value=""]').checked = true;
+            document.querySelectorAll('input[name="productos-estado-filtro"]').forEach(el => el.checked = false);
             document.getElementById('productos-filtro-destacado').checked = false;
             aplicarFiltrosProductos();
         });
@@ -2092,12 +2104,12 @@
 
         function aplicarFiltrosCupones() {
             const texto = document.getElementById('buscador-cupones').value.trim().toLowerCase();
-            const tipo = document.querySelector('input[name="cupones-tipo-filtro"]:checked').value;
-            const estado = document.querySelector('input[name="cupones-estado-filtro"]:checked').value;
+            const tipos = valoresMarcados('cupones-tipo-filtro');
+            const estados = valoresMarcados('cupones-estado-filtro');
 
             let filtrados = cuponesData.filter(c => c.code.toLowerCase().includes(texto));
-            if (tipo) filtrados = filtrados.filter(c => c.type === tipo);
-            if (estado) filtrados = filtrados.filter(c => String(!!c.active) === estado);
+            if (tipos.length) filtrados = filtrados.filter(c => tipos.includes(c.type));
+            if (estados.length) filtrados = filtrados.filter(c => estados.includes(String(!!c.active)));
 
             renderizarCupones(filtrados);
             renderizarKpisCupones();
@@ -2110,8 +2122,7 @@
         });
         document.getElementById('cupones-limpiar-filtros').addEventListener('click', () => {
             document.getElementById('buscador-cupones').value = '';
-            document.querySelector('input[name="cupones-tipo-filtro"][value=""]').checked = true;
-            document.querySelector('input[name="cupones-estado-filtro"][value=""]').checked = true;
+            document.querySelectorAll('input[name="cupones-tipo-filtro"], input[name="cupones-estado-filtro"]').forEach(el => el.checked = false);
             aplicarFiltrosCupones();
         });
         // La carga inicial de cupones se dispara desde el bootstrap general del panel
@@ -2641,20 +2652,18 @@
 
         function aplicarFiltrosUsuarios() {
             const texto = document.getElementById('buscador-usuarios').value.trim().toLowerCase();
-            const rolFiltro = document.querySelector('input[name="usuarios-rol-filtro"]:checked').value;
-            const estadoFiltro = document.querySelector('input[name="usuarios-estado-filtro"]:checked').value;
+            const roles = valoresMarcados('usuarios-rol-filtro');
+            const estados = valoresMarcados('usuarios-estado-filtro');
 
             let filtrados = usuariosData.filter(u =>
                 (u.name || '').toLowerCase().includes(texto) || (u.email || '').toLowerCase().includes(texto)
             );
             filtrados = filtrarPorRangoDeFechas(filtrados, (u) => u.createdAt, 'usuarios-fecha-desde', 'usuarios-fecha-hasta');
-            if (rolFiltro !== 'all') {
-                filtrados = filtrados.filter(u => u.role === rolFiltro);
+            if (roles.length) {
+                filtrados = filtrados.filter(u => roles.includes(u.role));
             }
-            if (estadoFiltro === 'activo') {
-                filtrados = filtrados.filter(u => u.isActive !== false);
-            } else if (estadoFiltro === 'inactivo') {
-                filtrados = filtrados.filter(u => u.isActive === false);
+            if (estados.length) {
+                filtrados = filtrados.filter(u => estados.includes(u.isActive === false ? 'inactivo' : 'activo'));
             }
 
             document.getElementById('usuarios-total-label').textContent = `${filtrados.length} usuario${filtrados.length === 1 ? '' : 's'} encontrado${filtrados.length === 1 ? '' : 's'}`;
@@ -2815,8 +2824,7 @@
             document.getElementById('buscador-usuarios').value = '';
             document.getElementById('usuarios-fecha-desde').value = '';
             document.getElementById('usuarios-fecha-hasta').value = '';
-            document.querySelector('input[name="usuarios-rol-filtro"][value="all"]').checked = true;
-            document.querySelector('input[name="usuarios-estado-filtro"][value="all"]').checked = true;
+            document.querySelectorAll('input[name="usuarios-rol-filtro"], input[name="usuarios-estado-filtro"]').forEach(el => el.checked = false);
             aplicarFiltrosUsuarios();
         });
 
@@ -2939,9 +2947,9 @@
 
         function aplicarFiltrosCitas() {
             let filtrados = filtrarPorRangoDeFechas(citasAdminData, (c) => c.date, 'citas-fecha-desde', 'citas-fecha-hasta');
-            const estadoFiltro = document.querySelector('input[name="citas-estado-filtro"]:checked').value;
-            if (estadoFiltro !== 'all') {
-                filtrados = filtrados.filter(c => (c.status || 'pendiente') === estadoFiltro);
+            const estados = valoresMarcados('citas-estado-filtro');
+            if (estados.length) {
+                filtrados = filtrados.filter(c => estados.includes(c.status || 'pendiente'));
             }
 
             const pendientes = filtrados.filter(c => (c.status || 'pendiente') === 'pendiente').length;
@@ -3049,7 +3057,7 @@
         document.getElementById('citas-limpiar-filtros').addEventListener('click', () => {
             document.getElementById('citas-fecha-desde').value = '';
             document.getElementById('citas-fecha-hasta').value = '';
-            document.querySelector('input[name="citas-estado-filtro"][value="all"]').checked = true;
+            document.querySelectorAll('input[name="citas-estado-filtro"]').forEach(el => el.checked = false);
             aplicarFiltrosCitas();
         });
 

@@ -12,6 +12,36 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <link rel="icon" href="/img/mujer-con-pelo-largo.png" type="image/x-icon">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <style>
+        /* Switch reutilizable: <input type="checkbox" class="sr-only peer"> + <span class="switch-track"> */
+        .switch-track {
+            position: relative;
+            width: 2.25rem;
+            height: 1.25rem;
+            flex-shrink: 0;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            transition: background-color 150ms;
+        }
+        .switch-track::after {
+            content: '';
+            position: absolute;
+            top: 0.125rem;
+            left: 0.125rem;
+            width: 1rem;
+            height: 1rem;
+            background-color: #fff;
+            border-radius: 9999px;
+            transition: transform 150ms;
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        }
+        .peer:checked~.switch-track {
+            background-color: #9333ea;
+        }
+        .peer:checked~.switch-track::after {
+            transform: translateX(1rem);
+        }
+    </style>
 </head>
 
 <body class="bg-white font-body">
@@ -536,29 +566,37 @@
                     <div class="pt-5 border-t border-gray-100">
                         <h4 class="text-sm font-medium text-gray-700 mb-3">Tipo de producto</h4>
                         <div class="space-y-2">
-                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                <input type="checkbox" class="filtro-tipo rounded text-purple-600 focus:ring-purple-400" data-tipo="shampoo"> Shampoo
+                            <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="filtro-tipo sr-only peer" data-tipo="shampoo">
+                                <span class="switch-track"></span> Shampoo
                             </label>
-                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                <input type="checkbox" class="filtro-tipo rounded text-purple-600 focus:ring-purple-400" data-tipo="acondicionador"> Acondicionador
+                            <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="filtro-tipo sr-only peer" data-tipo="acondicionador">
+                                <span class="switch-track"></span> Acondicionador
                             </label>
-                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                <input type="checkbox" class="filtro-tipo rounded text-purple-600 focus:ring-purple-400" data-tipo="mascarilla"> Mascarilla
+                            <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="filtro-tipo sr-only peer" data-tipo="mascarilla">
+                                <span class="switch-track"></span> Mascarilla
                             </label>
-                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                <input type="checkbox" class="filtro-tipo rounded text-purple-600 focus:ring-purple-400" data-tipo="crema"> Crema
+                            <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="filtro-tipo sr-only peer" data-tipo="crema">
+                                <span class="switch-track"></span> Crema
                             </label>
-                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                <input type="checkbox" class="filtro-tipo rounded text-purple-600 focus:ring-purple-400" data-tipo="serum"> Sérum
+                            <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="filtro-tipo sr-only peer" data-tipo="serum">
+                                <span class="switch-track"></span> Sérum
                             </label>
-                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                <input type="checkbox" class="filtro-tipo rounded text-purple-600 focus:ring-purple-400" data-tipo="aceite"> Aceite
+                            <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="filtro-tipo sr-only peer" data-tipo="aceite">
+                                <span class="switch-track"></span> Aceite
                             </label>
-                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                <input type="checkbox" class="filtro-tipo rounded text-purple-600 focus:ring-purple-400" data-tipo="tratamiento"> Tratamiento
+                            <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="filtro-tipo sr-only peer" data-tipo="tratamiento">
+                                <span class="switch-track"></span> Tratamiento
                             </label>
-                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                <input type="checkbox" class="filtro-tipo rounded text-purple-600 focus:ring-purple-400" data-tipo="otro"> Otro
+                            <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="filtro-tipo sr-only peer" data-tipo="otro">
+                                <span class="switch-track"></span> Otro
                             </label>
                         </div>
                     </div>
@@ -577,11 +615,15 @@
 
                     <!-- Otros -->
                     <div class="pt-5 border-t border-gray-100 space-y-2">
-                        <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                            <input type="checkbox" id="filtro-destacado" class="rounded text-purple-600 focus:ring-purple-400"> Solo destacados
+                        <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                            <input type="checkbox" id="filtro-destacado" class="sr-only peer">
+                            <span class="switch-track"></span>
+                            Solo destacados
                         </label>
-                        <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                            <input type="checkbox" id="filtro-disponible" class="rounded text-purple-600 focus:ring-purple-400"> Solo disponibles
+                        <label class="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer">
+                            <input type="checkbox" id="filtro-disponible" class="sr-only peer">
+                            <span class="switch-track"></span>
+                            Solo disponibles
                         </label>
                     </div>
                 </div>
