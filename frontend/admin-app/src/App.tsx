@@ -1,25 +1,29 @@
-import { Routes, Route } from 'react-router-dom'
-
-function Placeholder() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-white font-sans">
-      <div className="text-center">
-        <p className="text-xs font-semibold text-purple-600 uppercase tracking-wider mb-1">
-          Bella Beauty
-        </p>
-        <h1 className="text-2xl font-bold text-gray-900">Panel de administración (React)</h1>
-        <p className="text-sm text-gray-500 mt-2">En construcción — sub-fase 0 del plan de migración.</p>
-      </div>
-    </div>
-  )
-}
+import { Routes, Route, Navigate } from 'react-router-dom';
+import AdminLayout from './components/layout/AdminLayout';
+import ResumenPage from './pages/ResumenPage';
+import ProductosPage from './pages/ProductosPage';
+import CuponesPage from './pages/CuponesPage';
+import TarjetasPage from './pages/TarjetasPage';
+import PedidosPage from './pages/PedidosPage';
+import UsuariosPage from './pages/UsuariosPage';
+import CitasPage from './pages/CitasPage';
 
 function App() {
   return (
     <Routes>
-      <Route path="/*" element={<Placeholder />} />
+      <Route element={<AdminLayout />}>
+        <Route index element={<Navigate to="/resumen" replace />} />
+        <Route path="resumen" element={<ResumenPage />} />
+        <Route path="productos" element={<ProductosPage />} />
+        <Route path="cupones" element={<CuponesPage />} />
+        <Route path="tarjetas" element={<TarjetasPage />} />
+        <Route path="pedidos" element={<PedidosPage />} />
+        <Route path="usuarios" element={<UsuariosPage />} />
+        <Route path="citas" element={<CitasPage />} />
+        <Route path="*" element={<Navigate to="/resumen" replace />} />
+      </Route>
     </Routes>
-  )
+  );
 }
 
-export default App
+export default App;

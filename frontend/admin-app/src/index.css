@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Igual que en admin-productos.html: estas clases no cargan la fuente de Google
+   Fonts (esa página nunca la vincula), así que caen al fallback serif/sans-serif
+   del sistema — se porta tal cual para no cambiar el aspecto actual. */
+.font-display {
+    font-family: 'Italiana', serif;
+}
+.font-body {
+    font-family: 'Montserrat', sans-serif;
+}
+
 /* Chrome/Edge recientes dibujan una flecha nativa propia (::picker-icon) incluso con
    appearance:none, duplicando el ícono de flecha que ya agregamos a mano en los selects. */
 select.appearance-none::picker-icon {
