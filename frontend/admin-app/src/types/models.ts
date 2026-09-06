@@ -15,3 +15,19 @@ export interface Order {
   couponCode?: string;
   createdAt: string;
 }
+
+export interface Product {
+  _id: string;
+  name: string;
+  description: string;
+  price: number;
+  originalPrice?: number;
+  rating?: number;
+  stock?: number | null;
+  category: 'capilar' | 'facial' | '';
+  type?: string;
+  featured: boolean;
+  availability: boolean;
+  image?: string;
+  createdAt?: string;
+}
