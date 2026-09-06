@@ -15,7 +15,7 @@ const storage = new CloudinaryStorage({
     transformation: [{ width: 600, height: 600, crop: 'limit' }],
   },
 });
-const upload = multer({ storage });
+const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
 
 router.post('/', verifyToken, authorize('admin'), upload.single('image'), productController.createProduct);
 router.put('/:id', verifyToken, authorize('admin'), upload.single('image'), productController.updateProduct);

@@ -100,10 +100,18 @@ exports.createCoupon = async (req, res) => {
   }
 };
 
+// Explícitos en vez de un spread de req.body, para no dejar pasar claves
+// arbitrarias (p.ej. __proto__) hasta el casteo de Mongoose sin pasar por
+// mongo-sanitize.
+const CAMPOS_CUPON_EDITABLES = ['code', 'type', 'value', 'minPurchase', 'active', 'expiresAt'];
+
 exports.updateCoupon = async (req, res) => {
   try {
     const { id } = req.params;
-    const updates = { ...req.body };
+    const updates = {};
+    for (const campo of CAMPOS_CUPON_EDITABLES) {
+      if (typeof req.body[campo] !== 'undefined') updates[campo] = req.body[campo];
+    }
     if (updates.code) updates.code = updates.code.trim();
 
     const coupon = await Coupon.findByIdAndUpdate(id, updates, { new: true, runValidators: true });

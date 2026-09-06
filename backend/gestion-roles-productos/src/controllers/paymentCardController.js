@@ -61,10 +61,18 @@ exports.createPaymentCard = async (req, res) => {
   }
 };
 
+// Explícitos en vez de un spread de req.body, para no dejar pasar claves
+// arbitrarias (p.ej. __proto__) hasta el casteo de Mongoose sin pasar por
+// mongo-sanitize.
+const CAMPOS_TARJETA_EDITABLES = ['plantilla', 'banco', 'tipoCuenta', 'numeroCuenta', 'titular', 'marca', 'activa', 'orden'];
+
 exports.updatePaymentCard = async (req, res) => {
   try {
     const { id } = req.params;
-    const updates = { ...req.body };
+    const updates = {};
+    for (const campo of CAMPOS_TARJETA_EDITABLES) {
+      if (typeof req.body[campo] !== 'undefined') updates[campo] = req.body[campo];
+    }
     if (updates.numeroCuenta) updates.numeroCuenta = updates.numeroCuenta.trim();
     if (updates.titular) updates.titular = updates.titular.trim();
     if (updates.banco) updates.banco = updates.banco.trim();

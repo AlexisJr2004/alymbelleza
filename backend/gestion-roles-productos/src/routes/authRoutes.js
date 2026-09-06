@@ -15,7 +15,7 @@ const storage = new CloudinaryStorage({
     transformation: [{ width: 300, height: 300, crop: 'limit' }],
   },
 });
-const upload = multer({ storage });
+const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
 
 router.post('/register', upload.single('profileImage'), authController.register);
 router.post('/login', authController.login);

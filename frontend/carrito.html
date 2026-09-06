@@ -1288,6 +1288,17 @@
             }
         }
 
+        // Escapa HTML antes de insertar nombre/descripción de producto en innerHTML.
+        function escapeHtml(value) {
+            return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+            }[char]));
+        }
+
         document.addEventListener("DOMContentLoaded", async function () {
             const user = JSON.parse(localStorage.getItem("user"));
             if (!user || !user.token) {
@@ -1345,10 +1356,10 @@
                     const imageUrl = prod.image || './img/default.jpg';
                     return `
                         <div class="rounded-xl border border-gray-200 bg-white p-4 flex flex-col md:flex-row items-center justify-between gap-4">
-                            <img class="cart-item-image h-20 w-20 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity" src="${imageUrl}" data-image="${imageUrl}" data-name="${prod.name}" alt="${prod.name}" />
+                            <img class="cart-item-image h-20 w-20 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity" src="${imageUrl}" data-image="${imageUrl}" data-name="${escapeHtml(prod.name)}" alt="${escapeHtml(prod.name)}" />
                             <div class="flex-1 min-w-0">
-                                <h3 class="font-bold text-gray-900 mb-1">${prod.name}</h3>
-                                <p class="text-gray-500 text-sm mb-2">${prod.description || ''}</p>
+                                <h3 class="font-bold text-gray-900 mb-1">${escapeHtml(prod.name)}</h3>
+                                <p class="text-gray-500 text-sm mb-2">${escapeHtml(prod.description || '')}</p>
                                 <div class="flex items-center gap-2">
                                     <button class="decrementar-cantidad px-2 py-1 bg-gray-200 rounded" data-id="${prod._id}">-</button>
                                     <span class="mx-2">${item.cantidad}</span>

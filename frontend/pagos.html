@@ -1264,8 +1264,8 @@
                     <div style="flex:1;text-align:right;">
                         <h3 style="margin:0 0 8px 0;color:#7e22ce;font-size:16px;">Datos del Cliente</h3>
                         <p style="margin:0;font-size:13px;color:#666;line-height:1.4;">
-                            <b>Nombre:</b> ${usuario?.name || 'N/A'}<br/>
-                            <b>Email:</b> ${usuario?.email || 'N/A'}<br/>
+                            <b>Nombre:</b> ${escapeHtml(usuario?.name || 'N/A')}<br/>
+                            <b>Email:</b> ${escapeHtml(usuario?.email || 'N/A')}<br/>
                             <b>Factura No:</b> ${numeroOrden}<br/>
                             <b>Válido hasta:</b> ${fechaAnulacionStr}
                         </p>
@@ -1302,7 +1302,7 @@
                                 const subtotalItem = (item.price * item.cantidad);
                                 return `<tr style="${idx < items.length - 1 ? 'border-bottom:1px solid #f0f0f0;' : ''}">
                                     <td style="padding:10px;">
-                                        <strong style="font-size:13px;">${item.name}</strong><br>
+                                        <strong style="font-size:13px;">${escapeHtml(item.name)}</strong><br>
                                         <small style="color:#666;font-size:12px;">Producto de belleza premium</small>
                                     </td>
                                     <td style="padding:10px;text-align:center;">${item.cantidad}</td>
@@ -1321,7 +1321,7 @@
                             <span style="font-size:13px;color:#666;">$${subtotal.toFixed(2)}</span>
                         </div>
                         <div style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:6px;">
-                            <span style="font-size:13px;color:#10b981;margin-right:15px;">Descuento${order.couponCode ? ` (${order.couponCode})` : ''}:</span>
+                            <span style="font-size:13px;color:#10b981;margin-right:15px;">Descuento${order.couponCode ? ` (${escapeHtml(order.couponCode)})` : ''}:</span>
                             <span style="font-size:13px;color:#10b981;">-$${descuento.toFixed(2)}</span>
                         </div>` : ''}
                         <div style="display:flex;justify-content:flex-end;align-items:center;">
@@ -1490,22 +1490,22 @@
                         <div class="relative z-10 h-full flex flex-col justify-between">
                             <div class="flex justify-between items-start">
                                 <div class="flex items-center gap-2">
-                                    <img src="${logoBanco}" alt="Banco ${card.banco}" class="h-7">
+                                    <img src="${logoBanco}" alt="Banco ${escapeHtml(card.banco)}" class="h-7">
                                 </div>
                                 <div class="tarjeta-chip"></div>
                             </div>
                             <div>
                                 <p class="text-xs font-light ${subtitulo}">Número de cuenta</p>
-                                <p class="text-xl font-semibold tracking-wider mt-1">${card.numeroCuenta}</p>
+                                <p class="text-xl font-semibold tracking-wider mt-1">${escapeHtml(card.numeroCuenta)}</p>
                             </div>
                             <div class="flex justify-between items-end">
                                 <div>
                                     <p class="text-xs font-light ${subtitulo}">Titular</p>
-                                    <p class="text-base font-semibold tracking-wide">${card.titular}</p>
+                                    <p class="text-base font-semibold tracking-wide">${escapeHtml(card.titular)}</p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-xs font-light ${subtitulo}">${card.banco} · ${card.tipoCuenta}</p>
-                                    <img src="${marca.logo}" alt="${card.marca}" class="${marca.alto} ml-auto mt-1">
+                                    <p class="text-xs font-light ${subtitulo}">${escapeHtml(card.banco)} · ${escapeHtml(card.tipoCuenta)}</p>
+                                    <img src="${marca.logo}" alt="${escapeHtml(card.marca)}" class="${marca.alto} ml-auto mt-1">
                                 </div>
                             </div>
                         </div>

@@ -20,6 +20,12 @@ const paymentCardRoutes = require("./gestion-roles-productos/src/routes/paymentC
 
 const app = express();
 
+// Render está detrás de un proxy inverso; sin esto, express-rate-limit clave
+// sus límites por la IP del proxy en vez de la del visitante real (todos
+// comparten un mismo cupo, o incluso el login de una persona podría bloquear
+// a las demás).
+app.set('trust proxy', 1);
+
 // 1. Seguridad de cabeceras HTTP
 // El CSP por defecto de helmet bloquearía los CDN (Swiper, SweetAlert2, Font Awesome) y los
 // scripts inline que usan varias páginas del frontend; se desactiva hasta poder consolidar
@@ -117,7 +123,7 @@ app.use((err, req, res, next) => {
       success: false,
       error:
         err.code === "LIMIT_FILE_SIZE"
-          ? "El archivo es demasiado grande (máximo 15MB)"
+          ? "El archivo es demasiado grande."
           : "Error al subir el archivo",
       details: err.message,
     });

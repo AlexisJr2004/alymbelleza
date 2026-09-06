@@ -51,11 +51,16 @@ exports.sendContactEmail = async (req, res) => {
       });
     }
 
+    // name entra sin restricciones más allá de "no vacío"; a diferencia de email
+    // (cuyo regex ya excluye espacios/saltos de línea), un \r\n en name podría
+    // inyectar cabeceras adicionales en el correo vía replyTo/subject.
+    const nombreSeguro = name.replace(/[\r\n]+/g, ' ').trim();
+
     const mailOptions = {
       from: `"Bella Beauty Contacto" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
-      replyTo: `${name} <${email}>`,
-      subject: `Nuevo mensaje de contacto de ${name}`,
+      replyTo: `${nombreSeguro} <${email}>`,
+      subject: `Nuevo mensaje de contacto de ${nombreSeguro}`,
       text: `Nombre: ${name}\nEmail: ${email}\n\nMensaje:\n${message}`,
       html: `
         <div style="font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: 0 auto; color: #333;">

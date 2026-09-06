@@ -57,10 +57,24 @@ exports.getProductById = async (req, res) => {
     }
 };
 
+// Campos editables del producto, explícitos en vez de un spread de req.body: un
+// spread directo a findByIdAndUpdate deja pasar cualquier clave del body (incluida
+// una como __proto__) hasta el casteo de Mongoose, que mongo-sanitize no cubre.
+const CAMPOS_PRODUCTO_EDITABLES = ['name', 'description', 'rating', 'availability', 'price', 'originalPrice', 'category', 'type', 'stock'];
+
 exports.updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        const updates = { ...req.body };
+        const updates = {};
+        for (const campo of CAMPOS_PRODUCTO_EDITABLES) {
+            if (typeof req.body[campo] !== 'undefined') updates[campo] = req.body[campo];
+        }
+        if (typeof req.body.featured !== 'undefined') {
+            updates.featured = req.body.featured === 'true' || req.body.featured === true;
+        }
+        if (typeof updates.stock !== 'undefined' && updates.stock === '') {
+            updates.stock = null;
+        }
         let oldImagePublicId = null;
 
         if (req.file && req.file.path) {
@@ -70,12 +84,6 @@ exports.updateProduct = async (req, res) => {
             }
             updates.image = req.file.path;
             updates.imagePublicId = req.file.filename;
-        }
-        if (typeof updates.featured !== "undefined") {
-            updates.featured = updates.featured === 'true' || updates.featured === true;
-        }
-        if (typeof updates.stock !== "undefined" && updates.stock === '') {
-            updates.stock = null;
         }
         const updatedProduct = await Product.findByIdAndUpdate(id, updates, { new: true });
         if (!updatedProduct) {
