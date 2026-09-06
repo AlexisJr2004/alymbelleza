@@ -101,6 +101,16 @@ app.use("/api", (req, res) => {
   res.status(404).json({ success: false, error: "Recurso no encontrado" });
 });
 
+// 7b. Panel de administración nuevo (React/Vite) — SPA propia bajo /admin,
+// debe registrarse antes del estático/catch-all del frontend viejo para
+// que gane la resolución de rutas. admin-productos.html sigue existiendo
+// en su ruta plana de siempre, sin colisión.
+const adminAppDist = path.join(__dirname, "../frontend/admin-app/dist");
+app.use("/admin", express.static(adminAppDist));
+app.get(["/admin", "/admin/*"], (req, res) => {
+  res.sendFile(path.join(adminAppDist, "index.html"));
+});
+
 // 8. Servir el frontend estático
 app.use(
   express.static(path.join(__dirname, "../frontend"), {

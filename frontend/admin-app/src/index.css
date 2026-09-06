@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Chrome/Edge recientes dibujan una flecha nativa propia (::picker-icon) incluso con
+   appearance:none, duplicando el ícono de flecha que ya agregamos a mano en los selects. */
+select.appearance-none::picker-icon {
+    display: none;
+}
+
+/* Switch reutilizable: <input type="checkbox" class="sr-only peer"> + <span class="switch-track"> */
+.switch-track {
+    position: relative;
+    width: 2.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    background-color: #e5e7eb;
+    border-radius: 9999px;
+    transition: background-color 150ms;
+}
+.switch-track::after {
+    content: '';
+    position: absolute;
+    top: 0.125rem;
+    left: 0.125rem;
+    width: 1rem;
+    height: 1rem;
+    background-color: #fff;
+    border-radius: 9999px;
+    transition: transform 150ms;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+.peer:checked~.switch-track {
+    background-color: #9333ea;
+}
+.peer:checked~.switch-track::after {
+    transform: translateX(1rem);
+}
+
+/* Vista previa de tarjetas de pago (mismo diseño que pagos.html, estilo glass) */
+.tarjeta-guayaquil {
+    background: linear-gradient(135deg, rgba(25, 24, 81, 0.82) 0%, rgba(41, 38, 93, 0.82) 100%);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 1.25rem;
+    width: 100%;
+    height: 190px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 16px 32px -16px rgba(25, 24, 81, 0.6);
+}
+.tarjeta-pichincha {
+    background: linear-gradient(135deg, rgba(247, 223, 0, 0.82) 0%, rgba(238, 198, 0, 0.86) 100%);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 1.25rem;
+    width: 100%;
+    height: 190px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 16px 32px -16px rgba(180, 150, 0, 0.5);
+}
+.tarjeta-sheen {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 35%, rgba(255, 255, 255, 0.35) 48%, rgba(255, 255, 255, 0.05) 62%, transparent 75%);
+    pointer-events: none;
+    z-index: 2;
+}
+.tarjeta-chip {
+    width: 2.25rem;
+    height: 1.75rem;
+    border-radius: 0.25rem;
+    background: linear-gradient(135deg, #f4e4a6 0%, #d4af37 50%, #f4e4a6 100%);
+    position: relative;
+}
+.tarjeta-chip::before {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 3px;
+}
+.tarjeta-chip::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.25);
+}
