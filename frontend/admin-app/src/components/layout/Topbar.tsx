@@ -3,12 +3,15 @@ import { Link } from 'react-router-dom';
 import { MenuIcon, BellIcon } from '../icons';
 import { getStoredUser } from '../../lib/auth';
 import { formatoFechaLarga, resolveProfileImage } from '../../lib/format';
+import { useAppointmentsQuery } from '../../hooks/useAppointments';
 
 const FALLBACK_AVATAR = 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
 
 export default function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
   const user = getStoredUser();
   const [fecha, setFecha] = useState('');
+  const { data: citas = [] } = useAppointmentsQuery();
+  const hayPendientes = citas.some((c) => (c.status || 'pendiente') === 'pendiente');
 
   useEffect(() => {
     setFecha(formatoFechaLarga(new Date()));
@@ -27,13 +30,15 @@ export default function Topbar({ onToggleSidebar }: { onToggleSidebar: () => voi
       </div>
       <div className="flex items-center gap-3 lg:gap-4 shrink-0">
         <span className="hidden md:block text-sm text-gray-500 capitalize">{fecha}</span>
-        {/* El punto rojo de citas pendientes se conecta cuando exista useAppointments (sub-fase 5) */}
         <Link
           to="/citas"
           title="Citas pendientes"
           className="relative w-10 h-10 rounded-full bg-white/60 border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 hover:bg-white/90 transition-colors"
         >
           <BellIcon className="w-5 h-5" />
+          {hayPendientes && (
+            <span className="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 rounded-full border-2 border-white" />
+          )}
         </Link>
         <div className="w-px h-6 bg-gray-200 hidden md:block" />
         <div className="flex items-center gap-3">

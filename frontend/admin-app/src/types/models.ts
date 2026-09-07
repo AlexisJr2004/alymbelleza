@@ -16,6 +16,24 @@ export interface Order {
   createdAt: string;
 }
 
+export interface User {
+  _id: string;
+  name?: string;
+  email?: string;
+  phone?: string;
+  role: 'cliente' | 'admin';
+  isActive?: boolean;
+  profileImage?: string;
+  createdAt: string;
+}
+
+export interface Appointment {
+  _id: string;
+  user?: { name?: string; email?: string } | null;
+  date: string;
+  status?: 'pendiente' | 'realizada' | 'cancelada';
+}
+
 export interface Coupon {
   _id: string;
   code: string;
