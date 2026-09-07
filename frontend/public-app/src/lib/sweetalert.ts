@@ -21,3 +21,10 @@ export function notifySuccess(title: string, text?: string) {
 export function notifyError(title: string, text?: string) {
   Swal.fire({ title, text, icon: 'error' });
 }
+
+// Aviso neutro con botón de confirmación (a diferencia de notifySuccess, que
+// se auto-cierra) — usado por el carrito cuando un cupón se quita solo porque
+// la compra ya no alcanza el mínimo requerido (ver carrito.html ~1391-1396).
+export function notifyInfo(title: string, text?: string) {
+  Swal.fire({ title, text, icon: 'info' });
+}
