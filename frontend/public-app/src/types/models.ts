@@ -36,3 +36,13 @@ export interface Product {
   image?: string;
   createdAt?: string;
 }
+
+export interface Testimonial {
+  _id: string;
+  name: string;
+  role: string;
+  comment: string;
+  avatar: string;
+  userId?: string;
+  createdAt: string;
+}
