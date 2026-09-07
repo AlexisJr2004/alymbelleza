@@ -23,6 +23,14 @@ export default function ProductCard({ product }: ProductCardProps) {
   const categoriaBg = product.featured ? 'bg-blue-500' : 'bg-gray-500';
   const categoriaLabel = product.category === 'capilar' ? 'Productos Capilares' : 'Productos Faciales';
 
+  // Puerto de la lógica de stock de productos.html (líneas ~1079-1081): si el
+  // producto no tiene stock numérico, se controla solo por `availability` como
+  // siempre (compatible con Home, que nunca manda `stock`); si sí lo tiene,
+  // stock <= 0 también bloquea la compra aunque availability sea true.
+  const stockControlado = typeof product.stock === 'number';
+  const sinStock = stockControlado && (product.stock as number) <= 0;
+  const puedeComprar = product.availability && !sinStock;
+
   const handleAddToCart = () => {
     if (!isLoggedIn()) {
       navigate('/login');
@@ -54,10 +62,15 @@ export default function ProductCard({ product }: ProductCardProps) {
             <StarRating rating={product.rating} className="w-3.5 h-3.5" />
             <span className="text-gray-400 text-xs">{product.rating ? Number(product.rating).toFixed(1) : 'N/A'}</span>
           </div>
-          <span className={`text-xs font-medium ${product.availability ? 'text-green-600' : 'text-red-500'}`}>
-            {product.availability ? 'Disponible' : 'Agotado'}
+          <span className={`text-xs font-medium ${puedeComprar ? 'text-green-600' : 'text-red-500'}`}>
+            {puedeComprar ? 'Disponible' : 'Agotado'}
           </span>
         </div>
+        {stockControlado ? (
+          <p className={`text-xs ${sinStock ? 'text-red-500' : 'text-gray-400'} -mt-2 mb-3`}>
+            {sinStock ? 'Sin unidades disponibles' : `Quedan ${product.stock} unidad${product.stock === 1 ? '' : 'es'}`}
+          </p>
+        ) : null}
         <div className="flex items-center justify-between pt-3 border-t border-gray-100 mt-auto">
           <div>
             <span className="text-gray-900 font-bold text-lg">${product.price}</span>
@@ -80,7 +93,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             </button>
-            {product.availability ? (
+            {puedeComprar ? (
               <button
                 type="button"
                 onClick={handleAddToCart}

@@ -437,6 +437,38 @@
   }
 }
 
+/* Switch reutilizable: <input type="checkbox" class="sr-only peer"> + <span class="switch-track"> */
+.switch-track {
+  position: relative;
+  width: 2.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  transition: background-color 150ms;
+}
+
+.switch-track::after {
+  content: '';
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 1rem;
+  height: 1rem;
+  background-color: #fff;
+  border-radius: 9999px;
+  transition: transform 150ms;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.peer:checked~.switch-track {
+  background-color: #9333ea;
+}
+
+.peer:checked~.switch-track::after {
+  transform: translateX(1rem);
+}
+
 /* Sin esto, el navegador dibuja su propia flecha además de la nuestra en los <select> */
 select {
   appearance: none;
