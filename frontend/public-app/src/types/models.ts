@@ -93,3 +93,38 @@ export interface PaymentCard {
   marca: 'visa' | 'mastercard';
   activa: boolean;
 }
+
+// Lo que devuelve GET /api/auth/me (authController.me: `res.json({ user: req.user })`,
+// con verifyToken habiendo hecho `.select('-password -resetPasswordToken -resetPasswordExpires')`
+// sobre el modelo User completo). No es un StoredUser: no trae token, y sí trae
+// campos de perfil (dni/phone/gender/birthdate/address) que StoredUser nunca tuvo.
+export interface ProfileUser {
+  _id: string;
+  name: string;
+  email: string;
+  role: 'cliente' | 'admin';
+  isActive?: boolean;
+  profileImage?: string;
+  dni?: string;
+  phone?: string;
+  gender?: 'masculino' | 'femenino' | 'otro' | '';
+  birthdate?: string;
+  address?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+// Puerto de GalleryItem (backend/.../models/galleryItem.js). El enum real del
+// esquema en la base incluye categorías legadas ('escuela', 'eventos',
+// 'viajes-escolares') que ningún formulario ni filtro del sitio expone ya;
+// `category` se modela como string abierto en vez de atarse a ese enum.
+export interface GalleryItem {
+  _id: string;
+  url: string;
+  publicId: string;
+  category: string;
+  type: 'image' | 'video';
+  filename: string;
+  uploadedBy: string;
+  createdAt: string;
+}

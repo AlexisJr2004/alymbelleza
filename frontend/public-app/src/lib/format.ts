@@ -1,5 +1,4 @@
 import { API_URL } from './apiClient';
-import type { StoredUser } from './auth';
 
 export function formatoFechaLarga(fecha: Date): string {
   return fecha.toLocaleDateString('es-ES', {
@@ -38,8 +37,12 @@ export function formatImageUrl(url: string): string {
 }
 
 // Puerto directo de la resolución de foto de perfil usada en el dropdown de
-// usuario y el menú móvil (index.html:2770-2773 y equivalentes).
-export function resolveProfileImage(user: StoredUser | null): string {
+// usuario y el menú móvil (index.html:2770-2773 y equivalentes). El parámetro
+// se tipa como un subconjunto estructural (no StoredUser completo) porque
+// PerfilPage la reutiliza con el objeto de GET /api/auth/me, que trae los
+// mismos campos name/profileImage pero no token — misma lógica, sin forzar
+// un tipo que no encaja.
+export function resolveProfileImage(user: { name?: string; profileImage?: string } | null): string {
   const img = user?.profileImage;
   if (img && img.startsWith('http')) return img;
   if (img && img.startsWith('/uploads/')) return `${API_URL}${img}`;

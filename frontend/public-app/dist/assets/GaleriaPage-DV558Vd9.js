@@ -1,1 +1,0 @@
-import{t as e}from"./jsx-runtime-BkSabwWG.js";var t=e();function n(){return(0,t.jsx)(`div`,{className:`max-w-7xl mx-auto px-4 py-24 text-center text-gray-400`,children:`Pendiente de migrar (sub-fase 6 del plan).`})}export{n as default};
