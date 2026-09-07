@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /admin-productos.html
+Disallow: /admin
 Disallow: /login.html
 Disallow: /register.html
 Disallow: /forgot-password.html
