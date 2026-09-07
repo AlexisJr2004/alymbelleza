@@ -267,6 +267,42 @@ export function ChevronDownIcon(props: IconProps) {
   );
 }
 
+export function PercentIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 9h.008v.008H9V9Z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15 15h.008v.008H15V15Z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6" />
+      <circle cx="9" cy="9" r="1.5" fill="currentColor" stroke="none" />
+      <circle cx="15" cy="15" r="1.5" fill="currentColor" stroke="none" />
+    </Icon>
+  );
+}
+
+export function BankIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m7.5-6h.75m-.75 3h.75m-.75 3h.75M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21m-4.5-16.5h4.5v3.75h-4.5V4.5Z"
+      />
+    </Icon>
+  );
+}
+
+export function IdCardIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5h-15A1.5 1.5 0 0 0 3 6v12a1.5 1.5 0 0 0 1.5 1.5Zm6.75-10.5a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-2.25 4.5c-1.5 0-3 .75-3 2.25v.75h6v-.75c0-1.5-1.5-2.25-3-2.25Z"
+      />
+    </Icon>
+  );
+}
+
 export function BellIcon(props: IconProps) {
   return (
     <Icon {...props}>
