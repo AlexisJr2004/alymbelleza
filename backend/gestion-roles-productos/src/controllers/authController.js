@@ -151,7 +151,7 @@ exports.forgotPassword = async (req, res) => {
     await user.save();
 
     const frontendUrl = process.env.FRONTEND_URL;
-    const resetUrl = `${frontendUrl}/reset-password.html?token=${token}`;
+    const resetUrl = `${frontendUrl}/reset-password?token=${token}`;
 
     const mailOptions = {
       to: user.email,

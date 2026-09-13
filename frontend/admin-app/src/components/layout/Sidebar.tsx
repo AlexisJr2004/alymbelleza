@@ -105,7 +105,7 @@ export default function Sidebar({ open, onNavigate }: SidebarProps) {
       </nav>
       <div className="border-t border-gray-200 p-4 space-y-1 shrink-0">
         <a
-          href="/index.html"
+          href="/"
           className="flex items-center justify-center gap-2 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-colors"
         >
           <BackArrowIcon className="w-4 h-4 shrink-0" />

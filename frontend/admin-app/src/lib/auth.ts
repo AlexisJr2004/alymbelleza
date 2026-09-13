@@ -23,5 +23,5 @@ export function isAdmin(user: StoredUser | null): user is StoredUser {
 
 export function logout(): void {
   localStorage.removeItem('user');
-  window.location.href = '/login.html';
+  window.location.href = '/login';
 }

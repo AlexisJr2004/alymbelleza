@@ -101,27 +101,28 @@ app.use("/api", (req, res) => {
   res.status(404).json({ success: false, error: "Recurso no encontrado" });
 });
 
-// 7b. Panel de administración nuevo (React/Vite) — SPA propia bajo /admin,
-// debe registrarse antes del estático/catch-all del frontend viejo para
-// que gane la resolución de rutas. admin-productos.html sigue existiendo
-// en su ruta plana de siempre, sin colisión.
+// 7b. Panel de administración (React/Vite) — SPA propia bajo /admin, debe
+// registrarse antes del estático/catch-all del sitio público para que gane
+// la resolución de rutas.
 const adminAppDist = path.join(__dirname, "../frontend/admin-app/dist");
 app.use("/admin", express.static(adminAppDist));
 app.get(["/admin", "/admin/*"], (req, res) => {
   res.sendFile(path.join(adminAppDist, "index.html"));
 });
 
-// 8. Servir el frontend estático
-app.use(
-  express.static(path.join(__dirname, "../frontend"), {
-    extensions: ["html", "htm"],
-    index: "index.html",
-  })
-);
+// 8. Imágenes compartidas: admin-app (BankCardPreview) y public-app (favicon)
+// referencian rutas absolutas /img/... contra esta misma carpeta en vez de
+// tener cada una su propia copia completa.
+app.use("/img", express.static(path.join(__dirname, "../frontend/img")));
 
-// 9. Catch-all para SPA (debe ir al final)
+// 9. Sitio público nuevo (React/Vite) — reemplaza el frontend estático viejo.
+// Va después del bloque de /admin (7b) para que ese siga ganando su propio
+// prefijo; el catch-all de acá solo atrapa lo que ningún bloque anterior
+// (api, /admin, /img) ya resolvió.
+const publicAppDist = path.join(__dirname, "../frontend/public-app/dist");
+app.use(express.static(publicAppDist));
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/index.html"));
+  res.sendFile(path.join(publicAppDist, "index.html"));
 });
 
 // 10. Manejo centralizado de errores

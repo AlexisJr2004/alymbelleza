@@ -10,7 +10,7 @@ export default function RequireAdmin({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     if (!allowed) {
-      window.location.href = '/index.html';
+      window.location.href = '/';
     }
   }, [allowed]);
 

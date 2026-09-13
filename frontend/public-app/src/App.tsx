@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import PublicLayout from './components/layout/PublicLayout';
 import AuthLayout from './components/layout/AuthLayout';
 
@@ -46,6 +46,12 @@ function App() {
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
           <Route path="reset-password" element={<ResetPasswordPage />} />
         </Route>
+        {/* Red de seguridad: cualquier ruta vieja con extensión .html que haya
+            quedado colgada en algún lado (un enlace externo, un marcador
+            guardado, un correo ya enviado con el link de recuperación viejo)
+            cae acá en vez de quedar en una página en blanco sin ninguna Route
+            que la reconozca. */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
   );
