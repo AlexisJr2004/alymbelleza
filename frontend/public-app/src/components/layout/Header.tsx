@@ -25,7 +25,7 @@ function FullscreenToggle() {
       <button
         type="button"
         onClick={toggle}
-        className="text-purple-600 hover:text-purple-700 transition duration-300 p-2 rounded-full hover:bg-purple-50 focus:outline-none"
+        className="shrink-0 w-10 h-10 rounded-full bg-white/60 border border-purple-100 flex items-center justify-center text-purple-600 hover:text-purple-700 hover:bg-white/90 transition-colors focus:outline-none"
       >
         <i className={`fas ${isFullscreen ? 'fa-compress' : 'fa-expand'}`} />
       </button>
@@ -72,7 +72,7 @@ export default function Header() {
               <input
                 type="search"
                 placeholder="Buscar en el sitio..."
-                className="pl-10 pr-4 py-2 text-sm text-gray-900 border-none bg-purple-50 rounded-full focus:ring-2 focus:ring-purple-500 focus:outline-none transition duration-300"
+                className="w-40 pl-10 pr-4 py-2 text-sm text-gray-900 border-none bg-purple-50 rounded-full focus:ring-2 focus:ring-purple-500 focus:outline-none transition duration-300"
               />
             </div>
           </div>
@@ -84,7 +84,7 @@ export default function Header() {
                 href="https://www.tiktok.com/@merly_macias?lang=es"
                 target="_blank"
                 rel="noreferrer"
-                className="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50"
+                className="shrink-0 w-10 h-10 rounded-full bg-white/60 border border-purple-100 flex items-center justify-center text-purple-600 hover:text-purple-700 hover:bg-white/90 transition-colors"
               >
                 <i className="fab fa-tiktok" />
               </a>
@@ -92,7 +92,7 @@ export default function Header() {
                 href="https://www.facebook.com/HairdresserandSpa?mibextid=LQQJ4d"
                 target="_blank"
                 rel="noreferrer"
-                className="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50"
+                className="shrink-0 w-10 h-10 rounded-full bg-white/60 border border-purple-100 flex items-center justify-center text-purple-600 hover:text-purple-700 hover:bg-white/90 transition-colors"
               >
                 <i className="fab fa-facebook-f" />
               </a>

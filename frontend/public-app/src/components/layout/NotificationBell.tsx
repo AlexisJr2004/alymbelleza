@@ -32,7 +32,7 @@ export default function NotificationBell() {
           setOpen((v) => !v);
         }}
         title="Notificaciones"
-        className="text-purple-600 hover:text-purple-700 transition duration-200 p-2 rounded-full hover:bg-purple-50 relative"
+        className="shrink-0 relative w-10 h-10 rounded-full bg-white/60 border border-purple-100 flex items-center justify-center text-purple-600 hover:text-purple-700 hover:bg-white/90 transition-colors"
       >
         <i className="fas fa-bell" />
         {appointments.length > 0 && (
