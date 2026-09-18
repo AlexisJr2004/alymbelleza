@@ -36,9 +36,7 @@ export default function NotificationBell() {
       >
         <i className="fas fa-bell" />
         {appointments.length > 0 && (
-          <span className="absolute -top-1 -right-1 bg-pink-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold">
-            {appointments.length}
-          </span>
+          <span className="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 rounded-full border-2 border-white" />
         )}
       </button>
 
