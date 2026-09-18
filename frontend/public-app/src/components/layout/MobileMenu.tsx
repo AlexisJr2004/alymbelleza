@@ -28,9 +28,9 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
 
   return (
     <aside
-      className={`${
-        open ? '' : 'hidden'
-      } fixed left-0 top-0 z-50 h-screen w-80 bg-white/95 backdrop-blur-md rounded-r-3xl border-r border-purple-100 shadow-lg overflow-y-auto`}
+      className={`fixed left-0 top-0 z-50 h-screen w-80 bg-white/95 backdrop-blur-md rounded-r-3xl border-r border-purple-100 shadow-lg overflow-y-auto transition-transform duration-200 ${
+        open ? 'translate-x-0' : '-translate-x-full'
+      }`}
     >
       <div className="p-4 mb-6 border-b border-purple-100">
         <h2 className="text-xl font-display bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Bella Beauty</h2>
