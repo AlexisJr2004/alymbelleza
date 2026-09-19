@@ -101,3 +101,35 @@ export function XCircleIcon(props: IconProps) {
     </Icon>
   );
 }
+
+// Mismo lenguaje visual (trazo, viewBox 24x24) que el resto: el carrito y
+// las marcas de redes sociales pasan de glifos sólidos de Font Awesome a
+// iconos de línea propios, en vez de mezclar dos estilos distintos en la
+// misma barra de navegación.
+export function CartIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+      />
+    </Icon>
+  );
+}
+
+export function TiktokIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M21 7.917v4.034a9.948 9.948 0 0 1-5-1.951v6.667a6.333 6.333 0 1 1-8-6.129v4.13a2.333 2.333 0 1 0 4 1.632v-14.3h4.161c.336 1.877 1.635 3.434 3.339 4.09z" />
+    </Icon>
+  );
+}
+
+export function FacebookIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M7 10v4h3v7h4v-7h3l1-4h-4V8c0-1.325.21-1.85 1.928-1.85h2.072v-4h-2.53C11.86 2.15 10 4.136 10 7.298V10H7Z" />
+    </Icon>
+  );
+}

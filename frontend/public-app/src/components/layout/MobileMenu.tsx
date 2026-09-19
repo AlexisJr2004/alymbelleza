@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getStoredUser, isAdmin, logout } from '../../lib/auth';
 import { resolveProfileImage } from '../../lib/format';
 import { confirmAction, notifySuccess } from '../../lib/sweetalert';
-import { LogoutIcon } from '../icons';
+import { FacebookIcon, LogoutIcon, TiktokIcon } from '../icons';
 
 const FALLBACK_AVATAR = 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
 
@@ -277,7 +277,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
               rel="noreferrer"
               className="shrink-0 w-10 h-10 rounded-full bg-white/60 border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 hover:bg-white/90 transition-colors"
             >
-              <i className="fab fa-tiktok" />
+              <TiktokIcon className="w-5 h-5" />
             </a>
             <a
               href="https://www.facebook.com/HairdresserandSpa?mibextid=LQQJ4d"
@@ -285,7 +285,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
               rel="noreferrer"
               className="shrink-0 w-10 h-10 rounded-full bg-white/60 border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 hover:bg-white/90 transition-colors"
             >
-              <i className="fab fa-facebook-f" />
+              <FacebookIcon className="w-5 h-5" />
             </a>
           </div>
           <Link
