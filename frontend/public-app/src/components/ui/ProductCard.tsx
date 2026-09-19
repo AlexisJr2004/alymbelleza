@@ -81,7 +81,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               type="button"
               onClick={() => openQuickView(product)}
               aria-label={`Ver detalles de ${product.name}`}
-              className="ver-detalle-btn w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:text-blue-600 hover:border-blue-300 transition-colors duration-200"
+              className="ver-detalle-btn shrink-0 w-9 h-9 rounded-full bg-white/60 border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 hover:bg-white/90 transition-colors"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
