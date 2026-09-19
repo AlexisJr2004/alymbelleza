@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getStoredUser } from '../../lib/auth';
-import { BarsIcon, FacebookIcon, TiktokIcon, XIcon } from '../icons';
+import { BarsIcon, ClockIcon, EnvelopeIcon, FacebookIcon, MapPinIcon, TiktokIcon, XIcon } from '../icons';
 import UserDropdown from './UserDropdown';
 import NotificationBell from './NotificationBell';
 import CartBadge from './CartBadge';
@@ -47,19 +47,19 @@ export default function Header() {
         <div className="hidden md:flex justify-between items-center py-3 border-b border-purple-100 text-sm text-gray-600">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
-              <i className="fas fa-map-marker-alt text-purple-600" />
+              <MapPinIcon className="w-4 h-4 text-purple-600" />
               <a href="#" className="text-gray-700 hover:text-purple-700 transition duration-300">
                 Av. Principal 123, Ciudad
               </a>
             </div>
             <div className="flex items-center space-x-3">
-              <i className="fas fa-envelope text-purple-600" />
+              <EnvelopeIcon className="w-4 h-4 text-purple-600" />
               <a href="mailto:info@bellabeauty.com" className="text-gray-700 hover:text-purple-700 transition duration-300">
                 info@bellabeauty.com
               </a>
             </div>
             <div className="flex items-center space-x-3">
-              <i className="fas fa-clock text-purple-600" />
+              <ClockIcon className="w-4 h-4 text-purple-600" />
               <span className="text-gray-700">Lun - Dom: 9:00 - 20:00</span>
             </div>
           </div>

@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getStoredUser, isAdmin, logout } from '../../lib/auth';
 import { resolveProfileImage } from '../../lib/format';
 import { confirmAction, notifySuccess } from '../../lib/sweetalert';
-import { FacebookIcon, LogoutIcon, TiktokIcon } from '../icons';
+import { ClockIcon, EnvelopeIcon, FacebookIcon, LogoutIcon, MapPinIcon, TiktokIcon } from '../icons';
 
 const FALLBACK_AVATAR = 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
 
@@ -148,19 +148,19 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
 
         <div style={reveal(open, 2).style} className={cx('px-4 mb-6 space-y-4 border-b border-purple-100 pb-4', reveal(open, 2).className)}>
           <div className="flex items-center space-x-3">
-            <i className="fas fa-map-marker-alt text-gray-500" />
+            <MapPinIcon className="w-4 h-4 text-gray-500" />
             <a href="#" className="text-sm text-gray-700 hover:text-purple-700 transition duration-300">
               Av. Principal 123, Ciudad
             </a>
           </div>
           <div className="flex items-center space-x-3">
-            <i className="fas fa-envelope text-gray-500" />
+            <EnvelopeIcon className="w-4 h-4 text-gray-500" />
             <a href="mailto:info@bellabeauty.com" className="text-sm text-gray-700 hover:text-purple-700 transition duration-300">
               info@bellabeauty.com
             </a>
           </div>
           <div className="flex items-center space-x-3">
-            <i className="fas fa-clock text-gray-500" />
+            <ClockIcon className="w-4 h-4 text-gray-500" />
             <span className="text-sm text-gray-700">Lun - Dom: 9:00 - 20:00</span>
           </div>
         </div>
@@ -252,7 +252,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
                 onClick={onClose}
                 className="flex items-center px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 hover:bg-purple-50 transition-colors duration-200"
               >
-                <i className="fas fa-envelope w-5 h-5 text-gray-500 mr-3" />
+                <EnvelopeIcon className="w-5 h-5 text-gray-500 mr-3" />
                 Contacto
               </a>
             </li>
