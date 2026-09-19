@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
+import ModalHost from './components/ui/Modal.tsx'
 
 const queryClient = new QueryClient()
 
@@ -13,6 +14,7 @@ createRoot(document.getElementById('root')!).render(
       <BrowserRouter basename="/admin">
         <App />
       </BrowserRouter>
+      <ModalHost />
     </QueryClientProvider>
   </StrictMode>,
 )

@@ -1,23 +1,24 @@
-import Swal from 'sweetalert2';
+// Wrapper de diálogos del panel — antes usaba SweetAlert2, ahora usa el
+// modal propio (ver modalStore.ts + components/ui/Modal.tsx). Se mantienen
+// las mismas firmas exportadas a propósito: los sitios que llaman a estas
+// funciones en todo el panel no necesitan cambiar.
+import { showModal } from './modalStore';
 
 export async function confirmAction(opts: { title: string; text: string; confirmText: string; icon?: 'warning' | 'question' }) {
-  const result = await Swal.fire({
+  return showModal({
+    kind: 'confirm',
     title: opts.title,
     text: opts.text,
-    icon: opts.icon ?? 'warning',
-    showCancelButton: true,
-    confirmButtonColor: opts.icon === 'question' ? '#7e22ce' : '#e11d48',
-    cancelButtonColor: '#6b7280',
-    confirmButtonText: opts.confirmText,
-    cancelButtonText: 'Cancelar',
+    confirmText: opts.confirmText,
+    cancelText: 'Cancelar',
+    tone: opts.icon === 'question' ? 'brand' : 'danger',
   });
-  return result.isConfirmed;
 }
 
 export function notifySuccess(title: string, text?: string) {
-  Swal.fire({ title, text, icon: 'success', timer: 1200, showConfirmButton: false });
+  showModal({ kind: 'success', title, text, autoCloseMs: 1200 });
 }
 
 export function notifyError(title: string, text?: string) {
-  Swal.fire({ title, text, icon: 'error' });
+  showModal({ kind: 'error', title, text, confirmText: 'Entendido' });
 }
