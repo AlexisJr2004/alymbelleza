@@ -89,7 +89,7 @@ export default function Sidebar({ open, onNavigate }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-40 w-64 bg-white/70 backdrop-blur-xl border-r border-gray-200 flex flex-col transition-transform duration-300 ease-out lg:translate-x-0 ${
+      className={`fixed inset-y-0 left-0 z-40 w-64 bg-white/70 backdrop-blur-xl border-r border-gray-200 flex flex-col rounded-r-3xl lg:rounded-none transition-transform duration-300 ease-out lg:translate-x-0 ${
         open ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
