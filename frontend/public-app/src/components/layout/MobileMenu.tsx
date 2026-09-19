@@ -53,13 +53,13 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
       <div
         aria-hidden="true"
         onClick={onClose}
-        className={`fixed inset-0 z-40 bg-gray-900/40 transition-opacity duration-300 ${
+        className={`fixed inset-0 z-[1001] bg-gray-900/40 transition-opacity duration-300 ${
           open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       />
 
       <aside
-        className={`fixed left-0 top-0 z-50 h-screen w-80 bg-white/95 backdrop-blur-md rounded-r-3xl border-r border-purple-100 shadow-lg overflow-y-auto transition-transform duration-300 ease-out ${
+        className={`fixed left-0 top-0 z-[1002] h-screen w-80 bg-white/95 backdrop-blur-md rounded-r-3xl border-r border-purple-100 shadow-lg overflow-y-auto transition-transform duration-300 ease-out ${
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
