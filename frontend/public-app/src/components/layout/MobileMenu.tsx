@@ -77,14 +77,14 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
           {isAdmin(user) && (
             <div className="mt-3">
               <a href="/admin" className="inline-flex items-center text-sm text-purple-700 hover:text-purple-900 font-medium">
-                <i className="fa-solid fa-gear mr-1 text-sm" />
+                <i className="fa-solid fa-gear mr-1 text-sm text-gray-500" />
                 Panel Administrador
               </a>
             </div>
           )}
           <div className="mt-3">
             <Link to="/perfil" onClick={onClose} className="inline-flex items-center text-sm text-purple-700 hover:text-purple-900 font-medium">
-              <i className="fa-solid fa-user-circle mr-1 text-sm" />
+              <i className="fa-solid fa-user-circle mr-1 text-sm text-gray-500" />
               Perfil
             </Link>
           </div>
@@ -112,19 +112,19 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
 
       <div className="px-4 mb-6 space-y-4 border-b border-purple-100 pb-4">
         <div className="flex items-center space-x-3">
-          <i className="fas fa-map-marker-alt text-purple-600" />
+          <i className="fas fa-map-marker-alt text-gray-500" />
           <a href="#" className="text-sm text-gray-700 hover:text-purple-700 transition duration-300">
             Av. Principal 123, Ciudad
           </a>
         </div>
         <div className="flex items-center space-x-3">
-          <i className="fas fa-envelope text-purple-600" />
+          <i className="fas fa-envelope text-gray-500" />
           <a href="mailto:info@bellabeauty.com" className="text-sm text-gray-700 hover:text-purple-700 transition duration-300">
             info@bellabeauty.com
           </a>
         </div>
         <div className="flex items-center space-x-3">
-          <i className="fas fa-clock text-purple-600" />
+          <i className="fas fa-clock text-gray-500" />
           <span className="text-sm text-gray-700">Lun - Dom: 9:00 - 20:00</span>
         </div>
       </div>
@@ -132,7 +132,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
       <div className="px-4 mb-6">
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <i className="fas fa-search text-purple-400" />
+            <i className="fas fa-search text-gray-400" />
           </div>
           <input
             type="search"
@@ -146,7 +146,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
         <ul className="space-y-1">
           <li>
             <Link to="/" onClick={onClose} className="flex items-center px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50">
-              <i className="fas fa-home w-5 h-5 text-purple-500 mr-3" />
+              <i className="fas fa-home w-5 h-5 text-gray-500 mr-3" />
               Inicio
             </Link>
           </li>
@@ -157,7 +157,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
               className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50"
             >
               <div className="flex items-center">
-                <i className="fas fa-spa w-5 h-5 text-purple-500 mr-3" />
+                <i className="fas fa-spa w-5 h-5 text-gray-500 mr-3" />
                 Servicios
               </div>
               <i className="fas fa-chevron-down text-sm" />
@@ -182,19 +182,19 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
           </li>
           <li>
             <Link to="/productos" onClick={onClose} className="flex items-center px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50">
-              <i className="fas fa-shopping-bag w-5 h-5 text-purple-500 mr-3" />
+              <i className="fas fa-shopping-bag w-5 h-5 text-gray-500 mr-3" />
               Productos
             </Link>
           </li>
           <li>
             <a href="/#contacto" onClick={onClose} className="flex items-center px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50">
-              <i className="fas fa-envelope w-5 h-5 text-purple-500 mr-3" />
+              <i className="fas fa-envelope w-5 h-5 text-gray-500 mr-3" />
               Contacto
             </a>
           </li>
           <li>
             <Link to="/galeria" onClick={onClose} className="flex items-center px-4 py-2 text-sm font-medium text-gray-900 hover:bg-purple-50">
-              <i className="fas fa-images w-5 h-5 text-purple-500 mr-3" />
+              <i className="fas fa-images w-5 h-5 text-gray-500 mr-3" />
               Galeria
             </Link>
           </li>
