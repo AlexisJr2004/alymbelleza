@@ -10,8 +10,11 @@ import {
   BackArrowIcon,
   LogoutIcon,
 } from '../icons';
-import { logout } from '../../lib/auth';
+import { getStoredUser, logout } from '../../lib/auth';
+import { resolveProfileImage } from '../../lib/format';
 import { confirmAction } from '../../lib/sweetalert';
+
+const FALLBACK_AVATAR = 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
 
 interface NavItem {
   to: string;
@@ -77,6 +80,8 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ open, onNavigate }: SidebarProps) {
+  const user = getStoredUser();
+
   const handleLogout = async () => {
     const confirmed = await confirmAction({
       title: '¿Cerrar sesión?',
@@ -89,7 +94,7 @@ export default function Sidebar({ open, onNavigate }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-40 w-64 bg-white/70 backdrop-blur-xl border-r border-gray-200 flex flex-col rounded-r-3xl lg:rounded-none transition-transform duration-300 ease-out lg:translate-x-0 ${
+      className={`fixed inset-y-0 left-0 z-40 w-64 bg-white/95 backdrop-blur-md lg:bg-white/70 lg:backdrop-blur-xl border-r border-gray-200 flex flex-col rounded-r-3xl lg:rounded-none transition-transform duration-300 ease-out lg:translate-x-0 ${
         open ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
@@ -104,12 +109,41 @@ export default function Sidebar({ open, onNavigate }: SidebarProps) {
           Bella Beauty
         </span>
       </div>
+
+      {/* Tarjeta de perfil — solo en móvil (mismo patrón que
+          MobileMenu.tsx del sitio público), porque el Topbar oculta el
+          nombre/rol en pantallas chicas (hidden sm:block) y este es el
+          único lugar donde se ve quién inició sesión. */}
+      <div
+        style={reveal(open, 1).style}
+        className={cx('lg:hidden px-4 py-4 border-b border-gray-200 shrink-0', reveal(open, 1).className)}
+      >
+        <div className="flex items-center gap-3">
+          <img
+            className="w-12 h-12 rounded-full object-cover border-2 border-purple-100 shadow-sm shrink-0"
+            src={resolveProfileImage(user)}
+            alt="Foto de perfil"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = FALLBACK_AVATAR;
+            }}
+          />
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-gray-900 truncate">{user?.name || 'Administrador'}</p>
+            <p className="text-xs text-gray-500 truncate">{user?.email || ''}</p>
+            <span className="inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
+              Administrador
+            </span>
+          </div>
+        </div>
+      </div>
+
       <nav className="flex-1 overflow-y-auto px-4 py-6">
         {NAV_GROUPS.map((group, i) => (
           <div
             key={group.label}
-            style={reveal(open, i + 1).style}
-            className={cx(i < NAV_GROUPS.length - 1 ? 'mb-6' : '', reveal(open, i + 1).className)}
+            style={reveal(open, i + 2).style}
+            className={cx(i < NAV_GROUPS.length - 1 ? 'mb-6' : '', reveal(open, i + 2).className)}
           >
             <p className="px-3 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">{group.label}</p>
             <div className="space-y-1">
@@ -129,8 +163,8 @@ export default function Sidebar({ open, onNavigate }: SidebarProps) {
         ))}
       </nav>
       <div
-        style={reveal(open, NAV_GROUPS.length + 1).style}
-        className={cx('border-t border-gray-200 p-4 space-y-1 shrink-0', reveal(open, NAV_GROUPS.length + 1).className)}
+        style={reveal(open, NAV_GROUPS.length + 2).style}
+        className={cx('border-t border-gray-200 p-4 space-y-1 shrink-0', reveal(open, NAV_GROUPS.length + 2).className)}
       >
         <a
           href="/"

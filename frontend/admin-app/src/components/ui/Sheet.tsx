@@ -71,8 +71,23 @@ export default function Sheet({
       hasOpenedRef.current = true;
       setMounted(true);
       setDragY(0);
-      const raf = requestAnimationFrame(() => setPhase('open'));
-      return () => cancelAnimationFrame(raf);
+      // Doble rAF, no uno solo: cuando este Sheet ya estaba montado con
+      // open=false (p.ej. CrudModal cuando la página que lo usa recién
+      // decide abrirlo, a diferencia de ModalCard que se monta directo con
+      // open=true vía key={modal.id}), este mismo efecto es el que recién
+      // pone mounted=true — un solo rAF corre demasiado pronto, antes de
+      // que el navegador llegue a pintar el estado "cerrado" (translateY
+      // 100% / scale 0.95), así que salta directo al estado abierto sin
+      // animar nada. El segundo rAF garantiza que ya hubo un pintado real
+      // del estado inicial antes de cambiar de fase.
+      let raf2 = 0;
+      const raf1 = requestAnimationFrame(() => {
+        raf2 = requestAnimationFrame(() => setPhase('open'));
+      });
+      return () => {
+        cancelAnimationFrame(raf1);
+        cancelAnimationFrame(raf2);
+      };
     }
     if (!hasOpenedRef.current) return undefined;
     setPhase('exiting');
