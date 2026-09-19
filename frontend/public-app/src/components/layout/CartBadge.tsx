@@ -4,7 +4,11 @@ import { CartIcon } from '../icons';
 
 export default function CartBadge() {
   const { data: cart } = useCartQuery();
-  const count = cart?.items.reduce((sum, i) => sum + i.cantidad, 0) || 0;
+  // cart?.items.reduce(...) solo protege si `cart` mismo es nulo — si el
+  // backend alguna vez devuelve un objeto sin `items` (o algo con otra
+  // forma), `.reduce` sobre undefined tira una excepción sin capturar que
+  // se lleva puesto el <Header> entero (y con él, cualquier página pública).
+  const count = cart?.items?.reduce((sum, i) => sum + i.cantidad, 0) ?? 0;
 
   return (
     <Link
