@@ -159,14 +159,17 @@ export default function Header() {
             </Link>
           </nav>
 
-          {/* Mobile Menu Button */}
-          <button
-            type="button"
-            onClick={() => setMobileOpen((v) => !v)}
-            className="shrink-0 md:hidden w-10 h-10 rounded-full bg-white/60 border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 hover:bg-white/90 transition-colors focus:outline-none"
-          >
-            {mobileOpen ? <XIcon className="h-5 w-5" strokeWidth={2} /> : <BarsIcon className="h-5 w-5" strokeWidth={2} />}
-          </button>
+          {/* Notificaciones + Menú Móvil */}
+          <div className="flex items-center gap-2 md:hidden">
+            {!mobileOpen && <NotificationBell />}
+            <button
+              type="button"
+              onClick={() => setMobileOpen((v) => !v)}
+              className="shrink-0 w-10 h-10 rounded-full bg-white/60 border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 hover:bg-white/90 transition-colors focus:outline-none"
+            >
+              {mobileOpen ? <XIcon className="h-5 w-5" strokeWidth={2} /> : <BarsIcon className="h-5 w-5" strokeWidth={2} />}
+            </button>
+          </div>
         </div>
       </div>
 

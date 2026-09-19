@@ -90,7 +90,11 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between">
                   <span className="block text-base font-semibold text-gray-900 truncate max-w-[140px]">{user.name || 'Usuario'}</span>
-                  <button type="button" onClick={handleLogout} className="text-red-500 hover:text-red-700 transition-colors">
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="shrink-0 w-10 h-10 rounded-full bg-white/60 border border-gray-200 flex items-center justify-center text-red-500 hover:text-red-700 hover:bg-white/90 transition-colors"
+                  >
                     <LogoutIcon className="h-5 w-5" />
                   </button>
                 </div>
