@@ -1,30 +1,31 @@
-import Swal from 'sweetalert2';
+// Wrapper de diálogos del sitio — antes usaba SweetAlert2, ahora usa el
+// modal propio (ver modalStore.ts + components/ui/Modal.tsx). Se mantienen
+// las mismas firmas exportadas a propósito: los ~18 sitios que llaman a
+// estas funciones en todo el sitio no necesitan cambiar.
+import { showModal } from './modalStore';
 
 export async function confirmAction(opts: { title: string; text: string; confirmText: string; icon?: 'warning' | 'question' }) {
-  const result = await Swal.fire({
+  return showModal({
+    kind: 'confirm',
     title: opts.title,
     text: opts.text,
-    icon: opts.icon ?? 'warning',
-    showCancelButton: true,
-    confirmButtonColor: opts.icon === 'question' ? '#7e22ce' : '#e11d48',
-    cancelButtonColor: '#6b7280',
-    confirmButtonText: opts.confirmText,
-    cancelButtonText: 'Cancelar',
+    confirmText: opts.confirmText,
+    cancelText: 'Cancelar',
+    tone: opts.icon === 'question' ? 'brand' : 'danger',
   });
-  return result.isConfirmed;
 }
 
 export function notifySuccess(title: string, text?: string) {
-  Swal.fire({ title, text, icon: 'success', timer: 1500, showConfirmButton: false });
+  showModal({ kind: 'success', title, text, autoCloseMs: 1500 });
 }
 
 export function notifyError(title: string, text?: string) {
-  Swal.fire({ title, text, icon: 'error' });
+  showModal({ kind: 'error', title, text, confirmText: 'Entendido' });
 }
 
 // Aviso neutro con botón de confirmación (a diferencia de notifySuccess, que
 // se auto-cierra) — usado por el carrito cuando un cupón se quita solo porque
 // la compra ya no alcanza el mínimo requerido (ver carrito.html ~1391-1396).
 export function notifyInfo(title: string, text?: string) {
-  Swal.fire({ title, text, icon: 'info' });
+  showModal({ kind: 'info', title, text, confirmText: 'Entendido' });
 }

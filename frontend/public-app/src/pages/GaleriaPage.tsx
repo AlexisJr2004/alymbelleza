@@ -79,14 +79,13 @@ export default function GaleriaPage() {
     <>
       <UploadModal open={uploadOpen} onClose={() => setUploadOpen(false)} onSubmit={handleUploadSubmit} isSubmitting={uploadItem.isPending} />
 
-      {lightbox && (
-        <LightboxModal
-          items={lightbox.items}
-          index={lightbox.index}
-          onNavigate={(i) => setLightbox((prev) => (prev ? { ...prev, index: i } : prev))}
-          onClose={() => setLightbox(null)}
-        />
-      )}
+      <LightboxModal
+        open={!!lightbox}
+        items={lightbox?.items ?? []}
+        index={lightbox?.index ?? 0}
+        onNavigate={(i) => setLightbox((prev) => (prev ? { ...prev, index: i } : prev))}
+        onClose={() => setLightbox(null)}
+      />
 
       <section className="bg-white">
         <div id="galeria" className="mx-auto w-full max-w-7xl px-5 pb-16 md:px-10 md:pb-24">

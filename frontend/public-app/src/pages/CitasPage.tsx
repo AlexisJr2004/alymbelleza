@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import Swal from 'sweetalert2';
 import { useAppointmentsQuery, useCreateAppointment, useDeleteAppointment, useUpdateAppointmentStatus } from '../hooks/useAppointments';
 import { isLoggedIn } from '../lib/auth';
-import { confirmAction, notifyError, notifySuccess } from '../lib/sweetalert';
+import { confirmAction, notifyError, notifyInfo, notifySuccess } from '../lib/sweetalert';
 import { formatoFechaLarga, numeroWhatsapp } from '../lib/format';
 import Calendario from '../components/citas/Calendario';
 import TusCitasPanel from '../components/citas/TusCitasPanel';
@@ -34,7 +33,7 @@ export default function CitasPage() {
       // Fiel a citas.html: acá el sitio viejo solo mostraba esta alerta y no
       // hacía nada más (ni redirigía a login), así que no se agrega esa
       // navegación acá tampoco.
-      Swal.fire('Debes iniciar sesión para agendar una cita');
+      notifyInfo('Debes iniciar sesión para agendar una cita');
       return;
     }
 

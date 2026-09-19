@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
-import Swal from 'sweetalert2';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { useTestimonialsQuery } from '../../hooks/useTestimonials';
 import { isLoggedIn } from '../../lib/auth';
+import { notifyError } from '../../lib/sweetalert';
 import TestimonialCard from './TestimonialCard';
 import TestimonialModal from './TestimonialModal';
 
@@ -20,12 +20,7 @@ export default function TestimonialsSection() {
 
   const handleOpenModal = () => {
     if (!isLoggedIn()) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Inicia sesión',
-        text: 'Debes iniciar sesión para dejar un testimonio.',
-        confirmButtonColor: '#7e22ce',
-      });
+      notifyError('Inicia sesión', 'Debes iniciar sesión para dejar un testimonio.');
       return;
     }
     setModalOpen(true);

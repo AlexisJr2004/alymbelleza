@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Sheet from '../ui/Sheet';
 
 interface CartImagePreviewModalProps {
   image: { src: string; name: string } | null;
@@ -6,22 +7,14 @@ interface CartImagePreviewModalProps {
 }
 
 // Puerto de #cartImagePreviewModal + showModal/hideModal/openCartImagePreview
-// (carrito.html ~558-565, ~1530-1561): el nodo se mantiene montado durante los
-// 300ms de la animación de salida (igual que el hidden/opacity-0 con setTimeout
-// del original) en vez de desmontarse de golpe al cerrar.
+// (carrito.html ~558-565, ~1530-1561).
 export default function CartImagePreviewModal({ image, onClose }: CartImagePreviewModalProps) {
-  const [visible, setVisible] = useState(false);
-  const [rendered, setRendered] = useState<{ src: string; name: string } | null>(null);
+  // Se conserva la última imagen mostrada durante la animación de salida del
+  // Sheet (sigue montado unos ms más aunque `image` ya sea null).
+  const [rendered, setRendered] = useState(image);
 
   useEffect(() => {
-    if (image) {
-      setRendered(image);
-      const raf = requestAnimationFrame(() => setVisible(true));
-      return () => cancelAnimationFrame(raf);
-    }
-    setVisible(false);
-    const timeout = setTimeout(() => setRendered(null), 300);
-    return () => clearTimeout(timeout);
+    if (image) setRendered(image);
   }, [image]);
 
   useEffect(() => {
@@ -36,18 +29,22 @@ export default function CartImagePreviewModal({ image, onClose }: CartImagePrevi
   if (!rendered) return null;
 
   return (
-    <div
-      className={`fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300 z-[9999] flex items-center justify-center p-4 ${
-        visible ? 'opacity-100' : 'opacity-0'
-      }`}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
+    <Sheet
+      open={!!image}
+      onClose={onClose}
+      onFullyClosed={() => setRendered(null)}
+      desktopMaxWidthClassName="md:max-w-lg"
+      panelClassName="bg-transparent rounded-t-3xl md:rounded-none"
+      handleClassName="bg-white/50"
+      backdropClassName="bg-black/40 backdrop-blur-sm"
+      labelledBy="cart-image-preview-title"
     >
-      <div className="relative max-w-lg w-full">
-        <img src={rendered.src} alt={rendered.name} className="w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl bg-white" />
-        <p className="mt-4 text-center text-white text-lg font-semibold">{rendered.name}</p>
+      <div className="px-4 pb-6 pt-1 md:p-0">
+        <img src={rendered.src} alt={rendered.name} className="w-full max-h-[70vh] object-contain rounded-2xl shadow-2xl bg-white" />
+        <p id="cart-image-preview-title" className="mt-4 text-center text-white text-lg font-semibold">
+          {rendered.name}
+        </p>
       </div>
-    </div>
+    </Sheet>
   );
 }
