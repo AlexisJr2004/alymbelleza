@@ -4,7 +4,22 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getStoredUser, isAdmin, logout } from '../../lib/auth';
 import { resolveProfileImage } from '../../lib/format';
 import { confirmAction, notifySuccess } from '../../lib/sweetalert';
-import { ClockIcon, EnvelopeIcon, FacebookIcon, LogoutIcon, MapPinIcon, TiktokIcon } from '../icons';
+import {
+  ChevronDownIcon,
+  ClockIcon,
+  CogIcon,
+  EnvelopeIcon,
+  FacebookIcon,
+  HomeIcon,
+  LogoutIcon,
+  MapPinIcon,
+  PhotoIcon,
+  SearchIcon,
+  ShoppingBagIcon,
+  SparklesIcon,
+  TiktokIcon,
+  UserCircleIcon,
+} from '../icons';
 
 const FALLBACK_AVATAR = 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
 
@@ -111,7 +126,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
                   href="/admin"
                   className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-purple-700 hover:bg-purple-50 transition-colors duration-200"
                 >
-                  <i className="fa-solid fa-gear w-5 text-center text-gray-500" />
+                  <CogIcon className="w-5 h-5 shrink-0 text-gray-500" />
                   Panel Administrador
                 </a>
               )}
@@ -120,7 +135,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
                 onClick={onClose}
                 className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-purple-700 hover:bg-purple-50 transition-colors duration-200"
               >
-                <i className="fa-solid fa-user-circle w-5 text-center text-gray-500" />
+                <UserCircleIcon className="w-5 h-5 shrink-0 text-gray-500" />
                 Perfil
               </Link>
             </div>
@@ -148,19 +163,19 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
 
         <div style={reveal(open, 2).style} className={cx('px-4 mb-6 space-y-4 border-b border-purple-100 pb-4', reveal(open, 2).className)}>
           <div className="flex items-center space-x-3">
-            <MapPinIcon className="w-4 h-4 text-gray-500" />
+            <MapPinIcon className="w-4 h-4 shrink-0 text-gray-500" />
             <a href="#" className="text-sm text-gray-700 hover:text-purple-700 transition duration-300">
               Av. Principal 123, Ciudad
             </a>
           </div>
           <div className="flex items-center space-x-3">
-            <EnvelopeIcon className="w-4 h-4 text-gray-500" />
+            <EnvelopeIcon className="w-4 h-4 shrink-0 text-gray-500" />
             <a href="mailto:info@bellabeauty.com" className="text-sm text-gray-700 hover:text-purple-700 transition duration-300">
               info@bellabeauty.com
             </a>
           </div>
           <div className="flex items-center space-x-3">
-            <ClockIcon className="w-4 h-4 text-gray-500" />
+            <ClockIcon className="w-4 h-4 shrink-0 text-gray-500" />
             <span className="text-sm text-gray-700">Lun - Dom: 9:00 - 20:00</span>
           </div>
         </div>
@@ -168,7 +183,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
         <div style={reveal(open, 3).style} className={cx('px-4 mb-6', reveal(open, 3).className)}>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <i className="fas fa-search text-gray-400" />
+              <SearchIcon className="w-4 h-4 text-gray-400" />
             </div>
             <input
               type="search"
@@ -186,7 +201,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
                 onClick={onClose}
                 className="flex items-center px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 hover:bg-purple-50 transition-colors duration-200"
               >
-                <i className="fas fa-home w-5 h-5 text-gray-500 mr-3" />
+                <HomeIcon className="w-5 h-5 shrink-0 text-gray-500 mr-3" />
                 Inicio
               </Link>
             </li>
@@ -197,11 +212,11 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
                 className="flex items-center justify-between w-full px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 hover:bg-purple-50 transition-colors duration-200"
               >
                 <div className="flex items-center">
-                  <i className="fas fa-spa w-5 h-5 text-gray-500 mr-3" />
+                  <SparklesIcon className="w-5 h-5 shrink-0 text-gray-500 mr-3" />
                   Servicios
                 </div>
-                <i
-                  className={`fas fa-chevron-down text-sm transition-transform duration-300 ${servicesOpen ? 'rotate-180' : ''}`}
+                <ChevronDownIcon
+                  className={`w-4 h-4 shrink-0 transition-transform duration-300 ${servicesOpen ? 'rotate-180' : ''}`}
                 />
               </button>
               <div className={`grid transition-all duration-300 ease-in-out ${servicesOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
@@ -242,7 +257,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
                 onClick={onClose}
                 className="flex items-center px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 hover:bg-purple-50 transition-colors duration-200"
               >
-                <i className="fas fa-shopping-bag w-5 h-5 text-gray-500 mr-3" />
+                <ShoppingBagIcon className="w-5 h-5 shrink-0 text-gray-500 mr-3" />
                 Productos
               </Link>
             </li>
@@ -252,7 +267,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
                 onClick={onClose}
                 className="flex items-center px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 hover:bg-purple-50 transition-colors duration-200"
               >
-                <EnvelopeIcon className="w-5 h-5 text-gray-500 mr-3" />
+                <EnvelopeIcon className="w-5 h-5 shrink-0 text-gray-500 mr-3" />
                 Contacto
               </a>
             </li>
@@ -262,7 +277,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
                 onClick={onClose}
                 className="flex items-center px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 hover:bg-purple-50 transition-colors duration-200"
               >
-                <i className="fas fa-images w-5 h-5 text-gray-500 mr-3" />
+                <PhotoIcon className="w-5 h-5 shrink-0 text-gray-500 mr-3" />
                 Galeria
               </Link>
             </li>
