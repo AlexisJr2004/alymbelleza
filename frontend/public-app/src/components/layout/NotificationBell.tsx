@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { BellNotificationIcon, EmptyBellIcon, XIcon } from '../icons';
+import { EmptyBellIcon, XIcon } from '../icons';
 import { useAppointmentsQuery } from '../../hooks/useAppointments';
 
 const ESTADO_STYLES = {
-  pendiente: { color: 'text-yellow-500', bg: 'bg-blue-100', icon: 'fa-clock', label: 'Pendiente' },
-  realizada: { color: 'text-emerald-500', bg: 'bg-emerald-100', icon: 'fa-check-circle', label: 'Realizada' },
-  cancelada: { color: 'text-rose-500', bg: 'bg-rose-100', icon: 'fa-times-circle', label: 'Cancelada' },
+  pendiente: { color: 'text-amber-500', icon: 'fa-clock', label: 'Pendiente' },
+  realizada: { color: 'text-emerald-500', icon: 'fa-check-circle', label: 'Realizada' },
+  cancelada: { color: 'text-rose-500', icon: 'fa-times-circle', label: 'Cancelada' },
 } as const;
 
 export default function NotificationBell() {
@@ -40,67 +40,61 @@ export default function NotificationBell() {
         )}
       </button>
 
+      {/* Mismo patrón que UserDropdown.tsx (el otro desplegable del header):
+          rounded-md, shadow-lg, border-gray-100, filas planas con hover
+          gris — en vez del panel azul con insignias de ícono grandes que
+          tenía antes, que no encajaba con el resto del header. */}
       <div
-        className={`absolute right-0 mt-3 w-96 max-w-[90vw] bg-white rounded-3xl z-50 border border-gray-200 overflow-hidden transition-all duration-200 origin-top-right transform ${
-          open ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'
+        className={`absolute right-0 mt-2 w-80 max-w-[90vw] origin-top-right transition-all duration-200 ease-out transform ${
+          open ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-95 translate-y-1 pointer-events-none'
         }`}
       >
-        <div className="px-5 py-4 bg-white/60 backdrop-blur-md flex justify-between items-center rounded-t-3xl border-b border-blue-100">
-          <div className="flex items-center gap-3">
-            <div className="bg-blue-100/60 p-2 rounded-2xl">
-              <BellNotificationIcon className="h-6 w-6 text-blue-600" />
-            </div>
-            <h4 className="font-semibold text-blue-900 text-lg tracking-tight">Notificaciones</h4>
+        <div className="z-50 bg-white rounded-md shadow-lg border border-gray-100 overflow-hidden">
+          <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+            <h4 className="text-sm font-semibold text-gray-900">Notificaciones</h4>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="text-gray-400 hover:text-gray-600 transition-colors rounded-full p-1 focus:outline-none"
+            >
+              <XIcon className="h-4 w-4" />
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            className="text-blue-400 hover:text-blue-700 transition-colors rounded-full p-2 focus:outline-none"
-          >
-            <XIcon className="h-5 w-5" />
-          </button>
-        </div>
 
-        <ul id="notification-dropdown" className="divide-y divide-gray-100 max-h-96 overflow-y-auto bg-white px-2 py-3 space-y-2">
-          {appointments.length === 0 ? (
-            <li className="px-8 py-12 text-center">
-              <EmptyBellIcon className="h-14 w-14 mx-auto text-gray-300" />
-              <p className="mt-4 text-gray-500 font-semibold text-lg">No hay notificaciones</p>
-              <p className="text-sm text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán aquí</p>
-            </li>
-          ) : (
-            appointments.map((app) => {
-              const estado = ESTADO_STYLES[app.status || 'pendiente'];
-              const fechaStr = new Date(app.date).toLocaleDateString('es-ES', {
-                weekday: 'long',
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-              });
-              return (
-                <li
-                  key={app._id}
-                  className="bg-white rounded-2xl flex items-center gap-4 px-5 py-4 mb-2 border border-gray-200 hover:bg-blue-50 transition"
-                >
-                  <div className={`flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-2xl ${estado.bg}`}>
-                    <span className={`text-2xl ${estado.color}`}>
-                      <i className={`fas ${estado.icon}`} />
-                    </span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className={`font-semibold text-lg ${estado.color}`}>{estado.label}</span>
-                      <span className="text-xs text-gray-400 ml-2">{fechaStr}</span>
+          <ul className="notification-dropdown divide-y divide-gray-100 max-h-96 overflow-y-auto">
+            {appointments.length === 0 ? (
+              <li className="px-5 py-10 text-center">
+                <EmptyBellIcon className="h-10 w-10 mx-auto text-gray-300" />
+                <p className="mt-3 text-sm font-medium text-gray-500">No hay notificaciones</p>
+                <p className="text-xs text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán aquí</p>
+              </li>
+            ) : (
+              appointments.map((app) => {
+                const estado = ESTADO_STYLES[app.status || 'pendiente'];
+                const fechaStr = new Date(app.date).toLocaleDateString('es-ES', {
+                  weekday: 'long',
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                });
+                return (
+                  <li key={app._id} className="flex items-start gap-3 px-5 py-3 hover:bg-gray-50 transition-colors">
+                    <i className={`fas ${estado.icon} ${estado.color} mt-0.5`} />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-sm font-medium ${estado.color}`}>{estado.label}</span>
+                        <span className="text-xs text-gray-400">{fechaStr}</span>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-0.5">
+                        Tienes una reservación con tu estilista el <span className="font-medium text-gray-800">{fechaStr}</span>
+                      </p>
                     </div>
-                    <div className="text-gray-700 text-sm mt-1">
-                      Tienes una reservación con tu estilista el <span className="font-semibold">{fechaStr}</span>
-                    </div>
-                  </div>
-                </li>
-              );
-            })
-          )}
-        </ul>
+                  </li>
+                );
+              })
+            )}
+          </ul>
+        </div>
       </div>
     </div>
   );
