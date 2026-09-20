@@ -159,9 +159,14 @@ export default function Header() {
             </Link>
           </nav>
 
-          {/* Notificaciones + Menú Móvil */}
+          {/* Carrito + Notificaciones + Menú Móvil */}
           <div className="flex items-center gap-2 md:hidden">
-            {!mobileOpen && <NotificationBell />}
+            {!mobileOpen && (
+              <>
+                <CartBadge />
+                <NotificationBell />
+              </>
+            )}
             <button
               type="button"
               onClick={() => setMobileOpen((v) => !v)}
