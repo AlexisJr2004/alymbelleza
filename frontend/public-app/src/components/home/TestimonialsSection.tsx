@@ -72,7 +72,7 @@ export default function TestimonialsSection() {
               breakpoints={{
                 640: { slidesPerView: 1, spaceBetween: 20 },
                 768: { slidesPerView: 2.15, spaceBetween: 30, centeredSlides: true },
-                1024: { slidesPerView: 4.2, spaceBetween: 24, centeredSlides: true },
+                1024: { slidesPerView: 3.2, spaceBetween: 32, centeredSlides: true },
               }}
               modules={[Navigation, Pagination, Autoplay]}
             >
