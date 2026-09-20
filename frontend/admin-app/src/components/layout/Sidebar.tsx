@@ -94,13 +94,13 @@ export default function Sidebar({ open, onNavigate }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-40 w-64 bg-white/95 backdrop-blur-md lg:bg-white/70 lg:backdrop-blur-xl border-r border-gray-200 flex flex-col rounded-r-3xl lg:rounded-none transition-transform duration-300 ease-out lg:translate-x-0 ${
+      className={`fixed inset-y-0 left-0 z-40 w-80 lg:w-64 bg-white/95 backdrop-blur-md lg:bg-white/70 lg:backdrop-blur-xl border-r border-purple-100 shadow-lg lg:border-gray-200 lg:shadow-none flex flex-col rounded-r-3xl lg:rounded-none transition-transform duration-300 ease-out lg:translate-x-0 ${
         open ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
       <div
         style={reveal(open, 0).style}
-        className={cx('h-16 flex items-center gap-2.5 px-6 border-b border-gray-200 shrink-0', reveal(open, 0).className)}
+        className={cx('h-16 flex items-center gap-2.5 px-6 border-b border-purple-100 lg:border-gray-200 shrink-0', reveal(open, 0).className)}
       >
         <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center text-white text-sm font-bold shrink-0">
           B
@@ -110,27 +110,42 @@ export default function Sidebar({ open, onNavigate }: SidebarProps) {
         </span>
       </div>
 
-      {/* Tarjeta de perfil — solo en móvil (mismo patrón que
-          MobileMenu.tsx del sitio público), porque el Topbar oculta el
+      {/* Tarjeta de perfil — solo en móvil, réplica exacta (tamaño de
+          avatar, punto de estado, botón de logout junto al nombre) de la
+          de MobileMenu.tsx del sitio público, porque el Topbar oculta el
           nombre/rol en pantallas chicas (hidden sm:block) y este es el
           único lugar donde se ve quién inició sesión. */}
       <div
         style={reveal(open, 1).style}
-        className={cx('lg:hidden px-4 py-4 border-b border-gray-200 shrink-0', reveal(open, 1).className)}
+        className={cx('lg:hidden px-4 py-4 border-b border-purple-100 shrink-0', reveal(open, 1).className)}
       >
-        <div className="flex items-center gap-3">
-          <img
-            className="w-12 h-12 rounded-full object-cover border-2 border-purple-100 shadow-sm shrink-0"
-            src={resolveProfileImage(user)}
-            alt="Foto de perfil"
-            onError={(e) => {
-              e.currentTarget.onerror = null;
-              e.currentTarget.src = FALLBACK_AVATAR;
-            }}
-          />
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-gray-900 truncate">{user?.name || 'Administrador'}</p>
-            <p className="text-xs text-gray-500 truncate">{user?.email || ''}</p>
+        <div className="flex items-center space-x-4">
+          <div className="relative">
+            <img
+              className="w-14 h-14 rounded-full border-2 border-purple-100 object-cover shadow-sm"
+              src={resolveProfileImage(user)}
+              alt="Foto de perfil"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = FALLBACK_AVATAR;
+              }}
+            />
+            <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white bg-purple-500" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between">
+              <span className="block text-base font-semibold text-gray-900 truncate max-w-[140px]">
+                {user?.name || 'Administrador'}
+              </span>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="shrink-0 w-10 h-10 rounded-full bg-white/60 border border-gray-200 flex items-center justify-center text-red-500 hover:text-red-700 hover:bg-white/90 transition-colors"
+              >
+                <LogoutIcon className="h-5 w-5" />
+              </button>
+            </div>
+            <span className="block text-sm text-gray-600 truncate max-w-[160px]">{user?.email || ''}</span>
             <span className="inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
               Administrador
             </span>
@@ -164,7 +179,7 @@ export default function Sidebar({ open, onNavigate }: SidebarProps) {
       </nav>
       <div
         style={reveal(open, NAV_GROUPS.length + 2).style}
-        className={cx('border-t border-gray-200 p-4 space-y-1 shrink-0', reveal(open, NAV_GROUPS.length + 2).className)}
+        className={cx('border-t border-purple-100 lg:border-gray-200 p-4 space-y-1 shrink-0', reveal(open, NAV_GROUPS.length + 2).className)}
       >
         <a
           href="/"
@@ -173,10 +188,13 @@ export default function Sidebar({ open, onNavigate }: SidebarProps) {
           <BackArrowIcon className="w-4 h-4 shrink-0" />
           Volver al sitio
         </a>
+        {/* En móvil el logout ya vive en la tarjeta de perfil (icono junto
+            al nombre, igual que MobileMenu.tsx del sitio público) — este
+            botón de ancho completo queda solo para escritorio. */}
         <button
           type="button"
           onClick={handleLogout}
-          className="flex items-center justify-center gap-2 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 bg-white border border-gray-200 hover:bg-red-50 hover:border-red-200 transition-colors"
+          className="hidden lg:flex items-center justify-center gap-2 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 bg-white border border-gray-200 hover:bg-red-50 hover:border-red-200 transition-colors"
         >
           <LogoutIcon className="w-4 h-4 shrink-0" />
           Cerrar sesión
