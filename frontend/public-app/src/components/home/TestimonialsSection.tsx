@@ -71,8 +71,8 @@ export default function TestimonialsSection() {
               navigation={{ nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }}
               breakpoints={{
                 640: { slidesPerView: 1, spaceBetween: 20 },
-                768: { slidesPerView: 2, spaceBetween: 30 },
-                1024: { slidesPerView: 3, spaceBetween: 40 },
+                768: { slidesPerView: 2.15, spaceBetween: 30, centeredSlides: true },
+                1024: { slidesPerView: 4.2, spaceBetween: 24, centeredSlides: true },
               }}
               modules={[Navigation, Pagination, Autoplay]}
             >
@@ -82,13 +82,27 @@ export default function TestimonialsSection() {
                 </SwiperSlide>
               ))}
               <div className="swiper-pagination !relative !mt-8 !bottom-0" slot="container-end" />
-              <div className="swiper-button-next" slot="container-end">
+            </Swiper>
+          )}
+          {/* Flechas fuera del árbol de <Swiper> (no vía slot="container-end")
+              a propósito: el módulo de navegación las busca con
+              document.querySelectorAll, así que igual las encuentra estando
+              afuera — y así quedan fuera de .swiper/.swiper-wrapper, que es
+              donde va el degradado de los bordes (ver index.css). Tenerlas
+              adentro, dentro del mismo árbol enmascarado, hacía que Chrome
+              dejara de pintar TODA la franja de tarjetas (no solo los bordes)
+              — un problema de repintado del navegador al combinar mask-image
+              con contenido "slotted" por swiper/react, no algo propio de nuestro
+              degradado. */}
+          {!isEmpty && !isError && !isLoading && (
+            <>
+              <div className="swiper-button-next">
                 <i className="fas fa-chevron-right" />
               </div>
-              <div className="swiper-button-prev" slot="container-end">
+              <div className="swiper-button-prev">
                 <i className="fas fa-chevron-left" />
               </div>
-            </Swiper>
+            </>
           )}
         </div>
 

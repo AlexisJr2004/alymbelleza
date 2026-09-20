@@ -204,9 +204,42 @@
    default Swiper anima cada slide con easing tipo ease (acelera y frena), lo
    que igual se siente como una serie de "pasos" en vez de un solo desplazamiento
    fluido. Con timing-function lineal, la velocidad es constante de punta a
-   punta y el efecto se percibe como una cinta continua en vez de saltos. */
+   punta y el efecto se percibe como una cinta continua en vez de saltos.
+
+   El degradado (mask-image) va en .swiper, NO en .swiper-wrapper: .swiper es
+   la "ventana" fija (overflow visible pero con ancho estable, igual al
+   viewport del carrusel); .swiper-wrapper es la fila completa de tarjetas,
+   mucho más ancha que su propia caja, que se desliza por dentro moviéndose
+   con transform. La máscara se calcula sobre la caja PROPIA del elemento
+   enmascarado, sin importar su transform — aplicada a .swiper-wrapper,
+   prácticamente toda tarjeta queda fuera de esa caja angosta (608px) en
+   algún momento y la máscara la trataba como "más allá del degradado", osea
+   transparente: por eso no se veía NINGUNA tarjeta, no solo los bordes.
+   .swiper sí tiene el ancho estable del viewport real, así que enmascararlo
+   desvanece justo lo que entra/sale por los bordes.
+
+   Las flechas (TestimonialsSection.tsx) se renderizan FUERA de <Swiper>
+   (Swiper las encuentra igual vía document.querySelectorAll) para que no
+   sean parte de esta caja enmascarada — si vivieran dentro de .swiper con
+   su offset negativo (ver más abajo), la máscara también las volvería
+   invisibles.
+
+   Solo desde 768px: ahí (ver breakpoints en TestimonialsSection.tsx) las
+   tarjetas usan slidesPerView fraccionario + centeredSlides, así que siempre
+   asoma un pedacito de la siguiente/anterior en los bordes — el degradado
+   desvanece justo ese pedacito, dando el efecto de que "aparece". En móvil
+   se ve una sola tarjeta a ancho completo sin nada asomando: la misma máscara
+   ahí solo recortaría texto real de la tarjeta en vez de desvanecer un
+   sobrante, así que no se aplica. */
 .testimonials-swiper .swiper-wrapper {
   transition-timing-function: linear !important;
+}
+
+@media (min-width: 768px) {
+  .testimonials-swiper .swiper {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  }
 }
 
 /* Flechas de navegación del carrusel de testimonios: mismo estilo "glass" que el
