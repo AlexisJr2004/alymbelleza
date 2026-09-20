@@ -178,22 +178,6 @@
   overflow: visible;
 }
 
-.swiper-pagination {
-  position: relative;
-  margin-top: 20px;
-}
-
-.swiper-pagination-bullet {
-  width: 12px;
-  height: 12px;
-  background-color: #cbd5e0;
-  opacity: 1;
-}
-
-.swiper-pagination-bullet-active {
-  background-color: #9333ea;
-}
-
 .testimonials-swiper .swiper-slide {
   height: auto;
   display: flex;

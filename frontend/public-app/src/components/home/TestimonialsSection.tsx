@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination } from 'swiper/modules';
+import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/pagination';
 import { useTestimonialsQuery } from '../../hooks/useTestimonials';
 import { isLoggedIn } from '../../lib/auth';
 import { notifyError } from '../../lib/sweetalert';
@@ -61,7 +60,7 @@ export default function TestimonialsSection() {
           ) : isLoading ? (
             <div className="text-center p-8 text-gray-400">Cargando testimonios...</div>
           ) : isEmpty ? (
-            <Swiper centeredSlides slidesPerView={1} pagination={{ el: '.swiper-pagination', clickable: true }} modules={[Pagination]}>
+            <Swiper centeredSlides slidesPerView={1}>
               <SwiperSlide className="flex items-center justify-center h-full w-full">
                 <div className="w-full max-w-sm mx-auto text-center p-8">
                   <div className="mx-auto flex items-center justify-center rounded-full bg-gray-100 p-4 mb-4 w-16 h-16">
@@ -77,7 +76,6 @@ export default function TestimonialsSection() {
                   <p className="text-gray-600 mb-6 text-center">Parece que nadie ha compartido su experiencia todavía.</p>
                 </div>
               </SwiperSlide>
-              <div className="swiper-pagination !relative !mt-8 !bottom-0" slot="container-end" />
             </Swiper>
           ) : (
             <Swiper
@@ -87,19 +85,17 @@ export default function TestimonialsSection() {
               centeredSlides
               slidesPerView={1.15}
               spaceBetween={16}
-              pagination={{ el: '.swiper-pagination', clickable: true }}
               breakpoints={{
                 768: { slidesPerView: 2.15, spaceBetween: 30 },
                 1024: { slidesPerView: 3.2, spaceBetween: 32 },
               }}
-              modules={[Pagination, Autoplay]}
+              modules={[Autoplay]}
             >
               {loopSlides.map((testimonial, index) => (
                 <SwiperSlide key={`${testimonial._id}-${index}`}>
                   <TestimonialCard testimonial={testimonial} />
                 </SwiperSlide>
               ))}
-              <div className="swiper-pagination !relative !mt-8 !bottom-0" slot="container-end" />
             </Swiper>
           )}
         </div>
