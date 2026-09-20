@@ -212,94 +212,23 @@
    mucho más ancha que su propia caja, que se desliza por dentro moviéndose
    con transform. La máscara se calcula sobre la caja PROPIA del elemento
    enmascarado, sin importar su transform — aplicada a .swiper-wrapper,
-   prácticamente toda tarjeta queda fuera de esa caja angosta (608px) en
-   algún momento y la máscara la trataba como "más allá del degradado", osea
-   transparente: por eso no se veía NINGUNA tarjeta, no solo los bordes.
-   .swiper sí tiene el ancho estable del viewport real, así que enmascararlo
-   desvanece justo lo que entra/sale por los bordes.
+   prácticamente toda tarjeta queda fuera de esa caja angosta en algún momento
+   y la máscara la trataba como "más allá del degradado", o sea transparente:
+   por eso no se veía NINGUNA tarjeta, no solo los bordes. .swiper sí tiene el
+   ancho estable del viewport real, así que enmascararlo desvanece justo lo
+   que entra/sale por los bordes.
 
-   Las flechas (TestimonialsSection.tsx) se renderizan FUERA de <Swiper>
-   (Swiper las encuentra igual vía document.querySelectorAll) para que no
-   sean parte de esta caja enmascarada — si vivieran dentro de .swiper con
-   su offset negativo (ver más abajo), la máscara también las volvería
-   invisibles.
-
-   Solo desde 768px: ahí (ver breakpoints en TestimonialsSection.tsx) las
-   tarjetas usan slidesPerView fraccionario + centeredSlides, así que siempre
-   asoma un pedacito de la siguiente/anterior en los bordes — el degradado
-   desvanece justo ese pedacito, dando el efecto de que "aparece". En móvil
-   se ve una sola tarjeta a ancho completo sin nada asomando: la misma máscara
-   ahí solo recortaría texto real de la tarjeta en vez de desvanecer un
-   sobrante, así que no se aplica. */
+   Se aplica siempre (móvil incluido): en TestimonialsSection.tsx todos los
+   breakpoints usan slidesPerView fraccionario + centeredSlides, así que
+   siempre asoma un pedacito de la siguiente/anterior en los bordes — el
+   degradado desvanece justo ese pedacito, dando el efecto de que "aparece". */
 .testimonials-swiper .swiper-wrapper {
   transition-timing-function: linear !important;
 }
 
-@media (min-width: 768px) {
-  .testimonials-swiper .swiper {
-    -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
-    mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
-  }
-}
-
-/* Flechas de navegación del carrusel de testimonios: mismo estilo "glass" que el
-   visor de la galería, adaptado a un fondo claro (blanco translúcido en vez de
-   negro translúcido). Se les reserva espacio propio con padding lateral para
-   que no queden encima de las tarjetas — el padding empuja el propio track de
-   slides hacia adentro, y las flechas (ver más abajo) se corren con un offset
-   negativo más grande que su propio ancho para que quede un espacio visible
-   entre ellas y la tarjeta más cercana, en vez de tocarla. */
-.testimonials-swiper {
-  padding-left: 48px;
-  padding-right: 48px;
-}
-
-@media (min-width: 640px) {
-  .testimonials-swiper {
-    padding-left: 56px;
-    padding-right: 56px;
-  }
-}
-
-.testimonials-swiper .swiper-button-next,
-.testimonials-swiper .swiper-button-prev {
-  width: 44px;
-  height: 44px;
-  border-radius: 9999px;
-  background-color: rgba(17, 24, 39, 0.08);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-  color: #374151;
-  transition: background-color 0.2s ease;
-}
-
-.testimonials-swiper .swiper-button-next:hover,
-.testimonials-swiper .swiper-button-prev:hover {
-  background-color: rgba(17, 24, 39, 0.14);
-}
-
-/* !important necesario: el propio CSS de navegación de Swiper (cargado como
-   chunk aparte, inyectado después de esta hoja) trae una regla con la misma
-   especificidad (.swiper-horizontal .swiper-button-prev) que empataría y
-   ganaría por orden de carga, pisando este offset silenciosamente. */
-.testimonials-swiper .swiper-button-prev {
-  left: -68px !important;
-}
-
-.testimonials-swiper .swiper-button-next {
-  right: -68px !important;
-}
-
-/* Swiper inyecta su propio SVG de flecha como hijo del botón (no vía ::after);
-   se oculta porque el ícono real es el <i> de Font Awesome agregado en el HTML. */
-.testimonials-swiper .swiper-button-next .swiper-navigation-icon,
-.testimonials-swiper .swiper-button-prev .swiper-navigation-icon {
-  display: none;
-}
-
-.testimonials-swiper .swiper-button-next i,
-.testimonials-swiper .swiper-button-prev i {
-  font-size: 15px;
+.testimonials-swiper .swiper {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
 }
 
 .bg-white.dark\:bg-gray-800 {

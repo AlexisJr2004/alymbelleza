@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { useTestimonialsQuery } from '../../hooks/useTestimonials';
 import { isLoggedIn } from '../../lib/auth';
@@ -67,14 +66,15 @@ export default function TestimonialsSection() {
               loop
               speed={4000}
               autoplay={{ delay: 1, disableOnInteraction: false }}
+              centeredSlides
+              slidesPerView={1.15}
+              spaceBetween={16}
               pagination={{ el: '.swiper-pagination', clickable: true }}
-              navigation={{ nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }}
               breakpoints={{
-                640: { slidesPerView: 1, spaceBetween: 20 },
-                768: { slidesPerView: 2.15, spaceBetween: 30, centeredSlides: true },
-                1024: { slidesPerView: 3.2, spaceBetween: 32, centeredSlides: true },
+                768: { slidesPerView: 2.15, spaceBetween: 30 },
+                1024: { slidesPerView: 3.2, spaceBetween: 32 },
               }}
-              modules={[Navigation, Pagination, Autoplay]}
+              modules={[Pagination, Autoplay]}
             >
               {(testimonials ?? []).map((testimonial) => (
                 <SwiperSlide key={testimonial._id}>
@@ -83,26 +83,6 @@ export default function TestimonialsSection() {
               ))}
               <div className="swiper-pagination !relative !mt-8 !bottom-0" slot="container-end" />
             </Swiper>
-          )}
-          {/* Flechas fuera del árbol de <Swiper> (no vía slot="container-end")
-              a propósito: el módulo de navegación las busca con
-              document.querySelectorAll, así que igual las encuentra estando
-              afuera — y así quedan fuera de .swiper/.swiper-wrapper, que es
-              donde va el degradado de los bordes (ver index.css). Tenerlas
-              adentro, dentro del mismo árbol enmascarado, hacía que Chrome
-              dejara de pintar TODA la franja de tarjetas (no solo los bordes)
-              — un problema de repintado del navegador al combinar mask-image
-              con contenido "slotted" por swiper/react, no algo propio de nuestro
-              degradado. */}
-          {!isEmpty && !isError && !isLoading && (
-            <>
-              <div className="swiper-button-next">
-                <i className="fas fa-chevron-right" />
-              </div>
-              <div className="swiper-button-prev">
-                <i className="fas fa-chevron-left" />
-              </div>
-            </>
           )}
         </div>
 
