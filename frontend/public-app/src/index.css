@@ -171,7 +171,11 @@
 .swiper-container {
   width: 100%;
   height: auto;
-  overflow: hidden;
+  /* visible, no hidden: Swiper ya recorta el track de slides con el overflow
+     propio de su elemento raíz .swiper (CSS base de la librería) — dejar
+     este contenedor en hidden también cortaba las flechas de navegación en
+     vez de solo la franja de tarjetas, sin dejarles espacio para separarse. */
+  overflow: visible;
 }
 
 .swiper-pagination {
@@ -197,12 +201,14 @@
 
 /* Flechas de navegación del carrusel de testimonios: mismo estilo "glass" que el
    visor de la galería, adaptado a un fondo claro (blanco translúcido en vez de
-   negro translúcido). El contenedor tiene overflow: hidden, así que en vez de
-   sacarlas del carrusel se les reserva espacio propio con padding lateral, para
-   que no queden encima de las tarjetas. */
+   negro translúcido). Se les reserva espacio propio con padding lateral para
+   que no queden encima de las tarjetas — el padding empuja el propio track de
+   slides hacia adentro, y las flechas (ver más abajo) se corren con un offset
+   negativo más grande que su propio ancho para que quede un espacio visible
+   entre ellas y la tarjeta más cercana, en vez de tocarla. */
 .testimonials-swiper {
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: 48px;
+  padding-right: 48px;
 }
 
 @media (min-width: 640px) {
@@ -229,12 +235,16 @@
   background-color: rgba(17, 24, 39, 0.14);
 }
 
+/* !important necesario: el propio CSS de navegación de Swiper (cargado como
+   chunk aparte, inyectado después de esta hoja) trae una regla con la misma
+   especificidad (.swiper-horizontal .swiper-button-prev) que empataría y
+   ganaría por orden de carga, pisando este offset silenciosamente. */
 .testimonials-swiper .swiper-button-prev {
-  left: 0;
+  left: -68px !important;
 }
 
 .testimonials-swiper .swiper-button-next {
-  right: 0;
+  right: -68px !important;
 }
 
 /* Swiper inyecta su propio SVG de flecha como hijo del botón (no vía ::after);
