@@ -27,6 +27,16 @@ export default function Topbar({ onToggleSidebar }: { onToggleSidebar: () => voi
         >
           <MenuIcon className="w-5 h-5" />
         </button>
+        {/* Nombre de marca — solo en móvil (mismo tratamiento que el
+            encabezado del sitio público: Header.tsx). En escritorio ya se ve
+            en el Sidebar fijo, que queda al lado; repetirlo ahí sería
+            redundante. */}
+        <Link
+          to="/resumen"
+          className="lg:hidden font-display text-2xl bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent truncate"
+        >
+          Bella Beauty
+        </Link>
       </div>
       <div className="flex items-center gap-3 lg:gap-4 shrink-0">
         <span className="hidden md:block text-sm text-gray-500 capitalize">{fecha}</span>
