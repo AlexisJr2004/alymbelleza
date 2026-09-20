@@ -12,10 +12,28 @@ import TestimonialModal from './TestimonialModal';
 // Puerto de la sección de testimonios (initTestimonialSwiper/loadTestimonials
 // en js/main.js), usando los componentes oficiales de swiper/react en vez del
 // swiper-bundle imperativo por CDN que usaba el sitio viejo.
+// Con centeredSlides + slidesPerView fraccionario (hasta 3.2 en escritorio),
+// Swiper exige tener al menos slidesPerView + ~2 testimonios reales para que
+// el loop cierre sin huecos (lo valida con una regla propia: slides.length <
+// slidesPerView + loopedSlides). Con pocos testimonios reales esa cuenta no
+// daba, y al llegar al último quedaba un tramo en blanco antes de reaparecer
+// el primero. En vez de ajustar parámetros internos de Swiper (loopAdditionalSlides
+// en realidad EXIGE más testimonios reales, no los suple — solo agranda ese
+// mínimo), se repite la lista real las veces que hagan falta para asegurar un
+// mínimo cómodo de slides — mismos testimonios, nunca inventados.
+const MIN_SLIDES_FOR_SEAMLESS_LOOP = 16;
+
+function buildLoopSlides<T>(items: T[]): T[] {
+  if (items.length === 0 || items.length >= MIN_SLIDES_FOR_SEAMLESS_LOOP) return items;
+  const repeats = Math.ceil(MIN_SLIDES_FOR_SEAMLESS_LOOP / items.length);
+  return Array.from({ length: repeats }, () => items).flat();
+}
+
 export default function TestimonialsSection() {
   const { data: testimonials, isLoading, isError } = useTestimonialsQuery();
   const [modalOpen, setModalOpen] = useState(false);
   const isEmpty = !isLoading && !isError && (testimonials?.length ?? 0) === 0;
+  const loopSlides = buildLoopSlides(testimonials ?? []);
 
   const handleOpenModal = () => {
     if (!isLoggedIn()) {
@@ -76,8 +94,8 @@ export default function TestimonialsSection() {
               }}
               modules={[Pagination, Autoplay]}
             >
-              {(testimonials ?? []).map((testimonial) => (
-                <SwiperSlide key={testimonial._id}>
+              {loopSlides.map((testimonial, index) => (
+                <SwiperSlide key={`${testimonial._id}-${index}`}>
                   <TestimonialCard testimonial={testimonial} />
                 </SwiperSlide>
               ))}
