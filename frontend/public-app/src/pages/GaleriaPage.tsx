@@ -97,35 +97,37 @@ export default function GaleriaPage() {
             <div className="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mt-4" />
           </div>
 
-          <div className="flex flex-col items-center">
-            {admin && (
-              <div id="admin-upload-section" className="mb-6">
-                <button
-                  id="upload-btn"
-                  type="button"
-                  onClick={() => setUploadOpen(true)}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-2"
-                >
-                  <i className="fas fa-plus" />
-                  <i className="fas fa-image" />
-                  Subir Contenido
-                </button>
-              </div>
-            )}
+          {admin && (
+            <div id="admin-upload-section" className="flex justify-center mb-6">
+              <button
+                id="upload-btn"
+                type="button"
+                onClick={() => setUploadOpen(true)}
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-2"
+              >
+                <i className="fas fa-plus" />
+                <i className="fas fa-image" />
+                Subir Contenido
+              </button>
+            </div>
+          )}
 
+          <div className="flex flex-col lg:flex-row gap-8">
             <CategoryFilters filter={categoryFilter} />
 
-            {isLoading && (
-              <div className="w-full text-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-200 border-t-purple-500 mx-auto" />
-              </div>
-            )}
+            <div className="flex-1 min-w-0">
+              {isLoading && (
+                <div className="w-full text-center py-12">
+                  <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-200 border-t-purple-500 mx-auto" />
+                </div>
+              )}
 
-            {!isLoading && isError && <div className="text-center text-red-500">Error al cargar la galería.</div>}
+              {!isLoading && isError && <div className="text-center text-red-500">Error al cargar la galería.</div>}
 
-            {!isLoading && !isError && (
-              <GalleryGrid items={filteredItems} isAdmin={admin} onItemClick={openLightbox} onDelete={handleDelete} />
-            )}
+              {!isLoading && !isError && (
+                <GalleryGrid items={filteredItems} isAdmin={admin} onItemClick={openLightbox} onDelete={handleDelete} />
+              )}
+            </div>
           </div>
         </div>
       </section>

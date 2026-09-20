@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { useSwitchFilter } from '../../hooks/useSwitchFilter';
 import Switch from '../ui/Switch';
 
@@ -15,57 +16,48 @@ const CATEGORIES = [
   { value: 'local', label: 'Local' },
 ];
 
-// El original alterna clases con classList.add/remove sin limpiar del todo
-// las anteriores (ej. el botón "Todas las categorías" nunca pierde su borde
-// azul aunque quede "inactivo", y un botón activo termina con text-blue-700
-// Y text-white a la vez, un choque de clases que depende del orden interno
-// del CSS generado por Tailwind para decidir cuál gana). Acá se calculan las
-// clases finales de forma declarativa según el estado activo/inactivo, sin
-// heredar esa acumulación accidental — incluso el propio botón que empieza
-// activo por defecto('all') termina con el mismo aspecto "pastilla azul
-// rellena" que cualquier otro filtro seleccionado.
-const ACTIVE_CLASSES =
-  'filter-btn text-white bg-blue-700 border border-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 transition';
-const INACTIVE_CLASSES =
-  'filter-btn text-gray-900 border border-white hover:border-gray-200 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 transition';
-
+// Sidebar de filtros de la galería — mismo patrón que FiltrosSidebar.tsx en
+// productos: colapsable detrás de un botón "Filtros" en móvil, siempre
+// visible a la izquierda del grid en escritorio (lg:sticky). Las categorías
+// son switches independientes que se pueden combinar (OR); "Todas las
+// categorías" no es un switch real, siempre refleja que no hay ninguna
+// categoría marcada y tocarlo limpia el resto (igual que "Limpiar").
 export default function CategoryFilters({ filter }: CategoryFiltersProps) {
+  const [open, setOpen] = useState(false);
   const allActive = filter.selected.size === 0;
 
   return (
-    <>
-      {/* Móvil: misma fila de pastillas de siempre — una sola categoría a la
-          vez. Elegir una categoría reemplaza la selección; "Todas" limpia. */}
-      <div className="lg:hidden flex items-center justify-center py-2 flex-wrap">
-        <button type="button" onClick={filter.clear} className={allActive ? ACTIVE_CLASSES : INACTIVE_CLASSES}>
-          Todas las categorías
-        </button>
-        {CATEGORIES.map((c) => (
-          <button
-            key={c.value}
-            type="button"
-            onClick={() => {
-              filter.clear();
-              filter.toggle(c.value, true);
-            }}
-            className={filter.isChecked(c.value) ? ACTIVE_CLASSES : INACTIVE_CLASSES}
-          >
-            {c.label}
-          </button>
-        ))}
-      </div>
+    <aside className="lg:w-72 shrink-0">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="lg:hidden w-full flex items-center justify-between px-4 py-2.5 mb-4 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700"
+      >
+        <span>
+          <i className="fas fa-sliders-h mr-2 text-purple-500" />
+          Filtros
+        </span>
+        <i className={`fas fa-chevron-down text-xs transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
 
-      {/* Escritorio: switches independientes, igual que en los filtros de
-          productos (FiltrosSidebar.tsx) — se pueden combinar varias
-          categorías a la vez. "Todas las categorías" no es un switch
-          independiente de verdad: siempre refleja que no hay ninguna
-          categoría marcada, y tocarlo limpia el resto. */}
-      <div className="hidden lg:flex flex-wrap items-center justify-center gap-x-8 gap-y-3 py-4">
-        <Switch label="Todas las categorías" checked={allActive} onChange={() => filter.clear()} />
-        {CATEGORIES.map((c) => (
-          <Switch key={c.value} label={c.label} checked={filter.isChecked(c.value)} onChange={(checked) => filter.toggle(c.value, checked)} />
-        ))}
+      <div className={`${open ? 'block' : 'hidden'} lg:block space-y-6 border border-gray-200 rounded-xl p-5 lg:sticky lg:top-24`}>
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Filtros</h3>
+          <button type="button" onClick={filter.clear} className="text-xs font-medium text-purple-600 hover:text-purple-800">
+            Limpiar
+          </button>
+        </div>
+
+        <div>
+          <h4 className="text-sm font-medium text-gray-700 mb-3">Categoría</h4>
+          <div className="space-y-2">
+            <Switch label="Todas las categorías" checked={allActive} onChange={() => filter.clear()} />
+            {CATEGORIES.map((c) => (
+              <Switch key={c.value} label={c.label} checked={filter.isChecked(c.value)} onChange={(checked) => filter.toggle(c.value, checked)} />
+            ))}
+          </div>
+        </div>
       </div>
-    </>
+    </aside>
   );
 }

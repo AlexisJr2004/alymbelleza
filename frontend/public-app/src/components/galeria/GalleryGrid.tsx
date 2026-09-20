@@ -18,7 +18,7 @@ interface GalleryGridProps {
 // que el sitio real efectivamente tiene.
 export default function GalleryGrid({ items, isAdmin, onItemClick, onDelete }: GalleryGridProps) {
   return (
-    <div id="gallery-grid" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div id="gallery-grid" className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
       {items.map((item) => (
         <GalleryCard key={item._id} item={item} isAdmin={isAdmin} onClick={() => onItemClick(item)} onDelete={() => onDelete(item._id)} />
       ))}
