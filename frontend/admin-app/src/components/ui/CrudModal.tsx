@@ -14,11 +14,18 @@ interface CrudModalProps {
 // consumidor más de Sheet (mismo cascarón que usan los modales del sitio
 // público), lo que de paso le suma el comportamiento de hoja deslizable en
 // móvil sin que las páginas que lo usan necesiten cambiar nada.
-export default function CrudModal({ open, title, onClose, children, maxWidth = 'max-w-2xl' }: CrudModalProps) {
+//
+// `maxWidth` debe venir siempre con el prefijo "md:" ya incluido (p.ej.
+// "md:max-w-2xl"), NUNCA armado por partes con un template string — Tailwind
+// escanea el código como texto plano buscando nombres de clase completos, así
+// que un `md:${maxWidth}` nunca hace que compile la clase con breakpoint (solo
+// generaba las variantes sin prefijo, dejando el modal sin max-width real en
+// escritorio y ocupando toda la pantalla).
+export default function CrudModal({ open, title, onClose, children, maxWidth = 'md:max-w-2xl' }: CrudModalProps) {
   const titleId = 'crud-modal-title';
 
   return (
-    <Sheet open={open} onClose={onClose} desktopMaxWidthClassName={`md:${maxWidth}`} labelledBy={titleId}>
+    <Sheet open={open} onClose={onClose} desktopMaxWidthClassName={maxWidth} labelledBy={titleId}>
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 id={titleId} className="text-lg font-bold text-gray-800">

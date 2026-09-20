@@ -273,7 +273,7 @@ export default function CuponesPage() {
         </div>
       </div>
 
-      <CrudModal open={modalOpen} title={editingCoupon ? 'Editar Cupón' : 'Nuevo Cupón'} onClose={cerrarModal} maxWidth="max-w-lg">
+      <CrudModal open={modalOpen} title={editingCoupon ? 'Editar Cupón' : 'Nuevo Cupón'} onClose={cerrarModal} maxWidth="md:max-w-lg">
         <CouponForm
           key={editingCoupon?._id ?? 'nuevo'}
           initialData={editingCoupon}
