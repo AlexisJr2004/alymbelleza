@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useDeleteGalleryItem, useGalleryQuery, useUploadGalleryItem } from '../hooks/useGallery';
 import { getStoredUser, isAdmin as checkIsAdmin } from '../lib/auth';
 import { confirmAction, notifyError, notifySuccess } from '../lib/sweetalert';
+import { useSwitchFilter } from '../hooks/useSwitchFilter';
 import CategoryFilters from '../components/galeria/CategoryFilters';
 import GalleryGrid from '../components/galeria/GalleryGrid';
 import UploadModal from '../components/galeria/UploadModal';
@@ -22,7 +23,7 @@ export default function GaleriaPage() {
   const uploadItem = useUploadGalleryItem();
   const deleteItem = useDeleteGalleryItem();
 
-  const [activeFilter, setActiveFilter] = useState('all');
+  const categoryFilter = useSwitchFilter();
   const [uploadOpen, setUploadOpen] = useState(false);
   const [lightbox, setLightbox] = useState<LightboxState | null>(null);
 
@@ -30,7 +31,8 @@ export default function GaleriaPage() {
   const admin = checkIsAdmin(user);
 
   const allItems = items ?? [];
-  const filteredItems = activeFilter === 'all' ? allItems : allItems.filter((item) => item.category === activeFilter);
+  const filteredItems =
+    categoryFilter.selected.size === 0 ? allItems : allItems.filter((item) => categoryFilter.selected.has(item.category));
 
   function openLightbox(item: GalleryItem) {
     // openGalleryPopup() en el original arma la lista de navegación a partir
@@ -111,7 +113,7 @@ export default function GaleriaPage() {
               </div>
             )}
 
-            <CategoryFilters active={activeFilter} onChange={setActiveFilter} />
+            <CategoryFilters filter={categoryFilter} />
 
             {isLoading && (
               <div className="w-full text-center py-12">

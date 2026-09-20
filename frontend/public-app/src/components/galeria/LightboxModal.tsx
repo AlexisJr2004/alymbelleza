@@ -60,8 +60,10 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
       onClose={onClose}
       onFullyClosed={() => setRendered(null)}
       desktopMaxWidthClassName="md:max-w-3xl"
-      panelClassName="bg-transparent rounded-t-3xl md:rounded-none"
-      handleClassName="bg-white/50"
+      // Blanco sólido en móvil (mismo fondo que UploadModal y el resto de
+      // hojas); en escritorio sigue transparente sobre el fondo oscuro, como
+      // un visor de imagen normal.
+      panelClassName="bg-white md:bg-transparent rounded-t-3xl md:rounded-none"
       backdropClassName="bg-black/40"
       labelledBy="lightbox-title"
     >
@@ -99,13 +101,13 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
             <img key={item._id} src={url} alt={item.category} className="max-h-[60vh] max-w-full rounded-lg shadow-lg" />
           )}
         </div>
-        <div id="lightbox-title" className="mt-4 text-white text-sm">
+        <div id="lightbox-title" className="mt-4 text-gray-700 md:text-white text-sm">
           Subido el {fecha}
         </div>
 
         {multiple && (
           <div className="mt-6 max-w-full">
-            <div className="flex items-center gap-3 overflow-x-auto px-3 py-3 bg-white/5 backdrop-blur-sm rounded-xl">
+            <div className="flex items-center gap-3 overflow-x-auto px-3 py-3 bg-gray-100 md:bg-white/5 backdrop-blur-sm rounded-xl">
               {rendered.items.map((it, i) => (
                 <button
                   key={it._id}
@@ -113,7 +115,7 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
                   onClick={() => onNavigate(i)}
                   aria-label={`Ver elemento ${i + 1} de ${total}`}
                   className={`shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                    i === rendered.index ? 'border-white opacity-100' : 'border-transparent opacity-50 hover:opacity-90'
+                    i === rendered.index ? 'border-purple-500 md:border-white opacity-100' : 'border-transparent opacity-50 hover:opacity-90'
                   }`}
                 >
                   {it.type === 'video' ? (
