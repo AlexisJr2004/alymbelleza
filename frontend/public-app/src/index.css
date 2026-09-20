@@ -199,6 +199,16 @@
   display: flex;
 }
 
+/* Autoplay "continuo": delay casi nulo (ver TestimonialsSection.tsx) hace que
+   apenas termina una transición arranque la siguiente, sin pausas — pero por
+   default Swiper anima cada slide con easing tipo ease (acelera y frena), lo
+   que igual se siente como una serie de "pasos" en vez de un solo desplazamiento
+   fluido. Con timing-function lineal, la velocidad es constante de punta a
+   punta y el efecto se percibe como una cinta continua en vez de saltos. */
+.testimonials-swiper .swiper-wrapper {
+  transition-timing-function: linear !important;
+}
+
 /* Flechas de navegación del carrusel de testimonios: mismo estilo "glass" que el
    visor de la galería, adaptado a un fondo claro (blanco translúcido en vez de
    negro translúcido). Se les reserva espacio propio con padding lateral para

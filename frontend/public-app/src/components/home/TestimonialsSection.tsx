@@ -65,7 +65,8 @@ export default function TestimonialsSection() {
           ) : (
             <Swiper
               loop
-              autoplay={{ delay: 5000, disableOnInteraction: false }}
+              speed={4000}
+              autoplay={{ delay: 1, disableOnInteraction: false }}
               pagination={{ el: '.swiper-pagination', clickable: true }}
               navigation={{ nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }}
               breakpoints={{
