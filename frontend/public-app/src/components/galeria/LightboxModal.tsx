@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { formatImageUrl } from '../../lib/format';
+import { formatImageUrl, getGalleryVideoPlaybackUrl, getGalleryVideoPosterUrl } from '../../lib/format';
 import type { GalleryItem } from '../../types/models';
 import Sheet from '../ui/Sheet';
 
@@ -52,6 +52,9 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
   if (!item) return null;
 
   const url = formatImageUrl(item.url);
+  // El recorte (si el admin configuró uno al subirlo) solo aplica a la
+  // reproducción acá — la miniatura de la grilla usa su propia portada.
+  const videoUrl = formatImageUrl(getGalleryVideoPlaybackUrl(item));
   const fecha = new Date(item.createdAt).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
 
   return (
@@ -96,7 +99,7 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
             // original), para que autoPlay realmente dispare en cada cambio
             // en vez de que React solo actualice el atributo src de un mismo
             // nodo ya reproducido.
-            <video key={item._id} src={url} controls autoPlay className="max-h-[60vh] max-w-full rounded-lg shadow-lg" />
+            <video key={item._id} src={videoUrl} controls autoPlay className="max-h-[60vh] max-w-full rounded-lg shadow-lg" />
           ) : (
             <img key={item._id} src={url} alt={item.category} className="max-h-[60vh] max-w-full rounded-lg shadow-lg" />
           )}
@@ -119,7 +122,7 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
                   }`}
                 >
                   {it.type === 'video' ? (
-                    <video src={formatImageUrl(it.url)} muted className="w-full h-full object-cover pointer-events-none" />
+                    <img src={formatImageUrl(getGalleryVideoPosterUrl(it))} alt="" className="w-full h-full object-cover pointer-events-none" />
                   ) : (
                     <img src={formatImageUrl(it.url)} alt="" className="w-full h-full object-cover pointer-events-none" />
                   )}

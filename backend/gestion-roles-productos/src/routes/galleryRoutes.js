@@ -37,11 +37,27 @@ router.post(
   galleryStorage.single('file'),
   async (req, res) => {
     try {
-      const { category } = req.body;
+      const { category, posterSeconds, trimStart, trimEnd } = req.body;
       const file = req.file;
       if (!file) return res.status(400).json({ error: "No se proporcionó ningún archivo" });
       if (!category) return res.status(400).json({ error: "La categoría es requerida" });
       const fileType = file.mimetype.startsWith('image/') ? 'image' : 'video';
+
+      // posterSeconds/trimStart/trimEnd solo tienen sentido para video — llegan
+      // como texto desde el FormData del mini editor (UploadModal.tsx) y solo
+      // se guardan si el archivo realmente es un video.
+      let videoFields = {};
+      if (fileType === 'video') {
+        const poster = Number(posterSeconds);
+        if (Number.isFinite(poster) && poster >= 0) videoFields.posterSeconds = poster;
+
+        const start = Number(trimStart);
+        const end = Number(trimEnd);
+        if (Number.isFinite(start) && Number.isFinite(end) && start >= 0 && end > start) {
+          videoFields.trimStart = start;
+          videoFields.trimEnd = end;
+        }
+      }
       const uploadOptions = {
         folder: `bella-beauty/gallery/${category}`,
         resource_type: fileType === 'video' ? 'video' : 'image',
@@ -64,6 +80,7 @@ router.post(
         type: fileType,
         filename: result.original_filename,
         uploadedBy: req.user.id,
+        ...videoFields,
       });
       await galleryItem.save();
       res.json({

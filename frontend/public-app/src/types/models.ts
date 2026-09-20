@@ -127,4 +127,8 @@ export interface GalleryItem {
   filename: string;
   uploadedBy: string;
   createdAt: string;
+  // Solo tienen valor real cuando type === 'video' (ver UploadModal.tsx).
+  posterSeconds?: number;
+  trimStart?: number;
+  trimEnd?: number;
 }

@@ -21,12 +21,40 @@ const CATEGORY_OPTIONS = [
 
 type PreviewState = { type: 'image' | 'video'; src: string } | null;
 
+function formatSeconds(value: number): string {
+  const s = Math.max(0, value);
+  const m = Math.floor(s / 60);
+  const rest = Math.floor(s % 60);
+  return `${m}:${rest.toString().padStart(2, '0')}`;
+}
+
 // Puerto del modal "Subir Contenido a Galería" (galeria.html ~494-557 +
-// script ~858-971).
+// script ~858-971), ahora con un mini editor exclusivo para video: elegir el
+// fotograma de portada (se sube como un segundo dato — el segundo exacto — y
+// Cloudinary genera la miniatura al vuelo a partir de ese instante, sin
+// re-procesar ni re-subir nada) y recortar opcionalmente el rango que se
+// reproduce (misma idea: Cloudinary sirve el tramo pedido on-demand).
 export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: UploadModalProps) {
   const formRef = useRef<HTMLFormElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [preview, setPreview] = useState<PreviewState>(null);
   const [fileInfo, setFileInfo] = useState('');
+
+  const [videoDuration, setVideoDuration] = useState(0);
+  const [posterSeconds, setPosterSeconds] = useState(0);
+  const [posterFrame, setPosterFrame] = useState<string | null>(null);
+  const [trimEnabled, setTrimEnabled] = useState(false);
+  const [trimStart, setTrimStart] = useState(0);
+  const [trimEnd, setTrimEnd] = useState(0);
+
+  function resetVideoEditorState() {
+    setVideoDuration(0);
+    setPosterSeconds(0);
+    setPosterFrame(null);
+    setTrimEnabled(false);
+    setTrimStart(0);
+    setTrimEnd(0);
+  }
 
   function handleClose() {
     onClose();
@@ -34,6 +62,7 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
 
   function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
+    resetVideoEditorState();
     if (!file) {
       setPreview(null);
       return;
@@ -56,6 +85,40 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
       setPreview({ type: isVideo ? 'video' : 'image', src: ev.target?.result as string });
     };
     reader.readAsDataURL(file);
+  }
+
+  function handleVideoLoadedMetadata() {
+    const v = videoRef.current;
+    if (!v) return;
+    setVideoDuration(v.duration);
+    setTrimEnd(v.duration);
+  }
+
+  // Captura el fotograma actual en un <canvas> solo para mostrarlo como
+  // confirmación visual acá mismo — es un data URL local, no se sube; la
+  // portada real que ve la galería la genera Cloudinary a partir del segundo
+  // elegido cuando el video ya está subido.
+  function capturePosterFrame() {
+    const v = videoRef.current;
+    if (!v) return;
+    setPosterSeconds(v.currentTime);
+    const canvas = document.createElement('canvas');
+    canvas.width = v.videoWidth;
+    canvas.height = v.videoHeight;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.drawImage(v, 0, 0, canvas.width, canvas.height);
+    setPosterFrame(canvas.toDataURL('image/jpeg', 0.8));
+  }
+
+  function handleTrimStartChange(value: number) {
+    const next = Math.min(Math.max(0, value), trimEnd);
+    setTrimStart(next);
+  }
+
+  function handleTrimEndChange(value: number) {
+    const next = Math.max(Math.min(videoDuration, value), trimStart);
+    setTrimEnd(next);
   }
 
   function handleSubmit(e: FormEvent) {
@@ -122,10 +185,93 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
               {preview.type === 'image' ? (
                 <img src={preview.src} alt="Vista previa del archivo seleccionado" className="max-w-full h-48 object-cover rounded-lg mx-auto" />
               ) : (
-                <video src={preview.src} controls className="max-w-full h-48 object-cover rounded-lg mx-auto" />
+                <video
+                  ref={videoRef}
+                  src={preview.src}
+                  controls
+                  onLoadedMetadata={handleVideoLoadedMetadata}
+                  className="max-w-full h-48 rounded-lg mx-auto bg-black"
+                />
               )}
               <div className="text-sm text-gray-600 mt-2">{fileInfo}</div>
             </div>
+
+            {preview.type === 'video' && videoDuration > 0 && (
+              <div className="mt-3 space-y-4 border border-gray-200 rounded-lg p-3 bg-white">
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-xs font-medium text-gray-500">Portada en la galería</span>
+                    <span className="text-xs font-semibold text-purple-600">{formatSeconds(posterSeconds)}</span>
+                  </div>
+                  <p className="text-xs text-gray-500 mb-2">
+                    Mueve el video arriba hasta el fotograma que quieras usar como portada y confírmalo.
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={capturePosterFrame}
+                      className="shrink-0 text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 px-3 py-1.5 rounded-full transition-colors"
+                    >
+                      <i className="fas fa-camera mr-1.5" />
+                      Usar este momento
+                    </button>
+                    {posterFrame && (
+                      <img src={posterFrame} alt="Portada seleccionada" className="w-16 h-11 object-cover rounded border border-purple-200" />
+                    )}
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-gray-100">
+                  <label className="flex items-center gap-2 text-xs font-medium text-gray-700 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={trimEnabled}
+                      onChange={(e) => {
+                        setTrimEnabled(e.target.checked);
+                        if (e.target.checked) {
+                          setTrimStart(0);
+                          setTrimEnd(videoDuration);
+                        }
+                      }}
+                      className="rounded border-gray-300 text-purple-600 focus:ring-purple-400"
+                    />
+                    Recortar el video
+                  </label>
+                  {trimEnabled && (
+                    <div className="flex items-center gap-2 mt-2">
+                      <input
+                        type="number"
+                        min={0}
+                        max={trimEnd}
+                        step={0.1}
+                        value={Number(trimStart.toFixed(1))}
+                        onChange={(e) => handleTrimStartChange(Number(e.target.value))}
+                        className="w-20 px-2 py-1 border border-gray-200 rounded text-sm focus:ring-1 focus:ring-purple-400 focus:outline-none"
+                      />
+                      <span className="text-gray-400 text-sm">a</span>
+                      <input
+                        type="number"
+                        min={trimStart}
+                        max={videoDuration}
+                        step={0.1}
+                        value={Number(trimEnd.toFixed(1))}
+                        onChange={(e) => handleTrimEndChange(Number(e.target.value))}
+                        className="w-20 px-2 py-1 border border-gray-200 rounded text-sm focus:ring-1 focus:ring-purple-400 focus:outline-none"
+                      />
+                      <span className="text-xs text-gray-400">segundos (de {formatSeconds(videoDuration)})</span>
+                    </div>
+                  )}
+                </div>
+
+                <input type="hidden" name="posterSeconds" value={posterSeconds} />
+                {trimEnabled && (
+                  <>
+                    <input type="hidden" name="trimStart" value={trimStart} />
+                    <input type="hidden" name="trimEnd" value={trimEnd} />
+                  </>
+                )}
+              </div>
+            )}
           </div>
         )}
 

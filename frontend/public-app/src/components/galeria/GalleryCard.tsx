@@ -1,4 +1,4 @@
-import { formatImageUrl } from '../../lib/format';
+import { formatImageUrl, getGalleryVideoPosterUrl } from '../../lib/format';
 import type { GalleryItem } from '../../types/models';
 
 interface GalleryCardProps {
@@ -23,10 +23,16 @@ export default function GalleryCard({ item, isAdmin, onClick, onDelete }: Galler
       onClick={onClick}
     >
       {item.type === 'video' ? (
-        <video
-          src={url}
-          className="w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-105 rounded-xl"
-        />
+        <>
+          <img
+            src={formatImageUrl(getGalleryVideoPosterUrl(item))}
+            alt={item.category}
+            className="w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-105 rounded-xl"
+          />
+          <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 flex items-center justify-center pointer-events-none">
+            <i className="fas fa-play text-white text-sm ml-0.5" />
+          </span>
+        </>
       ) : (
         <img
           src={url}

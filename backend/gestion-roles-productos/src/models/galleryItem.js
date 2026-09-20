@@ -11,7 +11,15 @@ const gallerySchema = new mongoose.Schema({
     type: { type: String, enum: ['image', 'video'], required: true },
     filename: { type: String, required: true },
     uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    // Solo aplican a videos. posterSeconds es el instante (segundos) que el
+    // admin eligió como portada; trimStart/trimEnd (opcionales) acotan el
+    // rango que se reproduce. Ninguno reprocesa ni re-sube el archivo: ambos
+    // se resuelven como transformaciones de Cloudinary al vuelo (so_/eo_)
+    // sobre el mismo video ya subido.
+    posterSeconds: { type: Number, default: 0, min: 0 },
+    trimStart: { type: Number, min: 0 },
+    trimEnd: { type: Number, min: 0 }
 });
 
 const GalleryItem = mongoose.model('GalleryItem', gallerySchema);

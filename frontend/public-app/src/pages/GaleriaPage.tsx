@@ -90,7 +90,7 @@ export default function GaleriaPage() {
       />
 
       <section className="bg-white">
-        <div id="galeria" className="mx-auto w-full max-w-7xl px-5 pb-16 md:px-10 md:pb-24">
+        <div id="galeria" className="container mx-auto w-full px-5 pb-16 md:px-10 md:pb-24">
           <div className="flex flex-col items-center justify-center text-center mb-16 animate-fade-in">
             <br />
             <h2 className="font-display text-4xl md:text-5xl mb-6 leading-tight text-gray-900">Galería de Fotos ✨</h2>
