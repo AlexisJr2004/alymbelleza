@@ -1,4 +1,4 @@
-import { useRef, useState, type ChangeEvent, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react';
 import { formatDuration } from '../../lib/format';
 import { notifyError } from '../../lib/sweetalert';
 import Sheet from '../ui/Sheet';
@@ -49,6 +49,23 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
     setTrimStart(0);
     setTrimEnd(0);
   }
+
+  // El modal nunca se desmonta (Sheet lo mantiene montado y solo alterna
+  // `open`, igual que el resto de modales de la app), así que sin esto la
+  // vista previa, el archivo elegido y todo el mini editor de video quedaban
+  // pegados de la subida anterior la próxima vez que se abría — subir una
+  // imagen, cerrarlo, y volver a abrirlo para subir un video todavía mostraba
+  // la imagen vieja hasta elegir un archivo nuevo a mano. Se limpia todo al
+  // ABRIRSE (no al cerrarse) para no hacer parpadear el contenido mientras la
+  // hoja todavía está deslizándose hacia afuera en su animación de salida.
+  useEffect(() => {
+    if (!open) return;
+    setPreview(null);
+    setFileInfo('');
+    resetVideoEditorState();
+    formRef.current?.reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   function handleClose() {
     onClose();
