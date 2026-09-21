@@ -131,4 +131,5 @@ export interface GalleryItem {
   posterSeconds?: number;
   trimStart?: number;
   trimEnd?: number;
+  duration?: number;
 }

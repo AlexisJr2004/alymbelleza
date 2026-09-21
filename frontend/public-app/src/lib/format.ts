@@ -17,6 +17,16 @@ export function formatoMoneda(valor: number): string {
   return `$${(valor || 0).toFixed(2)}`;
 }
 
+// m:ss — usado tanto en el mini editor de subida (UploadModal.tsx, mientras
+// se elige portada/recorte) como en el badge de duración sobre la miniatura
+// de video en la grilla (GalleryCard.tsx).
+export function formatDuration(seconds: number): string {
+  const s = Math.max(0, seconds);
+  const m = Math.floor(s / 60);
+  const rest = Math.floor(s % 60);
+  return `${m}:${rest.toString().padStart(2, '0')}`;
+}
+
 // Normaliza un número local de Ecuador a formato internacional para enlaces wa.me
 export function numeroWhatsapp(phone: string): string {
   let digits = String(phone).replace(/\D/g, '');

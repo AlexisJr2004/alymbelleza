@@ -125,7 +125,13 @@ export default function GaleriaPage() {
               {!isLoading && isError && <div className="text-center text-red-500">Error al cargar la galería.</div>}
 
               {!isLoading && !isError && (
-                <GalleryGrid items={filteredItems} isAdmin={admin} onItemClick={openLightbox} onDelete={handleDelete} />
+                <GalleryGrid
+                  items={filteredItems}
+                  isAdmin={admin}
+                  hasActiveFilter={categoryFilter.selected.size > 0}
+                  onItemClick={openLightbox}
+                  onDelete={handleDelete}
+                />
               )}
             </div>
           </div>

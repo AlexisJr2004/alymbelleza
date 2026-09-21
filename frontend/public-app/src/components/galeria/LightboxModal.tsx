@@ -1,7 +1,27 @@
 import { useEffect, useState } from 'react';
 import { formatImageUrl, getGalleryVideoPlaybackUrl, getGalleryVideoPosterUrl } from '../../lib/format';
+import { notifyError } from '../../lib/sweetalert';
 import type { GalleryItem } from '../../types/models';
 import Sheet from '../ui/Sheet';
+
+// Cloudinary sirve estos archivos desde otro origen, así que un simple
+// <a href download> no alcanza — la mayoría de navegadores ignora el atributo
+// download en recursos cross-origin y termina abriéndolos en vez de bajarlos.
+// Se trae el archivo como blob y se dispara la descarga desde un object URL
+// del propio origen, que sí respeta el nombre de archivo elegido.
+async function downloadGalleryFile(url: string, filename: string) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('No se pudo descargar el archivo');
+  const blob = await res.blob();
+  const blobUrl = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = blobUrl;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(blobUrl);
+}
 
 interface LightboxModalProps {
   open: boolean;
@@ -28,6 +48,7 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
   const [rendered, setRendered] = useState<{ items: GalleryItem[]; index: number } | null>(
     open ? { items, index } : null
   );
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     if (open) setRendered({ items, index });
@@ -56,6 +77,20 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
   // reproducción acá — la miniatura de la grilla usa su propia portada.
   const videoUrl = formatImageUrl(getGalleryVideoPlaybackUrl(item));
   const fecha = new Date(item.createdAt).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  async function handleDownload() {
+    if (downloading) return;
+    setDownloading(true);
+    try {
+      // Descarga el archivo tal como se está viendo: el recorte configurado
+      // si es video, la imagen original si no.
+      await downloadGalleryFile(item.type === 'video' ? videoUrl : url, item.filename || `galeria-${item._id}`);
+    } catch {
+      notifyError('No se pudo descargar', 'Intenta de nuevo en unos segundos.');
+    } finally {
+      setDownloading(false);
+    }
+  }
 
   return (
     <Sheet
@@ -91,6 +126,16 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
             <i className="fas fa-chevron-right" />
           </button>
         )}
+
+        <button
+          type="button"
+          onClick={handleDownload}
+          disabled={downloading}
+          aria-label="Descargar"
+          className="absolute top-0 right-2 md:top-2 z-10 w-11 h-11 rounded-full bg-black/10 md:bg-white/10 hover:bg-black/20 md:hover:bg-white/20 text-gray-700 md:text-white flex items-center justify-center backdrop-blur-sm transition-colors disabled:opacity-60"
+        >
+          <i className={`fas ${downloading ? 'fa-spinner fa-spin' : 'fa-download'}`} />
+        </button>
 
         <div className="w-full flex items-center justify-center">
           {item.type === 'video' ? (

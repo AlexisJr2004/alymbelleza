@@ -19,7 +19,11 @@ const gallerySchema = new mongoose.Schema({
     // sobre el mismo video ya subido.
     posterSeconds: { type: Number, default: 0, min: 0 },
     trimStart: { type: Number, min: 0 },
-    trimEnd: { type: Number, min: 0 }
+    trimEnd: { type: Number, min: 0 },
+    // Duración total del video en segundos, leída en el navegador al elegir
+    // el archivo (video.duration) — solo para mostrar un badge tipo "0:45"
+    // en la tarjeta de la grilla, no se usa para nada del lado del servidor.
+    duration: { type: Number, min: 0 }
 });
 
 const GalleryItem = mongoose.model('GalleryItem', gallerySchema);

@@ -37,7 +37,7 @@ router.post(
   galleryStorage.single('file'),
   async (req, res) => {
     try {
-      const { category, posterSeconds, trimStart, trimEnd } = req.body;
+      const { category, posterSeconds, trimStart, trimEnd, duration } = req.body;
       const file = req.file;
       if (!file) return res.status(400).json({ error: "No se proporcionó ningún archivo" });
       if (!category) return res.status(400).json({ error: "La categoría es requerida" });
@@ -57,6 +57,9 @@ router.post(
           videoFields.trimStart = start;
           videoFields.trimEnd = end;
         }
+
+        const dur = Number(duration);
+        if (Number.isFinite(dur) && dur >= 0) videoFields.duration = dur;
       }
       const uploadOptions = {
         folder: `bella-beauty/gallery/${category}`,

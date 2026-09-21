@@ -281,6 +281,20 @@
   animation: fadeIn 0.6s ease-out forwards;
 }
 
+/* Entrada de cada tarjeta al (re)aparecer la grilla de la galería tras
+   cambiar de filtro (GalleryGrid.tsx) — más corta que fadeIn porque acá se
+   combina con un delay escalonado por tarjeta, no una aparición única. */
+@keyframes galleryItemIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @keyframes slide-in-bottom {
   from {
     transform: translateY(100%);

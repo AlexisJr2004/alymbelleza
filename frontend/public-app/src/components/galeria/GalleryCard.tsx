@@ -1,4 +1,4 @@
-import { formatImageUrl, getGalleryVideoPosterUrl } from '../../lib/format';
+import { formatDuration, formatImageUrl, getGalleryVideoPosterUrl } from '../../lib/format';
 import type { GalleryItem } from '../../types/models';
 
 interface GalleryCardProps {
@@ -27,16 +27,23 @@ export default function GalleryCard({ item, isAdmin, onClick, onDelete }: Galler
           <img
             src={formatImageUrl(getGalleryVideoPosterUrl(item))}
             alt={item.category}
+            loading="lazy"
             className="w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-105 rounded-xl"
           />
           <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 flex items-center justify-center pointer-events-none">
             <i className="fas fa-play text-white text-sm ml-0.5" />
           </span>
+          {typeof item.duration === 'number' && (
+            <span className="absolute bottom-2 right-2 px-1.5 py-0.5 rounded bg-black/70 text-white text-xs font-medium pointer-events-none">
+              {formatDuration(item.duration)}
+            </span>
+          )}
         </>
       ) : (
         <img
           src={url}
           alt={item.category}
+          loading="lazy"
           className="w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-105 rounded-xl"
         />
       )}

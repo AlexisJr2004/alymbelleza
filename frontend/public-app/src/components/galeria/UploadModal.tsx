@@ -1,4 +1,5 @@
 import { useRef, useState, type ChangeEvent, type FormEvent } from 'react';
+import { formatDuration } from '../../lib/format';
 import { notifyError } from '../../lib/sweetalert';
 import Sheet from '../ui/Sheet';
 
@@ -20,13 +21,6 @@ const CATEGORY_OPTIONS = [
 ];
 
 type PreviewState = { type: 'image' | 'video'; src: string } | null;
-
-function formatSeconds(value: number): string {
-  const s = Math.max(0, value);
-  const m = Math.floor(s / 60);
-  const rest = Math.floor(s % 60);
-  return `${m}:${rest.toString().padStart(2, '0')}`;
-}
 
 // Puerto del modal "Subir Contenido a Galería" (galeria.html ~494-557 +
 // script ~858-971), ahora con un mini editor exclusivo para video: elegir el
@@ -201,7 +195,7 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
                     <span className="text-xs font-medium text-gray-500">Portada en la galería</span>
-                    <span className="text-xs font-semibold text-purple-600">{formatSeconds(posterSeconds)}</span>
+                    <span className="text-xs font-semibold text-purple-600">{formatDuration(posterSeconds)}</span>
                   </div>
                   <p className="text-xs text-gray-500 mb-2">
                     Mueve el video arriba hasta el fotograma que quieras usar como portada y confírmalo.
@@ -258,12 +252,13 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
                         onChange={(e) => handleTrimEndChange(Number(e.target.value))}
                         className="w-20 px-2 py-1 border border-gray-200 rounded text-sm focus:ring-1 focus:ring-purple-400 focus:outline-none"
                       />
-                      <span className="text-xs text-gray-400">segundos (de {formatSeconds(videoDuration)})</span>
+                      <span className="text-xs text-gray-400">segundos (de {formatDuration(videoDuration)})</span>
                     </div>
                   )}
                 </div>
 
                 <input type="hidden" name="posterSeconds" value={posterSeconds} />
+                <input type="hidden" name="duration" value={videoDuration} />
                 {trimEnabled && (
                   <>
                     <input type="hidden" name="trimStart" value={trimStart} />
