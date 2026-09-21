@@ -6,6 +6,7 @@ import { notifyError, notifySuccess } from '../../lib/sweetalert';
 import { useAddToCart } from '../../hooks/useCart';
 import Sheet from './Sheet';
 import StarRating from './StarRating';
+import ProductReviews from './ProductReviews';
 
 // Puerto de buildProductQuickViewModal()/openProductQuickView() de js/main.js.
 // Compartido entre Home y la futura página de Productos (ver useProductQuickView).
@@ -53,7 +54,7 @@ export default function ProductQuickViewModal({ product, onClose }: ProductQuick
       open={!!product}
       onClose={onClose}
       onFullyClosed={() => setRendered(null)}
-      desktopMaxWidthClassName="md:max-w-2xl"
+      desktopMaxWidthClassName="md:max-w-2xl lg:max-w-5xl"
       labelledBy="quick-view-title"
     >
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 sticky top-0 bg-white z-10">
@@ -64,7 +65,7 @@ export default function ProductQuickViewModal({ product, onClose }: ProductQuick
           <i className="fas fa-times text-xl" />
         </button>
       </div>
-      <div className="grid md:grid-cols-2 gap-6 p-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-[1fr_1fr_320px] gap-6 p-6">
         <img
           src={rendered.image || './img/default.jpg'}
           alt={rendered.name}
@@ -112,6 +113,15 @@ export default function ProductQuickViewModal({ product, onClose }: ProductQuick
               </button>
             )}
           </div>
+        </div>
+
+        {/* En md (tablet) ocupa el ancho completo debajo de imagen+info
+            (col-span-2); recién en lg (escritorio) pasa a ser la tercera
+            columna "a la derecha" que pidió el usuario. Su propio scroll
+            interno (ver ProductReviews.tsx) queda acotado a 65vh en escritorio
+            para no competir con el scroll general de la hoja (max-h-[85vh]). */}
+        <div className="md:col-span-2 lg:col-span-1 lg:border-l lg:border-gray-100 lg:pl-6 pt-6 border-t border-gray-100 md:pt-6 lg:pt-0 lg:border-t-0 lg:max-h-[65vh]">
+          <ProductReviews productId={rendered._id} />
         </div>
       </div>
     </Sheet>

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BellIcon, CheckIcon, ClockIcon, EmptyBellIcon, XCircleIcon, XIcon } from '../icons';
 import { useAppointmentsQuery } from '../../hooks/useAppointments';
+import { useMarkNotificationRead, useNotificationsQuery } from '../../hooks/useNotifications';
 
 const ESTADO_STYLES = {
   pendiente: { color: 'text-amber-500', bg: 'bg-amber-50', icon: ClockIcon, label: 'Pendiente' },
@@ -9,10 +10,19 @@ const ESTADO_STYLES = {
   cancelada: { color: 'text-rose-500', bg: 'bg-rose-50', icon: XCircleIcon, label: 'Cancelada' },
 } as const;
 
+// La campana combina dos fuentes: las citas (siempre se mostraron acá, sin
+// concepto de leído/no leído) y las notificaciones "de verdad" nuevas
+// (respuestas a comentarios de producto, con read/unread) — se muestran como
+// dos grupos dentro de la misma lista en vez de fusionarlas por fecha, para
+// no tocar el comportamiento de citas que ya funcionaba.
 export default function NotificationBell() {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const { data: appointments = [] } = useAppointmentsQuery();
+  const { data: notifications = [] } = useNotificationsQuery();
+  const markRead = useMarkNotificationRead();
+  const unreadCount = notifications.filter((n) => !n.read).length;
+  const hasAnything = appointments.length > 0 || notifications.length > 0;
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -36,7 +46,7 @@ export default function NotificationBell() {
         className="shrink-0 relative w-10 h-10 rounded-full bg-white/60 border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 hover:bg-white/90 transition-colors"
       >
         <BellIcon className="w-5 h-5" />
-        {appointments.length > 0 && (
+        {(appointments.length > 0 || unreadCount > 0) && (
           <span className="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 rounded-full border-2 border-white" />
         )}
       </button>
@@ -68,40 +78,70 @@ export default function NotificationBell() {
           </div>
 
           <ul className="notification-dropdown divide-y divide-gray-100 max-h-96 overflow-y-auto">
-            {appointments.length === 0 ? (
+            {!hasAnything ? (
               <li className="px-5 py-10 text-center">
                 <EmptyBellIcon className="h-10 w-10 mx-auto text-gray-300" />
                 <p className="mt-3 text-sm font-medium text-gray-500">No hay notificaciones</p>
-                <p className="text-xs text-gray-400 mt-1">Cuando tengas nuevas citas, aparecerán aquí</p>
+                <p className="text-xs text-gray-400 mt-1">Cuando tengas actividad nueva, aparecerá aquí</p>
               </li>
             ) : (
-              appointments.map((app) => {
-                const estado = ESTADO_STYLES[app.status || 'pendiente'];
-                const fechaStr = new Date(app.date).toLocaleDateString('es-ES', {
-                  weekday: 'long',
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                });
-                return (
-                  <li key={app._id} className="mx-2 my-1 rounded-xl">
-                    <div className="flex items-start gap-3 px-3 py-3 rounded-xl hover:bg-gray-50 transition-colors">
-                      <span className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${estado.bg}`}>
-                        <estado.icon className={`w-4 h-4 ${estado.color}`} />
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className={`text-sm font-medium ${estado.color}`}>{estado.label}</span>
-                          <span className="text-xs text-gray-400">{fechaStr}</span>
+              <>
+                {notifications.map((n) => {
+                  const fechaStr = new Date(n.createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+                  const horaStr = new Date(n.createdAt).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+                  return (
+                    <li key={n._id} className="mx-2 my-1 rounded-xl">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!n.read) markRead.mutate(n._id);
+                        }}
+                        className={`w-full text-left flex items-start gap-3 px-3 py-3 rounded-xl hover:bg-gray-50 transition-colors ${
+                          n.read ? '' : 'bg-purple-50/70'
+                        }`}
+                      >
+                        <span className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 bg-purple-50">
+                          <i className="fas fa-comment-dots text-purple-500 text-sm" />
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-gray-700">{n.message}</p>
+                          <span className="text-xs text-gray-400">
+                            {fechaStr}, {horaStr}
+                          </span>
                         </div>
-                        <p className="text-sm text-gray-600 mt-0.5">
-                          Tienes una reservación con tu estilista el <span className="font-medium text-gray-800">{fechaStr}</span>
-                        </p>
+                        {!n.read && <span className="w-2 h-2 mt-1.5 rounded-full bg-rose-500 shrink-0" />}
+                      </button>
+                    </li>
+                  );
+                })}
+                {appointments.map((app) => {
+                  const estado = ESTADO_STYLES[app.status || 'pendiente'];
+                  const fechaStr = new Date(app.date).toLocaleDateString('es-ES', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                  });
+                  return (
+                    <li key={app._id} className="mx-2 my-1 rounded-xl">
+                      <div className="flex items-start gap-3 px-3 py-3 rounded-xl hover:bg-gray-50 transition-colors">
+                        <span className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${estado.bg}`}>
+                          <estado.icon className={`w-4 h-4 ${estado.color}`} />
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className={`text-sm font-medium ${estado.color}`}>{estado.label}</span>
+                            <span className="text-xs text-gray-400">{fechaStr}</span>
+                          </div>
+                          <p className="text-sm text-gray-600 mt-0.5">
+                            Tienes una reservación con tu estilista el <span className="font-medium text-gray-800">{fechaStr}</span>
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </li>
-                );
-              })
+                    </li>
+                  );
+                })}
+              </>
             )}
           </ul>
 

@@ -54,6 +54,31 @@ export interface Testimonial {
   createdAt: string;
 }
 
+export type ReactionType = 'heart' | 'like' | 'dislike';
+
+export interface ProductComment {
+  _id: string;
+  productId: string;
+  userId: string;
+  name: string;
+  avatar: string;
+  comment: string;
+  parentId: string | null;
+  reactions: { userId: string; type: ReactionType }[];
+  createdAt: string;
+  editedAt?: string;
+}
+
+export interface AppNotification {
+  _id: string;
+  type: 'comment_reply';
+  message: string;
+  productId?: string;
+  commentId?: string;
+  read: boolean;
+  createdAt: string;
+}
+
 export interface OrderItem {
   product?: string;
   name: string;
