@@ -1,6 +1,7 @@
-import type { SyntheticEvent } from 'react';
+import { useState, type SyntheticEvent } from 'react';
 import { resolveProfileImage } from '../../lib/format';
 import type { ProfileUser } from '../../types/models';
+import ProfilePhotoLightbox from './ProfilePhotoLightbox';
 
 interface ProfileCardProps {
   user: ProfileUser;
@@ -22,20 +23,30 @@ function handleImgError(e: SyntheticEvent<HTMLImageElement>) {
 // field has a value") — un icono huérfano sin texto no aporta nada.
 export default function ProfileCard({ user, previewUrl }: ProfileCardProps) {
   const formattedBirthdate = user.birthdate ? user.birthdate.split('T')[0] : '';
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const photoSrc = previewUrl || resolveProfileImage(user);
 
   return (
     <div className="lg:w-1/3">
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 sticky top-6">
         <div className="flex flex-col items-center">
-          <div className="relative mb-4">
+          <button
+            type="button"
+            onClick={() => setLightboxOpen(true)}
+            aria-label="Ver foto de perfil en grande"
+            className="relative mb-4 group rounded-full"
+          >
             <img
-              src={previewUrl || resolveProfileImage(user)}
+              src={photoSrc}
               alt="Foto de perfil"
-              className="w-32 h-32 rounded-full object-cover border-4 border-purple-100 shadow-lg"
+              className="w-32 h-32 rounded-full object-cover border-4 border-purple-100 shadow-lg transition-transform duration-300 group-hover:scale-105"
               onError={handleImgError}
             />
             <div className="absolute -bottom-2 -right-2 w-6 h-6 rounded-full border-2 border-white bg-green-500" />
-          </div>
+            <div className="absolute inset-0 rounded-full flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors duration-300">
+              <i className="fas fa-magnifying-glass text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </div>
+          </button>
           <h2 className="text-xl font-bold text-gray-800 text-center">{user.name || 'Nombre Apellido'}</h2>
           <p className="text-gray-500 text-sm mt-1 mb-3">{user.email || 'correo@ejemplo.com'}</p>
 
@@ -103,6 +114,8 @@ export default function ProfileCard({ user, previewUrl }: ProfileCardProps) {
           </div>
         </div>
       </div>
+
+      <ProfilePhotoLightbox open={lightboxOpen} src={photoSrc} onClose={() => setLightboxOpen(false)} />
     </div>
   );
 }

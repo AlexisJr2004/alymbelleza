@@ -1,7 +1,6 @@
-import { useRef, type ChangeEvent, type FormEvent } from 'react';
+import { useRef, useState, type FormEvent } from 'react';
 import type { ProfileUser } from '../../types/models';
-
-export type ProfileMessage = { text: string; type: 'error' | 'success' | 'info' } | null;
+import ChangePhotoModal from './ChangePhotoModal';
 
 interface ProfileEditFormProps {
   user: ProfileUser;
@@ -9,7 +8,6 @@ interface ProfileEditFormProps {
   isSaving: boolean;
   onStartEdit: () => void;
   onSubmit: (formData: FormData) => void;
-  onFileMessage: (message: ProfileMessage) => void;
   onPreviewUrl: (url: string | null) => void;
 }
 
@@ -24,36 +22,28 @@ export default function ProfileEditForm({
   isSaving,
   onStartEdit,
   onSubmit,
-  onFileMessage,
   onPreviewUrl,
 }: ProfileEditFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [photoModalOpen, setPhotoModalOpen] = useState(false);
 
   const formattedBirthdate = user.birthdate ? user.birthdate.split('T')[0] : '';
 
-  function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Fiel al original: si el archivo no pasa la validación, se muestra el
-    // mensaje y se sale sin tocar el input — no se limpia el valor
-    // seleccionado (perfil.html no llama a `.value = ''` en este punto).
-    if (!file.type.match('image.*')) {
-      onFileMessage({ text: 'Por favor selecciona una imagen válida', type: 'error' });
-      return;
+  // El input de archivo real del formulario queda oculto y ya no se abre
+  // directo — ChangePhotoModal (mismo estilo/flujo que UploadModal.tsx de
+  // Galería: elegir archivo, ver vista previa, confirmar) hace su propia
+  // selección y valida el archivo; al confirmar, se lo inyecta acá vía
+  // DataTransfer para que "Guardar cambios" lo siga mandando junto al resto
+  // de campos del form, exactamente como antes.
+  function handlePhotoConfirm(file: File, url: string) {
+    if (fileInputRef.current) {
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      fileInputRef.current.files = dt.files;
     }
-    if (file.size > 2 * 1024 * 1024) {
-      onFileMessage({ text: 'La imagen es demasiado grande (máx. 2MB)', type: 'error' });
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      onPreviewUrl(ev.target?.result as string);
-      onFileMessage({ text: 'Imagen seleccionada', type: 'success' });
-    };
-    reader.readAsDataURL(file);
+    onPreviewUrl(url);
+    setPhotoModalOpen(false);
   }
 
   function handleSubmit(e: FormEvent) {
@@ -169,26 +159,18 @@ export default function ProfileEditForm({
         <label className="block text-sm font-medium text-gray-700 mb-2">Foto de perfil</label>
         <div className="flex items-center gap-4">
           <div className="flex-1">
-            <input
-              ref={fileInputRef}
-              type="file"
-              name="profileImage"
-              id="edit-profileImage"
-              accept="image/*"
-              className="hidden"
-              disabled={!isEditing}
-              onChange={handleFileChange}
-            />
+            <input ref={fileInputRef} type="file" name="profileImage" id="edit-profileImage" accept="image/*" className="hidden" />
             <button
               id="change-photo-btn"
               type="button"
               disabled={!isEditing}
-              onClick={() => fileInputRef.current?.click()}
-              className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
+              onClick={() => setPhotoModalOpen(true)}
+              className="px-5 py-2 text-sm font-semibold text-gray-600 rounded-full border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
+              <i className="fas fa-camera mr-1.5" />
               Cambiar foto
             </button>
-            <p className="text-xs text-gray-500 mt-1">Formatos: JPG, PNG (Max. 2MB)</p>
+            <p className="text-xs text-gray-500 mt-1">Formatos: JPG, PNG (máx. 2MB)</p>
           </div>
         </div>
       </div>
@@ -199,7 +181,7 @@ export default function ProfileEditForm({
             id="edit-btn"
             type="button"
             onClick={onStartEdit}
-            className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg text-white font-semibold shadow hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition"
+            className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full text-white font-semibold shadow-lg hover:from-purple-700 hover:to-pink-700 hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-300"
           >
             Editar perfil
           </button>
@@ -209,12 +191,21 @@ export default function ProfileEditForm({
             id="save-btn"
             type="submit"
             disabled={isSaving}
-            className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg text-white font-semibold shadow hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition"
+            className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full text-white font-semibold shadow-lg hover:from-purple-700 hover:to-pink-700 hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
-            Guardar cambios
+            {isSaving ? (
+              <span>
+                <i className="fas fa-spinner fa-spin mr-2" />
+                Guardando...
+              </span>
+            ) : (
+              <span>Guardar cambios</span>
+            )}
           </button>
         )}
       </div>
+
+      <ChangePhotoModal open={photoModalOpen} onClose={() => setPhotoModalOpen(false)} onConfirm={handlePhotoConfirm} />
     </form>
   );
 }

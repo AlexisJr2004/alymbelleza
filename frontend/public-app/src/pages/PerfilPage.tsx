@@ -3,14 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useProfileQuery, useUpdateProfile } from '../hooks/useProfile';
 import { ApiError } from '../lib/apiClient';
 import { isLoggedIn, logout } from '../lib/auth';
+import { notifyError, notifySuccess } from '../lib/sweetalert';
 import ProfileCard from '../components/perfil/ProfileCard';
-import ProfileEditForm, { type ProfileMessage } from '../components/perfil/ProfileEditForm';
-
-const MESSAGE_CLASS: Record<NonNullable<ProfileMessage>['type'], string> = {
-  info: 'text-blue-500',
-  success: 'text-green-500',
-  error: 'text-red-500',
-};
+import ProfileEditForm from '../components/perfil/ProfileEditForm';
 
 // Página "Perfil" — puerto de frontend/perfil.html. El original hace un
 // hard-check de sesión con window.location.href = 'login.html'; acá se
@@ -23,7 +18,6 @@ export default function PerfilPage() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [message, setMessage] = useState<ProfileMessage>(null);
 
   useEffect(() => {
     if (!isLoggedIn()) {
@@ -43,14 +37,13 @@ export default function PerfilPage() {
   if (!isLoggedIn()) return null;
 
   async function handleSubmit(formData: FormData) {
-    setMessage({ text: 'Actualizando perfil...', type: 'info' });
     try {
       await updateProfile.mutateAsync(formData);
-      setMessage({ text: 'Perfil actualizado correctamente', type: 'success' });
+      notifySuccess('Perfil actualizado', 'Tus cambios se guardaron correctamente.');
       setIsEditing(false);
       setPreviewUrl(null);
     } catch (err) {
-      setMessage({ text: err instanceof ApiError ? err.message : 'Error al actualizar el perfil', type: 'error' });
+      notifyError('Error al actualizar', err instanceof ApiError ? err.message : 'No se pudo actualizar el perfil.');
     }
   }
 
@@ -80,17 +73,11 @@ export default function PerfilPage() {
                 user={user}
                 isEditing={isEditing}
                 isSaving={updateProfile.isPending}
-                onStartEdit={() => {
-                  setIsEditing(true);
-                  setMessage(null);
-                }}
+                onStartEdit={() => setIsEditing(true)}
                 onSubmit={handleSubmit}
-                onFileMessage={setMessage}
                 onPreviewUrl={setPreviewUrl}
               />
             )}
-
-            {message && <div className={`text-sm mt-4 ${MESSAGE_CLASS[message.type]}`}>{message.text}</div>}
           </div>
         </div>
       </div>
