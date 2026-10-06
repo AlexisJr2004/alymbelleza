@@ -25,7 +25,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="auth-card animate-fade-up bg-white rounded-xl w-full max-w-sm overflow-hidden">
+    <div className="auth-card animate-fade-up rounded-xl w-full max-w-sm overflow-hidden">
       <div className="h-1 bg-gradient-to-r from-purple-600 to-pink-500" />
 
       <div className="p-7">

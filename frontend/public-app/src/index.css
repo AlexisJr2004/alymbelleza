@@ -351,11 +351,25 @@
   height: 100%;
   overflow: hidden;
   z-index: -1;
+  /* El fondo vive ACÁ, no en el wrapper (bg-gray-50 anterior) — el orden de
+     pintado de CSS pone las cajas in-flow sin posicionar (como ese wrapper)
+     por ENCIMA de un hijo con z-index negativo, sin importar el z-index.
+     Resultado real: con el gris en el wrapper, las formas de abajo quedaban
+     completamente tapadas y nunca se veían. Moviendo el color de fondo a
+     este mismo elemento (ya z-index:-1 él solo) queda todo en una sola capa
+     y el cristal del login sí tiene algo debajo para desenfocar. */
+  background: #f9fafb;
 }
 
+/* liquid-glass.md › "Extend visually rich content beneath [the glass]
+   so the material has something to reflect" — las formas anteriores eran
+   demasiado chicas y poco opacas (0.14) para notarse detrás del cristal;
+   acá son más grandes y van desenfocadas con filter:blur para leerse como
+   un resplandor ambiental, no como círculos con borde duro. */
 .shape {
   position: absolute;
-  opacity: 0.14;
+  opacity: 0.55;
+  filter: blur(40px);
   animation: float 20s infinite linear;
 }
 
@@ -370,23 +384,33 @@
 }
 
 .shape:nth-child(1) {
-  top: 20%;
-  left: 10%;
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  top: 8%;
+  left: 18%;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, #a78bfa, transparent 70%);
   border-radius: 50%;
   animation-delay: 0s;
 }
 
 .shape:nth-child(2) {
-  top: 60%;
-  right: 10%;
-  width: 120px;
-  height: 120px;
-  background: linear-gradient(135deg, #ec4899, #8b5cf6);
-  border-radius: 30%;
+  top: 42%;
+  right: 12%;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, #f0abfc, transparent 70%);
+  border-radius: 50%;
   animation-delay: -10s;
+}
+
+.shape:nth-child(3) {
+  bottom: 2%;
+  left: 32%;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, #fbcfe8, transparent 70%);
+  border-radius: 50%;
+  animation-delay: -5s;
 }
 
 @keyframes float {
@@ -399,8 +423,45 @@
   }
 }
 
+/* Liquid Glass (variante "regular" de liquid-glass.md): el login es una
+   superficie flotante y enfocada sobre el fondo ambiental de arriba —
+   mismo rol que una sheet o un alert, no "contenido" que se lee, así que
+   es un candidato legítimo para el cristal (la guía prohíbe aplicarlo a
+   tarjetas de CONTENIDO, no a superficies funcionales flotantes). El
+   relleno blanco al 65% + saturate(1.4) caen dentro del rango que la guía
+   da como punto de partida para la variante regular; el borde de 1px
+   imita el "hairline highlight" del cristal real. El contenido de adentro
+   (inputs, botón) se queda sólido — el cristal no se apila.
+   prefers-reduced-transparency castea a un fallback opaco (Safari/iOS lo
+   soporta de forma nativa; en navegadores donde la media feature no
+   existe, este bloque simplemente nunca matchea). */
 .auth-card {
-  box-shadow: 0 5px 15px -5px rgba(124, 58, 237, 0.1);
+  background: rgba(255, 255, 255, 0.65);
+  -webkit-backdrop-filter: blur(28px) saturate(1.4);
+  backdrop-filter: blur(28px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 32px -8px rgba(124, 58, 237, 0.25);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .auth-card {
+    background: #ffffff;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .auth-card {
+    background: #ffffff;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .auth-card {
+    background: #ffffff;
+    border-color: #6b7280;
+  }
 }
 
 /* Degradado oscurecido a propósito respecto al original (#8b5cf6→#ec4899):
