@@ -355,8 +355,18 @@
 
 .shape {
   position: absolute;
-  opacity: 0.1;
+  opacity: 0.14;
   animation: float 20s infinite linear;
+}
+
+/* accessibility.md › Cognitive: cuando Reduce Motion está activo, las
+   animaciones automáticas/repetitivas deben responder — ninguna animación
+   del sitio lo hacía hasta ahora. */
+@media (prefers-reduced-motion: reduce) {
+  .shape,
+  .animate-fade-up {
+    animation: none !important;
+  }
 }
 
 .shape:nth-child(1) {
@@ -393,16 +403,28 @@
   box-shadow: 0 5px 15px -5px rgba(124, 58, 237, 0.1);
 }
 
+/* Degradado oscurecido a propósito respecto al original (#8b5cf6→#ec4899):
+   con texto blanco encima, ese par daba 4.23:1 en el extremo morado y
+   3.53:1 en el extremo rosa — por debajo del mínimo de 4.5:1 de
+   accessibility.md › Vision para texto de hasta 17pt. Este par da 5.70:1 →
+   4.60:1, dentro del mínimo en todo el degradado. */
 .btn-gradient {
-  background-image: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+  background-image: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
 }
 
 .btn-gradient:hover {
-  background-image: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+  background-image: linear-gradient(135deg, #6d28d9 0%, #be185d 100%);
 }
 
 .input-focus:focus {
   box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.45);
+}
+
+.auth-card a:focus-visible,
+.auth-card button:focus-visible {
+  outline: 2px solid #7c3aed;
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 .form-grid {
