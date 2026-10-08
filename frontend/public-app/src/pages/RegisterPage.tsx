@@ -2,27 +2,29 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRegister } from '../hooks/useAuth';
 import { ApiError } from '../lib/apiClient';
+import AuthCardShell from '../components/auth/AuthCardShell';
+import AuthShowcasePanel from '../components/auth/AuthShowcasePanel';
 
-const DEFAULT_AVATAR = 'https://i.ibb.co/zhpcw3df/mujer-con-pelo-largo.png';
+const FIELD_CLASS =
+  'h-[43px] w-full rounded-full border-0 bg-[#FBFAFC] px-[18px] text-[12.5px] text-gray-800 outline-none ring-1 ring-transparent transition placeholder:text-gray-400 focus:bg-white focus:ring-purple-400';
+const LABEL_CLASS = 'mb-2 block pl-[18px] text-[11.5px] text-gray-500';
 
+// Mismo estilo que LoginPage (login-crextio.html adaptado a los colores
+// de Bella Beauty), con el panel izquierdo más ancho para el formulario
+// completo de registro (bastante más largo que el de login — por eso
+// necesita scroll propio en escritorio, mismo patrón ya usado en
+// LoginPage). El cascarón y el panel de la foto se comparten vía
+// AuthCardShell/AuthShowcasePanel.
 export default function RegisterPage() {
   const navigate = useNavigate();
   const register = useRegister();
-  const [preview, setPreview] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
   const [fileName, setFileName] = useState('Ningún archivo');
   const [error, setError] = useState('');
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) {
-      setPreview(null);
-      setFileName('Ningún archivo');
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = (ev) => setPreview(ev.target?.result as string);
-    reader.readAsDataURL(file);
-    setFileName(file.name);
+    setFileName(file ? file.name : 'Ningún archivo');
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -38,154 +40,179 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="auth-card bg-white rounded-xl w-full max-w-3xl overflow-hidden">
-      <div className="h-1.5 bg-gradient-to-r from-purple-600 to-pink-500" />
+    <AuthCardShell onClose={() => navigate('/')} maxWidthClassName="lg:max-w-[1200px]">
+      <section className="flex w-full flex-col px-8 py-9 sm:px-10 lg:w-[600px] lg:shrink-0 lg:overflow-y-auto lg:px-10 lg:pb-9 lg:pt-9">
+        <span className="inline-flex h-[41px] w-fit items-center self-start rounded-full border border-gray-400 px-[18px] text-[17px] tracking-[-0.01em] text-gray-800">
+          Bella Beauty
+        </span>
 
-      <div className="p-6">
-        <div className="text-center mb-4">
-          <div className="relative mx-auto w-20 h-20 mb-2">
-            <img
-              src={preview || DEFAULT_AVATAR}
-              alt="Vista previa"
-              className="w-full h-full object-cover rounded-full border-2 border-purple-100"
-            />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-800">Bella Beauty</h2>
-          <p className="text-gray-500 text-sm mt-1">Completa tu registro</p>
-        </div>
+        <div className="flex flex-1 flex-col items-center justify-center py-10 lg:py-7">
+          <div className="w-full max-w-[400px]">
+            <header className="text-center">
+              <h1 className="text-[26px] font-light tracking-[-0.01em] text-gray-900">Crea tu cuenta</h1>
+              <p className="mt-1 text-[12.5px] text-gray-600">Regístrate para reservar tu próxima cita</p>
+            </header>
 
-        <form className="space-y-4" encType="multipart/form-data" onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-base font-semibold text-gray-800 mb-2 pb-1 border-b border-gray-100">Información básica</h3>
-              <div className="form-grid">
+            <form className="mt-[30px]" encType="multipart/form-data" onSubmit={handleSubmit} noValidate>
+              <div className="space-y-[15px]">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Nombre completo*</label>
+                  <label htmlFor="register-name" className={LABEL_CLASS}>
+                    Nombre completo
+                  </label>
                   <input
-                    type="text"
+                    id="register-name"
                     name="name"
+                    type="text"
+                    autoComplete="name"
                     required
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none input-focus transition duration-150"
                     placeholder="Ej: María González"
+                    className={FIELD_CLASS}
                   />
                 </div>
+
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Correo electrónico*</label>
+                  <label htmlFor="register-email" className={LABEL_CLASS}>
+                    Correo electrónico
+                  </label>
                   <input
-                    type="email"
+                    id="register-email"
                     name="email"
+                    type="email"
+                    autoComplete="email"
                     required
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none input-focus transition duration-150"
-                    placeholder="correo@ejemplo.com"
+                    placeholder="tucorreo@ejemplo.com"
+                    className={FIELD_CLASS}
                   />
                 </div>
+
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Contraseña*</label>
-                  <input
-                    type="password"
-                    name="password"
-                    required
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none input-focus transition duration-150"
-                    placeholder="••••••••"
-                  />
-                  <p className="text-xs text-gray-400 mt-1">Mínimo 8 caracteres</p>
+                  <label htmlFor="register-password" className={LABEL_CLASS}>
+                    Contraseña
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="register-password"
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      autoComplete="new-password"
+                      required
+                      minLength={8}
+                      placeholder="Mínimo 8 caracteres"
+                      className={`${FIELD_CLASS} pr-12`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((v) => !v)}
+                      aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                      aria-pressed={showPassword}
+                      className="absolute right-0 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full text-gray-600 transition hover:bg-black/5"
+                    >
+                      <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'} text-sm`} />
+                    </button>
+                  </div>
                 </div>
+
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Foto de perfil</label>
-                  <div className="flex items-center gap-2">
-                    <label className="cursor-pointer">
-                      <span className="text-xs text-white py-1.5 px-3 rounded-md bg-purple-500 hover:bg-purple-600 transition duration-150 inline-block">
-                        Seleccionar
-                      </span>
-                      <input type="file" name="profileImage" accept="image/*" className="hidden" onChange={handleFileChange} />
+                  <label htmlFor="register-photo" className={LABEL_CLASS}>
+                    Foto de perfil
+                  </label>
+                  <div className="flex items-center gap-3 pl-[6px]">
+                    <label
+                      htmlFor="register-photo"
+                      className="flex h-[36px] shrink-0 cursor-pointer items-center rounded-full border border-purple-200 bg-white/50 px-4 text-[11.5px] text-purple-700 transition hover:bg-white/90"
+                    >
+                      Seleccionar
                     </label>
-                    <span className="text-xs text-gray-500 truncate max-w-[120px]">{fileName}</span>
+                    <input id="register-photo" name="profileImage" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+                    <span className="truncate text-[11.5px] text-gray-500">{fileName}</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-x-3">
+                  <div>
+                    <label htmlFor="register-birthdate" className={LABEL_CLASS}>
+                      Nacimiento
+                    </label>
+                    <input id="register-birthdate" name="birthdate" type="date" autoComplete="bday" className={FIELD_CLASS} />
+                  </div>
+                  <div>
+                    <label htmlFor="register-gender" className={LABEL_CLASS}>
+                      Género
+                    </label>
+                    <select id="register-gender" name="gender" defaultValue="" className={FIELD_CLASS}>
+                      <option value="">Selecciona</option>
+                      <option value="masculino">Masculino</option>
+                      <option value="femenino">Femenino</option>
+                      <option value="otro">Otro</option>
+                      <option value="prefiero-no-decir">Prefiero no decir</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="register-address" className={LABEL_CLASS}>
+                    Dirección
+                  </label>
+                  <input
+                    id="register-address"
+                    name="address"
+                    type="text"
+                    autoComplete="street-address"
+                    placeholder="Calle, número, ciudad"
+                    className={FIELD_CLASS}
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-x-3">
+                  <div>
+                    <label htmlFor="register-dni" className={LABEL_CLASS}>
+                      Cédula
+                    </label>
+                    <input id="register-dni" name="dni" type="text" placeholder="N° de identificación" className={FIELD_CLASS} />
+                  </div>
+                  <div>
+                    <label htmlFor="register-phone" className={LABEL_CLASS}>
+                      Teléfono
+                    </label>
+                    <input id="register-phone" name="phone" type="tel" autoComplete="tel" placeholder="N° de contacto" className={FIELD_CLASS} />
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div>
-              <h3 className="text-base font-semibold text-gray-800 mb-2 pb-1 border-b border-gray-100">Información personal</h3>
-              <div className="form-grid">
-                <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Fecha de nacimiento</label>
-                  <input
-                    type="date"
-                    name="birthdate"
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none input-focus transition duration-150"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Género</label>
-                  <select
-                    name="gender"
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none input-focus transition duration-150"
-                  >
-                    <option value="">Selecciona</option>
-                    <option value="masculino">Masculino</option>
-                    <option value="femenino">Femenino</option>
-                    <option value="otro">Otro</option>
-                    <option value="prefiero-no-decir">Prefiero no decir</option>
-                  </select>
-                </div>
+              <button
+                type="submit"
+                disabled={register.isPending}
+                className="mt-[22px] h-[48px] w-full rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-[13.5px] font-medium text-white transition hover:from-purple-700 hover:to-pink-700 active:scale-[.99] disabled:opacity-60"
+              >
+                {register.isPending ? (
+                  <span>
+                    <i className="fas fa-spinner fa-spin mr-1.5" /> Registrando...
+                  </span>
+                ) : (
+                  'Registrarse'
+                )}
+              </button>
+            </form>
+
+            {error && (
+              <div role="alert" className="mt-4 rounded-2xl border border-red-100 bg-red-50 px-[18px] py-2.5 text-[11.5px] text-red-600">
+                {error}
               </div>
-            </div>
-
-            <div>
-              <h3 className="text-base font-semibold text-gray-800 mb-2 pb-1 border-b border-gray-100">Información de contacto</h3>
-              <div className="form-grid">
-                <div className="md:col-span-2">
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Dirección</label>
-                  <input
-                    type="text"
-                    name="address"
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none input-focus transition duration-150"
-                    placeholder="Calle, número, ciudad"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Cédula</label>
-                  <input
-                    type="text"
-                    name="dni"
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none input-focus transition duration-150"
-                    placeholder="Número de identificación"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Teléfono</label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none input-focus transition duration-150"
-                    placeholder="Número de contacto"
-                  />
-                </div>
-              </div>
-            </div>
+            )}
           </div>
+        </div>
 
-          <div className="pt-2">
-            <button
-              type="submit"
-              disabled={register.isPending}
-              className="w-full btn-gradient text-white py-2.5 text-sm rounded-md font-medium transition-all disabled:opacity-60"
-            >
-              {register.isPending ? <><i className="fas fa-spinner fa-spin mr-1" /> Registrando...</> : 'Registrarse'}
-            </button>
+        <footer className="flex items-center justify-center text-[11px]">
+          <p className="text-gray-500">
+            ¿Ya tienes cuenta?{' '}
+            <Link to="/login" className="text-gray-800 underline underline-offset-2 hover:text-gray-900">
+              Inicia sesión
+            </Link>
+          </p>
+        </footer>
+      </section>
 
-            <p className="text-center text-xs text-gray-500 mt-3">
-              ¿Ya tienes cuenta?
-              <Link to="/login" className="text-purple-600 font-medium hover:underline ml-1">
-                Inicia sesión
-              </Link>
-            </p>
-          </div>
-        </form>
-
-        {error && <div className="mt-3 text-xs text-center text-red-600 font-medium">{error}</div>}
-      </div>
-    </div>
+      <AuthShowcasePanel onClose={() => navigate('/')} />
+    </AuthCardShell>
   );
 }
