@@ -1,6 +1,6 @@
 /* Porte íntegro de frontend/css/style.css — mismas fuentes, animaciones y
    ajustes visuales usados en todo el sitio público viejo. */
-@import url('https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@300;400;500;600&family=Outfit:wght@300;400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -12,6 +12,12 @@
 
 .font-body {
   font-family: 'Montserrat', sans-serif;
+}
+
+/* Solo para el login rediseñado (login-crextio.html) — el resto del
+   sitio sigue en Montserrat (.font-body). */
+.font-outfit {
+  font-family: 'Outfit', 'Montserrat', sans-serif;
 }
 
 .animate-fade-up {

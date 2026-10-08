@@ -6,29 +6,29 @@ import { ApiError } from '../lib/apiClient';
 // Misma foto que ya usa el hero de Home (HeroSection.tsx) — se reutiliza acá
 // en vez de sumar una imagen de stock nueva al sitio.
 const HERO_IMAGE = 'https://www.universia.net/content/dam/universia/imagenes/2020/12/estilista%20profesional%20MX-min.jpg';
-// Nota: el fallback de avatar usado en el resto del sitio
-// (https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png) devuelve 404 — el
-// host gratuito de imágenes ya no lo sirve. Acá se evita esa dependencia
-// con íconos en vez de fotos; vale la pena reemplazarlo en el resto del
-// sitio en un cambio aparte.
-const AVATAR_TONES = ['bg-purple-200 text-purple-700', 'bg-pink-200 text-pink-700', 'bg-amber-200 text-amber-800'];
+// pravatar.cc: servicio estable de fotos placeholder, el mismo que usa
+// login-crextio.html — a diferencia del fallback de avatar del resto del
+// sitio (i.ibb.co/...), que devuelve 404, este sí responde 200 (verificado).
+const CLUSTER_AVATARS = ['https://i.pravatar.cc/150?img=47', 'https://i.pravatar.cc/150?img=45', 'https://i.pravatar.cc/150?img=44'];
+const TEAM_AVATARS = ['https://i.pravatar.cc/60?img=12', 'https://i.pravatar.cc/60?img=32', 'https://i.pravatar.cc/60?img=5', 'https://i.pravatar.cc/60?img=68'];
 
 const WEEK_DAYS = [
   { label: 'Dom', num: 22 },
   { label: 'Lun', num: 23 },
   { label: 'Mar', num: 24 },
   { label: 'Mié', num: 25 },
-  { label: 'Jue', num: 26, active: true },
+  { label: 'Jue', num: 26 },
   { label: 'Vie', num: 27 },
   { label: 'Sáb', num: 28 },
 ];
 
-// Puerto del login al layout de referencia: panel claro con el formulario a
-// la izquierda y una foto a pantalla completa con tarjetas flotantes a la
-// derecha (oculta en mobile — el panel del formulario es lo único crítico
-// ahí). Colores tomados literalmente de la referencia (crema + amarillo
-// mostaza), no el morado/rosa de marca de Bella Beauty — así lo pidió el
-// usuario explícitamente para esta pantalla.
+// Puerto fiel de login-crextio.html (estructura, gradiente de fondo,
+// recorte/"fillet" de la esquina del botón de cerrar, tarjeta apilada,
+// racimo de avatares, calendario con textura rayada) con los colores del
+// sistema de Bella Beauty (morado→rosa) en vez de la paleta gris/crema/
+// amarilla original — así lo pidió el usuario esta vez. Tipografía Outfit
+// (.font-outfit en index.css), igual que la referencia, sin tocar la
+// fuente del resto del sitio.
 export default function LoginPage() {
   const navigate = useNavigate();
   const login = useLogin();
@@ -51,182 +51,236 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative bg-gradient-to-br from-[#FAF7F0] to-[#F3E6C8] rounded-[36px] w-full max-w-5xl overflow-hidden shadow-2xl shadow-black/10 flex flex-col lg:flex-row lg:h-[620px]">
-      <button
-        type="button"
-        onClick={() => navigate('/')}
-        aria-label="Cerrar y volver al inicio"
-        className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/70 backdrop-blur-md border border-white/60 shadow-md flex items-center justify-center text-gray-600 hover:text-gray-800 hover:bg-white/90 transition-colors"
+    <>
+      {/* Reemplaza el bg-gray-50 de AuthLayout solo en esta ruta, sin tocar
+          el layout compartido (afecta a las otras 3 páginas de auth). Sin
+          z-index explícito a propósito: un elemento fixed ya pinta por
+          encima de una caja plana sin posicionar (como el bg-gray-50 del
+          layout) y de las formas con z-index negativo del fondo, por orden
+          de capas — no hace falta pelear con z-index (lección de los dos
+          bugs de stacking de este mismo login). */}
+      <div className="fixed inset-0 bg-[#ABA6B6]" aria-hidden="true" />
+
+      <div
+        className="font-outfit relative flex w-full max-w-[1040px] flex-col overflow-hidden rounded-[36px] shadow-[0_40px_90px_-30px_rgba(60,30,80,.45)] lg:h-[730px] lg:flex-row"
+        style={{
+          background:
+            'radial-gradient(75% 60% at 22% 105%, rgba(168,85,247,.35) 0%, rgba(168,85,247,0) 70%), linear-gradient(90deg, #EBE7F0 0%, #EFE7ED 36%, #F8E3EF 60%, #FBE2EE 100%)',
+        }}
       >
-        <i className="fas fa-times" />
-      </button>
+        {/* El botón de cerrar "de verdad" (con el recorte/fillet) vive
+            dentro de la sección de la foto, oculta en mobile — sin esto,
+            en mobile no había NINGÚN botón de cerrar. */}
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          aria-label="Cerrar y volver al inicio"
+          className="absolute right-4 top-4 z-20 grid h-10 w-10 place-items-center rounded-full bg-white/70 text-gray-700 shadow-md backdrop-blur-md transition hover:bg-white lg:hidden"
+        >
+          <i className="fas fa-times" />
+        </button>
 
-      <div className="w-full lg:w-[44%] px-8 py-10 sm:px-12 sm:py-12 flex flex-col justify-center lg:overflow-y-auto">
-        <span className="inline-flex items-center self-start px-4 py-1.5 rounded-full border border-gray-300 text-sm font-medium text-gray-800 mb-8 lg:mb-10">
-          Bella Beauty
-        </span>
+        <section className="flex w-full flex-col px-8 py-9 sm:px-10 lg:w-[440px] lg:shrink-0 lg:overflow-y-auto lg:px-10 lg:pb-9 lg:pt-9">
+          <span className="inline-flex h-[41px] w-fit items-center self-start rounded-full border border-gray-400 px-[18px] text-[17px] tracking-[-0.01em] text-gray-800">
+            Bella Beauty
+          </span>
 
-        <h1 className="text-[28px] sm:text-[32px] font-semibold text-gray-900 leading-tight">Inicia sesión</h1>
-        <p className="text-sm text-gray-500 mt-2 mb-8">Bienvenida de nuevo, ingresa tus datos para continuar</p>
+          <div className="flex flex-1 flex-col items-center justify-center py-10 lg:py-0">
+            <div className="w-full max-w-[290px]">
+              <header className="text-center">
+                <h1 className="text-[26px] font-light tracking-[-0.01em] text-gray-900">Inicia sesión</h1>
+                <p className="mt-1 text-[12.5px] text-gray-600">Bienvenida de nuevo, ingresa tus datos</p>
+              </header>
 
-        <form onSubmit={handleSubmit} noValidate>
-          <div className="space-y-5">
-            <div>
-              <label htmlFor="login-email" className="block text-xs font-medium text-gray-500 mb-1.5">
-                Correo electrónico
-              </label>
-              <input
-                id="login-email"
-                type="email"
-                name="email"
-                autoComplete="email"
-                required
-                className="w-full px-4 py-3.5 bg-white rounded-2xl border border-transparent focus:border-gray-300 focus:outline-none text-sm text-gray-800 placeholder:text-gray-400 transition-colors"
-                placeholder="tucorreo@ejemplo.com"
-              />
-            </div>
+              <form className="mt-[34px]" onSubmit={handleSubmit} noValidate>
+                <div className="space-y-[15px]">
+                  <div>
+                    <label htmlFor="login-email" className="mb-2 block pl-[18px] text-[11.5px] text-gray-500">
+                      Correo electrónico
+                    </label>
+                    <input
+                      id="login-email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      placeholder="tucorreo@ejemplo.com"
+                      className="h-[43px] w-full rounded-full border-0 bg-[#FBFAFC] px-[18px] text-[12.5px] text-gray-800 outline-none ring-1 ring-transparent transition placeholder:text-gray-400 focus:bg-white focus:ring-purple-400"
+                    />
+                  </div>
 
-            <div>
-              <label htmlFor="login-password" className="block text-xs font-medium text-gray-500 mb-1.5">
-                Contraseña
-              </label>
-              <div className="relative">
-                <input
-                  id="login-password"
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  autoComplete="current-password"
-                  required
-                  className="w-full px-4 py-3.5 pr-11 bg-white rounded-2xl border border-transparent focus:border-gray-300 focus:outline-none text-sm text-gray-800 placeholder:text-gray-400 transition-colors"
-                  placeholder="••••••••••••"
-                />
+                  <div>
+                    <label htmlFor="login-password" className="mb-2 block pl-[18px] text-[11.5px] text-gray-500">
+                      Contraseña
+                    </label>
+                    <div className="relative">
+                      <input
+                        id="login-password"
+                        name="password"
+                        type={showPassword ? 'text' : 'password'}
+                        autoComplete="current-password"
+                        required
+                        placeholder="••••••••••••"
+                        className="h-[43px] w-full rounded-full border-0 bg-[#FBFAFC] px-[18px] pr-12 text-[12.5px] text-gray-800 outline-none ring-1 ring-transparent transition placeholder:text-gray-400 focus:bg-white focus:ring-purple-400"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((v) => !v)}
+                        aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                        aria-pressed={showPassword}
+                        className="absolute right-0 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full text-gray-600 transition hover:bg-black/5"
+                      >
+                        <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'} text-sm`} />
+                      </button>
+                    </div>
+                    <div className="mt-2 pr-[6px] text-right">
+                      <Link to="/forgot-password" className="text-[11.5px] text-gray-500 hover:text-gray-700 hover:underline">
+                        ¿Olvidaste tu contraseña?
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+
                 <button
-                  type="button"
-                  onClick={() => setShowPassword((v) => !v)}
-                  aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                  aria-pressed={showPassword}
-                  className="absolute right-0 top-0 h-full w-11 flex items-center justify-center text-gray-400 hover:text-gray-600"
+                  type="submit"
+                  disabled={login.isPending}
+                  className="mt-[22px] h-[48px] w-full rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-[13.5px] font-medium text-white transition hover:from-purple-700 hover:to-pink-700 active:scale-[.99] disabled:opacity-60"
                 >
-                  <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} />
+                  {login.isPending ? (
+                    <span>
+                      <i className="fas fa-spinner fa-spin mr-1.5" /> Verificando...
+                    </span>
+                  ) : (
+                    'Iniciar sesión'
+                  )}
                 </button>
-              </div>
-              <div className="text-right mt-1.5">
-                <Link to="/forgot-password" className="text-xs text-gray-500 hover:text-gray-700 hover:underline">
-                  ¿Olvidaste tu contraseña?
+
+                <Link
+                  to="/"
+                  className="mt-3 flex h-[43px] w-full items-center justify-center gap-2 rounded-full border border-purple-200 bg-white/30 text-[11.5px] text-purple-700 transition hover:bg-white/70"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-[15px] w-[15px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  Ingresar como invitada
                 </Link>
+              </form>
+
+              {error && (
+                <div role="alert" className="mt-4 rounded-2xl border border-red-100 bg-red-50 px-[18px] py-2.5 text-[11.5px] text-red-600">
+                  {error}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <footer className="flex items-center justify-center text-[11px]">
+            <p className="text-gray-500">
+              ¿No tienes cuenta?{' '}
+              <Link to="/register" className="text-gray-800 underline underline-offset-2 hover:text-gray-900">
+                Regístrate
+              </Link>
+            </p>
+          </footer>
+        </section>
+
+        <section className="relative hidden flex-1 py-[18px] pr-[18px] lg:block">
+          <div className="relative h-full w-full">
+            <div className="absolute inset-0 overflow-hidden rounded-[30px]" aria-hidden="true">
+              <img src={HERO_IMAGE} alt="" className="h-full w-full object-cover" />
+
+              {/* Tarjeta apilada: capa de cristal oscuro detrás (primero en
+                  el DOM, sin z-index) + tarjeta sólida en degradado de
+                  marca encima. */}
+              <div className="absolute left-[10.2%] top-[3.4%] h-[77px] w-[203px]">
+                <div className="absolute left-[11px] top-[28px] h-[49px] w-[192px] rounded-[10px] bg-[#2c2235]/55 backdrop-blur-md">
+                  <span className="absolute right-[13px] top-[13px] h-[7px] w-[7px] rounded-full bg-pink-300" />
+                  <p className="absolute bottom-[11px] left-[28px] text-[10px] text-white/70">3:00 PM</p>
+                </div>
+                <div className="absolute left-0 top-0 h-[50px] w-[176px] rounded-[10px] bg-gradient-to-r from-purple-600 to-pink-600 px-[13px] py-[9px] shadow-[0_8px_20px_-8px_rgba(0,0,0,.35)]">
+                  <p className="text-[11px] font-medium leading-tight text-white">Cita confirmada</p>
+                  <p className="mt-[3px] text-[9.5px] text-white/80">Corte y Color</p>
+                  <span className="absolute right-[13px] top-[13px] h-[6px] w-[6px] rounded-full bg-white" />
+                </div>
+              </div>
+
+              <div className="absolute left-[64.8%] top-[18%] h-[106px] w-[118px]">
+                {CLUSTER_AVATARS.map((src, i) => (
+                  <img
+                    key={src}
+                    src={src}
+                    alt=""
+                    className="absolute rounded-full border-2 border-white object-cover shadow-md"
+                    style={[
+                      { left: 0, top: 0, width: 62, height: 62 },
+                      { left: 60, top: 26, width: 55, height: 55 },
+                      { left: 26, top: 60, width: 43, height: 43 },
+                    ][i]}
+                  />
+                ))}
+              </div>
+
+              <div className="absolute left-[12.4%] top-[53.6%] h-[170px] w-[323px]">
+                <div className="absolute left-[36px] top-0 h-[110px] w-[287px] overflow-hidden rounded-[12px] border border-white/30 bg-white/15 backdrop-blur-[6px]">
+                  <div className="grid grid-cols-7 gap-y-[5px] px-[12px] pt-[10px] text-center text-white">
+                    {WEEK_DAYS.map((d) => (
+                      <span key={`lbl-${d.label}`} className="text-[11px] text-white/90">
+                        {d.label}
+                      </span>
+                    ))}
+                    {WEEK_DAYS.map((d) => (
+                      <span key={`num-${d.label}`} className="text-[18px] font-light">
+                        {d.num}
+                      </span>
+                    ))}
+                  </div>
+                  <div
+                    className="absolute bottom-0 right-0 h-[54px] w-[44%]"
+                    style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,.6) 0 1.5px, transparent 1.5px 9px)' }}
+                  />
+                </div>
+
+                <div className="absolute left-0 top-[74px] h-[96px] w-[190px] rounded-[12px] bg-white px-[13px] pt-[14px] shadow-[0_12px_30px_-10px_rgba(0,0,0,.35)]">
+                  <p className="text-[11.5px] font-medium text-gray-900">Próxima cita</p>
+                  <p className="mt-[2px] text-[9.5px] text-gray-500">Corte y Color · 3:00 PM</p>
+                  <span className="absolute right-[13px] top-[13px] h-[7px] w-[7px] rounded-full bg-gradient-to-r from-purple-600 to-pink-600" />
+                  <div className="absolute bottom-[13px] left-[13px] flex -space-x-[5px]">
+                    {TEAM_AVATARS.map((src) => (
+                      <img key={src} src={src} alt="" className="h-[19px] w-[19px] rounded-full border border-white object-cover" />
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <button
-            type="submit"
-            disabled={login.isPending}
-            className="w-full bg-[#F6C945] hover:bg-[#F0BD2C] text-gray-900 font-semibold py-3.5 rounded-full transition-all disabled:opacity-60 mt-7"
-          >
-            {login.isPending ? (
-              <span>
-                <i className="fas fa-spinner fa-spin mr-1.5" /> Verificando...
-              </span>
-            ) : (
-              'Iniciar sesión'
-            )}
-          </button>
-
-          <Link
-            to="/"
-            className="flex items-center justify-center w-full py-3 mt-3 text-sm font-medium text-gray-700 border border-gray-300 rounded-full hover:bg-white transition-all"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-            Ingresar como invitada
-          </Link>
-        </form>
-
-        {error && (
-          <div role="alert" className="mt-5 text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl py-2.5 px-3.5">
-            {error}
-          </div>
-        )}
-
-        <p className="text-xs text-gray-500 mt-8">
-          ¿No tienes cuenta?{' '}
-          <Link to="/register" className="text-gray-900 font-medium underline underline-offset-2">
-            Regístrate
-          </Link>
-        </p>
-      </div>
-
-      <div className="hidden lg:block lg:w-[56%] relative overflow-hidden rounded-r-[36px]">
-        <img src={HERO_IMAGE} alt="" className="absolute inset-0 w-full h-full object-cover" />
-
-        {/* Avatares flotando sobre la foto, estilo "personas etiquetadas". */}
-        <div className="absolute top-20 right-10 flex -space-x-3">
-          {AVATAR_TONES.map((tone, i) => (
+            {/* Recorte/"fillet" de la esquina donde va el botón de cerrar:
+                mismo truco que la referencia (radial-gradient con un corte
+                nítido a los ~20px) para lograr esquinas cóncavas, con el
+                color exacto del extremo derecho del degradado de la
+                tarjeta para que el recorte quede invisible. */}
+            <span className="absolute right-0 top-0 h-[50px] w-[72px] rounded-bl-[20px] rounded-tr-[36px] bg-[#FBE2EE]" aria-hidden="true" />
             <span
-              key={i}
-              className={`w-9 h-9 rounded-full border-2 border-white/80 shadow-md flex items-center justify-center backdrop-blur-sm ${tone}`}
+              className="absolute right-[72px] top-0 h-5 w-5"
+              style={{ background: 'radial-gradient(circle at 0 100%, transparent 19.5px, #FBE2EE 20px)' }}
+              aria-hidden="true"
+            />
+            <span
+              className="absolute right-0 top-[50px] h-5 w-5"
+              style={{ background: 'radial-gradient(circle at 0 100%, transparent 19.5px, #FBE2EE 20px)' }}
+              aria-hidden="true"
+            />
+
+            <button
+              type="button"
+              onClick={() => navigate('/')}
+              aria-label="Cerrar y volver al inicio"
+              className="absolute -top-[3px] right-[20px] grid h-[43px] w-[43px] place-items-center rounded-full bg-[#FBF7FA] text-gray-800 shadow-sm transition hover:bg-white"
             >
-              <i className="fas fa-user text-xs" />
-            </span>
-          ))}
-        </div>
-
-        {/* Tarjeta de notificación apilada: una capa de cristal oscuro
-            asomando detrás de la tarjeta amarilla sólida de encima. */}
-        <div className="absolute top-6 left-6">
-          {/* Capa de atrás primero en el DOM, sin z-index explícito — un
-              z-index negativo acá puede terminar detrás de la FOTO entera
-              en vez de solo detrás de esta tarjeta, según qué ancestro
-              resulte ser el stacking context real (el mismo bug que las
-              formas flotantes del fondo del login anterior). El orden del
-              DOM ya alcanza para que la tarjeta amarilla pinte encima. */}
-          <div className="absolute top-14 left-3 w-[190px] bg-black/25 backdrop-blur-md border border-white/10 rounded-2xl px-4 py-2.5">
-            <p className="text-xs text-white/80">09:30am–10:00am</p>
+              <i className="fas fa-times" />
+            </button>
           </div>
-          <div className="relative bg-[#F6C945] rounded-2xl shadow-lg px-4 py-3 w-[200px]">
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-sm font-semibold text-gray-900">Cita confirmada</span>
-              <span className="w-2 h-2 rounded-full bg-white/80 shrink-0" />
-            </div>
-            <p className="text-xs text-gray-800/80 mt-0.5">Corte y Color · 3:00 PM</p>
-          </div>
-        </div>
-
-        {/* Franja de calendario: cristal real — fondo translúcido +
-            backdrop-blur sobre la foto, con borde hairline. */}
-        <div className="absolute left-1/2 top-[48%] -translate-x-1/2 -translate-y-1/2 bg-white/35 backdrop-blur-xl border border-white/50 rounded-2xl shadow-lg px-4 py-3 flex items-center gap-3">
-          {WEEK_DAYS.map((d) => (
-            <div key={d.label} className="flex flex-col items-center gap-1.5">
-              <span className="text-[10px] text-gray-700/80">{d.label}</span>
-              <span
-                className={`w-7 h-7 flex items-center justify-center rounded-full text-xs font-medium ${
-                  d.active ? 'bg-[#F6C945] text-gray-900' : 'text-gray-800'
-                }`}
-              >
-                {d.num}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <div className="absolute bottom-6 left-6 right-6 bg-white/40 backdrop-blur-xl border border-white/50 rounded-2xl shadow-lg px-4 py-3 flex items-center justify-between">
-          <div>
-            <p className="text-sm font-semibold text-gray-900">Equipo disponible hoy</p>
-            <p className="text-xs text-gray-700/80 mt-0.5">3 estilistas listas para ti</p>
-          </div>
-          <div className="flex -space-x-2">
-            {AVATAR_TONES.map((tone, i) => (
-              <span
-                key={i}
-                className={`w-7 h-7 rounded-full border-2 border-white/80 flex items-center justify-center ${tone}`}
-              >
-                <i className="fas fa-user text-[10px]" />
-              </span>
-            ))}
-          </div>
-        </div>
+        </section>
       </div>
-    </div>
+    </>
   );
 }
