@@ -62,7 +62,7 @@ export default function LoginPage() {
       <div className="fixed inset-0 bg-[#ABA6B6]" aria-hidden="true" />
 
       <div
-        className="font-outfit relative flex w-full max-w-[1040px] flex-col overflow-hidden rounded-[36px] shadow-[0_40px_90px_-30px_rgba(60,30,80,.45)] lg:h-[730px] lg:flex-row"
+        className="font-outfit relative flex w-full max-w-[480px] flex-col overflow-hidden rounded-[40px] shadow-[0_40px_90px_-30px_rgba(60,30,80,.45)] lg:h-[767px] lg:max-w-[1090px] lg:flex-row"
         style={{
           background:
             'radial-gradient(75% 60% at 22% 105%, rgba(168,85,247,.35) 0%, rgba(168,85,247,0) 70%), linear-gradient(90deg, #EBE7F0 0%, #EFE7ED 36%, #F8E3EF 60%, #FBE2EE 100%)',
@@ -80,7 +80,7 @@ export default function LoginPage() {
           <i className="fas fa-times" />
         </button>
 
-        <section className="flex w-full flex-col px-8 py-9 sm:px-10 lg:w-[440px] lg:shrink-0 lg:overflow-y-auto lg:px-10 lg:pb-9 lg:pt-9">
+        <section className="flex w-full flex-col px-8 py-9 sm:px-10 lg:w-[476px] lg:shrink-0 lg:overflow-y-auto lg:px-10 lg:pb-9 lg:pt-9">
           <span className="inline-flex h-[41px] w-fit items-center self-start rounded-full border border-gray-400 px-[18px] text-[17px] tracking-[-0.01em] text-gray-800">
             Bella Beauty
           </span>
@@ -258,7 +258,7 @@ export default function LoginPage() {
                 nítido a los ~20px) para lograr esquinas cóncavas, con el
                 color exacto del extremo derecho del degradado de la
                 tarjeta para que el recorte quede invisible. */}
-            <span className="absolute right-0 top-0 h-[50px] w-[72px] rounded-bl-[20px] rounded-tr-[36px] bg-[#FBE2EE]" aria-hidden="true" />
+            <span className="absolute right-0 top-0 h-[50px] w-[72px] rounded-bl-[20px] rounded-tr-[30px] bg-[#FBE2EE]" aria-hidden="true" />
             <span
               className="absolute right-[72px] top-0 h-5 w-5"
               style={{ background: 'radial-gradient(circle at 0 100%, transparent 19.5px, #FBE2EE 20px)' }}
