@@ -11,10 +11,10 @@ const LABEL_CLASS = 'mb-2 block pl-[18px] text-[11.5px] text-gray-500';
 
 // Mismo estilo que LoginPage (login-crextio.html adaptado a los colores de
 // Bella Beauty). Los 8 campos de datos van de a 2 por fila para que todo
-// el formulario entre en los 767px de la tarjeta sin scroll propio (el
-// intento anterior necesitaba scroll — con fotos+nacimiento/género sueltos
-// sumaba demasiadas filas). La foto de perfil se previsualiza en un
-// círculo junto al botón "Seleccionar" en vez de ocupar su propia fila.
+// el formulario entre en los 767px de la tarjeta sin scroll propio. La
+// foto de perfil es un círculo grande justo debajo del subtítulo — clic
+// en el círculo mismo (es un <label for="register-photo">) abre el
+// selector de archivos, sin botón aparte.
 export default function RegisterPage() {
   const navigate = useNavigate();
   const register = useRegister();
@@ -59,8 +59,28 @@ export default function RegisterPage() {
               <p className="mt-1 text-[12.5px] text-gray-600">Regístrate para reservar tu próxima cita</p>
             </header>
 
-            <form className="mt-[26px]" encType="multipart/form-data" onSubmit={handleSubmit} noValidate>
-              <div className="space-y-[14px]">
+            <form encType="multipart/form-data" onSubmit={handleSubmit} noValidate>
+              {/* El input de archivo tiene que ser descendiente del <form>
+                  para que new FormData(e.currentTarget) lo recoja al
+                  enviar — por eso el form envuelve también el círculo, no
+                  solo la grilla de campos de abajo. */}
+              <div className="mt-4 flex justify-center">
+                <label htmlFor="register-photo" className="group relative cursor-pointer">
+                  <span className="grid h-24 w-24 place-items-center overflow-hidden rounded-full bg-white ring-1 ring-purple-100 transition group-hover:ring-2 group-hover:ring-purple-300">
+                    {preview ? (
+                      <img src={preview} alt="" className="h-full w-full object-cover" />
+                    ) : (
+                      <i className="fas fa-user text-2xl text-gray-300" />
+                    )}
+                  </span>
+                  <span className="absolute bottom-0 right-0 grid h-7 w-7 place-items-center rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md ring-2 ring-white transition group-hover:scale-110">
+                    <i className="fas fa-camera text-[10px]" />
+                  </span>
+                </label>
+                <input id="register-photo" name="profileImage" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+              </div>
+
+              <div className="mt-4 space-y-[12px]">
                 <div className="grid grid-cols-2 gap-x-3">
                   <div>
                     <label htmlFor="register-name" className={LABEL_CLASS}>
@@ -167,28 +187,6 @@ export default function RegisterPage() {
                       Cédula
                     </label>
                     <input id="register-dni" name="dni" type="text" placeholder="N° de identificación" className={FIELD_CLASS} />
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="register-photo" className={LABEL_CLASS}>
-                    Foto de perfil
-                  </label>
-                  <div className="flex items-center gap-3 pl-[6px]">
-                    <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full bg-white ring-1 ring-purple-100">
-                      {preview ? (
-                        <img src={preview} alt="" className="h-full w-full object-cover" />
-                      ) : (
-                        <i className="fas fa-user text-xs text-gray-300" />
-                      )}
-                    </span>
-                    <label
-                      htmlFor="register-photo"
-                      className="flex h-[36px] shrink-0 cursor-pointer items-center rounded-full border border-purple-200 bg-white/50 px-4 text-[11.5px] text-purple-700 transition hover:bg-white/90"
-                    >
-                      Seleccionar
-                    </label>
-                    <input id="register-photo" name="profileImage" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
                   </div>
                 </div>
               </div>
