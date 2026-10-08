@@ -62,7 +62,7 @@ export default function LoginPage() {
       <div className="fixed inset-0 bg-[#ABA6B6]" aria-hidden="true" />
 
       <div
-        className="font-outfit relative flex w-full max-w-[480px] flex-col overflow-hidden rounded-[40px] shadow-[0_40px_90px_-30px_rgba(60,30,80,.45)] lg:h-[767px] lg:max-w-[1090px] lg:flex-row"
+        className="font-outfit relative flex w-full max-w-[480px] flex-col overflow-hidden rounded-[40px] lg:h-[767px] lg:max-w-[1090px] lg:flex-row"
         style={{
           background:
             'radial-gradient(75% 60% at 22% 105%, rgba(168,85,247,.35) 0%, rgba(168,85,247,0) 70%), linear-gradient(90deg, #EBE7F0 0%, #EFE7ED 36%, #F8E3EF 60%, #FBE2EE 100%)',
