@@ -51,17 +51,17 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative bg-white rounded-[28px] w-full max-w-5xl overflow-hidden shadow-2xl shadow-black/10 flex flex-col lg:flex-row lg:h-[620px]">
+    <div className="relative bg-gradient-to-br from-[#FAF7F0] to-[#F3E6C8] rounded-[36px] w-full max-w-5xl overflow-hidden shadow-2xl shadow-black/10 flex flex-col lg:flex-row lg:h-[620px]">
       <button
         type="button"
         onClick={() => navigate('/')}
         aria-label="Cerrar y volver al inicio"
-        className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/90 hover:bg-white shadow-md flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors"
+        className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/70 backdrop-blur-md border border-white/60 shadow-md flex items-center justify-center text-gray-600 hover:text-gray-800 hover:bg-white/90 transition-colors"
       >
         <i className="fas fa-times" />
       </button>
 
-      <div className="w-full lg:w-[44%] bg-[#F8F4ED] px-8 py-10 sm:px-12 sm:py-12 flex flex-col justify-center lg:overflow-y-auto">
+      <div className="w-full lg:w-[44%] px-8 py-10 sm:px-12 sm:py-12 flex flex-col justify-center lg:overflow-y-auto">
         <span className="inline-flex items-center self-start px-4 py-1.5 rounded-full border border-gray-300 text-sm font-medium text-gray-800 mb-8 lg:mb-10">
           Bella Beauty
         </span>
@@ -157,24 +157,51 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <div className="hidden lg:block lg:w-[56%] relative overflow-hidden">
+      <div className="hidden lg:block lg:w-[56%] relative overflow-hidden rounded-r-[36px]">
         <img src={HERO_IMAGE} alt="" className="absolute inset-0 w-full h-full object-cover" />
 
-        <div className="absolute top-6 left-6 bg-white rounded-2xl shadow-lg px-4 py-3 max-w-[220px]">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#F6C945] shrink-0" />
-            <span className="text-sm font-semibold text-gray-900">Cita confirmada</span>
-          </div>
-          <p className="text-xs text-gray-500 mt-0.5 ml-4">Corte y Color · 3:00 PM</p>
+        {/* Avatares flotando sobre la foto, estilo "personas etiquetadas". */}
+        <div className="absolute top-20 right-10 flex -space-x-3">
+          {AVATAR_TONES.map((tone, i) => (
+            <span
+              key={i}
+              className={`w-9 h-9 rounded-full border-2 border-white/80 shadow-md flex items-center justify-center backdrop-blur-sm ${tone}`}
+            >
+              <i className="fas fa-user text-xs" />
+            </span>
+          ))}
         </div>
 
-        <div className="absolute left-1/2 top-[48%] -translate-x-1/2 -translate-y-1/2 bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg px-4 py-3 flex items-center gap-3">
+        {/* Tarjeta de notificación apilada: una capa de cristal oscuro
+            asomando detrás de la tarjeta amarilla sólida de encima. */}
+        <div className="absolute top-6 left-6">
+          {/* Capa de atrás primero en el DOM, sin z-index explícito — un
+              z-index negativo acá puede terminar detrás de la FOTO entera
+              en vez de solo detrás de esta tarjeta, según qué ancestro
+              resulte ser el stacking context real (el mismo bug que las
+              formas flotantes del fondo del login anterior). El orden del
+              DOM ya alcanza para que la tarjeta amarilla pinte encima. */}
+          <div className="absolute top-14 left-3 w-[190px] bg-black/25 backdrop-blur-md border border-white/10 rounded-2xl px-4 py-2.5">
+            <p className="text-xs text-white/80">09:30am–10:00am</p>
+          </div>
+          <div className="relative bg-[#F6C945] rounded-2xl shadow-lg px-4 py-3 w-[200px]">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-sm font-semibold text-gray-900">Cita confirmada</span>
+              <span className="w-2 h-2 rounded-full bg-white/80 shrink-0" />
+            </div>
+            <p className="text-xs text-gray-800/80 mt-0.5">Corte y Color · 3:00 PM</p>
+          </div>
+        </div>
+
+        {/* Franja de calendario: cristal real — fondo translúcido +
+            backdrop-blur sobre la foto, con borde hairline. */}
+        <div className="absolute left-1/2 top-[48%] -translate-x-1/2 -translate-y-1/2 bg-white/35 backdrop-blur-xl border border-white/50 rounded-2xl shadow-lg px-4 py-3 flex items-center gap-3">
           {WEEK_DAYS.map((d) => (
             <div key={d.label} className="flex flex-col items-center gap-1.5">
-              <span className="text-[10px] text-gray-400">{d.label}</span>
+              <span className="text-[10px] text-gray-700/80">{d.label}</span>
               <span
                 className={`w-7 h-7 flex items-center justify-center rounded-full text-xs font-medium ${
-                  d.active ? 'bg-[#F6C945] text-gray-900' : 'text-gray-600'
+                  d.active ? 'bg-[#F6C945] text-gray-900' : 'text-gray-800'
                 }`}
               >
                 {d.num}
@@ -183,16 +210,16 @@ export default function LoginPage() {
           ))}
         </div>
 
-        <div className="absolute bottom-6 left-6 right-6 bg-white rounded-2xl shadow-lg px-4 py-3 flex items-center justify-between">
+        <div className="absolute bottom-6 left-6 right-6 bg-white/40 backdrop-blur-xl border border-white/50 rounded-2xl shadow-lg px-4 py-3 flex items-center justify-between">
           <div>
             <p className="text-sm font-semibold text-gray-900">Equipo disponible hoy</p>
-            <p className="text-xs text-gray-500 mt-0.5">3 estilistas listas para ti</p>
+            <p className="text-xs text-gray-700/80 mt-0.5">3 estilistas listas para ti</p>
           </div>
           <div className="flex -space-x-2">
             {AVATAR_TONES.map((tone, i) => (
               <span
                 key={i}
-                className={`w-7 h-7 rounded-full border-2 border-white flex items-center justify-center ${tone}`}
+                className={`w-7 h-7 rounded-full border-2 border-white/80 flex items-center justify-center ${tone}`}
               >
                 <i className="fas fa-user text-[10px]" />
               </span>
