@@ -6,9 +6,9 @@ const CARD_BG = `
 
 export default function HeroSection() {
   return (
-    <section className="font-josefin container relative mx-auto overflow-hidden px-6 py-16">
+    <section className="font-josefin container relative mx-auto overflow-hidden px-6 py-16 xl:flex xl:min-h-[calc(100vh-152px)] xl:items-center xl:py-6">
       {/* ===================== MARCO DE VIDRIO ===================== */}
-      <div className="relative z-10 rounded-[36px] border border-white/50 bg-white/20 p-2 shadow-[0_30px_60px_-30px_rgba(90,45,20,.35)] backdrop-blur-sm xl:h-[733px]">
+      <div className="relative z-10 w-full rounded-[36px] border border-white/50 bg-white/20 p-2 shadow-[0_30px_60px_-30px_rgba(90,45,20,.35)] backdrop-blur-sm xl:h-[733px]">
         <div
           className="relative flex flex-col gap-10 overflow-hidden rounded-[29px] px-6 py-6 sm:px-10 xl:block xl:h-full xl:p-0"
           style={{ background: CARD_BG }}
