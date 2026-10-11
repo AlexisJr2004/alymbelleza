@@ -6,38 +6,10 @@ const CARD_BG = `
 
 export default function HeroSection() {
   return (
-    <section
-      className="font-josefin relative overflow-hidden"
-      style={{ background: 'linear-gradient(180deg, #f3dccd 0%, #e7bea7 42%, #c28c6d 78%, #ad7556 100%)' }}
-    >
-      <div className="relative mx-auto max-w-[1280px] px-4 pb-32 pt-10 sm:px-8 xl:left-1/2 xl:h-[960px] xl:w-[1280px] xl:max-w-none xl:-translate-x-1/2 xl:p-0">
-        {/* Palabra gigante de fondo */}
-        <svg
-          viewBox="0 0 1280 160"
-          className="pointer-events-none absolute bottom-0 left-0 w-full xl:h-[160px] xl:w-[1280px]"
-          aria-hidden="true"
-        >
-          <text
-            x="-14"
-            y="164"
-            textLength="1308"
-            lengthAdjust="spacing"
-            className="font-cormorant"
-            fontSize="244"
-            fill="#fff"
-            fillOpacity=".2"
-          >
-            BELLEZA
-          </text>
-        </svg>
-
-        {/* Lema superior */}
-        <p className="text-right text-[18px] text-[#3b2418] xl:absolute xl:right-[52px] xl:top-[57px]">
-          Tu belleza, nuestra pasión
-        </p>
-
+    <section className="font-josefin relative overflow-hidden">
+      <div className="relative mx-auto max-w-[1280px] px-4 py-10 sm:px-8 xl:left-1/2 xl:h-[763px] xl:w-[1280px] xl:max-w-none xl:-translate-x-1/2 xl:p-0">
         {/* ===================== MARCO DE VIDRIO ===================== */}
-        <div className="relative z-10 mt-6 rounded-[36px] border border-white/50 bg-white/20 p-2 shadow-[0_30px_60px_-30px_rgba(90,45,20,.35)] backdrop-blur-sm xl:absolute xl:left-[44px] xl:top-[115px] xl:m-0 xl:h-[733px] xl:w-[1191px]">
+        <div className="relative z-10 rounded-[36px] border border-white/50 bg-white/20 p-2 shadow-[0_30px_60px_-30px_rgba(90,45,20,.35)] backdrop-blur-sm xl:absolute xl:left-[44px] xl:top-0 xl:m-0 xl:h-[733px] xl:w-[1191px]">
           <div
             className="relative flex flex-col gap-10 overflow-hidden rounded-[29px] px-6 py-6 sm:px-10 xl:block xl:h-full xl:p-0"
             style={{ background: CARD_BG }}
@@ -305,12 +277,6 @@ export default function HeroSection() {
             </p>
           </div>
         </div>
-
-        {/* Brillo que se desborda bajo la botella */}
-        <div
-          className="pointer-events-none absolute left-[230px] top-[790px] z-20 hidden h-[80px] w-[360px] rounded-full bg-white/35 blur-2xl xl:block"
-          aria-hidden="true"
-        />
       </div>
     </section>
   );
