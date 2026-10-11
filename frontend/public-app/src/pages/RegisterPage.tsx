@@ -46,7 +46,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <AuthCardShell onClose={() => navigate('/')} maxWidthClassName="lg:max-w-[1200px]">
+    <AuthCardShell onClose={() => navigate('/')} maxWidthClassName="md:max-w-[1200px]">
       <section className="flex w-full flex-col px-8 py-9 sm:px-10 lg:w-[600px] lg:shrink-0 lg:overflow-y-auto lg:px-10 lg:pb-9 lg:pt-9">
         <span className="inline-flex h-[41px] w-fit items-center self-start rounded-full border border-gray-400 px-[18px] text-[17px] tracking-[-0.01em] text-gray-800">
           Bella Beauty
@@ -55,7 +55,9 @@ export default function RegisterPage() {
         <div className="flex flex-1 flex-col items-center justify-center py-8 lg:py-6">
           <div className="w-full max-w-[420px]">
             <header className="text-center">
-              <h1 className="text-[26px] font-light tracking-[-0.01em] text-gray-900">Crea tu cuenta</h1>
+              <h1 id="auth-card-title" className="text-[26px] font-light tracking-[-0.01em] text-gray-900">
+                Crea tu cuenta
+              </h1>
               <p className="mt-1 text-[12.5px] text-gray-600">Regístrate para reservar tu próxima cita</p>
             </header>
 

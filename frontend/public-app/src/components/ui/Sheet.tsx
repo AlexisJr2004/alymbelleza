@@ -32,6 +32,10 @@ interface SheetProps {
   /** Fondo/bordes/radios del panel. Default: tarjeta blanca. Los modales de
    * imagen (lightbox, vista previa del carrito) pasan algo transparente. */
   panelClassName?: string;
+  /** Estilos inline adicionales para el panel, mezclados con los que ya usa
+   * la animación de entrada/arrastre — para fondos que una clase de
+   * Tailwind no puede expresar (degradados con stops exactos, etc.). */
+  panelStyle?: React.CSSProperties;
   /** Color de la manija de arrastre (móvil). Default: gris, para paneles
    * blancos; los modales oscuros pasan un tono claro/translúcido. */
   handleClassName?: string;
@@ -50,6 +54,7 @@ export default function Sheet({
   labelledBy,
   desktopMaxWidthClassName = 'md:max-w-sm',
   panelClassName = 'bg-white rounded-t-3xl md:rounded-2xl',
+  panelStyle,
   handleClassName = 'bg-gray-300',
   backdropClassName = 'bg-gray-900/50',
   onFullyClosed,
@@ -162,7 +167,7 @@ export default function Sheet({
         aria-modal="true"
         aria-labelledby={labelledBy}
         className={`fixed z-[2001] inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto md:inset-auto md:left-1/2 md:top-1/2 md:bottom-auto md:w-full md:max-h-[90vh] ${desktopMaxWidthClassName} ${panelClassName}`}
-        style={style}
+        style={panelStyle ? { ...style, ...panelStyle } : style}
       >
         {isMobile && (
           <div

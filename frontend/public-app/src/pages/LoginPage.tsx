@@ -37,7 +37,7 @@ export default function LoginPage() {
   return (
     <AuthCardShell
       onClose={() => navigate('/')}
-      maxWidthClassName="lg:max-w-[1090px]"
+      maxWidthClassName="md:max-w-[1090px]"
       pageBackgroundClassName="bg-white"
       cardBackground="#FFFFFF"
     >
@@ -49,7 +49,9 @@ export default function LoginPage() {
         <div className="flex flex-1 flex-col items-center justify-center py-10 lg:py-0">
           <div className="w-full max-w-[290px]">
             <header className="text-center">
-              <h1 className="text-[26px] font-light tracking-[-0.01em] text-gray-900">Inicia sesión</h1>
+              <h1 id="auth-card-title" className="text-[26px] font-light tracking-[-0.01em] text-gray-900">
+                Inicia sesión
+              </h1>
               <p className="mt-1 text-[12.5px] text-gray-600">Bienvenida de nuevo, ingresa tus datos</p>
             </header>
 
