@@ -19,6 +19,13 @@ const WEEK_DAYS = [
 
 interface AuthShowcasePanelProps {
   onClose: () => void;
+  /** Color sólido exacto (hex) del extremo derecho del fondo de la
+   * tarjeta (AuthCardShell → cardBackground) — el recorte/"fillet" de la
+   * esquina lo usa para fundirse sin costura. Si cambia el fondo de la
+   * tarjeta y este valor no se actualiza junto con él, la esquina queda
+   * con un parche de color que no pega (el bug visible que se evita
+   * pasándolo como prop en vez de dejarlo fijo acá). */
+  cornerColor?: string;
 }
 
 // Panel derecho compartido por Login/Register: la foto a pantalla completa
@@ -27,7 +34,7 @@ interface AuthShowcasePanelProps {
 // la esquina donde va el botón de cerrar de escritorio — calcado de
 // login-crextio.html. Oculto en mobile (el formulario es lo único crítico
 // ahí); el botón de cerrar de mobile vive en AuthCardShell.
-export default function AuthShowcasePanel({ onClose }: AuthShowcasePanelProps) {
+export default function AuthShowcasePanel({ onClose, cornerColor = '#FBE2EE' }: AuthShowcasePanelProps) {
   return (
     <section className="relative hidden flex-1 py-[18px] pr-[18px] lg:block">
       <div className="relative h-full w-full">
@@ -105,15 +112,19 @@ export default function AuthShowcasePanel({ onClose }: AuthShowcasePanelProps) {
             el recorte quede invisible. El radio del fillet (30px) es el
             del panel de la foto, no el de la tarjeta completa (40px) —
             son dos valores distintos en la referencia. */}
-        <span className="absolute right-0 top-0 h-[50px] w-[72px] rounded-bl-[20px] rounded-tr-[30px] bg-[#FBE2EE]" aria-hidden="true" />
+        <span
+          className="absolute right-0 top-0 h-[50px] w-[72px] rounded-bl-[20px] rounded-tr-[30px]"
+          style={{ backgroundColor: cornerColor }}
+          aria-hidden="true"
+        />
         <span
           className="absolute right-[72px] top-0 h-5 w-5"
-          style={{ background: 'radial-gradient(circle at 0 100%, transparent 19.5px, #FBE2EE 20px)' }}
+          style={{ background: `radial-gradient(circle at 0 100%, transparent 19.5px, ${cornerColor} 20px)` }}
           aria-hidden="true"
         />
         <span
           className="absolute right-0 top-[50px] h-5 w-5"
-          style={{ background: 'radial-gradient(circle at 0 100%, transparent 19.5px, #FBE2EE 20px)' }}
+          style={{ background: `radial-gradient(circle at 0 100%, transparent 19.5px, ${cornerColor} 20px)` }}
           aria-hidden="true"
         />
 
