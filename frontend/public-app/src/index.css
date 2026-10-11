@@ -395,31 +395,6 @@
   }
 }
 
-/* Bob sutil para las tarjetas flotantes del Hero — HeroSection.tsx ya
-   traía la clase `animate-float` en su JSX, pero nunca se había definido
-   acá ni en tailwind.config.js, así que no hacía nada (bug real, las
-   tarjetas nunca flotaron). Keyframe propio, más chico y sin rotación que
-   el de .shape arriba, que sí está pensado para una tarjeta grande. */
-@keyframes cardFloat {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
-
-.animate-float {
-  animation: cardFloat 5s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .animate-float {
-    animation: none;
-  }
-}
-
 .auth-card {
   box-shadow: 0 5px 15px -5px rgba(124, 58, 237, 0.1);
 }
