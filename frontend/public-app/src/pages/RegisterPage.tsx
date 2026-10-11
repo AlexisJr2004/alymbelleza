@@ -46,7 +46,12 @@ export default function RegisterPage() {
   };
 
   return (
-    <AuthCardShell onClose={() => navigate('/')} maxWidthClassName="md:max-w-[1200px]">
+    <AuthCardShell
+      onClose={() => navigate('/')}
+      maxWidthClassName="md:max-w-[1200px]"
+      pageBackgroundClassName="bg-white"
+      cardBackground="#FFFFFF"
+    >
       <section className="flex w-full flex-col px-8 py-9 sm:px-10 lg:w-[600px] lg:shrink-0 lg:overflow-y-auto lg:px-10 lg:pb-9 lg:pt-9">
         <span className="inline-flex h-[41px] w-fit items-center self-start rounded-full border border-gray-400 px-[18px] text-[17px] tracking-[-0.01em] text-gray-800">
           Bella Beauty
@@ -226,7 +231,7 @@ export default function RegisterPage() {
         </footer>
       </section>
 
-      <AuthShowcasePanel onClose={() => navigate('/')} />
+      <AuthShowcasePanel onClose={() => navigate('/')} cornerColor="#FFFFFF" />
     </AuthCardShell>
   );
 }
