@@ -4,7 +4,6 @@ import PageHeader from '../components/ui/PageHeader';
 import Sparkline from '../components/ui/Sparkline';
 import TrendChart from '../components/ui/TrendChart';
 import AnnularDonut from '../components/ui/AnnularDonut';
-import BankCardPreview from '../components/ui/BankCardPreview';
 import {
   PedidosIcon,
   UsuariosIcon,
@@ -26,6 +25,16 @@ import { useAppointmentsQuery } from '../hooks/useAppointments';
 import { construirSerieMensual } from '../lib/monthly';
 import { formatoMoneda, formatoFechaCorta } from '../lib/format';
 import type { Order } from '../types/models';
+
+// Mismo set de degradés que la cuadrícula de resumen de TarjetasPage.tsx —
+// se reutiliza acá para que "Tarjetas de pago" tenga el mismo diseño de
+// tarjeta en vez del estilo "banco real" (BankCardPreview) que tenía antes.
+const RESUMEN_TARJETA_ESTILOS = [
+  'from-emerald-500 to-emerald-600',
+  'from-violet-500 to-purple-600',
+  'from-orange-400 to-orange-500',
+  'from-sky-400 to-blue-500',
+];
 
 function ResumenKpiCard({
   etiqueta,
@@ -146,7 +155,8 @@ export default function ResumenPage() {
   const clientesInactivos = useMemo(() => calcularClientesInactivos(orders, users), [orders, users]);
 
   const tarjetasActivas = paymentCards.filter((c) => c.activa);
-  const tarjetaActual = tarjetasActivas.length ? tarjetasActivas[tarjetaIndex % tarjetasActivas.length] : null;
+  const tarjetaEstiloIndice = tarjetasActivas.length ? tarjetaIndex % tarjetasActivas.length : 0;
+  const tarjetaActual = tarjetasActivas.length ? tarjetasActivas[tarjetaEstiloIndice] : null;
 
   return (
     <div className="space-y-5">
@@ -254,12 +264,22 @@ export default function ResumenPage() {
         </div>
       </div>
 
-      {/* Fila 2: gráfico de ingresos, ancho completo */}
-      <div className="glass p-5">
-        <h3 className="text-base font-semibold text-ink mb-1">Ingresos de los últimos 6 meses</h3>
-        <p className="text-sm text-muted mb-4">Total facturado por mes según los pedidos registrados.</p>
-        <div className="h-36">
-          <TrendChart data={serieIngresos} formatValue={formatoMoneda} color="#7e9ce3" />
+      {/* Fila 2: gráfico de ingresos + ingresos de este mes, a la derecha */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <div className="lg:col-span-2 glass p-5">
+          <h3 className="text-base font-semibold text-ink mb-1">Ingresos de los últimos 6 meses</h3>
+          <p className="text-sm text-muted mb-4">Total facturado por mes según los pedidos registrados.</p>
+          <div className="h-36">
+            <TrendChart data={serieIngresos} formatValue={formatoMoneda} color="#7e9ce3" />
+          </div>
+        </div>
+
+        <div className="rounded-[26px] bg-ink p-5 text-white relative overflow-hidden">
+          <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full pointer-events-none" />
+          <div className="absolute -bottom-10 -left-6 w-28 h-28 bg-white/10 rounded-full pointer-events-none" />
+          <p className="text-sm text-white/70 relative">Ingresos de este mes</p>
+          <p className="text-2xl font-bold mt-1 relative">{formatoMoneda(mesActualTotal)}</p>
+          <p className="text-sm text-white/70 mt-3 relative">{mesSub}</p>
         </div>
       </div>
 
@@ -298,19 +318,8 @@ export default function ResumenPage() {
         </div>
       </div>
 
-      {/* Fila 3b: ingresos de este mes + últimos pedidos + tarjetas de pago
-          (antes vivían en una columna angosta al lado del gráfico de
-          ingresos; ahora que ese gráfico ocupa el ancho completo, pasan a
-          su propia fila de 3 columnas). */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div className="rounded-[26px] bg-ink p-5 text-white relative overflow-hidden">
-          <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full pointer-events-none" />
-          <div className="absolute -bottom-10 -left-6 w-28 h-28 bg-white/10 rounded-full pointer-events-none" />
-          <p className="text-sm text-white/70 relative">Ingresos de este mes</p>
-          <p className="text-2xl font-bold mt-1 relative">{formatoMoneda(mesActualTotal)}</p>
-          <p className="text-sm text-white/70 mt-3 relative">{mesSub}</p>
-        </div>
-
+      {/* Fila 3b: últimos pedidos + tarjetas de pago */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div className="glass overflow-hidden">
           <div className="px-5 py-3 border-b border-white/70 flex items-center justify-between">
             <h3 className="text-sm font-semibold text-ink">Últimos pedidos</h3>
@@ -344,7 +353,31 @@ export default function ResumenPage() {
           </div>
           <div className="p-5">
             {tarjetaActual ? (
-              <BankCardPreview card={tarjetaActual} />
+              <div
+                className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${RESUMEN_TARJETA_ESTILOS[tarjetaEstiloIndice % RESUMEN_TARJETA_ESTILOS.length]} p-5 text-white`}
+              >
+                <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-white/10 pointer-events-none" />
+                <div className="absolute -bottom-10 -left-6 w-28 h-28 rounded-full bg-white/10 pointer-events-none" />
+                <div className="relative z-10">
+                  <p className="text-sm font-medium text-white/80">{tarjetaActual.banco}</p>
+                  <p className="text-xl font-bold mt-1 tracking-wide">{tarjetaActual.numeroCuenta}</p>
+                  <div className="flex items-center gap-1.5 mt-4">
+                    <span className="w-6 h-6 rounded-full bg-white/50" />
+                    <span className="w-6 h-6 rounded-full bg-white/25 -ml-3" />
+                    <span className="text-xs font-semibold ml-2 uppercase tracking-wide">{tarjetaActual.marca}</span>
+                  </div>
+                  <div className="flex items-center justify-between mt-5 pt-3 border-t border-white/20">
+                    <div className="min-w-0">
+                      <p className="text-[10px] text-white/70 uppercase tracking-wide">Tipo de cuenta</p>
+                      <p className="text-sm font-semibold mt-0.5 truncate">{tarjetaActual.tipoCuenta}</p>
+                    </div>
+                    <div className="text-right min-w-0">
+                      <p className="text-[10px] text-white/70 uppercase tracking-wide">Titular</p>
+                      <p className="text-sm font-semibold mt-0.5 truncate">{tarjetaActual.titular}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             ) : (
               <p className="text-sm text-muted text-center py-8">Todavía no hay tarjetas visibles.</p>
             )}
