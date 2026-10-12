@@ -121,7 +121,7 @@ export default function ProductosPage() {
           <button
             type="button"
             onClick={abrirNuevo}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-purple-600 text-white rounded-full text-sm font-medium hover:bg-purple-700 transition-colors shrink-0"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-ink text-white rounded-full text-sm font-medium hover:bg-ink/85 transition-colors shrink-0"
           >
             <PlusIcon className="w-4 h-4" /> Nuevo Producto
           </button>
@@ -133,50 +133,50 @@ export default function ProductosPage() {
           label="Total productos"
           value={productos.length}
           note="En el catálogo"
-          iconBg="bg-purple-100/70"
-          iconColor="text-purple-600"
+          iconBg="bg-ink/5"
+          iconColor="text-ink"
           icon={<ProductosIcon className="w-5 h-5" />}
         />
         <KpiCard
           label="Disponibles"
           value={disponibles}
           note="Con stock"
-          valueClassName="text-emerald-700"
-          iconBg="bg-emerald-100/70"
-          iconColor="text-emerald-600"
+          valueClassName="text-sky"
+          iconBg="bg-sky/15"
+          iconColor="text-sky"
           icon={<CheckIcon className="w-5 h-5" />}
         />
         <KpiCard
           label="Agotados"
           value={agotados}
           note="Sin stock"
-          valueClassName="text-rose-700"
-          iconBg="bg-rose-100/70"
-          iconColor="text-rose-600"
+          valueClassName="text-coral"
+          iconBg="bg-coral/15"
+          iconColor="text-coral"
           icon={<XIcon className="w-5 h-5" />}
         />
         <KpiCard
           label="Destacados"
           value={destacados}
           note="En vitrina"
-          valueClassName="text-sky-700"
-          iconBg="bg-sky-100/70"
-          iconColor="text-sky-600"
+          valueClassName="text-ink"
+          iconBg="bg-[#eef0f4]"
+          iconColor="text-muted"
           icon={<StarIcon className="w-5 h-5" />}
         />
       </KpiRow>
 
       <div className="flex flex-col lg:flex-row items-start gap-6">
         <aside className="w-full lg:w-64 shrink-0">
-          <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5 space-y-5">
+          <div className="glass p-5 space-y-5">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Filtros</h3>
-              <button type="button" onClick={limpiarFiltros} className="text-xs font-medium text-purple-600 hover:text-purple-800">
+              <h3 className="text-sm font-semibold text-ink uppercase tracking-wide">Filtros</h3>
+              <button type="button" onClick={limpiarFiltros} className="text-xs font-medium text-coral hover:text-coral/80">
                 Limpiar
               </button>
             </div>
             <div>
-              <h4 className="text-sm font-medium text-gray-700 mb-2">Categoría</h4>
+              <h4 className="text-sm font-medium text-[#3a3d45] mb-2">Categoría</h4>
               <div className="relative">
                 <select
                   value={categoriaFiltro}
@@ -184,7 +184,7 @@ export default function ProductosPage() {
                     setCategoriaFiltro(e.target.value);
                     setPagina(1);
                   }}
-                  className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"
+                  className="w-full px-3 py-1.5 border border-white/80 bg-white/60 rounded-full text-sm focus:ring-2 focus:ring-sky/50 focus:outline-none"
                 >
                   <option value="">Todas</option>
                   <option value="capilar">Productos Capilares</option>
@@ -193,14 +193,14 @@ export default function ProductosPage() {
               </div>
             </div>
             <div>
-              <h4 className="text-sm font-medium text-gray-700 mb-2">Tipo</h4>
+              <h4 className="text-sm font-medium text-[#3a3d45] mb-2">Tipo</h4>
               <select
                 value={tipoFiltro}
                 onChange={(e) => {
                   setTipoFiltro(e.target.value);
                   setPagina(1);
                 }}
-                className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"
+                className="w-full px-3 py-1.5 border border-white/80 bg-white/60 rounded-full text-sm focus:ring-2 focus:ring-sky/50 focus:outline-none"
               >
                 <option value="">Todos</option>
                 {TIPOS.map((t) => (
@@ -210,8 +210,8 @@ export default function ProductosPage() {
                 ))}
               </select>
             </div>
-            <div className="pt-4 border-t border-gray-100 space-y-2">
-              <h4 className="text-sm font-medium text-gray-700 mb-2">Estado</h4>
+            <div className="pt-4 border-t border-white/70 space-y-2">
+              <h4 className="text-sm font-medium text-[#3a3d45] mb-2">Estado</h4>
               <Switch
                 checked={estadoFiltro.isChecked('true')}
                 onChange={(v) => {
@@ -229,7 +229,7 @@ export default function ProductosPage() {
                 label="Agotados"
               />
             </div>
-            <div className="pt-4 border-t border-gray-100">
+            <div className="pt-4 border-t border-white/70">
               <Switch
                 checked={soloDestacados}
                 onChange={(v) => {
@@ -246,22 +246,22 @@ export default function ProductosPage() {
               title="Disponibilidad"
               centerCaption="Disponibles"
               groups={[
-                { label: 'Disponibles', count: disponibles, color: '#059669' },
-                { label: 'Agotados', count: agotados, color: '#e11d48' },
+                { label: 'Disponibles', count: disponibles, color: '#7e9ce3' },
+                { label: 'Agotados', count: agotados, color: '#e2766f' },
               ]}
             />
           </div>
         </aside>
 
         <div className="flex-1 min-w-0 w-full">
-          <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6 md:p-8">
+          <div className="glass p-6 md:p-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-              <h2 className="text-2xl font-bold text-gray-800 flex items-center">
-                <ProductosIcon className="w-5 h-5 mr-2 text-purple-600" />
+              <h2 className="text-2xl font-bold text-ink flex items-center">
+                <ProductosIcon className="w-5 h-5 mr-2 text-coral" />
                 Productos
               </h2>
               <div className="relative">
-                <SearchIcon className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
+                <SearchIcon className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
                 <input
                   type="text"
                   value={search}
@@ -270,55 +270,57 @@ export default function ProductosPage() {
                     setPagina(1);
                   }}
                   placeholder="Buscar producto..."
-                  className="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full md:w-72"
+                  className="pl-10 pr-4 py-2 border border-white/80 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none w-full md:w-72"
                 />
               </div>
             </div>
 
-            <div className="overflow-x-auto rounded-xl border border-gray-200">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+            <div className="overflow-x-auto rounded-[22px] border border-white/70">
+              <table className="min-w-full divide-y divide-white/70">
+                <thead className="bg-white/40">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Producto</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Calificación</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Imagen</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Producto</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Precio</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Descripción</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Calificación</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Stock</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Imagen</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Estado</th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-muted uppercase tracking-wider">Acciones</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white/20 divide-y divide-white/60">
                   {isLoading ? (
                     <tr>
-                      <td colSpan={8} className="p-6 text-center text-gray-400">Cargando...</td>
+                      <td colSpan={8} className="p-6 text-center text-muted">Cargando...</td>
                     </tr>
                   ) : (
                     productosPagina.map((p) => (
                       <tr key={p._id}>
-                        <td className="p-2 font-semibold">{p.name}</td>
-                        <td className="p-2">${p.price}</td>
-                        <td className="p-2">{p.description}</td>
-                        <td className="p-2">{p.rating ?? 0}</td>
-                        <td className="p-2">
+                        <td className="p-3 pl-6 font-semibold text-ink">{p.name}</td>
+                        <td className="p-3 text-[#3a3d45]">${p.price}</td>
+                        <td className="p-3 text-[#3a3d45] max-w-xs truncate" title={p.description}>{p.description}</td>
+                        <td className="p-3 text-[#3a3d45]">{p.rating ?? 0}</td>
+                        <td className="p-3 text-[#3a3d45]">
                           {p.stock === null || p.stock === undefined ? (
-                            <span className="text-gray-400">Sin control</span>
+                            <span className="text-muted">Sin control</span>
                           ) : (
                             p.stock
                           )}
                         </td>
-                        <td className="p-2">
-                          <img src={p.image || './img/default.jpg'} alt={p.name} className="w-16 h-16 object-cover rounded" />
+                        <td className="p-3">
+                          <img src={p.image || './img/default.jpg'} alt={p.name} className="w-16 h-16 object-cover rounded-xl" />
                         </td>
-                        <td className="p-2">{p.availability ? 'Sí' : 'No'}</td>
-                        <td className="p-2">
+                        <td className="p-3">
+                          {p.availability ? <span className="status bg-sky">Sí</span> : <span className="status bg-muted">No</span>}
+                        </td>
+                        <td className="p-3">
                           <div className="flex items-center gap-2 justify-end">
                             <button
                               type="button"
                               title="Editar"
                               onClick={() => abrirEditar(p)}
-                              className="text-blue-600 hover:text-blue-800 p-2 rounded-full bg-blue-50 hover:bg-blue-100 transition"
+                              className="text-sky hover:text-sky/70 p-2 rounded-full bg-sky/10 hover:bg-sky/20 transition"
                             >
                               <PencilIcon className="w-4 h-4" />
                             </button>
@@ -326,7 +328,7 @@ export default function ProductosPage() {
                               type="button"
                               title="Eliminar"
                               onClick={() => handleDelete(p)}
-                              className="text-red-600 hover:text-red-800 p-2 rounded-full bg-red-50 hover:bg-red-100 transition"
+                              className="text-coral hover:text-coral/70 p-2 rounded-full bg-coral/10 hover:bg-coral/20 transition"
                             >
                               <TrashIcon className="w-4 h-4" />
                             </button>

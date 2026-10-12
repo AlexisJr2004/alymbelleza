@@ -102,7 +102,7 @@ export default function TarjetasPage() {
           <button
             type="button"
             onClick={abrirNueva}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-purple-600 text-white rounded-full text-sm font-medium hover:bg-purple-700 transition-colors shrink-0"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-ink text-white rounded-full text-sm font-medium hover:bg-ink/85 transition-colors shrink-0"
           >
             <PlusIcon className="w-4 h-4" /> Tarjeta nueva
           </button>
@@ -111,7 +111,7 @@ export default function TarjetasPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
         {isLoading ? null : tarjetas.length === 0 ? (
-          <p className="sm:col-span-2 xl:col-span-4 text-center text-gray-400 py-6">No hay tarjetas de pago creadas todavía.</p>
+          <p className="sm:col-span-2 xl:col-span-4 text-center text-muted py-6">No hay tarjetas de pago creadas todavía.</p>
         ) : (
           tarjetas.map((c, i) => (
             <div
@@ -145,64 +145,60 @@ export default function TarjetasPage() {
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <div className="xl:col-span-2 bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6">
+        <div className="xl:col-span-2 glass p-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-1">
-            <h3 className="text-lg font-bold text-gray-800">Lista de tarjetas</h3>
+            <h3 className="text-lg font-bold text-ink">Lista de tarjetas</h3>
             <div className="relative">
-              <SearchIcon className="w-3.5 h-3.5 absolute left-3 top-3 text-gray-400" />
+              <SearchIcon className="w-3.5 h-3.5 absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Buscar por banco, cuenta o titular..."
-                className="pl-9 pr-3 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full sm:w-64"
+                className="pl-9 pr-3 py-1.5 text-sm border border-white/80 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none w-full sm:w-64"
               />
             </div>
           </div>
-          <p className="text-sm text-gray-500 mb-4">Todas las cuentas bancarias registradas.</p>
-          <div className="divide-y divide-gray-100">
+          <p className="text-sm text-muted mb-4">Todas las cuentas bancarias registradas.</p>
+          <div className="divide-y divide-white/60">
             {filtradas.length === 0 ? (
-              <p className="text-center text-gray-400 py-6">No se encontraron tarjetas de pago.</p>
+              <p className="text-center text-muted py-6">No se encontraron tarjetas de pago.</p>
             ) : (
               filtradas.map((c) => {
                 const indiceOriginal = tarjetas.indexOf(c);
                 const estilo = RESUMEN_TARJETA_ESTILOS[indiceOriginal % RESUMEN_TARJETA_ESTILOS.length];
                 return (
                   <div key={c._id} className="flex flex-wrap items-center gap-4 py-3.5">
-                    <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${estilo} shrink-0`} />
+                    <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${estilo} shrink-0`} />
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 flex-1 min-w-[200px] text-sm">
                       <div className="min-w-0">
-                        <p className="text-xs text-gray-400">Banco</p>
-                        <p className="font-medium text-gray-800 truncate">{c.banco}</p>
+                        <p className="text-xs text-muted">Banco</p>
+                        <p className="font-medium text-ink truncate">{c.banco}</p>
                       </div>
                       <div className="min-w-0">
-                        <p className="text-xs text-gray-400">Tipo</p>
-                        <p className="font-medium text-gray-800 truncate">{c.tipoCuenta}</p>
+                        <p className="text-xs text-muted">Tipo</p>
+                        <p className="font-medium text-ink truncate">{c.tipoCuenta}</p>
                       </div>
                       <div className="min-w-0">
-                        <p className="text-xs text-gray-400">Número de cuenta</p>
-                        <p className="font-medium text-gray-800 truncate">{c.numeroCuenta}</p>
+                        <p className="text-xs text-muted">Número de cuenta</p>
+                        <p className="font-medium text-ink truncate">{c.numeroCuenta}</p>
                       </div>
                       <div className="min-w-0">
-                        <p className="text-xs text-gray-400">Titular</p>
-                        <p className="font-medium text-gray-800 truncate">{c.titular}</p>
+                        <p className="text-xs text-muted">Titular</p>
+                        <p className="font-medium text-ink truncate">{c.titular}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 shrink-0 ml-auto">
                       {c.activa ? (
-                        <span className="px-2 py-0.5 text-[11px] font-semibold rounded-full bg-green-100 text-green-700 whitespace-nowrap">
-                          Visible
-                        </span>
+                        <span className="status bg-sky whitespace-nowrap">Visible</span>
                       ) : (
-                        <span className="px-2 py-0.5 text-[11px] font-semibold rounded-full bg-gray-100 text-gray-600 whitespace-nowrap">
-                          Oculta
-                        </span>
+                        <span className="status bg-muted whitespace-nowrap">Oculta</span>
                       )}
                       <button
                         type="button"
                         title="Editar"
                         onClick={() => abrirEditar(c)}
-                        className="text-blue-600 hover:text-blue-800 p-2 rounded-full bg-blue-50 hover:bg-blue-100 transition"
+                        className="text-sky hover:text-sky/70 p-2 rounded-full bg-sky/10 hover:bg-sky/20 transition"
                       >
                         <PencilIcon className="w-4 h-4" />
                       </button>
@@ -210,7 +206,7 @@ export default function TarjetasPage() {
                         type="button"
                         title="Eliminar"
                         onClick={() => handleDelete(c)}
-                        className="text-red-600 hover:text-red-800 p-2 rounded-full bg-red-50 hover:bg-red-100 transition"
+                        className="text-coral hover:text-coral/70 p-2 rounded-full bg-coral/10 hover:bg-coral/20 transition"
                       >
                         <TrashIcon className="w-4 h-4" />
                       </button>
@@ -222,9 +218,9 @@ export default function TarjetasPage() {
           </div>
         </div>
 
-        <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6">
-          <h3 className="text-lg font-bold text-gray-800 mb-1">Estadística de tarjetas</h3>
-          <p className="text-sm text-gray-500 mb-5">Distribución por banco.</p>
+        <div className="glass p-6">
+          <h3 className="text-lg font-bold text-ink mb-1">Estadística de tarjetas</h3>
+          <p className="text-sm text-muted mb-5">Distribución por banco.</p>
           <div className="flex justify-center">
             <div className="relative w-36 h-36 rounded-full" style={{ background: computeConicGradient(donutGroups).background }}>
               <div className="absolute inset-[14px] bg-white rounded-full" />
@@ -232,13 +228,13 @@ export default function TarjetasPage() {
           </div>
           <div className="mt-6 space-y-2.5">
             {donutGroups.length === 0 ? (
-              <p className="text-sm text-gray-400 text-center">Sin datos todavía.</p>
+              <p className="text-sm text-muted text-center">Sin datos todavía.</p>
             ) : (
               donutGroups.map((g) => (
                 <div key={g.label} className="flex items-center gap-2 text-sm">
                   <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: g.color }} />
-                  <span className="text-gray-600 truncate">{g.label}</span>
-                  <span className="ml-auto font-medium text-gray-800">{g.count}</span>
+                  <span className="text-[#3a3d45] truncate">{g.label}</span>
+                  <span className="ml-auto font-medium text-ink">{g.count}</span>
                 </div>
               ))
             )}

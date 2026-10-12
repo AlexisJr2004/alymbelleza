@@ -103,7 +103,7 @@ export default function CuponesPage() {
           <button
             type="button"
             onClick={abrirNuevo}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-purple-600 text-white rounded-full text-sm font-medium hover:bg-purple-700 transition-colors shrink-0"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-ink text-white rounded-full text-sm font-medium hover:bg-ink/85 transition-colors shrink-0"
           >
             <PlusIcon className="w-4 h-4" /> Nuevo Cupón
           </button>
@@ -115,57 +115,57 @@ export default function CuponesPage() {
           label="Total cupones"
           value={cupones.length}
           note="Creados en total"
-          iconBg="bg-purple-100/70"
-          iconColor="text-purple-600"
+          iconBg="bg-ink/5"
+          iconColor="text-ink"
           icon={<CuponesIcon className="w-5 h-5" />}
         />
         <KpiCard
           label="Activos"
           value={activos}
           note="Disponibles para usar"
-          valueClassName="text-emerald-700"
-          iconBg="bg-emerald-100/70"
-          iconColor="text-emerald-600"
+          valueClassName="text-sky"
+          iconBg="bg-sky/15"
+          iconColor="text-sky"
           icon={<CheckIcon className="w-5 h-5" />}
         />
         <KpiCard
           label="Inactivos"
           value={inactivos}
           note="Deshabilitados"
-          valueClassName="text-rose-700"
-          iconBg="bg-rose-100/70"
-          iconColor="text-rose-600"
+          valueClassName="text-muted"
+          iconBg="bg-[#eef0f4]"
+          iconColor="text-muted"
           icon={<XIcon className="w-5 h-5" />}
         />
         <KpiCard
           label="Vencen pronto"
           value={vencenPronto}
           note="En los próximos 30 días"
-          valueClassName="text-amber-700"
-          iconBg="bg-amber-100/70"
-          iconColor="text-amber-600"
+          valueClassName="text-coral"
+          iconBg="bg-coral/15"
+          iconColor="text-coral"
           icon={<BellIcon className="w-5 h-5" />}
         />
       </KpiRow>
 
       <div className="flex flex-col lg:flex-row items-start gap-6">
         <aside className="w-full lg:w-64 shrink-0">
-          <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5 space-y-5">
+          <div className="glass p-5 space-y-5">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Filtros</h3>
-              <button type="button" onClick={limpiarFiltros} className="text-xs font-medium text-purple-600 hover:text-purple-800">
+              <h3 className="text-sm font-semibold text-ink uppercase tracking-wide">Filtros</h3>
+              <button type="button" onClick={limpiarFiltros} className="text-xs font-medium text-coral hover:text-coral/80">
                 Limpiar
               </button>
             </div>
             <div>
-              <h4 className="text-sm font-medium text-gray-700 mb-2">Tipo de descuento</h4>
+              <h4 className="text-sm font-medium text-[#3a3d45] mb-2">Tipo de descuento</h4>
               <div className="space-y-2">
                 <Switch checked={tipoFiltro.isChecked('percentage')} onChange={(v) => tipoFiltro.toggle('percentage', v)} label="Porcentaje" />
                 <Switch checked={tipoFiltro.isChecked('fixed')} onChange={(v) => tipoFiltro.toggle('fixed', v)} label="Monto fijo" />
               </div>
             </div>
-            <div className="pt-4 border-t border-gray-100">
-              <h4 className="text-sm font-medium text-gray-700 mb-2">Estado</h4>
+            <div className="pt-4 border-t border-white/70">
+              <h4 className="text-sm font-medium text-[#3a3d45] mb-2">Estado</h4>
               <div className="space-y-2">
                 <Switch checked={estadoFiltro.isChecked('true')} onChange={(v) => estadoFiltro.toggle('true', v)} label="Activos" />
                 <Switch checked={estadoFiltro.isChecked('false')} onChange={(v) => estadoFiltro.toggle('false', v)} label="Inactivos" />
@@ -178,52 +178,52 @@ export default function CuponesPage() {
               title="Distribución"
               centerCaption="Activos"
               groups={[
-                { label: 'Activos', count: activos, color: '#059669' },
-                { label: 'Inactivos', count: inactivos, color: '#e11d48' },
+                { label: 'Activos', count: activos, color: '#7e9ce3' },
+                { label: 'Inactivos', count: inactivos, color: '#e2766f' },
               ]}
             />
           </div>
         </aside>
 
         <div className="flex-1 min-w-0 w-full">
-          <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6 md:p-8">
+          <div className="glass p-6 md:p-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-              <h2 className="text-2xl font-bold text-gray-800 flex items-center">
-                <CuponesIcon className="w-5 h-5 mr-2 text-purple-600" />
+              <h2 className="text-2xl font-bold text-ink flex items-center">
+                <CuponesIcon className="w-5 h-5 mr-2 text-coral" />
                 Cupones
               </h2>
               <div className="relative">
-                <SearchIcon className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
+                <SearchIcon className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
                 <input
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Buscar por código..."
-                  className="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full md:w-72"
+                  className="pl-10 pr-4 py-2 border border-white/80 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none w-full md:w-72"
                 />
               </div>
             </div>
 
-            <div className="overflow-x-auto rounded-xl border border-gray-200">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+            <div className="overflow-x-auto rounded-[22px] border border-white/70">
+              <table className="min-w-full divide-y divide-white/70">
+                <thead className="bg-white/40">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Código</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descuento</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Compra mínima</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expira</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Código</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Descuento</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Compra mínima</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Expira</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Estado</th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-muted uppercase tracking-wider">Acciones</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white/20 divide-y divide-white/60">
                   {isLoading ? (
                     <tr>
-                      <td colSpan={6} className="p-6 text-center text-gray-400">Cargando...</td>
+                      <td colSpan={6} className="p-6 text-center text-muted">Cargando...</td>
                     </tr>
                   ) : filtrados.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="p-6 text-center text-gray-400">No hay cupones creados todavía.</td>
+                      <td colSpan={6} className="p-6 text-center text-muted">No hay cupones creados todavía.</td>
                     </tr>
                   ) : (
                     filtrados.map((c) => {
@@ -231,24 +231,24 @@ export default function CuponesPage() {
                       const expira = c.expiresAt ? new Date(c.expiresAt).toLocaleDateString('es-ES') : 'Sin vencimiento';
                       return (
                         <tr key={c._id}>
-                          <td className="p-2 font-semibold">{c.code}</td>
-                          <td className="p-2">{descuentoTexto}</td>
-                          <td className="p-2">{c.minPurchase ? `$${Number(c.minPurchase).toFixed(2)}` : '—'}</td>
-                          <td className="p-2">{expira}</td>
-                          <td className="p-2">
+                          <td className="p-3 pl-6 font-semibold text-ink">{c.code}</td>
+                          <td className="p-3 text-[#3a3d45]">{descuentoTexto}</td>
+                          <td className="p-3 text-[#3a3d45]">{c.minPurchase ? `$${Number(c.minPurchase).toFixed(2)}` : '—'}</td>
+                          <td className="p-3 text-[#3a3d45]">{expira}</td>
+                          <td className="p-3">
                             {c.active ? (
-                              <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">Activo</span>
+                              <span className="status bg-sky">Activo</span>
                             ) : (
-                              <span className="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600">Inactivo</span>
+                              <span className="status bg-muted">Inactivo</span>
                             )}
                           </td>
-                          <td className="p-2">
+                          <td className="p-3">
                             <div className="flex items-center gap-2 justify-end">
                               <button
                                 type="button"
                                 title="Editar"
                                 onClick={() => abrirEditar(c)}
-                                className="text-blue-600 hover:text-blue-800 p-2 rounded-full bg-blue-50 hover:bg-blue-100 transition"
+                                className="text-sky hover:text-sky/70 p-2 rounded-full bg-sky/10 hover:bg-sky/20 transition"
                               >
                                 <PencilIcon className="w-4 h-4" />
                               </button>
@@ -256,7 +256,7 @@ export default function CuponesPage() {
                                 type="button"
                                 title="Eliminar"
                                 onClick={() => handleDelete(c)}
-                                className="text-red-600 hover:text-red-800 p-2 rounded-full bg-red-50 hover:bg-red-100 transition"
+                                className="text-coral hover:text-coral/70 p-2 rounded-full bg-coral/10 hover:bg-coral/20 transition"
                               >
                                 <TrashIcon className="w-4 h-4" />
                               </button>

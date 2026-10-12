@@ -54,50 +54,50 @@ export default function PedidosPage() {
           label="Total pedidos"
           value={filtrados.length}
           note="Pedidos registrados"
-          iconBg="bg-purple-100/70"
-          iconColor="text-purple-600"
+          iconBg="bg-ink/5"
+          iconColor="text-ink"
           icon={<PedidosIcon className="w-5 h-5" />}
         />
         <KpiCard
           label="Ingresos"
           value={formatoMoneda(ingresos)}
           note="Total facturado"
-          valueClassName="text-emerald-700"
-          iconBg="bg-emerald-100/70"
-          iconColor="text-emerald-600"
+          valueClassName="text-sky"
+          iconBg="bg-sky/15"
+          iconColor="text-sky"
           icon={<DollarIcon className="w-5 h-5" />}
         />
         <KpiCard
           label="Descuentos"
           value={formatoMoneda(descuentos)}
           note="Aplicados con cupón"
-          valueClassName="text-pink-700"
-          iconBg="bg-pink-100/70"
-          iconColor="text-pink-600"
+          valueClassName="text-coral"
+          iconBg="bg-coral/15"
+          iconColor="text-coral"
           icon={<CuponesIcon className="w-5 h-5" />}
         />
         <KpiCard
           label="Ticket promedio"
           value={formatoMoneda(promedio)}
           note="Por pedido"
-          valueClassName="text-sky-700"
-          iconBg="bg-sky-100/70"
-          iconColor="text-sky-600"
+          valueClassName="text-ink"
+          iconBg="bg-[#eef0f4]"
+          iconColor="text-muted"
           icon={<BarsIcon className="w-5 h-5" />}
         />
       </KpiRow>
 
       <div className="flex flex-col lg:flex-row items-start gap-6">
         <aside className="w-full lg:w-64 shrink-0">
-          <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5 space-y-5">
+          <div className="glass p-5 space-y-5">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Filtros</h3>
-              <button type="button" onClick={limpiarFiltros} className="text-xs font-medium text-purple-600 hover:text-purple-800">
+              <h3 className="text-sm font-semibold text-ink uppercase tracking-wide">Filtros</h3>
+              <button type="button" onClick={limpiarFiltros} className="text-xs font-medium text-coral hover:text-coral/80">
                 Limpiar
               </button>
             </div>
             <div>
-              <h4 className="text-sm font-medium text-gray-700 mb-2">Rango de fechas</h4>
+              <h4 className="text-sm font-medium text-[#3a3d45] mb-2">Rango de fechas</h4>
               <div className="space-y-2">
                 <input
                   type="date"
@@ -107,7 +107,7 @@ export default function PedidosPage() {
                     setFechaDesde(e.target.value);
                     setPagina(1);
                   }}
-                  className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"
+                  className="w-full px-3 py-1.5 border border-white/80 bg-white/60 rounded-full text-sm focus:ring-2 focus:ring-sky/50 focus:outline-none"
                 />
                 <input
                   type="date"
@@ -117,11 +117,11 @@ export default function PedidosPage() {
                     setFechaHasta(e.target.value);
                     setPagina(1);
                   }}
-                  className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"
+                  className="w-full px-3 py-1.5 border border-white/80 bg-white/60 rounded-full text-sm focus:ring-2 focus:ring-sky/50 focus:outline-none"
                 />
               </div>
             </div>
-            <div className="pt-4 border-t border-gray-100">
+            <div className="pt-4 border-t border-white/70">
               <Switch
                 checked={soloConCupon}
                 onChange={(v) => {
@@ -138,73 +138,69 @@ export default function PedidosPage() {
               title="Uso de cupones"
               centerCaption="Con cupón"
               groups={[
-                { label: 'Con cupón', count: conCupon, color: '#db2777' },
-                { label: 'Sin cupón', count: sinCupon, color: '#e5e7eb' },
+                { label: 'Con cupón', count: conCupon, color: '#e2766f' },
+                { label: 'Sin cupón', count: sinCupon, color: '#c3c8d4' },
               ]}
             />
           </div>
         </aside>
 
         <div className="flex-1 min-w-0 w-full">
-          <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6 md:p-8">
+          <div className="glass p-6 md:p-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-              <h2 className="text-2xl font-bold text-gray-800 flex items-center">
-                <PedidosIcon className="w-5 h-5 mr-2 text-purple-600" />
+              <h2 className="text-2xl font-bold text-ink flex items-center">
+                <PedidosIcon className="w-5 h-5 mr-2 text-coral" />
                 Pedidos
               </h2>
             </div>
-            <div className="overflow-x-auto rounded-xl border border-gray-200">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+            <div className="overflow-x-auto rounded-[22px] border border-white/70">
+              <table className="min-w-full divide-y divide-white/70">
+                <thead className="bg-white/40">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Productos</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cupón</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descuento</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Cliente</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Productos</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Cupón</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Descuento</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Total</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Fecha</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white/20 divide-y divide-white/60">
                   {isLoading ? (
                     <tr>
-                      <td colSpan={6} className="p-6 text-center text-gray-400">Cargando...</td>
+                      <td colSpan={6} className="p-6 text-center text-muted">Cargando...</td>
                     </tr>
                   ) : pedidosPagina.length ? (
                     pedidosPagina.map((o) => {
                       const productosPlano = (o.items || []).map((i) => `${i.cantidad}× ${i.name}`).join(', ');
                       return (
                         <tr key={o._id}>
-                          <td className="p-3 pl-6">
+                          <td className="p-3 pl-6 text-[#3a3d45]">
                             {o.user ? (
                               <>
                                 {o.user.name || 'Cliente'}
                                 <br />
-                                <span className="text-xs text-gray-400">{o.user.email || ''}</span>
+                                <span className="text-xs text-muted">{o.user.email || ''}</span>
                               </>
                             ) : (
                               'Cliente eliminado'
                             )}
                           </td>
-                          <td className="p-3 max-w-xs truncate" title={productosPlano}>
+                          <td className="p-3 text-[#3a3d45] max-w-xs truncate" title={productosPlano}>
                             {productosPlano}
                           </td>
                           <td className="p-3">
-                            {o.couponCode ? (
-                              <span className="px-2 py-1 text-xs font-semibold rounded-full bg-pink-100 text-pink-700">{o.couponCode}</span>
-                            ) : (
-                              '—'
-                            )}
+                            {o.couponCode ? <span className="status bg-coral">{o.couponCode}</span> : '—'}
                           </td>
-                          <td className="p-3">{o.discount ? `-${formatoMoneda(o.discount)}` : '—'}</td>
-                          <td className="p-3 font-semibold text-purple-700">{formatoMoneda(o.total)}</td>
-                          <td className="p-3">{formatoFechaCorta(o.createdAt)}</td>
+                          <td className="p-3 text-[#3a3d45]">{o.discount ? `-${formatoMoneda(o.discount)}` : '—'}</td>
+                          <td className="p-3 font-semibold text-ink">{formatoMoneda(o.total)}</td>
+                          <td className="p-3 text-[#3a3d45]">{formatoFechaCorta(o.createdAt)}</td>
                         </tr>
                       );
                     })
                   ) : (
                     <tr>
-                      <td colSpan={6} className="p-6 text-center text-gray-400">Todavía no hay pedidos registrados.</td>
+                      <td colSpan={6} className="p-6 text-center text-muted">Todavía no hay pedidos registrados.</td>
                     </tr>
                   )}
                 </tbody>

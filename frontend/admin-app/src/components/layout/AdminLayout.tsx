@@ -26,10 +26,21 @@ export default function AdminLayout() {
           }`}
         />
         <MobileDrawer open={mobileOpen} onClose={() => setMobileOpen(false)} />
-        <ChatPanel />
 
-        <main className="max-w-[1600px] mx-auto p-4 lg:pl-[104px] lg:pr-10 lg:py-8">
-          <Outlet />
+        {/* Grid de 2 columnas: contenido a la izquierda (la que manda en
+            ancho) + panel de IA a la derecha, siempre visible, sin botón
+            para abrirlo. El quiebre a columna única se da en 2xl (no en xl,
+            que es donde los grids internos de cada página -- KpiRow, etc. --
+            ya pasan a su propio máximo de columnas) para que esos grids
+            internos no compitan por ancho con la columna del chat en el
+            mismo breakpoint. */}
+        <main className="max-w-[1800px] mx-auto p-4 lg:pl-[104px] lg:pr-6 lg:py-8">
+          <div className="grid grid-cols-1 gap-6 2xl:grid-cols-[minmax(0,1fr)_360px]">
+            <div id="admin-content" className="min-w-0">
+              <Outlet />
+            </div>
+            <ChatPanel />
+          </div>
         </main>
       </div>
     </RequireAdmin>
