@@ -8,16 +8,16 @@ interface KpiCardProps {
   icon: React.ReactNode;
 }
 
-export function KpiCard({ label, value, note, valueClassName = 'text-gray-900', iconBg, iconColor, icon }: KpiCardProps) {
+export function KpiCard({ label, value, note, valueClassName = 'text-ink', iconBg, iconColor, icon }: KpiCardProps) {
   return (
-    <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
+    <div className="glass p-5">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">{label}</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted">{label}</p>
           <p className={`mt-2 text-3xl font-bold ${valueClassName}`}>{value}</p>
-          <p className="mt-1 text-xs text-gray-400">{note}</p>
+          <p className="mt-1 text-xs text-muted">{note}</p>
         </div>
-        <div className={`w-11 h-11 rounded-xl ${iconBg} ${iconColor} flex items-center justify-center shrink-0`}>
+        <div className={`w-11 h-11 rounded-full ${iconBg} ${iconColor} flex items-center justify-center shrink-0`}>
           {icon}
         </div>
       </div>

@@ -10,14 +10,14 @@ export default function Pagination({ totalItems, porPagina, paginaActiva, onChan
   if (totalPaginas <= 1) return null;
 
   return (
-    <div className="flex justify-center mt-4">
+    <div className="flex justify-center mt-4 gap-1.5">
       {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((i) => (
         <button
           key={i}
           type="button"
           onClick={() => onChange(i)}
-          className={`mx-1 px-3 py-1 rounded transition ${
-            i === paginaActiva ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'
+          className={`h-8 w-8 rounded-full text-sm font-medium transition ${
+            i === paginaActiva ? 'bg-ink text-white' : 'bg-white/50 text-[#3a3d45] hover:bg-white/90'
           }`}
         >
           {i}

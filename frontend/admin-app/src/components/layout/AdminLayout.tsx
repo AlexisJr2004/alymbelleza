@@ -1,34 +1,34 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import RequireAdmin from './RequireAdmin';
-import Sidebar from './Sidebar';
-import Topbar from './Topbar';
+import TopNav from './TopNav';
+import IconRail from './IconRail';
+import MobileDrawer from './MobileDrawer';
 
 export default function AdminLayout() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <RequireAdmin>
-      <div className="bg-white font-body min-h-screen">
-        <Sidebar open={sidebarOpen} onNavigate={() => setSidebarOpen(false)} />
+      <div className="app-bg font-sans text-ink antialiased min-h-screen">
+        <TopNav onToggleMobile={() => setMobileOpen((v) => !v)} />
+        <IconRail />
 
-        {/* Siempre montado (no solo cuando sidebarOpen) para poder animar su
+        {/* Siempre montado (no solo cuando mobileOpen) para poder animar su
             opacidad al abrir/cerrar, igual que el overlay del menú móvil
             público — antes aparecía/desaparecía de golpe sin transición. */}
         <div
           aria-hidden="true"
-          onClick={() => setSidebarOpen(false)}
-          className={`fixed inset-0 bg-gray-900/40 z-30 lg:hidden transition-opacity duration-300 ${
-            sidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          onClick={() => setMobileOpen(false)}
+          className={`fixed inset-0 bg-ink/30 z-30 lg:hidden transition-opacity duration-300 ${
+            mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
           }`}
         />
+        <MobileDrawer open={mobileOpen} onClose={() => setMobileOpen(false)} />
 
-        <div className="relative z-10 lg:pl-64">
-          <Topbar onToggleSidebar={() => setSidebarOpen((v) => !v)} />
-          <main className="p-4 lg:p-6 max-w-[1920px] mx-auto">
-            <Outlet />
-          </main>
-        </div>
+        <main className="max-w-[1600px] mx-auto p-4 lg:pl-[104px] lg:pr-10 lg:py-8">
+          <Outlet />
+        </main>
       </div>
     </RequireAdmin>
   );
