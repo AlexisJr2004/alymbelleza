@@ -43,13 +43,13 @@ function ResumenKpiCard({
   icon: React.ReactNode;
 }) {
   return (
-    <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-5">
-      <div className="flex items-center justify-between mb-3">
-        <p className="text-sm text-gray-500">{etiqueta}</p>
-        <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${iconBg} ${iconColor}`}>{icon}</div>
+    <div className="glass p-4">
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-xs text-muted">{etiqueta}</p>
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${iconBg} ${iconColor}`}>{icon}</div>
       </div>
-      <p className="text-2xl font-bold text-gray-900 leading-tight">{valor}</p>
-      <p className="text-xs text-gray-400 mt-2">{sub}</p>
+      <p className="text-xl font-bold text-ink leading-tight">{valor}</p>
+      <p className="text-xs text-muted mt-1.5">{sub}</p>
     </div>
   );
 }
@@ -149,7 +149,7 @@ export default function ResumenPage() {
   const tarjetaActual = tarjetasActivas.length ? tarjetasActivas[tarjetaIndex % tarjetasActivas.length] : null;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <PageHeader
         eyebrow="Panel de control"
         title="Resumen general"
@@ -157,19 +157,19 @@ export default function ResumenPage() {
       />
 
       {/* Fila 1: hero de ingresos + KPIs */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        <div className="lg:col-span-2 flex flex-col gap-4">
-          <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6">
-            <h3 className="font-semibold text-gray-800">Ingresos totales</h3>
-            <p className="text-sm text-gray-400">Resumen de tus ingresos actuales</p>
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
+        <div className="lg:col-span-2 flex flex-col gap-3">
+          <div className="glass p-5">
+            <h3 className="font-semibold text-ink">Ingresos totales</h3>
+            <p className="text-sm text-muted">Resumen de tus ingresos actuales</p>
 
-            <div className="flex items-end justify-between gap-4 mt-5">
+            <div className="flex items-end justify-between gap-4 mt-4">
               <div>
-                <p className="text-3xl font-bold text-gray-900">{formatoMoneda(ingresos)}</p>
+                <p className="text-2xl font-bold text-ink">{formatoMoneda(ingresos)}</p>
                 {cambioPct === null ? (
-                  <p className="text-sm font-medium mt-1 text-gray-400">Sin datos del mes anterior</p>
+                  <p className="text-sm font-medium mt-1 text-muted">Sin datos del mes anterior</p>
                 ) : (
-                  <p className={`text-sm font-medium mt-1 ${cambioPct >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
+                  <p className={`text-sm font-medium mt-1 ${cambioPct >= 0 ? 'text-sky' : 'text-coral'}`}>
                     <span className="inline-flex items-center gap-1">
                       {cambioPct >= 0 ? <ArrowUpIcon className="w-3.5 h-3.5" /> : <ArrowDownIcon className="w-3.5 h-3.5" />}
                       {Math.abs(cambioPct)}% que el mes anterior
@@ -180,30 +180,30 @@ export default function ResumenPage() {
               <Sparkline data={serieIngresos} />
             </div>
 
-            <div className="border-t border-dashed border-gray-300/70 my-5" />
+            <div className="border-t border-dashed border-white/80 my-4" />
 
             <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-500">
-                <span className="font-semibold text-gray-800">{orders.length}</span> pedidos registrados
+              <p className="text-sm text-muted">
+                <span className="font-semibold text-ink">{orders.length}</span> pedidos registrados
               </p>
-              <Link to="/pedidos" className="text-sm font-medium text-purple-600 hover:text-purple-800 flex items-center gap-1">
+              <Link to="/pedidos" className="text-sm font-medium text-sky hover:text-sky/70 flex items-center gap-1">
                 Ver todos
                 <ArrowRightIcon className="w-3.5 h-3.5" />
               </Link>
             </div>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-2.5">
             <Link
               to="/pedidos"
-              className="flex-1 bg-purple-600 text-white py-2.5 rounded-lg text-sm font-medium flex items-center justify-center gap-2 hover:bg-purple-700 transition-colors"
+              className="flex-1 bg-ink text-white py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 hover:bg-ink/85 transition-colors"
             >
               <PedidosIcon className="w-4 h-4" />
               Ver pedidos
             </Link>
             <Link
               to="/citas"
-              className="flex-1 bg-white/70 backdrop-blur-md border border-gray-200 text-gray-700 py-2.5 rounded-lg text-sm font-medium flex items-center justify-center gap-2 hover:bg-white/90 transition-colors"
+              className="flex-1 bg-white/50 border border-white/80 text-[#3a3d45] py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 hover:bg-white/90 transition-colors"
             >
               <CitasIcon className="w-4 h-4" />
               Ver citas
@@ -211,122 +211,122 @@ export default function ResumenPage() {
             <Link
               to="/productos"
               title="Agregar producto"
-              className="w-11 h-11 shrink-0 bg-white/70 backdrop-blur-md border border-gray-200 text-gray-700 rounded-lg flex items-center justify-center hover:bg-white/90 transition-colors"
+              className="w-11 h-11 shrink-0 bg-white/50 border border-white/80 text-[#3a3d45] rounded-full flex items-center justify-center hover:bg-white/90 transition-colors"
             >
               <PlusIcon className="w-4 h-4" />
             </Link>
           </div>
         </div>
 
-        <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
           <ResumenKpiCard
             etiqueta="Pedidos"
             valor={orders.length}
             sub={`${formatoMoneda(descuentos)} en descuentos`}
-            iconBg="bg-purple-100/70"
-            iconColor="text-purple-600"
+            iconBg="bg-ink/5"
+            iconColor="text-ink"
             icon={<PedidosIcon className="w-4 h-4" />}
           />
           <ResumenKpiCard
             etiqueta="Usuarios"
             valor={users.length}
             sub={`${usuariosEsteMes} nuevos este mes`}
-            iconBg="bg-blue-100/70"
-            iconColor="text-blue-600"
+            iconBg="bg-sky/15"
+            iconColor="text-sky"
             icon={<UsuariosIcon className="w-4 h-4" />}
           />
           <ResumenKpiCard
             etiqueta="Productos"
             valor={products.length}
             sub={`${productosAgotados} agotados`}
-            iconBg="bg-pink-100/70"
-            iconColor="text-pink-600"
+            iconBg="bg-coral/15"
+            iconColor="text-coral"
             icon={<ProductosIcon className="w-4 h-4" />}
           />
           <ResumenKpiCard
             etiqueta="Cupones activos"
             valor={`${cuponesActivos}/${coupons.length}`}
             sub={`${coupons.length} en total`}
-            iconBg="bg-amber-100/70"
-            iconColor="text-amber-600"
+            iconBg="bg-[#eef0f4]"
+            iconColor="text-muted"
             icon={<CuponesIcon className="w-4 h-4" />}
           />
         </div>
       </div>
 
       {/* Fila 2: gráfico de ingresos + panel lateral */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-1">Ingresos de los últimos 6 meses</h3>
-          <p className="text-sm text-gray-500 mb-6">Total facturado por mes según los pedidos registrados.</p>
-          <div className="h-48">
-            <TrendChart data={serieIngresos} formatValue={formatoMoneda} color="#9333ea" />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <div className="lg:col-span-2 glass p-5">
+          <h3 className="text-base font-semibold text-ink mb-1">Ingresos de los últimos 6 meses</h3>
+          <p className="text-sm text-muted mb-4">Total facturado por mes según los pedidos registrados.</p>
+          <div className="h-36">
+            <TrendChart data={serieIngresos} formatValue={formatoMoneda} color="#7e9ce3" />
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div className="rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 p-6 text-white relative overflow-hidden">
+        <div className="space-y-4">
+          <div className="rounded-[26px] bg-ink p-5 text-white relative overflow-hidden">
             <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full pointer-events-none" />
             <div className="absolute -bottom-10 -left-6 w-28 h-28 bg-white/10 rounded-full pointer-events-none" />
-            <p className="text-sm text-white/80 relative">Ingresos de este mes</p>
-            <p className="text-3xl font-bold mt-1 relative">{formatoMoneda(mesActualTotal)}</p>
-            <p className="text-sm text-white/80 mt-4 relative">{mesSub}</p>
+            <p className="text-sm text-white/70 relative">Ingresos de este mes</p>
+            <p className="text-2xl font-bold mt-1 relative">{formatoMoneda(mesActualTotal)}</p>
+            <p className="text-sm text-white/70 mt-3 relative">{mesSub}</p>
           </div>
 
-          <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-              <h3 className="text-base font-semibold text-gray-800">Últimos pedidos</h3>
-              <Link to="/pedidos" className="text-sm text-purple-600 hover:text-purple-800 font-medium">
+          <div className="glass overflow-hidden">
+            <div className="px-5 py-3 border-b border-white/70 flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-ink">Últimos pedidos</h3>
+              <Link to="/pedidos" className="text-xs text-sky hover:text-sky/70 font-medium">
                 Ver todos
               </Link>
             </div>
-            <div className="divide-y divide-gray-100">
+            <div className="divide-y divide-white/60">
               {ultimosPedidos.length ? (
                 ultimosPedidos.map((o) => (
-                  <div key={o._id} className="flex items-center justify-between px-6 py-3">
+                  <div key={o._id} className="flex items-center justify-between px-5 py-2.5">
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-gray-800 truncate">{o.user?.name || 'Cliente'}</p>
-                      <p className="text-xs text-gray-400">{formatoFechaCorta(o.createdAt)}</p>
+                      <p className="text-sm font-medium text-ink truncate">{o.user?.name || 'Cliente'}</p>
+                      <p className="text-xs text-muted">{formatoFechaCorta(o.createdAt)}</p>
                     </div>
-                    <span className="text-sm font-semibold text-purple-700">{formatoMoneda(o.total)}</span>
+                    <span className="text-sm font-semibold text-sky">{formatoMoneda(o.total)}</span>
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-gray-400 px-6 py-6 text-center">Todavía no hay pedidos.</p>
+                <p className="text-sm text-muted px-5 py-5 text-center">Todavía no hay pedidos.</p>
               )}
             </div>
           </div>
 
-          <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-              <h3 className="text-base font-semibold text-gray-800">Tarjetas de pago</h3>
-              <Link to="/tarjetas" className="text-sm text-purple-600 hover:text-purple-800 font-medium">
+          <div className="glass overflow-hidden">
+            <div className="px-5 py-3 border-b border-white/70 flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-ink">Tarjetas de pago</h3>
+              <Link to="/tarjetas" className="text-xs text-sky hover:text-sky/70 font-medium">
                 Ver todas
               </Link>
             </div>
-            <div className="p-6">
+            <div className="p-5">
               {tarjetaActual ? (
                 <BankCardPreview card={tarjetaActual} />
               ) : (
-                <p className="text-sm text-gray-400 text-center py-10">Todavía no hay tarjetas visibles.</p>
+                <p className="text-sm text-muted text-center py-8">Todavía no hay tarjetas visibles.</p>
               )}
-              <div className="flex items-center justify-between mt-4">
+              <div className="flex items-center justify-between mt-3">
                 <button
                   type="button"
                   disabled={!tarjetasActivas.length}
                   onClick={() => setTarjetaIndex((i) => (i - 1 + tarjetasActivas.length) % tarjetasActivas.length)}
-                  className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition disabled:opacity-40"
+                  className="w-8 h-8 rounded-full border border-white/80 bg-white/50 flex items-center justify-center text-[#3a3d45] hover:bg-white/90 transition disabled:opacity-40"
                 >
                   <ChevronDownIcon className="w-3.5 h-3.5 rotate-90" />
                 </button>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-muted">
                   {tarjetasActivas.length ? `${(tarjetaIndex % tarjetasActivas.length) + 1} / ${tarjetasActivas.length}` : '0 / 0'}
                 </span>
                 <button
                   type="button"
                   disabled={!tarjetasActivas.length}
                   onClick={() => setTarjetaIndex((i) => (i + 1) % tarjetasActivas.length)}
-                  className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition disabled:opacity-40"
+                  className="w-8 h-8 rounded-full border border-white/80 bg-white/50 flex items-center justify-center text-[#3a3d45] hover:bg-white/90 transition disabled:opacity-40"
                 >
                   <ChevronDownIcon className="w-3.5 h-3.5 -rotate-90" />
                 </button>
@@ -337,93 +337,89 @@ export default function ResumenPage() {
       </div>
 
       {/* Fila 3: distribución de citas + pedidos por mes */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6">
-          <div className="flex items-start justify-between gap-3 mb-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div className="glass p-5">
+          <div className="flex items-start justify-between gap-3 mb-4">
             <div>
-              <p className="text-xs uppercase tracking-wider text-purple-600 font-semibold">Estado general</p>
-              <h3 className="text-lg font-semibold text-gray-800 mt-1">Estado de las citas</h3>
+              <p className="text-xs uppercase tracking-wider text-coral font-semibold">Estado general</p>
+              <h3 className="text-base font-semibold text-ink mt-1">Estado de las citas</h3>
             </div>
-            <span className="text-xs px-2 py-1 bg-purple-50 text-purple-600 rounded-full border border-purple-100 shrink-0">
+            <span className="text-xs px-2 py-1 bg-white/50 text-[#3a3d45] rounded-full border border-white/80 shrink-0">
               Total: <span className="font-semibold">{totalCitas}</span>
             </span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-6 items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-5 items-center">
             <AnnularDonut groups={conteosCitas} centerPct={pctRealizadas} centerCaption="Realizadas" />
-            <div className="space-y-2.5">
+            <div className="space-y-2">
               {conteosCitas.map((e) => (
-                <div key={e.key} className="flex items-center gap-2 text-sm text-gray-600">
+                <div key={e.key} className="flex items-center gap-2 text-sm text-[#3a3d45]">
                   <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: e.color }} />
                   <span>{e.label}</span>
-                  <span className="ml-auto font-medium text-gray-800">{e.count}</span>
+                  <span className="ml-auto font-medium text-ink">{e.count}</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
-        <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-1">Pedidos de los últimos 6 meses</h3>
-          <p className="text-sm text-gray-500 mb-6">Cantidad de pedidos registrados por mes.</p>
-          <div className="h-40">
-            <TrendChart data={seriePedidos} formatValue={(v) => String(v)} color="#db2777" />
+        <div className="glass p-5">
+          <h3 className="text-base font-semibold text-ink mb-1">Pedidos de los últimos 6 meses</h3>
+          <p className="text-sm text-muted mb-4">Cantidad de pedidos registrados por mes.</p>
+          <div className="h-32">
+            <TrendChart data={seriePedidos} formatValue={(v) => String(v)} color="#e2766f" />
           </div>
         </div>
       </div>
 
       {/* Fila 4: pedidos recientes */}
-      <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-800">Pedidos recientes</h3>
-          <Link to="/pedidos" className="text-sm text-purple-600 hover:text-purple-800 font-medium">
+      <div className="glass overflow-hidden">
+        <div className="px-5 py-3.5 border-b border-white/70 flex items-center justify-between">
+          <h3 className="text-base font-semibold text-ink">Pedidos recientes</h3>
+          <Link to="/pedidos" className="text-sm text-sky hover:text-sky/70 font-medium">
             Ver todos
           </Link>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-white/70">
+            <thead className="bg-white/40">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Cliente</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Productos</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Cupón</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Fecha</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Total</th>
+                <th className="px-5 py-2.5 text-left text-xs font-medium text-muted uppercase tracking-wider">Cliente</th>
+                <th className="px-5 py-2.5 text-left text-xs font-medium text-muted uppercase tracking-wider">Productos</th>
+                <th className="px-5 py-2.5 text-left text-xs font-medium text-muted uppercase tracking-wider">Cupón</th>
+                <th className="px-5 py-2.5 text-left text-xs font-medium text-muted uppercase tracking-wider">Fecha</th>
+                <th className="px-5 py-2.5 text-right text-xs font-medium text-muted uppercase tracking-wider">Total</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-100">
+            <tbody className="bg-white/20 divide-y divide-white/60">
               {pedidosTabla.length ? (
                 pedidosTabla.map((o) => {
                   const productosPlano = (o.items || []).map((i) => `${i.cantidad}× ${i.name}`).join(', ');
                   return (
-                    <tr key={o._id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 text-sm text-gray-700">
+                    <tr key={o._id} className="hover:bg-white/40 transition-colors">
+                      <td className="px-5 py-3 text-sm text-[#3a3d45]">
                         {o.user ? (
                           <>
                             {o.user.name || 'Cliente'}
                             <br />
-                            <span className="text-xs text-gray-400">{o.user.email || ''}</span>
+                            <span className="text-xs text-muted">{o.user.email || ''}</span>
                           </>
                         ) : (
                           'Cliente eliminado'
                         )}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate" title={productosPlano}>
+                      <td className="px-5 py-3 text-sm text-muted max-w-xs truncate" title={productosPlano}>
                         {productosPlano}
                       </td>
-                      <td className="px-6 py-4 text-sm">
-                        {o.couponCode ? (
-                          <span className="px-2 py-1 text-xs font-semibold rounded-full bg-pink-100 text-pink-700">{o.couponCode}</span>
-                        ) : (
-                          '—'
-                        )}
+                      <td className="px-5 py-3 text-sm">
+                        {o.couponCode ? <span className="status bg-coral">{o.couponCode}</span> : '—'}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500">{formatoFechaCorta(o.createdAt)}</td>
-                      <td className="px-6 py-4 text-sm font-semibold text-gray-900 text-right">{formatoMoneda(o.total)}</td>
+                      <td className="px-5 py-3 text-sm text-muted">{formatoFechaCorta(o.createdAt)}</td>
+                      <td className="px-5 py-3 text-sm font-semibold text-ink text-right">{formatoMoneda(o.total)}</td>
                     </tr>
                   );
                 })
               ) : (
                 <tr>
-                  <td colSpan={5} className="px-6 py-10 text-center text-gray-400">
+                  <td colSpan={5} className="px-5 py-8 text-center text-muted">
                     Todavía no hay pedidos registrados.
                   </td>
                 </tr>
@@ -434,104 +430,102 @@ export default function ResumenPage() {
       </div>
 
       {/* Fila 5: usuarios nuevos */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-1">Usuarios nuevos por mes</h3>
-          <p className="text-sm text-gray-500 mb-6">Registros nuevos en los últimos 6 meses.</p>
-          <div className="h-40">
-            <TrendChart data={serieUsuariosNuevos} formatValue={(v) => String(v)} color="#4f46e5" />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div className="glass p-5">
+          <h3 className="text-base font-semibold text-ink mb-1">Usuarios nuevos por mes</h3>
+          <p className="text-sm text-muted mb-4">Registros nuevos en los últimos 6 meses.</p>
+          <div className="h-32">
+            <TrendChart data={serieUsuariosNuevos} formatValue={(v) => String(v)} color="#16181d" />
           </div>
         </div>
-        <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-gray-800">Últimos usuarios registrados</h3>
-            <Link to="/usuarios" className="text-sm text-purple-600 hover:text-purple-800 font-medium">
+        <div className="glass overflow-hidden">
+          <div className="px-5 py-3.5 border-b border-white/70 flex items-center justify-between">
+            <h3 className="text-base font-semibold text-ink">Últimos usuarios registrados</h3>
+            <Link to="/usuarios" className="text-sm text-sky hover:text-sky/70 font-medium">
               Ver todos
             </Link>
           </div>
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-white/60">
             {ultimosUsuarios.length ? (
               ultimosUsuarios.map((u) => (
-                <div key={u._id} className="flex items-center justify-between px-6 py-3">
+                <div key={u._id} className="flex items-center justify-between px-5 py-2.5">
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-gray-800 truncate">{u.name || 'Usuario'}</p>
-                    <p className="text-xs text-gray-400 truncate">{u.email || ''}</p>
+                    <p className="text-sm font-medium text-ink truncate">{u.name || 'Usuario'}</p>
+                    <p className="text-xs text-muted truncate">{u.email || ''}</p>
                   </div>
-                  <span className="text-xs text-gray-400 shrink-0 ml-2">{formatoFechaCorta(u.createdAt)}</span>
+                  <span className="text-xs text-muted shrink-0 ml-2">{formatoFechaCorta(u.createdAt)}</span>
                 </div>
               ))
             ) : (
-              <p className="text-sm text-gray-400 px-6 py-6 text-center">Todavía no hay usuarios.</p>
+              <p className="text-sm text-muted px-5 py-5 text-center">Todavía no hay usuarios.</p>
             )}
           </div>
         </div>
       </div>
 
-      {/* Fila 6: clientes más activos */}
-      <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-4 gap-3">
-          <div>
-            <p className="text-xs uppercase tracking-wider text-purple-600 font-semibold">Usuarios</p>
-            <h3 className="text-lg font-bold text-gray-800 mt-1">Clientes más activos</h3>
+      {/* Fila 6: clientes más activos + en riesgo de abandono, lado a lado
+          (antes eran dos tarjetas de ancho completo apiladas) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div className="glass p-5">
+          <div className="flex items-center justify-between mb-3 gap-3">
+            <div>
+              <p className="text-xs uppercase tracking-wider text-coral font-semibold">Usuarios</p>
+              <h3 className="text-base font-bold text-ink mt-1">Clientes más activos</h3>
+            </div>
+            <span className="text-xs px-2 py-1 bg-white/50 text-[#3a3d45] rounded-full border border-white/80 shrink-0">
+              {clientesActivos.length} con pedidos
+            </span>
           </div>
-          <span className="text-xs px-2 py-1 bg-purple-50 text-purple-600 rounded-full border border-purple-100">
-            {clientesActivos.length} cliente{clientesActivos.length === 1 ? '' : 's'} con pedidos
-          </span>
-        </div>
-        {clientesActivos.length ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
-            {clientesActivos.map((u, i) => (
-              <div key={u.email} className="rounded-2xl border border-gray-200 bg-white p-3">
-                <p className="text-[10px] uppercase tracking-wide text-gray-400">Cliente {i + 1}</p>
-                <h4 className="mt-1 text-sm font-semibold text-gray-900 truncate">{u.nombre}</h4>
-                <div className="mt-3 rounded-xl bg-purple-50/60 p-3">
-                  <div className="flex items-end justify-between gap-2">
+          {clientesActivos.length ? (
+            <div className="grid grid-cols-2 gap-2.5">
+              {clientesActivos.slice(0, 4).map((u, i) => (
+                <div key={u.email} className="rounded-2xl border border-white/80 bg-white/40 p-2.5">
+                  <p className="text-[10px] uppercase tracking-wide text-muted">Cliente {i + 1}</p>
+                  <h4 className="mt-0.5 text-sm font-semibold text-ink truncate">{u.nombre}</h4>
+                  <div className="mt-2 flex items-end justify-between gap-2">
                     <div>
-                      <p className="text-[10px] uppercase tracking-wide text-gray-500">Pedidos</p>
-                      <p className="text-xl font-bold text-gray-900">{u.total}</p>
+                      <p className="text-[9px] uppercase tracking-wide text-muted">Pedidos</p>
+                      <p className="text-lg font-bold text-ink leading-tight">{u.total}</p>
                     </div>
-                    <div className="text-right">
-                      <p className="text-[10px] uppercase tracking-wide text-gray-500">Gastado</p>
-                      <p className="text-sm font-semibold text-purple-700">{formatoMoneda(u.gastado)}</p>
-                    </div>
+                    <p className="text-xs font-semibold text-sky">{formatoMoneda(u.gastado)}</p>
                   </div>
-                  <p className="mt-1.5 text-[11px] text-gray-400">Último: {formatoFechaCorta(u.ultimo)}</p>
                 </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-center text-gray-400 py-6 text-sm">Todavía no hay pedidos de clientes.</p>
-        )}
-      </div>
-
-      {/* Fila 7: clientes en riesgo de abandono */}
-      <div className="bg-white/70 backdrop-blur-md rounded-xl border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-4 gap-3">
-          <div>
-            <p className="text-xs uppercase tracking-wider text-amber-600 font-semibold">Retención</p>
-            <h3 className="text-lg font-bold text-gray-800 mt-1">Clientes en riesgo de abandono</h3>
-          </div>
-          <span className="text-xs px-2 py-1 bg-amber-50 text-amber-700 rounded-full border border-amber-100 shrink-0">
-            30+ días sin pedidos
-          </span>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-muted py-5 text-sm">Todavía no hay pedidos de clientes.</p>
+          )}
         </div>
-        {clientesInactivos.length ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
-            {clientesInactivos.map((u) => (
-              <div key={u.email} className="rounded-2xl border border-amber-100 bg-amber-50/40 p-3">
-                <h4 className="text-sm font-semibold text-gray-900 truncate">{u.name || 'Cliente'}</h4>
-                <p className="text-xs text-gray-500 mt-1 truncate">{u.email || ''}</p>
-                <div className="mt-2 flex items-center justify-between">
-                  <span className="text-xs text-gray-500">{u.ultimoPedido ? `Último: ${formatoFechaCorta(u.ultimoPedido)}` : 'Nunca ha comprado'}</span>
-                  {u.dias != null && <span className="text-xs font-bold text-amber-700">{u.dias}d</span>}
-                </div>
-              </div>
-            ))}
+
+        <div className="glass p-5">
+          <div className="flex items-center justify-between mb-3 gap-3">
+            <div>
+              <p className="text-xs uppercase tracking-wider text-coral font-semibold">Retención</p>
+              <h3 className="text-base font-bold text-ink mt-1">En riesgo de abandono</h3>
+            </div>
+            <span className="text-xs px-2 py-1 bg-coral/10 text-coral rounded-full border border-coral/25 shrink-0">
+              30+ días
+            </span>
           </div>
-        ) : (
-          <p className="text-center text-gray-400 py-6 text-sm">Todos los clientes activos tienen pedidos recientes.</p>
-        )}
+          {clientesInactivos.length ? (
+            <div className="grid grid-cols-2 gap-2.5">
+              {clientesInactivos.slice(0, 4).map((u) => (
+                <div key={u.email} className="rounded-2xl border border-coral/25 bg-coral/5 p-2.5">
+                  <h4 className="text-sm font-semibold text-ink truncate">{u.name || 'Cliente'}</h4>
+                  <p className="text-xs text-muted mt-0.5 truncate">{u.email || ''}</p>
+                  <div className="mt-2 flex items-center justify-between">
+                    <span className="text-[11px] text-muted">
+                      {u.ultimoPedido ? formatoFechaCorta(u.ultimoPedido) : 'Nunca compró'}
+                    </span>
+                    {u.dias != null && <span className="text-xs font-bold text-coral">{u.dias}d</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-muted py-5 text-sm">Todos los clientes activos tienen pedidos recientes.</p>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -56,7 +56,7 @@ export default function TopNav({ onToggleMobile }: { onToggleMobile: () => void 
           to="/citas"
           title="Citas pendientes"
           aria-label="Citas pendientes"
-          className="circle-btn relative"
+          className="rail-btn relative"
         >
           <BellIcon className="h-[18px] w-[18px]" />
           {hayPendientes && (

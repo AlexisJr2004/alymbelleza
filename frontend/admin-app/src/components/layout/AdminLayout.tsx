@@ -4,6 +4,7 @@ import RequireAdmin from './RequireAdmin';
 import TopNav from './TopNav';
 import IconRail from './IconRail';
 import MobileDrawer from './MobileDrawer';
+import ChatPanel from './ChatPanel';
 
 export default function AdminLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -25,6 +26,7 @@ export default function AdminLayout() {
           }`}
         />
         <MobileDrawer open={mobileOpen} onClose={() => setMobileOpen(false)} />
+        <ChatPanel />
 
         <main className="max-w-[1600px] mx-auto p-4 lg:pl-[104px] lg:pr-10 lg:py-8">
           <Outlet />
