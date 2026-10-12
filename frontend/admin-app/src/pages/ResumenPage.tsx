@@ -254,89 +254,17 @@ export default function ResumenPage() {
         </div>
       </div>
 
-      {/* Fila 2: gráfico de ingresos + panel lateral */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <div className="lg:col-span-2 glass p-5">
-          <h3 className="text-base font-semibold text-ink mb-1">Ingresos de los últimos 6 meses</h3>
-          <p className="text-sm text-muted mb-4">Total facturado por mes según los pedidos registrados.</p>
-          <div className="h-36">
-            <TrendChart data={serieIngresos} formatValue={formatoMoneda} color="#7e9ce3" />
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <div className="rounded-[26px] bg-ink p-5 text-white relative overflow-hidden">
-            <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full pointer-events-none" />
-            <div className="absolute -bottom-10 -left-6 w-28 h-28 bg-white/10 rounded-full pointer-events-none" />
-            <p className="text-sm text-white/70 relative">Ingresos de este mes</p>
-            <p className="text-2xl font-bold mt-1 relative">{formatoMoneda(mesActualTotal)}</p>
-            <p className="text-sm text-white/70 mt-3 relative">{mesSub}</p>
-          </div>
-
-          <div className="glass overflow-hidden">
-            <div className="px-5 py-3 border-b border-white/70 flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-ink">Últimos pedidos</h3>
-              <Link to="/pedidos" className="text-xs text-sky hover:text-sky/70 font-medium">
-                Ver todos
-              </Link>
-            </div>
-            <div className="divide-y divide-white/60">
-              {ultimosPedidos.length ? (
-                ultimosPedidos.map((o) => (
-                  <div key={o._id} className="flex items-center justify-between px-5 py-2.5">
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-ink truncate">{o.user?.name || 'Cliente'}</p>
-                      <p className="text-xs text-muted">{formatoFechaCorta(o.createdAt)}</p>
-                    </div>
-                    <span className="text-sm font-semibold text-sky">{formatoMoneda(o.total)}</span>
-                  </div>
-                ))
-              ) : (
-                <p className="text-sm text-muted px-5 py-5 text-center">Todavía no hay pedidos.</p>
-              )}
-            </div>
-          </div>
-
-          <div className="glass overflow-hidden">
-            <div className="px-5 py-3 border-b border-white/70 flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-ink">Tarjetas de pago</h3>
-              <Link to="/tarjetas" className="text-xs text-sky hover:text-sky/70 font-medium">
-                Ver todas
-              </Link>
-            </div>
-            <div className="p-5">
-              {tarjetaActual ? (
-                <BankCardPreview card={tarjetaActual} />
-              ) : (
-                <p className="text-sm text-muted text-center py-8">Todavía no hay tarjetas visibles.</p>
-              )}
-              <div className="flex items-center justify-between mt-3">
-                <button
-                  type="button"
-                  disabled={!tarjetasActivas.length}
-                  onClick={() => setTarjetaIndex((i) => (i - 1 + tarjetasActivas.length) % tarjetasActivas.length)}
-                  className="w-8 h-8 rounded-full border border-white/80 bg-white/50 flex items-center justify-center text-[#3a3d45] hover:bg-white/90 transition disabled:opacity-40"
-                >
-                  <ChevronDownIcon className="w-3.5 h-3.5 rotate-90" />
-                </button>
-                <span className="text-xs text-muted">
-                  {tarjetasActivas.length ? `${(tarjetaIndex % tarjetasActivas.length) + 1} / ${tarjetasActivas.length}` : '0 / 0'}
-                </span>
-                <button
-                  type="button"
-                  disabled={!tarjetasActivas.length}
-                  onClick={() => setTarjetaIndex((i) => (i + 1) % tarjetasActivas.length)}
-                  className="w-8 h-8 rounded-full border border-white/80 bg-white/50 flex items-center justify-center text-[#3a3d45] hover:bg-white/90 transition disabled:opacity-40"
-                >
-                  <ChevronDownIcon className="w-3.5 h-3.5 -rotate-90" />
-                </button>
-              </div>
-            </div>
-          </div>
+      {/* Fila 2: gráfico de ingresos, ancho completo */}
+      <div className="glass p-5">
+        <h3 className="text-base font-semibold text-ink mb-1">Ingresos de los últimos 6 meses</h3>
+        <p className="text-sm text-muted mb-4">Total facturado por mes según los pedidos registrados.</p>
+        <div className="h-36">
+          <TrendChart data={serieIngresos} formatValue={formatoMoneda} color="#7e9ce3" />
         </div>
       </div>
 
-      {/* Fila 3: distribución de citas + pedidos por mes */}
+      {/* Fila 3: distribución de citas + pedidos por mes, justo debajo de
+          ingresos y en las mismas 2 columnas */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         <div className="glass p-5">
           <div className="flex items-start justify-between gap-3 mb-4">
@@ -366,6 +294,81 @@ export default function ResumenPage() {
           <p className="text-sm text-muted mb-4">Cantidad de pedidos registrados por mes.</p>
           <div className="h-32">
             <TrendChart data={seriePedidos} formatValue={(v) => String(v)} color="#e2766f" />
+          </div>
+        </div>
+      </div>
+
+      {/* Fila 3b: ingresos de este mes + últimos pedidos + tarjetas de pago
+          (antes vivían en una columna angosta al lado del gráfico de
+          ingresos; ahora que ese gráfico ocupa el ancho completo, pasan a
+          su propia fila de 3 columnas). */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="rounded-[26px] bg-ink p-5 text-white relative overflow-hidden">
+          <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full pointer-events-none" />
+          <div className="absolute -bottom-10 -left-6 w-28 h-28 bg-white/10 rounded-full pointer-events-none" />
+          <p className="text-sm text-white/70 relative">Ingresos de este mes</p>
+          <p className="text-2xl font-bold mt-1 relative">{formatoMoneda(mesActualTotal)}</p>
+          <p className="text-sm text-white/70 mt-3 relative">{mesSub}</p>
+        </div>
+
+        <div className="glass overflow-hidden">
+          <div className="px-5 py-3 border-b border-white/70 flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-ink">Últimos pedidos</h3>
+            <Link to="/pedidos" className="text-xs text-sky hover:text-sky/70 font-medium">
+              Ver todos
+            </Link>
+          </div>
+          <div className="divide-y divide-white/60">
+            {ultimosPedidos.length ? (
+              ultimosPedidos.map((o) => (
+                <div key={o._id} className="flex items-center justify-between px-5 py-2.5">
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-ink truncate">{o.user?.name || 'Cliente'}</p>
+                    <p className="text-xs text-muted">{formatoFechaCorta(o.createdAt)}</p>
+                  </div>
+                  <span className="text-sm font-semibold text-sky">{formatoMoneda(o.total)}</span>
+                </div>
+              ))
+            ) : (
+              <p className="text-sm text-muted px-5 py-5 text-center">Todavía no hay pedidos.</p>
+            )}
+          </div>
+        </div>
+
+        <div className="glass overflow-hidden">
+          <div className="px-5 py-3 border-b border-white/70 flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-ink">Tarjetas de pago</h3>
+            <Link to="/tarjetas" className="text-xs text-sky hover:text-sky/70 font-medium">
+              Ver todas
+            </Link>
+          </div>
+          <div className="p-5">
+            {tarjetaActual ? (
+              <BankCardPreview card={tarjetaActual} />
+            ) : (
+              <p className="text-sm text-muted text-center py-8">Todavía no hay tarjetas visibles.</p>
+            )}
+            <div className="flex items-center justify-between mt-3">
+              <button
+                type="button"
+                disabled={!tarjetasActivas.length}
+                onClick={() => setTarjetaIndex((i) => (i - 1 + tarjetasActivas.length) % tarjetasActivas.length)}
+                className="w-8 h-8 rounded-full border border-white/80 bg-white/50 flex items-center justify-center text-[#3a3d45] hover:bg-white/90 transition disabled:opacity-40"
+              >
+                <ChevronDownIcon className="w-3.5 h-3.5 rotate-90" />
+              </button>
+              <span className="text-xs text-muted">
+                {tarjetasActivas.length ? `${(tarjetaIndex % tarjetasActivas.length) + 1} / ${tarjetasActivas.length}` : '0 / 0'}
+              </span>
+              <button
+                type="button"
+                disabled={!tarjetasActivas.length}
+                onClick={() => setTarjetaIndex((i) => (i + 1) % tarjetasActivas.length)}
+                className="w-8 h-8 rounded-full border border-white/80 bg-white/50 flex items-center justify-center text-[#3a3d45] hover:bg-white/90 transition disabled:opacity-40"
+              >
+                <ChevronDownIcon className="w-3.5 h-3.5 -rotate-90" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
