@@ -1,7 +1,8 @@
+import { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { MenuIcon, BellIcon } from '../icons';
 import { getStoredUser } from '../../lib/auth';
-import { resolveProfileImage } from '../../lib/format';
+import { formatoFechaLarga, resolveProfileImage } from '../../lib/format';
 import { useAppointmentsQuery } from '../../hooks/useAppointments';
 
 const FALLBACK_AVATAR = 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
@@ -20,6 +21,16 @@ export default function TopNav({ onToggleMobile }: { onToggleMobile: () => void 
   const user = getStoredUser();
   const { data: citas = [] } = useAppointmentsQuery();
   const hayPendientes = citas.some((c) => (c.status || 'pendiente') === 'pendiente');
+
+  const [fecha, setFecha] = useState('');
+  useEffect(() => {
+    // Solo la primera letra en mayúscula ("Domingo, 11 de octubre de
+    // 2026") — con la clase capitalize de Tailwind, que mayusculiza cada
+    // palabra, los conectores ("de") quedaban en mayúscula también, poco
+    // natural en español.
+    const raw = formatoFechaLarga(new Date());
+    setFecha(raw.charAt(0).toUpperCase() + raw.slice(1));
+  }, []);
 
   return (
     <header className="sticky top-0 z-20 flex h-[74px] items-center gap-3 px-4 lg:px-8">
@@ -54,27 +65,39 @@ export default function TopNav({ onToggleMobile }: { onToggleMobile: () => void 
         </ul>
       </nav>
 
-      <div className="ml-auto flex shrink-0 items-center gap-2 rounded-full border border-white/70 bg-white/30 p-1.5">
-        <Link
-          to="/citas"
-          title="Citas pendientes"
-          aria-label="Citas pendientes"
-          className="rail-btn relative"
-        >
-          <BellIcon className="h-[18px] w-[18px]" />
-          {hayPendientes && (
-            <span className="absolute right-[11px] top-[11px] h-[7px] w-[7px] rounded-full bg-coral ring-2 ring-white" />
-          )}
-        </Link>
-        <img
-          className="h-[44px] w-[44px] rounded-full object-cover ring-[3px] ring-white/80"
-          src={resolveProfileImage(user)}
-          alt="Foto de perfil"
-          onError={(e) => {
-            e.currentTarget.onerror = null;
-            e.currentTarget.src = FALLBACK_AVATAR;
-          }}
-        />
+      <div className="ml-auto flex shrink-0 items-center gap-3">
+        {fecha && (
+          <p className="hidden rounded-full border border-white/70 bg-white/30 px-5 py-2.5 text-sm text-[#3a3d45] 2xl:block">
+            {fecha}
+          </p>
+        )}
+
+        <div className="flex shrink-0 items-center gap-2 rounded-full border border-white/70 bg-white/30 py-1.5 pl-1.5 pr-4">
+          <Link
+            to="/citas"
+            title="Citas pendientes"
+            aria-label="Citas pendientes"
+            className="rail-btn relative"
+          >
+            <BellIcon className="h-[18px] w-[18px]" />
+            {hayPendientes && (
+              <span className="absolute right-[11px] top-[11px] h-[7px] w-[7px] rounded-full bg-coral ring-2 ring-white" />
+            )}
+          </Link>
+          <img
+            className="h-[44px] w-[44px] rounded-full object-cover ring-[3px] ring-white/80"
+            src={resolveProfileImage(user)}
+            alt="Foto de perfil"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = FALLBACK_AVATAR;
+            }}
+          />
+          <div className="hidden min-w-0 max-w-[160px] leading-tight 2xl:block">
+            <p className="truncate text-sm font-semibold text-ink">{user?.name || 'Administrador'}</p>
+            <p className="truncate text-xs text-muted">Administrador</p>
+          </div>
+        </div>
       </div>
     </header>
   );
