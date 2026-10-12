@@ -22,7 +22,7 @@ export default function IconRail() {
 
   return (
     <nav
-      className="fixed left-[18px] top-[92px] z-20 hidden w-[60px] flex-col items-center gap-[7px] rounded-full border border-white/70 bg-white/30 py-[10px] lg:flex"
+      className="fixed bottom-[18px] left-[18px] z-20 hidden w-[60px] flex-col items-center gap-[7px] rounded-full border border-white/70 bg-white/30 py-[10px] lg:flex"
       aria-label="Acciones rápidas"
     >
       <a href="/" className="rail-btn" aria-label="Volver al sitio" title="Volver al sitio">
