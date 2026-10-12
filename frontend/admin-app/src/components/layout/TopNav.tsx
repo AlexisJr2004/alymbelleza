@@ -32,7 +32,10 @@ export default function TopNav({ onToggleMobile }: { onToggleMobile: () => void 
         <MenuIcon className="h-[18px] w-[18px]" />
       </button>
 
-      <Link to="/resumen" className="flex shrink-0 items-center gap-2.5">
+      <Link
+        to="/resumen"
+        className="flex shrink-0 items-center gap-2.5 rounded-full border border-[#d8dae1] bg-white/60 py-1.5 pl-1.5 pr-4 shadow-sm"
+      >
         <span className="grid h-9 w-9 place-items-center rounded-full bg-ink text-[14px] font-bold text-white">
           B
         </span>
@@ -40,7 +43,7 @@ export default function TopNav({ onToggleMobile }: { onToggleMobile: () => void 
       </Link>
 
       <nav className="hidden flex-1 justify-center lg:flex" aria-label="Secciones">
-        <ul className="flex items-center gap-[2px] rounded-full border border-white/70 bg-white/30 p-[3px]">
+        <ul className="flex items-center gap-[2px] rounded-full border border-[#d8dae1] bg-white/60 p-[3px] shadow-sm">
           {NAV_ITEMS.map((item) => (
             <li key={item.to}>
               <NavLink to={item.to} className={({ isActive }) => `nav-pill ${isActive ? 'is-active' : ''}`}>
@@ -51,7 +54,7 @@ export default function TopNav({ onToggleMobile }: { onToggleMobile: () => void 
         </ul>
       </nav>
 
-      <div className="ml-auto flex shrink-0 items-center gap-2">
+      <div className="ml-auto flex shrink-0 items-center gap-2 rounded-full border border-[#d8dae1] bg-white/60 p-1.5 shadow-sm">
         <Link
           to="/citas"
           title="Citas pendientes"
