@@ -104,7 +104,7 @@ export default function ChatPanel() {
   }
 
   return (
-    <aside className="glass flex h-[600px] w-full flex-col overflow-hidden 2xl:sticky 2xl:top-[90px] 2xl:h-[calc(100vh-110px)]">
+    <aside className="glass flex h-[560px] w-full flex-col overflow-hidden 2xl:sticky 2xl:top-[90px] 2xl:h-[calc(100vh-160px)]">
       <div className="flex shrink-0 items-center gap-2.5 border-b border-white/70 px-5 py-4">
         <span className="grid h-9 w-9 place-items-center rounded-full bg-ink text-white">
           <SparklesIcon className="h-[18px] w-[18px]" />

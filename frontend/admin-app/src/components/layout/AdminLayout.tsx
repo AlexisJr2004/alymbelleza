@@ -33,8 +33,13 @@ export default function AdminLayout() {
             que es donde los grids internos de cada página -- KpiRow, etc. --
             ya pasan a su propio máximo de columnas) para que esos grids
             internos no compitan por ancho con la columna del chat en el
-            mismo breakpoint. */}
-        <main className="max-w-[1800px] mx-auto p-4 lg:pl-[104px] lg:pr-6 lg:py-8">
+            mismo breakpoint. max-w subido de 1800 a 2000: con 1800, en
+            pantallas de 1920px+ el mx-auto dejaba un margen muerto a cada
+            lado que empujaba el contenido lejos del riel de iconos y el
+            chat lejos del borde derecho -- de ahí el pedido de "mover
+            contenido a la izquierda / chat a la derecha". pl/pr también se
+            reducen un poco para acercar ambas columnas a sus bordes. */}
+        <main className="max-w-[2000px] mx-auto p-4 lg:pl-[96px] lg:pr-4 lg:py-8">
           <div className="grid grid-cols-1 gap-6 2xl:grid-cols-[minmax(0,1fr)_360px]">
             <div id="admin-content" className="min-w-0">
               <Outlet />
