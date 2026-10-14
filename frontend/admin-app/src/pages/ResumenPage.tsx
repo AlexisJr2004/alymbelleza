@@ -180,14 +180,111 @@ export default function ResumenPage() {
         description="Los pedidos, citas y usuarios de Bella Beauty se consolidan aquí para ver el estado del negocio de un vistazo."
       />
 
-      {/* Fila 1: ranking de clientes (a la izquierda) + las 4 KPIs. items-start
-          para que la columna del ranking (más alta, tiene foto + lista) no
-          estire la grilla de KPIs de al lado y le deje aire de más abajo. */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 items-start">
+      {/* Fila 1: ingresos totales (izquierda) + las 4 KPIs (centro) +
+          ranking de clientes (derecha). items-start para que ninguna
+          columna se estire por CSS Grid al tener alturas distintas. */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
+        {/* Ingresos totales + acciones */}
+        <div className="flex flex-col gap-3">
+          <div className="glass p-5">
+            <h3 className="font-semibold text-ink">Ingresos totales</h3>
+            <p className="text-sm text-muted">Resumen de tus ingresos actuales</p>
+
+            <div className="flex items-end justify-between gap-4 mt-4">
+              <div>
+                <p className="text-2xl font-bold text-ink">{formatoMoneda(ingresos)}</p>
+                {cambioPct === null ? (
+                  <p className="text-sm font-medium mt-1 text-muted">Sin datos del mes anterior</p>
+                ) : (
+                  <p className={`text-sm font-medium mt-1 ${cambioPct >= 0 ? 'text-sky' : 'text-coral'}`}>
+                    <span className="inline-flex items-center gap-1">
+                      {cambioPct >= 0 ? <ArrowUpIcon className="w-3.5 h-3.5" /> : <ArrowDownIcon className="w-3.5 h-3.5" />}
+                      {Math.abs(cambioPct)}% que el mes anterior
+                    </span>
+                  </p>
+                )}
+              </div>
+              <Sparkline data={serieIngresos} />
+            </div>
+
+            <div className="border-t border-dashed border-white/80 my-4" />
+
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-muted">
+                <span className="font-semibold text-ink">{orders.length}</span> pedidos registrados
+              </p>
+              <Link to="/pedidos" className="text-sm font-medium text-sky hover:text-sky/70 flex items-center gap-1">
+                Ver todos
+                <ArrowRightIcon className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+
+          <div className="flex gap-2.5">
+            <Link
+              to="/pedidos"
+              className="flex-1 bg-ink text-white py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 hover:bg-ink/85 transition-colors"
+            >
+              <PedidosIcon className="w-4 h-4" />
+              Ver pedidos
+            </Link>
+            <Link
+              to="/citas"
+              className="flex-1 bg-white/50 border border-white/80 text-[#3a3d45] py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 hover:bg-white/90 transition-colors"
+            >
+              <CitasIcon className="w-4 h-4" />
+              Ver citas
+            </Link>
+            <Link
+              to="/productos"
+              title="Agregar producto"
+              className="w-11 h-11 shrink-0 bg-white/50 border border-white/80 text-[#3a3d45] rounded-full flex items-center justify-center hover:bg-white/90 transition-colors"
+            >
+              <PlusIcon className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+
+        {/* Las 4 KPIs */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <ResumenKpiCard
+            etiqueta="Pedidos"
+            valor={orders.length}
+            sub={`${formatoMoneda(descuentos)} en descuentos`}
+            iconBg="bg-ink/5"
+            iconColor="text-ink"
+            icon={<PedidosIcon className="w-4 h-4" />}
+          />
+          <ResumenKpiCard
+            etiqueta="Usuarios"
+            valor={users.length}
+            sub={`${usuariosEsteMes} nuevos este mes`}
+            iconBg="bg-sky/15"
+            iconColor="text-sky"
+            icon={<UsuariosIcon className="w-4 h-4" />}
+          />
+          <ResumenKpiCard
+            etiqueta="Productos"
+            valor={products.length}
+            sub={`${productosAgotados} agotados`}
+            iconBg="bg-coral/15"
+            iconColor="text-coral"
+            icon={<ProductosIcon className="w-4 h-4" />}
+          />
+          <ResumenKpiCard
+            etiqueta="Cupones activos"
+            valor={`${cuponesActivos}/${coupons.length}`}
+            sub={`${coupons.length} en total`}
+            iconBg="bg-[#eef0f4]"
+            iconColor="text-muted"
+            icon={<CuponesIcon className="w-4 h-4" />}
+          />
+        </div>
+
         {/* Ranking de clientes — un solo contenedor .glass con 2 sub-bloques:
             el N.º 1 (foto circular centrada + nombre/correo/celular) y,
             debajo, la lista del resto. */}
-        <div className="lg:col-span-2 glass p-5">
+        <div className="glass p-5">
           <div className="mb-4">
             <p className="text-xs uppercase tracking-wider text-coral font-semibold">Ranking</p>
             <h3 className="text-base font-bold text-ink mt-1">Clientes con más compras</h3>
@@ -266,105 +363,6 @@ export default function ResumenPage() {
           ) : (
             <p className="text-center text-muted py-6 text-sm">Todavía no hay compras de clientes.</p>
           )}
-        </div>
-
-        <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <ResumenKpiCard
-            etiqueta="Pedidos"
-            valor={orders.length}
-            sub={`${formatoMoneda(descuentos)} en descuentos`}
-            iconBg="bg-ink/5"
-            iconColor="text-ink"
-            icon={<PedidosIcon className="w-4 h-4" />}
-          />
-          <ResumenKpiCard
-            etiqueta="Usuarios"
-            valor={users.length}
-            sub={`${usuariosEsteMes} nuevos este mes`}
-            iconBg="bg-sky/15"
-            iconColor="text-sky"
-            icon={<UsuariosIcon className="w-4 h-4" />}
-          />
-          <ResumenKpiCard
-            etiqueta="Productos"
-            valor={products.length}
-            sub={`${productosAgotados} agotados`}
-            iconBg="bg-coral/15"
-            iconColor="text-coral"
-            icon={<ProductosIcon className="w-4 h-4" />}
-          />
-          <ResumenKpiCard
-            etiqueta="Cupones activos"
-            valor={`${cuponesActivos}/${coupons.length}`}
-            sub={`${coupons.length} en total`}
-            iconBg="bg-[#eef0f4]"
-            iconColor="text-muted"
-            icon={<CuponesIcon className="w-4 h-4" />}
-          />
-        </div>
-      </div>
-
-      {/* Fila 1b: ingresos totales + acciones — antes vivía a la izquierda de
-          las 4 KPIs; ese lugar ahora lo ocupa el ranking de clientes, así
-          que pasa a su propia fila, con un ancho acotado (max-w-xl) para no
-          quedar estirado a todo el ancho de la página. */}
-      <div className="max-w-xl flex flex-col gap-3">
-        <div className="glass p-5">
-          <h3 className="font-semibold text-ink">Ingresos totales</h3>
-          <p className="text-sm text-muted">Resumen de tus ingresos actuales</p>
-
-          <div className="flex items-end justify-between gap-4 mt-4">
-            <div>
-              <p className="text-2xl font-bold text-ink">{formatoMoneda(ingresos)}</p>
-              {cambioPct === null ? (
-                <p className="text-sm font-medium mt-1 text-muted">Sin datos del mes anterior</p>
-              ) : (
-                <p className={`text-sm font-medium mt-1 ${cambioPct >= 0 ? 'text-sky' : 'text-coral'}`}>
-                  <span className="inline-flex items-center gap-1">
-                    {cambioPct >= 0 ? <ArrowUpIcon className="w-3.5 h-3.5" /> : <ArrowDownIcon className="w-3.5 h-3.5" />}
-                    {Math.abs(cambioPct)}% que el mes anterior
-                  </span>
-                </p>
-              )}
-            </div>
-            <Sparkline data={serieIngresos} />
-          </div>
-
-          <div className="border-t border-dashed border-white/80 my-4" />
-
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-muted">
-              <span className="font-semibold text-ink">{orders.length}</span> pedidos registrados
-            </p>
-            <Link to="/pedidos" className="text-sm font-medium text-sky hover:text-sky/70 flex items-center gap-1">
-              Ver todos
-              <ArrowRightIcon className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-        </div>
-
-        <div className="flex gap-2.5">
-          <Link
-            to="/pedidos"
-            className="flex-1 bg-ink text-white py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 hover:bg-ink/85 transition-colors"
-          >
-            <PedidosIcon className="w-4 h-4" />
-            Ver pedidos
-          </Link>
-          <Link
-            to="/citas"
-            className="flex-1 bg-white/50 border border-white/80 text-[#3a3d45] py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 hover:bg-white/90 transition-colors"
-          >
-            <CitasIcon className="w-4 h-4" />
-            Ver citas
-          </Link>
-          <Link
-            to="/productos"
-            title="Agregar producto"
-            className="w-11 h-11 shrink-0 bg-white/50 border border-white/80 text-[#3a3d45] rounded-full flex items-center justify-center hover:bg-white/90 transition-colors"
-          >
-            <PlusIcon className="w-4 h-4" />
-          </Link>
         </div>
       </div>
 
