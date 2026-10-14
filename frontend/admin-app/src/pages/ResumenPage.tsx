@@ -23,8 +23,10 @@ import { useCouponsQuery } from '../hooks/useCoupons';
 import { usePaymentCardsQuery } from '../hooks/usePaymentCards';
 import { useAppointmentsQuery } from '../hooks/useAppointments';
 import { construirSerieMensual } from '../lib/monthly';
-import { formatoMoneda, formatoFechaCorta } from '../lib/format';
-import type { Order } from '../types/models';
+import { formatoMoneda, formatoFechaCorta, numeroWhatsapp } from '../lib/format';
+import type { Order, User } from '../types/models';
+
+const FALLBACK_AVATAR = 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
 
 // Mismo set de degradés que la cuadrícula de resumen de TarjetasPage.tsx —
 // se reutiliza acá para que "Tarjetas de pago" tenga el mismo diseño de
@@ -63,8 +65,11 @@ function ResumenKpiCard({
   );
 }
 
-function calcularClientesActivos(orders: Order[]) {
-  const porUsuario: Record<string, { nombre: string; email: string; total: number; gastado: number; ultimo: string }> = {};
+function calcularClientesActivos(orders: Order[], users: User[]) {
+  const porUsuario: Record<
+    string,
+    { nombre: string; email: string; total: number; gastado: number; ultimo: string; phone?: string; profileImage?: string }
+  > = {};
   orders.forEach((o) => {
     const email = o.user?.email;
     if (!email) return;
@@ -74,6 +79,15 @@ function calcularClientesActivos(orders: Order[]) {
     porUsuario[email].total += 1;
     porUsuario[email].gastado += o.total || 0;
     if (new Date(o.createdAt) > new Date(porUsuario[email].ultimo)) porUsuario[email].ultimo = o.createdAt;
+  });
+  // El pedido solo trae name/email del cliente (ver Order en types/models.ts) —
+  // el teléfono y la foto de perfil viven en el User completo, así que se
+  // cruzan acá por email para el ranking de compras.
+  const usuarioPorEmail = new Map(users.filter((u) => u.email).map((u) => [u.email as string, u]));
+  Object.values(porUsuario).forEach((c) => {
+    const u = usuarioPorEmail.get(c.email);
+    c.phone = u?.phone;
+    c.profileImage = u?.profileImage;
   });
   return Object.values(porUsuario)
     .sort((a, b) => b.total - a.total)
@@ -151,7 +165,7 @@ export default function ResumenPage() {
   const pedidosTabla = orders.slice(0, 6);
   const ultimosUsuarios = users.slice(0, 5);
 
-  const clientesActivos = useMemo(() => calcularClientesActivos(orders), [orders]);
+  const clientesActivos = useMemo(() => calcularClientesActivos(orders, users), [orders, users]);
   const clientesInactivos = useMemo(() => calcularClientesInactivos(orders, users), [orders, users]);
 
   const tarjetasActivas = paymentCards.filter((c) => c.activa);
@@ -562,6 +576,88 @@ export default function ResumenPage() {
             <p className="text-center text-muted py-5 text-sm">Todos los clientes activos tienen pedidos recientes.</p>
           )}
         </div>
+      </div>
+
+      {/* Fila 7: ranking de clientes por compras — el #1 destacado con foto,
+          correo y celular, y el resto en una lista ordenada debajo. */}
+      <div className="glass p-5">
+        <div className="mb-4">
+          <p className="text-xs uppercase tracking-wider text-coral font-semibold">Ranking</p>
+          <h3 className="text-base font-bold text-ink mt-1">Clientes con más compras</h3>
+        </div>
+
+        {clientesActivos.length ? (
+          <div className="space-y-4">
+            <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-white/80 bg-white/40 p-4">
+              <div className="relative shrink-0">
+                <img
+                  src={clientesActivos[0].profileImage || FALLBACK_AVATAR}
+                  alt={clientesActivos[0].nombre}
+                  className="h-16 w-16 rounded-full object-cover ring-[3px] ring-white"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = FALLBACK_AVATAR;
+                  }}
+                />
+                <span className="absolute -bottom-1 -right-1 grid h-6 w-6 place-items-center rounded-full bg-ink text-[11px] font-bold text-white ring-2 ring-white">
+                  1
+                </span>
+              </div>
+              <div className="min-w-0 flex-1">
+                <h4 className="text-base font-bold text-ink truncate">{clientesActivos[0].nombre}</h4>
+                <p className="text-sm text-muted truncate">{clientesActivos[0].email}</p>
+                {clientesActivos[0].phone ? (
+                  <a
+                    href={`https://wa.me/${numeroWhatsapp(clientesActivos[0].phone)}`}
+                    target="_blank"
+                    rel="noopener"
+                    className="text-sm text-sky hover:text-sky/70 hover:underline"
+                  >
+                    {clientesActivos[0].phone}
+                  </a>
+                ) : (
+                  <p className="text-sm text-muted">Sin teléfono</p>
+                )}
+              </div>
+              <div className="text-right shrink-0">
+                <p className="text-[10px] uppercase tracking-wide text-muted">Pedidos</p>
+                <p className="text-xl font-bold text-ink leading-tight">{clientesActivos[0].total}</p>
+                <p className="text-xs font-semibold text-sky">{formatoMoneda(clientesActivos[0].gastado)}</p>
+              </div>
+            </div>
+
+            {clientesActivos.length > 1 && (
+              <div className="divide-y divide-white/60">
+                {clientesActivos.slice(1).map((c, i) => (
+                  <div key={c.email} className="flex items-center gap-3 py-2.5">
+                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-white/80 bg-white/60 text-xs font-semibold text-[#3a3d45]">
+                      {i + 2}
+                    </span>
+                    <img
+                      src={c.profileImage || FALLBACK_AVATAR}
+                      alt={c.nombre}
+                      className="h-9 w-9 rounded-full object-cover shrink-0"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = FALLBACK_AVATAR;
+                      }}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-ink truncate">{c.nombre}</p>
+                      <p className="text-xs text-muted truncate">{c.email}</p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="text-sm font-semibold text-ink">{c.total} pedidos</p>
+                      <p className="text-xs text-sky">{formatoMoneda(c.gastado)}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ) : (
+          <p className="text-center text-muted py-6 text-sm">Todavía no hay compras de clientes.</p>
+        )}
       </div>
     </div>
   );
