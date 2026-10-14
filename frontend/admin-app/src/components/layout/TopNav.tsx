@@ -9,6 +9,7 @@ const FALLBACK_AVATAR = 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
 
 const NAV_ITEMS = [
   { to: '/resumen', label: 'Resumen' },
+  { to: '/ranking', label: 'Ranking' },
   { to: '/productos', label: 'Productos' },
   { to: '/cupones', label: 'Cupones' },
   { to: '/pedidos', label: 'Pedidos' },

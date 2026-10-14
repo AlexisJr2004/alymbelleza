@@ -1,0 +1,181 @@
+import { useMemo, useState } from 'react';
+import PageHeader from '../components/ui/PageHeader';
+import { KpiCard, KpiRow } from '../components/ui/KpiCard';
+import Pagination from '../components/ui/Pagination';
+import { TrophyIcon, UsuariosIcon, DollarIcon, BarsIcon, SearchIcon } from '../components/icons';
+import { useOrdersQuery } from '../hooks/useOrders';
+import { useUsersQuery } from '../hooks/useUsers';
+import { calcularClientesActivos } from '../lib/ranking';
+import { formatoMoneda, numeroWhatsapp } from '../lib/format';
+
+const RANKING_POR_PAGINA = 10;
+const FALLBACK_AVATAR = 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
+
+export default function RankingPage() {
+  const { data: orders = [] } = useOrdersQuery();
+  const { data: users = [] } = useUsersQuery();
+
+  const [search, setSearch] = useState('');
+  const [pagina, setPagina] = useState(1);
+
+  const clientesActivos = useMemo(() => calcularClientesActivos(orders, users), [orders, users]);
+
+  const filtrados = useMemo(() => {
+    const texto = search.trim().toLowerCase();
+    if (!texto) return clientesActivos;
+    return clientesActivos.filter(
+      (c) => c.nombre.toLowerCase().includes(texto) || c.email.toLowerCase().includes(texto)
+    );
+  }, [clientesActivos, search]);
+
+  const totalGastado = clientesActivos.reduce((sum, c) => sum + c.gastado, 0);
+  const promedio = clientesActivos.length ? totalGastado / clientesActivos.length : 0;
+  const lider = clientesActivos[0];
+
+  const inicio = (pagina - 1) * RANKING_POR_PAGINA;
+  const paginaActual = filtrados.slice(inicio, inicio + RANKING_POR_PAGINA);
+
+  return (
+    <div>
+      <PageHeader
+        eyebrow="Clientes"
+        title="Ranking de clientes"
+        description="Todos los clientes con compras realizadas, ordenados por cantidad de pedidos."
+      />
+
+      <KpiRow>
+        <KpiCard
+          label="Clientes con compras"
+          value={clientesActivos.length}
+          note="Al menos un pedido"
+          iconBg="bg-ink/5"
+          iconColor="text-ink"
+          icon={<UsuariosIcon className="w-5 h-5" />}
+        />
+        <KpiCard
+          label="Líder actual"
+          value={lider ? lider.nombre : '—'}
+          note={lider ? `${lider.total} pedidos` : 'Sin compras todavía'}
+          valueClassName="text-coral"
+          iconBg="bg-coral/15"
+          iconColor="text-coral"
+          icon={<TrophyIcon className="w-5 h-5" />}
+        />
+        <KpiCard
+          label="Total en compras"
+          value={formatoMoneda(totalGastado)}
+          note="Entre todos los clientes"
+          valueClassName="text-sky"
+          iconBg="bg-sky/15"
+          iconColor="text-sky"
+          icon={<DollarIcon className="w-5 h-5" />}
+        />
+        <KpiCard
+          label="Promedio por cliente"
+          value={formatoMoneda(promedio)}
+          note="Gasto promedio"
+          iconBg="bg-[#eef0f4]"
+          iconColor="text-muted"
+          icon={<BarsIcon className="w-5 h-5" />}
+        />
+      </KpiRow>
+
+      <div className="glass p-6 md:p-8">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-ink flex items-center">
+              <TrophyIcon className="w-5 h-5 mr-2 text-coral" />
+              Ranking completo
+            </h2>
+            <p className="text-sm text-muted mt-1">
+              {filtrados.length} cliente{filtrados.length === 1 ? '' : 's'} encontrado{filtrados.length === 1 ? '' : 's'}
+            </p>
+          </div>
+          <div className="relative">
+            <SearchIcon className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPagina(1);
+              }}
+              placeholder="Buscar por nombre o email..."
+              className="pl-10 pr-4 py-2 border border-white/80 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none w-full md:w-72"
+            />
+          </div>
+        </div>
+
+        <div className="overflow-x-auto rounded-[22px] border border-white/70">
+          <table className="min-w-full divide-y divide-white/70">
+            <thead className="bg-white/40">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">#</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Cliente</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Email</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Teléfono</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-muted uppercase tracking-wider">Pedidos</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-muted uppercase tracking-wider">Total gastado</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white/20 divide-y divide-white/60">
+              {paginaActual.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="p-6 text-center text-muted">
+                    No se encontraron clientes.
+                  </td>
+                </tr>
+              ) : (
+                paginaActual.map((c, i) => (
+                  <tr key={c.email}>
+                    <td className="p-3 pl-6">
+                      <span className="grid h-7 w-7 place-items-center rounded-full border border-white/80 bg-white/60 text-xs font-semibold text-[#3a3d45]">
+                        {inicio + i + 1}
+                      </span>
+                    </td>
+                    <td className="p-3">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={c.profileImage || FALLBACK_AVATAR}
+                          alt={c.nombre}
+                          className="w-9 h-9 rounded-full object-cover border border-white/80"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = FALLBACK_AVATAR;
+                          }}
+                        />
+                        <span className="font-semibold text-ink">{c.nombre}</span>
+                      </div>
+                    </td>
+                    <td className="p-3">
+                      <a href={`mailto:${c.email}`} className="text-sky hover:text-sky/70 hover:underline">
+                        {c.email}
+                      </a>
+                    </td>
+                    <td className="p-3">
+                      {c.phone ? (
+                        <a
+                          href={`https://wa.me/${numeroWhatsapp(c.phone)}`}
+                          target="_blank"
+                          rel="noopener"
+                          className="text-emerald-600 hover:text-emerald-800 hover:underline"
+                        >
+                          {c.phone}
+                        </a>
+                      ) : (
+                        '—'
+                      )}
+                    </td>
+                    <td className="p-3 text-right font-semibold text-ink">{c.total}</td>
+                    <td className="p-3 text-right font-semibold text-sky">{formatoMoneda(c.gastado)}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+        <Pagination totalItems={filtrados.length} porPagina={RANKING_POR_PAGINA} paginaActiva={pagina} onChange={setPagina} />
+      </div>
+    </div>
+  );
+}

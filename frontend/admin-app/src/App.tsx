@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import AdminLayout from './components/layout/AdminLayout';
 import ResumenPage from './pages/ResumenPage';
+import RankingPage from './pages/RankingPage';
 import ProductosPage from './pages/ProductosPage';
 import CuponesPage from './pages/CuponesPage';
 import TarjetasPage from './pages/TarjetasPage';
@@ -14,6 +15,7 @@ function App() {
       <Route element={<AdminLayout />}>
         <Route index element={<Navigate to="/resumen" replace />} />
         <Route path="resumen" element={<ResumenPage />} />
+        <Route path="ranking" element={<RankingPage />} />
         <Route path="productos" element={<ProductosPage />} />
         <Route path="cupones" element={<CuponesPage />} />
         <Route path="tarjetas" element={<TarjetasPage />} />

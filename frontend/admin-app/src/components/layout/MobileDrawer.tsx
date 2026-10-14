@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import {
   ResumenIcon,
+  TrophyIcon,
   ProductosIcon,
   CuponesIcon,
   PedidosIcon,
@@ -25,6 +26,7 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { to: '/resumen', label: 'Resumen', icon: ResumenIcon },
+  { to: '/ranking', label: 'Ranking', icon: TrophyIcon },
   { to: '/productos', label: 'Productos', icon: ProductosIcon },
   { to: '/cupones', label: 'Cupones', icon: CuponesIcon },
   { to: '/pedidos', label: 'Pedidos', icon: PedidosIcon },

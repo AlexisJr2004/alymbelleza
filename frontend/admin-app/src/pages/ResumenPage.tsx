@@ -23,8 +23,9 @@ import { useCouponsQuery } from '../hooks/useCoupons';
 import { usePaymentCardsQuery } from '../hooks/usePaymentCards';
 import { useAppointmentsQuery } from '../hooks/useAppointments';
 import { construirSerieMensual } from '../lib/monthly';
+import { calcularClientesActivos } from '../lib/ranking';
 import { formatoMoneda, formatoFechaCorta, numeroWhatsapp } from '../lib/format';
-import type { Order, User } from '../types/models';
+import type { Order } from '../types/models';
 
 const FALLBACK_AVATAR = 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
 
@@ -63,35 +64,6 @@ function ResumenKpiCard({
       <p className="text-xs text-muted mt-1.5">{sub}</p>
     </div>
   );
-}
-
-function calcularClientesActivos(orders: Order[], users: User[]) {
-  const porUsuario: Record<
-    string,
-    { nombre: string; email: string; total: number; gastado: number; ultimo: string; phone?: string; profileImage?: string }
-  > = {};
-  orders.forEach((o) => {
-    const email = o.user?.email;
-    if (!email) return;
-    if (!porUsuario[email]) {
-      porUsuario[email] = { nombre: o.user?.name || 'Cliente', email, total: 0, gastado: 0, ultimo: o.createdAt };
-    }
-    porUsuario[email].total += 1;
-    porUsuario[email].gastado += o.total || 0;
-    if (new Date(o.createdAt) > new Date(porUsuario[email].ultimo)) porUsuario[email].ultimo = o.createdAt;
-  });
-  // El pedido solo trae name/email del cliente (ver Order en types/models.ts) —
-  // el teléfono y la foto de perfil viven en el User completo, así que se
-  // cruzan acá por email para el ranking de compras.
-  const usuarioPorEmail = new Map(users.filter((u) => u.email).map((u) => [u.email as string, u]));
-  Object.values(porUsuario).forEach((c) => {
-    const u = usuarioPorEmail.get(c.email);
-    c.phone = u?.phone;
-    c.profileImage = u?.profileImage;
-  });
-  return Object.values(porUsuario)
-    .sort((a, b) => b.total - a.total)
-    .slice(0, 8);
 }
 
 function calcularClientesInactivos(orders: Order[], users: { name?: string; email?: string; role: string; createdAt: string }[]) {
@@ -181,11 +153,13 @@ export default function ResumenPage() {
       />
 
       {/* Fila 1: ingresos totales (izquierda) + las 4 KPIs (centro) +
-          ranking de clientes (derecha). items-start para que ninguna
-          columna se estire por CSS Grid al tener alturas distintas. */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
+          ranking de clientes (derecha). Por defecto CSS Grid estira (stretch)
+          las 3 columnas a la misma altura — la del ranking es la más alta, así
+          que Ingresos totales y las KPI (ambas con justify-center/content-center)
+          se centran como grupo dentro de ese espacio extra. */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Ingresos totales + acciones */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col justify-center gap-3">
           <div className="glass p-5">
             <h3 className="font-semibold text-ink">Ingresos totales</h3>
             <p className="text-sm text-muted">Resumen de tus ingresos actuales</p>
@@ -246,7 +220,7 @@ export default function ResumenPage() {
         </div>
 
         {/* Las 4 KPIs */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 content-center">
           <ResumenKpiCard
             etiqueta="Pedidos"
             valor={orders.length}
@@ -283,11 +257,17 @@ export default function ResumenPage() {
 
         {/* Ranking de clientes — un solo contenedor .glass con 2 sub-bloques:
             el N.º 1 (foto circular centrada + nombre/correo/celular) y,
-            debajo, la lista del resto. */}
+            debajo, los N.º 2 y 3. Solo se muestra el top 3 — el resto vive
+            en RankingPage.tsx (/ranking), enlazada con "Ver todos". */}
         <div className="glass p-5">
-          <div className="mb-4">
-            <p className="text-xs uppercase tracking-wider text-coral font-semibold">Ranking</p>
-            <h3 className="text-base font-bold text-ink mt-1">Clientes con más compras</h3>
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs uppercase tracking-wider text-coral font-semibold">Ranking</p>
+              <h3 className="text-base font-bold text-ink mt-1">Clientes con más compras</h3>
+            </div>
+            <Link to="/ranking" className="text-xs font-medium text-sky hover:text-sky/70 shrink-0">
+              Ver todos
+            </Link>
           </div>
 
           {clientesActivos.length ? (
@@ -333,7 +313,7 @@ export default function ResumenPage() {
 
               {clientesActivos.length > 1 && (
                 <div className="mt-4 divide-y divide-white/60 rounded-2xl border border-white/80 bg-white/25 px-4">
-                  {clientesActivos.slice(1).map((c, i) => (
+                  {clientesActivos.slice(1, 3).map((c, i) => (
                     <div key={c.email} className="flex items-center gap-3 py-2.5">
                       <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-white/80 bg-white/60 text-xs font-semibold text-[#3a3d45]">
                         {i + 2}

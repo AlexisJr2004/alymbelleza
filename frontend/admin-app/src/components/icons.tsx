@@ -99,6 +99,21 @@ export function CitasIcon(props: IconProps) {
   );
 }
 
+export function TrophyIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 4.5h9v4.125a4.5 4.5 0 1 1-9 0V4.5Z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 6a2.25 2.25 0 1 0 0 4.5" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 6a2.25 2.25 0 1 1 0 4.5" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M12 13.125V16.5m-3 3.75h6l-.527-2.11a1.125 1.125 0 0 0-1.091-.853h-1.764a1.125 1.125 0 0 0-1.091.853L9 20.25Z"
+      />
+    </Icon>
+  );
+}
+
 export function BackArrowIcon(props: IconProps) {
   return (
     <Icon {...props}>
