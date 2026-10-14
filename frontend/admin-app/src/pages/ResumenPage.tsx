@@ -278,60 +278,61 @@ export default function ResumenPage() {
         </div>
       </div>
 
-      {/* Fila 1b: ranking de clientes por compras, arriba — el #1 destacado
-          como tarjeta de foto a pantalla completa (estilo "tarjeta de
-          perfil": foto + degradé + nombre/contacto abajo a la izquierda,
-          pastilla de monto abajo a la derecha) y el resto en una lista al
-          lado. */}
-      {clientesActivos.length ? (
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
-          <div className="lg:col-span-2 relative aspect-[4/5] overflow-hidden rounded-[26px]">
-            <img
-              src={clientesActivos[0].profileImage || FALLBACK_AVATAR}
-              alt={clientesActivos[0].nombre}
-              className="absolute inset-0 h-full w-full object-cover"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = FALLBACK_AVATAR;
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
-            <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-ink">
-              N.º 1 en compras
-            </span>
-            <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-5">
-              <div className="min-w-0">
-                <h4 className="text-xl font-bold text-white truncate">{clientesActivos[0].nombre}</h4>
-                <p className="mt-1 truncate text-xs text-white/75">
-                  {clientesActivos[0].email}
-                  {clientesActivos[0].phone && (
-                    <>
-                      {' · '}
-                      <a
-                        href={`https://wa.me/${numeroWhatsapp(clientesActivos[0].phone)}`}
-                        target="_blank"
-                        rel="noopener"
-                        className="underline hover:text-white"
-                      >
-                        {clientesActivos[0].phone}
-                      </a>
-                    </>
-                  )}
-                </p>
-              </div>
-              <span className="shrink-0 whitespace-nowrap rounded-full bg-white px-4 py-2 text-sm font-semibold text-ink">
-                {formatoMoneda(clientesActivos[0].gastado)}
-              </span>
-            </div>
-          </div>
+      {/* Fila 1b: ranking de clientes por compras, arriba — todo en UN solo
+          contenedor .glass; adentro, un sub-contenedor para el N.º 1 (foto
+          circular centrada arriba, nombre/correo/celular debajo, también
+          centrado) y otro sub-contenedor debajo con la lista del resto. */}
+      <div className="glass p-5">
+        <div className="mb-4">
+          <p className="text-xs uppercase tracking-wider text-coral font-semibold">Ranking</p>
+          <h3 className="text-base font-bold text-ink mt-1">Clientes con más compras</h3>
+        </div>
 
-          <div className="lg:col-span-3 glass p-5">
-            <div className="mb-4">
-              <p className="text-xs uppercase tracking-wider text-coral font-semibold">Ranking</p>
-              <h3 className="text-base font-bold text-ink mt-1">Clientes con más compras</h3>
+        {clientesActivos.length ? (
+          <>
+            {/* Sub-contenedor: cliente N.º 1 */}
+            <div className="flex flex-col items-center rounded-2xl border border-white/80 bg-white/40 p-6 text-center">
+              <div className="relative">
+                <img
+                  src={clientesActivos[0].profileImage || FALLBACK_AVATAR}
+                  alt={clientesActivos[0].nombre}
+                  className="h-24 w-24 rounded-full object-cover ring-[3px] ring-white"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = FALLBACK_AVATAR;
+                  }}
+                />
+                <span className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full bg-ink text-xs font-bold text-white ring-2 ring-white">
+                  1
+                </span>
+              </div>
+              <h4 className="mt-3 text-lg font-bold text-ink">{clientesActivos[0].nombre}</h4>
+              <p className="mt-1 text-sm text-muted">{clientesActivos[0].email}</p>
+              {clientesActivos[0].phone ? (
+                <a
+                  href={`https://wa.me/${numeroWhatsapp(clientesActivos[0].phone)}`}
+                  target="_blank"
+                  rel="noopener"
+                  className="text-sm text-sky hover:text-sky/70 hover:underline"
+                >
+                  {clientesActivos[0].phone}
+                </a>
+              ) : (
+                <p className="text-sm text-muted">Sin teléfono</p>
+              )}
+              <div className="mt-3 flex items-center gap-2 text-xs">
+                <span className="rounded-full border border-white/80 bg-white/60 px-3 py-1 font-medium text-[#3a3d45]">
+                  {clientesActivos[0].total} pedidos
+                </span>
+                <span className="rounded-full bg-sky/15 px-3 py-1 font-semibold text-sky">
+                  {formatoMoneda(clientesActivos[0].gastado)}
+                </span>
+              </div>
             </div>
-            {clientesActivos.length > 1 ? (
-              <div className="divide-y divide-white/60">
+
+            {/* Sub-contenedor: el resto del ranking */}
+            {clientesActivos.length > 1 && (
+              <div className="mt-4 divide-y divide-white/60 rounded-2xl border border-white/80 bg-white/25 px-4">
                 {clientesActivos.slice(1).map((c, i) => (
                   <div key={c.email} className="flex items-center gap-3 py-2.5">
                     <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-white/80 bg-white/60 text-xs font-semibold text-[#3a3d45]">
@@ -357,18 +358,12 @@ export default function ResumenPage() {
                   </div>
                 ))}
               </div>
-            ) : (
-              <p className="text-center text-muted py-6 text-sm">Todavía no hay más clientes con compras.</p>
             )}
-          </div>
-        </div>
-      ) : (
-        <div className="glass p-5">
-          <p className="text-xs uppercase tracking-wider text-coral font-semibold">Ranking</p>
-          <h3 className="text-base font-bold text-ink mt-1">Clientes con más compras</h3>
+          </>
+        ) : (
           <p className="text-center text-muted py-6 text-sm">Todavía no hay compras de clientes.</p>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Fila 2: gráfico de ingresos + ingresos de este mes, a la derecha */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
