@@ -180,66 +180,92 @@ export default function ResumenPage() {
         description="Los pedidos, citas y usuarios de Bella Beauty se consolidan aquí para ver el estado del negocio de un vistazo."
       />
 
-      {/* Fila 1: hero de ingresos + KPIs */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
-        <div className="lg:col-span-2 flex flex-col gap-3">
-          <div className="glass p-5">
-            <h3 className="font-semibold text-ink">Ingresos totales</h3>
-            <p className="text-sm text-muted">Resumen de tus ingresos actuales</p>
+      {/* Fila 1: ranking de clientes (a la izquierda) + las 4 KPIs. items-start
+          para que la columna del ranking (más alta, tiene foto + lista) no
+          estire la grilla de KPIs de al lado y le deje aire de más abajo. */}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 items-start">
+        {/* Ranking de clientes — un solo contenedor .glass con 2 sub-bloques:
+            el N.º 1 (foto circular centrada + nombre/correo/celular) y,
+            debajo, la lista del resto. */}
+        <div className="lg:col-span-2 glass p-5">
+          <div className="mb-4">
+            <p className="text-xs uppercase tracking-wider text-coral font-semibold">Ranking</p>
+            <h3 className="text-base font-bold text-ink mt-1">Clientes con más compras</h3>
+          </div>
 
-            <div className="flex items-end justify-between gap-4 mt-4">
-              <div>
-                <p className="text-2xl font-bold text-ink">{formatoMoneda(ingresos)}</p>
-                {cambioPct === null ? (
-                  <p className="text-sm font-medium mt-1 text-muted">Sin datos del mes anterior</p>
+          {clientesActivos.length ? (
+            <>
+              <div className="flex flex-col items-center rounded-2xl border border-white/80 bg-white/40 p-6 text-center">
+                <div className="relative">
+                  <img
+                    src={clientesActivos[0].profileImage || FALLBACK_AVATAR}
+                    alt={clientesActivos[0].nombre}
+                    className="h-24 w-24 rounded-full object-cover ring-[3px] ring-white"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = FALLBACK_AVATAR;
+                    }}
+                  />
+                  <span className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full bg-ink text-xs font-bold text-white ring-2 ring-white">
+                    1
+                  </span>
+                </div>
+                <h4 className="mt-3 text-lg font-bold text-ink">{clientesActivos[0].nombre}</h4>
+                <p className="mt-1 text-sm text-muted">{clientesActivos[0].email}</p>
+                {clientesActivos[0].phone ? (
+                  <a
+                    href={`https://wa.me/${numeroWhatsapp(clientesActivos[0].phone)}`}
+                    target="_blank"
+                    rel="noopener"
+                    className="text-sm text-sky hover:text-sky/70 hover:underline"
+                  >
+                    {clientesActivos[0].phone}
+                  </a>
                 ) : (
-                  <p className={`text-sm font-medium mt-1 ${cambioPct >= 0 ? 'text-sky' : 'text-coral'}`}>
-                    <span className="inline-flex items-center gap-1">
-                      {cambioPct >= 0 ? <ArrowUpIcon className="w-3.5 h-3.5" /> : <ArrowDownIcon className="w-3.5 h-3.5" />}
-                      {Math.abs(cambioPct)}% que el mes anterior
-                    </span>
-                  </p>
+                  <p className="text-sm text-muted">Sin teléfono</p>
                 )}
+                <div className="mt-3 flex items-center gap-2 text-xs">
+                  <span className="rounded-full border border-white/80 bg-white/60 px-3 py-1 font-medium text-[#3a3d45]">
+                    {clientesActivos[0].total} pedidos
+                  </span>
+                  <span className="rounded-full bg-sky/15 px-3 py-1 font-semibold text-sky">
+                    {formatoMoneda(clientesActivos[0].gastado)}
+                  </span>
+                </div>
               </div>
-              <Sparkline data={serieIngresos} />
-            </div>
 
-            <div className="border-t border-dashed border-white/80 my-4" />
-
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-muted">
-                <span className="font-semibold text-ink">{orders.length}</span> pedidos registrados
-              </p>
-              <Link to="/pedidos" className="text-sm font-medium text-sky hover:text-sky/70 flex items-center gap-1">
-                Ver todos
-                <ArrowRightIcon className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          </div>
-
-          <div className="flex gap-2.5">
-            <Link
-              to="/pedidos"
-              className="flex-1 bg-ink text-white py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 hover:bg-ink/85 transition-colors"
-            >
-              <PedidosIcon className="w-4 h-4" />
-              Ver pedidos
-            </Link>
-            <Link
-              to="/citas"
-              className="flex-1 bg-white/50 border border-white/80 text-[#3a3d45] py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 hover:bg-white/90 transition-colors"
-            >
-              <CitasIcon className="w-4 h-4" />
-              Ver citas
-            </Link>
-            <Link
-              to="/productos"
-              title="Agregar producto"
-              className="w-11 h-11 shrink-0 bg-white/50 border border-white/80 text-[#3a3d45] rounded-full flex items-center justify-center hover:bg-white/90 transition-colors"
-            >
-              <PlusIcon className="w-4 h-4" />
-            </Link>
-          </div>
+              {clientesActivos.length > 1 && (
+                <div className="mt-4 divide-y divide-white/60 rounded-2xl border border-white/80 bg-white/25 px-4">
+                  {clientesActivos.slice(1).map((c, i) => (
+                    <div key={c.email} className="flex items-center gap-3 py-2.5">
+                      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-white/80 bg-white/60 text-xs font-semibold text-[#3a3d45]">
+                        {i + 2}
+                      </span>
+                      <img
+                        src={c.profileImage || FALLBACK_AVATAR}
+                        alt={c.nombre}
+                        className="h-9 w-9 rounded-full object-cover shrink-0"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = FALLBACK_AVATAR;
+                        }}
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-ink truncate">{c.nombre}</p>
+                        <p className="text-xs text-muted truncate">{c.email}</p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <p className="text-sm font-semibold text-ink">{c.total} pedidos</p>
+                        <p className="text-xs text-sky">{formatoMoneda(c.gastado)}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
+          ) : (
+            <p className="text-center text-muted py-6 text-sm">Todavía no hay compras de clientes.</p>
+          )}
         </div>
 
         <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -278,91 +304,68 @@ export default function ResumenPage() {
         </div>
       </div>
 
-      {/* Fila 1b: ranking de clientes por compras, arriba — todo en UN solo
-          contenedor .glass; adentro, un sub-contenedor para el N.º 1 (foto
-          circular centrada arriba, nombre/correo/celular debajo, también
-          centrado) y otro sub-contenedor debajo con la lista del resto. */}
-      <div className="glass p-5">
-        <div className="mb-4">
-          <p className="text-xs uppercase tracking-wider text-coral font-semibold">Ranking</p>
-          <h3 className="text-base font-bold text-ink mt-1">Clientes con más compras</h3>
+      {/* Fila 1b: ingresos totales + acciones — antes vivía a la izquierda de
+          las 4 KPIs; ese lugar ahora lo ocupa el ranking de clientes, así
+          que pasa a su propia fila, con un ancho acotado (max-w-xl) para no
+          quedar estirado a todo el ancho de la página. */}
+      <div className="max-w-xl flex flex-col gap-3">
+        <div className="glass p-5">
+          <h3 className="font-semibold text-ink">Ingresos totales</h3>
+          <p className="text-sm text-muted">Resumen de tus ingresos actuales</p>
+
+          <div className="flex items-end justify-between gap-4 mt-4">
+            <div>
+              <p className="text-2xl font-bold text-ink">{formatoMoneda(ingresos)}</p>
+              {cambioPct === null ? (
+                <p className="text-sm font-medium mt-1 text-muted">Sin datos del mes anterior</p>
+              ) : (
+                <p className={`text-sm font-medium mt-1 ${cambioPct >= 0 ? 'text-sky' : 'text-coral'}`}>
+                  <span className="inline-flex items-center gap-1">
+                    {cambioPct >= 0 ? <ArrowUpIcon className="w-3.5 h-3.5" /> : <ArrowDownIcon className="w-3.5 h-3.5" />}
+                    {Math.abs(cambioPct)}% que el mes anterior
+                  </span>
+                </p>
+              )}
+            </div>
+            <Sparkline data={serieIngresos} />
+          </div>
+
+          <div className="border-t border-dashed border-white/80 my-4" />
+
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-muted">
+              <span className="font-semibold text-ink">{orders.length}</span> pedidos registrados
+            </p>
+            <Link to="/pedidos" className="text-sm font-medium text-sky hover:text-sky/70 flex items-center gap-1">
+              Ver todos
+              <ArrowRightIcon className="w-3.5 h-3.5" />
+            </Link>
+          </div>
         </div>
 
-        {clientesActivos.length ? (
-          <>
-            {/* Sub-contenedor: cliente N.º 1 */}
-            <div className="flex flex-col items-center rounded-2xl border border-white/80 bg-white/40 p-6 text-center">
-              <div className="relative">
-                <img
-                  src={clientesActivos[0].profileImage || FALLBACK_AVATAR}
-                  alt={clientesActivos[0].nombre}
-                  className="h-24 w-24 rounded-full object-cover ring-[3px] ring-white"
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = FALLBACK_AVATAR;
-                  }}
-                />
-                <span className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full bg-ink text-xs font-bold text-white ring-2 ring-white">
-                  1
-                </span>
-              </div>
-              <h4 className="mt-3 text-lg font-bold text-ink">{clientesActivos[0].nombre}</h4>
-              <p className="mt-1 text-sm text-muted">{clientesActivos[0].email}</p>
-              {clientesActivos[0].phone ? (
-                <a
-                  href={`https://wa.me/${numeroWhatsapp(clientesActivos[0].phone)}`}
-                  target="_blank"
-                  rel="noopener"
-                  className="text-sm text-sky hover:text-sky/70 hover:underline"
-                >
-                  {clientesActivos[0].phone}
-                </a>
-              ) : (
-                <p className="text-sm text-muted">Sin teléfono</p>
-              )}
-              <div className="mt-3 flex items-center gap-2 text-xs">
-                <span className="rounded-full border border-white/80 bg-white/60 px-3 py-1 font-medium text-[#3a3d45]">
-                  {clientesActivos[0].total} pedidos
-                </span>
-                <span className="rounded-full bg-sky/15 px-3 py-1 font-semibold text-sky">
-                  {formatoMoneda(clientesActivos[0].gastado)}
-                </span>
-              </div>
-            </div>
-
-            {/* Sub-contenedor: el resto del ranking */}
-            {clientesActivos.length > 1 && (
-              <div className="mt-4 divide-y divide-white/60 rounded-2xl border border-white/80 bg-white/25 px-4">
-                {clientesActivos.slice(1).map((c, i) => (
-                  <div key={c.email} className="flex items-center gap-3 py-2.5">
-                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-white/80 bg-white/60 text-xs font-semibold text-[#3a3d45]">
-                      {i + 2}
-                    </span>
-                    <img
-                      src={c.profileImage || FALLBACK_AVATAR}
-                      alt={c.nombre}
-                      className="h-9 w-9 rounded-full object-cover shrink-0"
-                      onError={(e) => {
-                        e.currentTarget.onerror = null;
-                        e.currentTarget.src = FALLBACK_AVATAR;
-                      }}
-                    />
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-ink truncate">{c.nombre}</p>
-                      <p className="text-xs text-muted truncate">{c.email}</p>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <p className="text-sm font-semibold text-ink">{c.total} pedidos</p>
-                      <p className="text-xs text-sky">{formatoMoneda(c.gastado)}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </>
-        ) : (
-          <p className="text-center text-muted py-6 text-sm">Todavía no hay compras de clientes.</p>
-        )}
+        <div className="flex gap-2.5">
+          <Link
+            to="/pedidos"
+            className="flex-1 bg-ink text-white py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 hover:bg-ink/85 transition-colors"
+          >
+            <PedidosIcon className="w-4 h-4" />
+            Ver pedidos
+          </Link>
+          <Link
+            to="/citas"
+            className="flex-1 bg-white/50 border border-white/80 text-[#3a3d45] py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 hover:bg-white/90 transition-colors"
+          >
+            <CitasIcon className="w-4 h-4" />
+            Ver citas
+          </Link>
+          <Link
+            to="/productos"
+            title="Agregar producto"
+            className="w-11 h-11 shrink-0 bg-white/50 border border-white/80 text-[#3a3d45] rounded-full flex items-center justify-center hover:bg-white/90 transition-colors"
+          >
+            <PlusIcon className="w-4 h-4" />
+          </Link>
+        </div>
       </div>
 
       {/* Fila 2: gráfico de ingresos + ingresos de este mes, a la derecha */}
