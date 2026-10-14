@@ -423,42 +423,13 @@
   }
 }
 
-/* "Efecto cristal" estilo iOS Liquid Glass — cápsula translúcida con blur
-   fuerte + saturación, un brillo superior y un borde que se desvanece de
-   claro a transparente (simulando luz atravesando el borde curvo de un
-   cristal), en vez del glass plano del resto del sitio. Úsalo junto con el
-   radius que ya traiga el elemento (rounded-[26px], rounded-full, etc.) —
-   esta clase no define su propio border-radius. */
-.liquid-glass {
-  position: relative;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.45) 55%, rgba(255, 255, 255, 0.35) 100%);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.9),
-    inset 0 -10px 16px -14px rgba(168, 85, 247, 0.3),
-    0 8px 30px -12px rgba(109, 40, 217, 0.25);
-}
-
-.liquid-glass::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 45%);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
 /* Switch reutilizable: <input type="checkbox" class="sr-only peer"> + <span class="switch-track">
-   Mismo "efecto cristal" que .liquid-glass, aplicado al riel (tintado
-   translúcido que cambia de vidrio neutro a vidrio morado) y a la perilla
-   (esfera de cristal con brillo especular). La perilla usa una curva de
-   easing con "overshoot" (back-out) en vez de lineal/ease, para que se
-   sienta como el resorte del toggle nativo de iOS al activar/desactivar. */
+   "Efecto cristal" estilo iOS Liquid Glass: el riel es translúcido con su
+   propio blur/saturación (tintado que cambia de vidrio neutro a vidrio
+   morado) y la perilla es una esfera de cristal con brillo especular. La
+   perilla usa una curva de easing con "overshoot" (back-out) en vez de
+   lineal/ease, para que se sienta como el resorte del toggle nativo de iOS
+   al activar/desactivar. */
 .switch-track {
   position: relative;
   width: 2.25rem;
