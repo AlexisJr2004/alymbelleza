@@ -31,7 +31,7 @@ export default function CategoryFilters({ filter }: CategoryFiltersProps) {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="lg:hidden w-full flex items-center justify-between px-4 py-2.5 mb-4 border border-white/70 bg-white/50 backdrop-blur-md rounded-full text-sm font-semibold text-gray-700"
+        className="liquid-glass lg:hidden w-full flex items-center justify-between px-4 py-2.5 mb-4 rounded-full text-sm font-semibold text-gray-700"
       >
         <span>
           <i className="fas fa-sliders-h mr-2 text-purple-500" />
@@ -41,7 +41,7 @@ export default function CategoryFilters({ filter }: CategoryFiltersProps) {
       </button>
 
       <div
-        className={`${open ? 'block' : 'hidden'} lg:block space-y-6 border border-white/70 bg-white/50 backdrop-blur-md rounded-[26px] p-5 lg:sticky lg:top-24`}
+        className={`liquid-glass ${open ? 'block' : 'hidden'} lg:block space-y-6 rounded-[26px] p-5 lg:sticky lg:top-24`}
       >
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Filtros</h3>
