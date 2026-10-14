@@ -50,7 +50,7 @@ export default function GalleryGrid({ items, isAdmin, hasActiveFilter, onItemCli
 
       {count === 0 ? (
         <div className="w-full flex flex-col items-center justify-center text-center py-16">
-          <div className="w-16 h-16 rounded-full border border-white/70 bg-white/50 backdrop-blur-md flex items-center justify-center mb-4">
+          <div className="w-16 h-16 rounded-full bg-purple-50 flex items-center justify-center mb-4">
             <i className="fas fa-image text-2xl text-purple-300" />
           </div>
           <p className="font-medium text-gray-600">{hasActiveFilter ? 'No se encontró contenido' : 'Aún no hay contenido en la galería'}</p>

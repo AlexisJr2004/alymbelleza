@@ -31,7 +31,7 @@ export default function CategoryFilters({ filter }: CategoryFiltersProps) {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="lg:hidden w-full flex items-center justify-between px-4 py-2.5 mb-4 border border-white/70 bg-white/50 backdrop-blur-md rounded-full text-sm font-semibold text-gray-700"
+        className="lg:hidden w-full flex items-center justify-between px-4 py-2.5 mb-4 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700"
       >
         <span>
           <i className="fas fa-sliders-h mr-2 text-purple-500" />
@@ -40,9 +40,7 @@ export default function CategoryFilters({ filter }: CategoryFiltersProps) {
         <i className={`fas fa-chevron-down text-xs transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
 
-      <div
-        className={`${open ? 'block' : 'hidden'} lg:block space-y-6 border border-white/70 bg-white/50 backdrop-blur-md rounded-[26px] p-5 lg:sticky lg:top-24`}
-      >
+      <div className={`${open ? 'block' : 'hidden'} lg:block space-y-6 border border-gray-200 rounded-xl p-5 lg:sticky lg:top-24`}>
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Filtros</h3>
           <button type="button" onClick={filter.clear} className="text-xs font-medium text-purple-600 hover:text-purple-800">
