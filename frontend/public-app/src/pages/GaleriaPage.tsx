@@ -89,12 +89,7 @@ export default function GaleriaPage() {
         onClose={() => setLightbox(null)}
       />
 
-      {/* Fondo degradado suave (antes bg-white liso) para que la cápsula de
-          filtros y las tarjetas, ambas translúcidas, tengan algo de color
-          detrás contra el cual mostrar el blur — mismo lenguaje de "cápsulas
-          y efectos translúcidos" que ya tiene el admin-app, pero con el
-          morado/rosa propio del sitio público en vez de la paleta del admin. */}
-      <section className="bg-gradient-to-b from-purple-50/70 via-white to-pink-50/40">
+      <section className="bg-white">
         <div id="galeria" className="container mx-auto w-full px-5 pb-16 md:px-10 md:pb-24">
           <div className="flex flex-col items-center justify-center text-center mb-16 animate-fade-in">
             <br />
