@@ -4,6 +4,7 @@ import PageHeader from '../components/ui/PageHeader';
 import Sparkline from '../components/ui/Sparkline';
 import TrendChart from '../components/ui/TrendChart';
 import AnnularDonut from '../components/ui/AnnularDonut';
+import ClienteRankingCard from '../components/ui/ClienteRankingCard';
 import {
   PedidosIcon,
   UsuariosIcon,
@@ -24,10 +25,8 @@ import { usePaymentCardsQuery } from '../hooks/usePaymentCards';
 import { useAppointmentsQuery } from '../hooks/useAppointments';
 import { construirSerieMensual } from '../lib/monthly';
 import { calcularClientesActivos } from '../lib/ranking';
-import { formatoMoneda, formatoFechaCorta, numeroWhatsapp } from '../lib/format';
+import { formatoMoneda, formatoFechaCorta } from '../lib/format';
 import type { Order } from '../types/models';
-
-const FALLBACK_AVATAR = 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
 
 // Mismo set de degradés que la cuadrícula de resumen de TarjetasPage.tsx —
 // se reutiliza acá para que "Tarjetas de pago" tenga el mismo diseño de
@@ -55,13 +54,15 @@ function ResumenKpiCard({
   icon: React.ReactNode;
 }) {
   return (
-    <div className="glass p-4">
+    <div className="glass p-4 flex flex-col justify-between">
       <div className="flex items-center justify-between mb-2">
         <p className="text-xs text-muted">{etiqueta}</p>
         <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${iconBg} ${iconColor}`}>{icon}</div>
       </div>
-      <p className="text-xl font-bold text-ink leading-tight">{valor}</p>
-      <p className="text-xs text-muted mt-1.5">{sub}</p>
+      <div>
+        <p className="text-xl font-bold text-ink leading-tight">{valor}</p>
+        <p className="text-xs text-muted mt-1.5">{sub}</p>
+      </div>
     </div>
   );
 }
@@ -155,42 +156,48 @@ export default function ResumenPage() {
       {/* Fila 1: ingresos totales (izquierda) + las 4 KPIs (centro) +
           ranking de clientes (derecha). Por defecto CSS Grid estira (stretch)
           las 3 columnas a la misma altura — la del ranking es la más alta, así
-          que Ingresos totales y las KPI (ambas con justify-center/content-center)
-          se centran como grupo dentro de ese espacio extra. */}
+          que Ingresos totales y las KPI crecen (no solo se centran con aire)
+          para ocupar ese espacio extra: la card de Ingresos usa flex-1 +
+          justify-between internamente, y la grilla de KPIs usa auto-rows-fr
+          para que las propias tarjetas se estiren. */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Ingresos totales + acciones */}
-        <div className="flex flex-col justify-center gap-3">
-          <div className="glass p-5">
-            <h3 className="font-semibold text-ink">Ingresos totales</h3>
-            <p className="text-sm text-muted">Resumen de tus ingresos actuales</p>
+        <div className="flex flex-col gap-3">
+          <div className="glass p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 className="font-semibold text-ink">Ingresos totales</h3>
+              <p className="text-sm text-muted">Resumen de tus ingresos actuales</p>
 
-            <div className="flex items-end justify-between gap-4 mt-4">
-              <div>
-                <p className="text-2xl font-bold text-ink">{formatoMoneda(ingresos)}</p>
-                {cambioPct === null ? (
-                  <p className="text-sm font-medium mt-1 text-muted">Sin datos del mes anterior</p>
-                ) : (
-                  <p className={`text-sm font-medium mt-1 ${cambioPct >= 0 ? 'text-sky' : 'text-coral'}`}>
-                    <span className="inline-flex items-center gap-1">
-                      {cambioPct >= 0 ? <ArrowUpIcon className="w-3.5 h-3.5" /> : <ArrowDownIcon className="w-3.5 h-3.5" />}
-                      {Math.abs(cambioPct)}% que el mes anterior
-                    </span>
-                  </p>
-                )}
+              <div className="flex items-end justify-between gap-4 mt-4">
+                <div>
+                  <p className="text-2xl font-bold text-ink">{formatoMoneda(ingresos)}</p>
+                  {cambioPct === null ? (
+                    <p className="text-sm font-medium mt-1 text-muted">Sin datos del mes anterior</p>
+                  ) : (
+                    <p className={`text-sm font-medium mt-1 ${cambioPct >= 0 ? 'text-sky' : 'text-coral'}`}>
+                      <span className="inline-flex items-center gap-1">
+                        {cambioPct >= 0 ? <ArrowUpIcon className="w-3.5 h-3.5" /> : <ArrowDownIcon className="w-3.5 h-3.5" />}
+                        {Math.abs(cambioPct)}% que el mes anterior
+                      </span>
+                    </p>
+                  )}
+                </div>
+                <Sparkline data={serieIngresos} />
               </div>
-              <Sparkline data={serieIngresos} />
             </div>
 
-            <div className="border-t border-dashed border-white/80 my-4" />
+            <div>
+              <div className="border-t border-dashed border-white/80 my-4" />
 
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-muted">
-                <span className="font-semibold text-ink">{orders.length}</span> pedidos registrados
-              </p>
-              <Link to="/pedidos" className="text-sm font-medium text-sky hover:text-sky/70 flex items-center gap-1">
-                Ver todos
-                <ArrowRightIcon className="w-3.5 h-3.5" />
-              </Link>
+              <div className="flex items-center justify-between">
+                <p className="text-sm text-muted">
+                  <span className="font-semibold text-ink">{orders.length}</span> pedidos registrados
+                </p>
+                <Link to="/pedidos" className="text-sm font-medium text-sky hover:text-sky/70 flex items-center gap-1">
+                  Ver todos
+                  <ArrowRightIcon className="w-3.5 h-3.5" />
+                </Link>
+              </div>
             </div>
           </div>
 
@@ -219,8 +226,10 @@ export default function ResumenPage() {
           </div>
         </div>
 
-        {/* Las 4 KPIs */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 content-center">
+        {/* Las 4 KPIs — auto-rows-fr para que ambas filas (2x2) se repartan
+            toda la altura estirada por la fila superior, en vez de quedar a
+            tamaño natural con aire alrededor. */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 auto-rows-fr">
           <ResumenKpiCard
             etiqueta="Pedidos"
             valor={orders.length}
@@ -255,95 +264,9 @@ export default function ResumenPage() {
           />
         </div>
 
-        {/* Ranking de clientes — un solo contenedor .glass con 2 sub-bloques:
-            el N.º 1 (foto circular centrada + nombre/correo/celular) y,
-            debajo, los N.º 2 y 3. Solo se muestra el top 3 — el resto vive
-            en RankingPage.tsx (/ranking), enlazada con "Ver todos". */}
-        <div className="glass p-5">
-          <div className="mb-4 flex items-center justify-between gap-3">
-            <div>
-              <p className="text-xs uppercase tracking-wider text-coral font-semibold">Ranking</p>
-              <h3 className="text-base font-bold text-ink mt-1">Clientes con más compras</h3>
-            </div>
-            <Link to="/ranking" className="text-xs font-medium text-sky hover:text-sky/70 shrink-0">
-              Ver todos
-            </Link>
-          </div>
-
-          {clientesActivos.length ? (
-            <>
-              <div className="flex flex-col items-center rounded-2xl border border-white/80 bg-white/40 p-6 text-center">
-                <div className="relative">
-                  <img
-                    src={clientesActivos[0].profileImage || FALLBACK_AVATAR}
-                    alt={clientesActivos[0].nombre}
-                    className="h-24 w-24 rounded-full object-cover ring-[3px] ring-white"
-                    onError={(e) => {
-                      e.currentTarget.onerror = null;
-                      e.currentTarget.src = FALLBACK_AVATAR;
-                    }}
-                  />
-                  <span className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full bg-ink text-xs font-bold text-white ring-2 ring-white">
-                    1
-                  </span>
-                </div>
-                <h4 className="mt-3 text-lg font-bold text-ink">{clientesActivos[0].nombre}</h4>
-                <p className="mt-1 text-sm text-muted">{clientesActivos[0].email}</p>
-                {clientesActivos[0].phone ? (
-                  <a
-                    href={`https://wa.me/${numeroWhatsapp(clientesActivos[0].phone)}`}
-                    target="_blank"
-                    rel="noopener"
-                    className="text-sm text-sky hover:text-sky/70 hover:underline"
-                  >
-                    {clientesActivos[0].phone}
-                  </a>
-                ) : (
-                  <p className="text-sm text-muted">Sin teléfono</p>
-                )}
-                <div className="mt-3 flex items-center gap-2 text-xs">
-                  <span className="rounded-full border border-white/80 bg-white/60 px-3 py-1 font-medium text-[#3a3d45]">
-                    {clientesActivos[0].total} pedidos
-                  </span>
-                  <span className="rounded-full bg-sky/15 px-3 py-1 font-semibold text-sky">
-                    {formatoMoneda(clientesActivos[0].gastado)}
-                  </span>
-                </div>
-              </div>
-
-              {clientesActivos.length > 1 && (
-                <div className="mt-4 divide-y divide-white/60 rounded-2xl border border-white/80 bg-white/25 px-4">
-                  {clientesActivos.slice(1, 3).map((c, i) => (
-                    <div key={c.email} className="flex items-center gap-3 py-2.5">
-                      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-white/80 bg-white/60 text-xs font-semibold text-[#3a3d45]">
-                        {i + 2}
-                      </span>
-                      <img
-                        src={c.profileImage || FALLBACK_AVATAR}
-                        alt={c.nombre}
-                        className="h-9 w-9 rounded-full object-cover shrink-0"
-                        onError={(e) => {
-                          e.currentTarget.onerror = null;
-                          e.currentTarget.src = FALLBACK_AVATAR;
-                        }}
-                      />
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium text-ink truncate">{c.nombre}</p>
-                        <p className="text-xs text-muted truncate">{c.email}</p>
-                      </div>
-                      <div className="text-right shrink-0">
-                        <p className="text-sm font-semibold text-ink">{c.total} pedidos</p>
-                        <p className="text-xs text-sky">{formatoMoneda(c.gastado)}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </>
-          ) : (
-            <p className="text-center text-muted py-6 text-sm">Todavía no hay compras de clientes.</p>
-          )}
-        </div>
+        {/* Ranking de clientes — contenedor compartido con RankingPage.tsx
+            (ver ClienteRankingCard.tsx), acá con enlace "Ver todos" a /ranking. */}
+        <ClienteRankingCard clientes={clientesActivos} verTodosHref="/ranking" />
       </div>
 
       {/* Fila 2: gráfico de ingresos + ingresos de este mes, a la derecha */}
