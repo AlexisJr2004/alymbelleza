@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { MenuIcon, BellIcon } from '../icons';
+import { BellIcon } from '../icons';
 import { getStoredUser } from '../../lib/auth';
 import { formatoFechaLarga, resolveProfileImage } from '../../lib/format';
 import { useAppointmentsQuery } from '../../hooks/useAppointments';
@@ -18,7 +18,7 @@ const NAV_ITEMS = [
   { to: '/citas', label: 'Citas' },
 ];
 
-export default function TopNav({ onToggleMobile }: { onToggleMobile: () => void }) {
+export default function TopNav() {
   const user = getStoredUser();
   const { data: citas = [] } = useAppointmentsQuery();
   const hayPendientes = citas.some((c) => (c.status || 'pendiente') === 'pendiente');
@@ -35,15 +35,6 @@ export default function TopNav({ onToggleMobile }: { onToggleMobile: () => void 
 
   return (
     <header className="sticky top-0 z-20 flex h-[74px] items-center gap-3 px-4 lg:px-8">
-      <button
-        type="button"
-        onClick={onToggleMobile}
-        className="circle-btn lg:hidden"
-        aria-label="Abrir menú"
-      >
-        <MenuIcon className="h-[18px] w-[18px]" />
-      </button>
-
       <Link
         to="/resumen"
         className="flex shrink-0 items-center gap-2.5 rounded-full border border-white/70 bg-white/30 py-1.5 pl-1.5 pr-4"

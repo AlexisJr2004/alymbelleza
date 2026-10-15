@@ -5,6 +5,7 @@ import Sparkline from '../components/ui/Sparkline';
 import TrendChart from '../components/ui/TrendChart';
 import AnnularDonut from '../components/ui/AnnularDonut';
 import ClienteRankingCard from '../components/ui/ClienteRankingCard';
+import ProgressRing from '../components/ui/ProgressRing';
 import {
   PedidosIcon,
   UsuariosIcon,
@@ -16,6 +17,7 @@ import {
   ChevronDownIcon,
   CitasIcon,
   PlusIcon,
+  TrophyIcon,
 } from '../components/icons';
 import { useOrdersQuery } from '../hooks/useOrders';
 import { useUsersQuery } from '../hooks/useUsers';
@@ -67,6 +69,68 @@ function ResumenKpiCard({
   );
 }
 
+// Tarjeta de estadística para el resumen móvil — ícono + anillo de progreso
+// (ver ProgressRing.tsx) en vez de solo ícono + etiqueta como ResumenKpiCard,
+// inspirada en la plantilla de referencia que compartió el usuario.
+function ResumenStatCardMobile({
+  icon,
+  iconBg,
+  iconColor,
+  ringColor,
+  percent,
+  etiqueta,
+  valor,
+}: {
+  icon: React.ReactNode;
+  iconBg: string;
+  iconColor: string;
+  ringColor: string;
+  percent: number;
+  etiqueta: string;
+  valor: React.ReactNode;
+}) {
+  return (
+    <div className="glass p-4">
+      <div className="flex items-center justify-between">
+        <div className={`grid h-10 w-10 place-items-center rounded-2xl ${iconBg} ${iconColor}`}>{icon}</div>
+        <div className="relative h-10 w-10 shrink-0">
+          <ProgressRing percent={percent} size={40} strokeWidth={4} color={ringColor} />
+          <span className="absolute inset-0 grid place-items-center text-[10px] font-bold text-ink">{percent}%</span>
+        </div>
+      </div>
+      <p className="mt-3 text-xs text-muted">{etiqueta}</p>
+      <p className="text-lg font-bold text-ink leading-tight">{valor}</p>
+    </div>
+  );
+}
+
+// Acceso rápido del resumen móvil — grilla 2x2 de accesos directos a las
+// secciones más usadas, reemplazando la fila de botones "Ver pedidos/Ver
+// citas/+" (que sigue existiendo tal cual para escritorio).
+function ResumenQuickAction({
+  to,
+  icon,
+  label,
+  active,
+}: {
+  to: string;
+  icon: React.ReactNode;
+  label: string;
+  active?: boolean;
+}) {
+  return (
+    <Link
+      to={to}
+      className={`flex flex-col items-center justify-center gap-2 rounded-2xl p-4 text-center transition ${
+        active ? 'bg-ink text-white' : 'glass text-ink hover:bg-white/50'
+      }`}
+    >
+      <span className={`grid h-10 w-10 place-items-center rounded-xl ${active ? 'bg-white/15' : 'bg-ink/5'}`}>{icon}</span>
+      <span className="text-xs font-medium">{label}</span>
+    </Link>
+  );
+}
+
 function calcularClientesInactivos(orders: Order[], users: { name?: string; email?: string; role: string; createdAt: string }[]) {
   const ultimoPorEmail: Record<string, string> = {};
   orders.forEach((o) => {
@@ -115,6 +179,15 @@ export default function ResumenPage() {
     return f.getMonth() === hoy.getMonth() && f.getFullYear() === hoy.getFullYear();
   }).length;
 
+  // Porcentajes para los anillos de progreso de las tarjetas de estadística
+  // en el resumen móvil — cada uno deriva de datos que ya se calculan acá
+  // arriba, sin inventar métricas nuevas.
+  const productosDisponibles = products.length - productosAgotados;
+  const pctPedidosConCupon = orders.length ? Math.round((orders.filter((o) => o.couponCode).length / orders.length) * 100) : 0;
+  const pctUsuariosNuevos = users.length ? Math.round((usuariosEsteMes / users.length) * 100) : 0;
+  const pctProductosDisponibles = products.length ? Math.round((productosDisponibles / products.length) * 100) : 0;
+  const pctCuponesActivos = coupons.length ? Math.round((cuponesActivos / coupons.length) * 100) : 0;
+
   const serieIngresos = useMemo(() => construirSerieMensual(orders, (o) => o.createdAt, (o) => o.total || 0), [orders]);
   const seriePedidos = useMemo(() => construirSerieMensual(orders, (o) => o.createdAt, () => 1), [orders]);
   const serieUsuariosNuevos = useMemo(() => construirSerieMensual(users, (u) => u.createdAt, () => 1), [users]);
@@ -153,14 +226,96 @@ export default function ResumenPage() {
         description="Los pedidos, citas y usuarios de Bella Beauty se consolidan aquí para ver el estado del negocio de un vistazo."
       />
 
+      {/* Resumen móvil — reemplaza, solo por debajo de lg, el contenido de
+          Fila 1 + "Últimos pedidos"/"Pedidos recientes" de más abajo (esos
+          quedan ocultos en móvil, ver sus propios comentarios) por una vista
+          curada: tarjetas de estadística con anillo de progreso, accesos
+          rápidos y pedidos recientes, inspirada en la plantilla de
+          referencia que compartió el usuario. */}
+      <div className="lg:hidden space-y-5">
+        <div className="grid grid-cols-2 gap-3">
+          <ResumenStatCardMobile
+            icon={<PedidosIcon className="w-5 h-5" />}
+            iconBg="bg-ink/5"
+            iconColor="text-ink"
+            ringColor="#16181d"
+            percent={pctPedidosConCupon}
+            etiqueta="Pedidos"
+            valor={orders.length}
+          />
+          <ResumenStatCardMobile
+            icon={<UsuariosIcon className="w-5 h-5" />}
+            iconBg="bg-sky/15"
+            iconColor="text-sky"
+            ringColor="#7e9ce3"
+            percent={pctUsuariosNuevos}
+            etiqueta="Usuarios"
+            valor={users.length}
+          />
+          <ResumenStatCardMobile
+            icon={<ProductosIcon className="w-5 h-5" />}
+            iconBg="bg-coral/15"
+            iconColor="text-coral"
+            ringColor="#e2766f"
+            percent={pctProductosDisponibles}
+            etiqueta="Productos"
+            valor={products.length}
+          />
+          <ResumenStatCardMobile
+            icon={<CuponesIcon className="w-5 h-5" />}
+            iconBg="bg-[#eef0f4]"
+            iconColor="text-muted"
+            ringColor="#8a8f9a"
+            percent={pctCuponesActivos}
+            etiqueta="Cupones activos"
+            valor={`${cuponesActivos}/${coupons.length}`}
+          />
+        </div>
+
+        <div>
+          <h3 className="text-sm font-semibold text-ink mb-3">Accesos rápidos</h3>
+          <div className="grid grid-cols-2 gap-3">
+            <ResumenQuickAction to="/pedidos" icon={<PedidosIcon className="w-5 h-5" />} label="Pedidos" active />
+            <ResumenQuickAction to="/citas" icon={<CitasIcon className="w-5 h-5" />} label="Citas" />
+            <ResumenQuickAction to="/ranking" icon={<TrophyIcon className="w-5 h-5" />} label="Ranking" />
+            <ResumenQuickAction to="/productos" icon={<ProductosIcon className="w-5 h-5" />} label="Productos" />
+          </div>
+        </div>
+
+        <div className="glass overflow-hidden">
+          <div className="px-5 py-3 border-b border-white/70 flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-ink">Pedidos recientes</h3>
+            <Link to="/pedidos" className="text-xs text-sky hover:text-sky/70 font-medium">
+              Ver todos
+            </Link>
+          </div>
+          <div className="divide-y divide-white/60">
+            {ultimosPedidos.length ? (
+              ultimosPedidos.map((o) => (
+                <div key={o._id} className="flex items-center justify-between px-5 py-2.5">
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-ink truncate">{o.user?.name || 'Cliente'}</p>
+                    <p className="text-xs text-muted">{formatoFechaCorta(o.createdAt)}</p>
+                  </div>
+                  <span className="text-sm font-semibold text-sky">{formatoMoneda(o.total)}</span>
+                </div>
+              ))
+            ) : (
+              <p className="text-sm text-muted px-5 py-5 text-center">Todavía no hay pedidos.</p>
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* Fila 1: ingresos totales (izquierda) + las 4 KPIs (centro) +
           ranking de clientes (derecha). Por defecto CSS Grid estira (stretch)
           las 3 columnas a la misma altura — la del ranking es la más alta, así
           que Ingresos totales y las KPI crecen (no solo se centran con aire)
           para ocupar ese espacio extra: la card de Ingresos usa flex-1 +
           justify-between internamente, y la grilla de KPIs usa auto-rows-fr
-          para que las propias tarjetas se estiren. */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          para que las propias tarjetas se estiren. Solo visible desde lg: en
+          móvil, el bloque de arriba la reemplaza. */}
+      <div className="hidden lg:grid lg:grid-cols-3 gap-5">
         {/* Ingresos totales + acciones */}
         <div className="flex flex-col gap-3">
           <div className="glass p-5 flex-1 flex flex-col justify-between">
@@ -323,9 +478,11 @@ export default function ResumenPage() {
         </div>
       </div>
 
-      {/* Fila 3b: últimos pedidos + tarjetas de pago */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <div className="glass overflow-hidden">
+      {/* Fila 3b: últimos pedidos (solo desde lg: — el resumen móvil de más
+          arriba ya tiene su propia lista de "Pedidos recientes") + tarjetas
+          de pago (siempre visible, sin equivalente en el resumen móvil) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div className="hidden lg:block glass overflow-hidden">
           <div className="px-5 py-3 border-b border-white/70 flex items-center justify-between">
             <h3 className="text-sm font-semibold text-ink">Últimos pedidos</h3>
             <Link to="/pedidos" className="text-xs text-sky hover:text-sky/70 font-medium">
@@ -411,8 +568,9 @@ export default function ResumenPage() {
         </div>
       </div>
 
-      {/* Fila 4: pedidos recientes */}
-      <div className="glass overflow-hidden">
+      {/* Fila 4: pedidos recientes — tabla ancha, solo desde lg: en móvil ya
+          se ve la lista compacta del resumen móvil de más arriba */}
+      <div className="hidden lg:block glass overflow-hidden">
         <div className="px-5 py-3.5 border-b border-white/70 flex items-center justify-between">
           <h3 className="text-base font-semibold text-ink">Pedidos recientes</h3>
           <Link to="/pedidos" className="text-sm text-sky hover:text-sky/70 font-medium">

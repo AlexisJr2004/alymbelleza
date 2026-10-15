@@ -4,6 +4,7 @@ import RequireAdmin from './RequireAdmin';
 import TopNav from './TopNav';
 import IconRail from './IconRail';
 import MobileDrawer from './MobileDrawer';
+import BottomMobileNav from './BottomMobileNav';
 import ChatPanel from './ChatPanel';
 
 export default function AdminLayout() {
@@ -12,8 +13,9 @@ export default function AdminLayout() {
   return (
     <RequireAdmin>
       <div className="app-bg font-sans text-ink antialiased min-h-screen">
-        <TopNav onToggleMobile={() => setMobileOpen((v) => !v)} />
+        <TopNav />
         <IconRail />
+        <BottomMobileNav onOpenMore={() => setMobileOpen(true)} />
 
         {/* Siempre montado (no solo cuando mobileOpen) para poder animar su
             opacidad al abrir/cerrar, igual que el overlay del menú móvil
@@ -39,7 +41,7 @@ export default function AdminLayout() {
             chat lejos del borde derecho -- de ahí el pedido de "mover
             contenido a la izquierda / chat a la derecha". pl/pr también se
             reducen un poco para acercar ambas columnas a sus bordes. */}
-        <main className="max-w-[2000px] mx-auto p-4 lg:pl-[96px] lg:pr-4 lg:py-8">
+        <main className="max-w-[2000px] mx-auto p-4 pb-28 lg:pb-8 lg:pl-[96px] lg:pr-4 lg:py-8">
           <div className="grid grid-cols-1 gap-6 2xl:grid-cols-[minmax(0,1fr)_360px]">
             <div id="admin-content" className="min-w-0">
               <Outlet />
