@@ -25,14 +25,24 @@ export default function CrudModal({ open, title, onClose, children, maxWidth = '
   const titleId = 'crud-modal-title';
 
   return (
-    <Sheet open={open} onClose={onClose} desktopMaxWidthClassName={maxWidth} labelledBy={titleId}>
+    <Sheet
+      open={open}
+      onClose={onClose}
+      desktopMaxWidthClassName={maxWidth}
+      labelledBy={titleId}
+      panelClassName="bg-white/80 backdrop-blur-xl border border-white/70 rounded-t-3xl md:rounded-[26px]"
+    >
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 id={titleId} className="text-lg font-bold text-gray-800">
+          <h3 id={titleId} className="text-lg font-bold text-ink">
             {title}
           </h3>
-          <button type="button" onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
-            <XIcon className="w-5 h-5" />
+          <button
+            type="button"
+            onClick={onClose}
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/80 bg-white/60 text-muted transition hover:bg-white/90 hover:text-ink"
+          >
+            <XIcon className="w-4 h-4" />
           </button>
         </div>
         {children}
