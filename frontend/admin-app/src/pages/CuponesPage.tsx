@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import PageHeader from '../components/ui/PageHeader';
 import { KpiCard, KpiRow } from '../components/ui/KpiCard';
+import StatCardMobile from '../components/ui/StatCardMobile';
 import Switch from '../components/ui/Switch';
 import DonutChart from '../components/ui/DonutChart';
 import CrudModal from '../components/ui/CrudModal';
@@ -38,6 +39,12 @@ export default function CuponesPage() {
       return t >= ahora && t <= ahora + TREINTA_DIAS_MS;
     }).length;
   }, [cupones]);
+
+  // Porcentajes para los anillos de progreso de las tarjetas de estadística
+  // en móvil, todos como fracción del total de cupones.
+  const pctActivos = cupones.length ? Math.round((activos / cupones.length) * 100) : 0;
+  const pctInactivos = cupones.length ? Math.round((inactivos / cupones.length) * 100) : 0;
+  const pctVencenPronto = cupones.length ? Math.round((vencenPronto / cupones.length) * 100) : 0;
 
   const filtrados = useMemo(() => {
     const texto = search.trim().toLowerCase();
@@ -109,6 +116,45 @@ export default function CuponesPage() {
           </button>
         }
       />
+
+      <div className="grid grid-cols-2 gap-3 mb-6 lg:hidden">
+        <StatCardMobile
+          icon={<CuponesIcon className="w-5 h-5" />}
+          iconBg="bg-ink/5"
+          iconColor="text-ink"
+          ringColor="#16181d"
+          percent={100}
+          label="Total cupones"
+          value={cupones.length}
+        />
+        <StatCardMobile
+          icon={<CheckIcon className="w-5 h-5" />}
+          iconBg="bg-sky/15"
+          iconColor="text-sky"
+          ringColor="#7e9ce3"
+          percent={pctActivos}
+          label="Activos"
+          value={activos}
+        />
+        <StatCardMobile
+          icon={<XIcon className="w-5 h-5" />}
+          iconBg="bg-[#eef0f4]"
+          iconColor="text-muted"
+          ringColor="#8a8f9a"
+          percent={pctInactivos}
+          label="Inactivos"
+          value={inactivos}
+        />
+        <StatCardMobile
+          icon={<BellIcon className="w-5 h-5" />}
+          iconBg="bg-coral/15"
+          iconColor="text-coral"
+          ringColor="#e2766f"
+          percent={pctVencenPronto}
+          label="Vencen pronto"
+          value={vencenPronto}
+        />
+      </div>
 
       <KpiRow>
         <KpiCard

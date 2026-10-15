@@ -5,7 +5,7 @@ import Sparkline from '../components/ui/Sparkline';
 import TrendChart from '../components/ui/TrendChart';
 import AnnularDonut from '../components/ui/AnnularDonut';
 import ClienteRankingCard from '../components/ui/ClienteRankingCard';
-import ProgressRing from '../components/ui/ProgressRing';
+import StatCardMobile from '../components/ui/StatCardMobile';
 import {
   PedidosIcon,
   UsuariosIcon,
@@ -65,41 +65,6 @@ function ResumenKpiCard({
         <p className="text-xl font-bold text-ink leading-tight">{valor}</p>
         <p className="text-xs text-muted mt-1.5">{sub}</p>
       </div>
-    </div>
-  );
-}
-
-// Tarjeta de estadística para el resumen móvil — ícono + anillo de progreso
-// (ver ProgressRing.tsx) en vez de solo ícono + etiqueta como ResumenKpiCard,
-// inspirada en la plantilla de referencia que compartió el usuario.
-function ResumenStatCardMobile({
-  icon,
-  iconBg,
-  iconColor,
-  ringColor,
-  percent,
-  etiqueta,
-  valor,
-}: {
-  icon: React.ReactNode;
-  iconBg: string;
-  iconColor: string;
-  ringColor: string;
-  percent: number;
-  etiqueta: string;
-  valor: React.ReactNode;
-}) {
-  return (
-    <div className="glass p-4">
-      <div className="flex items-center justify-between">
-        <div className={`grid h-10 w-10 place-items-center rounded-2xl ${iconBg} ${iconColor}`}>{icon}</div>
-        <div className="relative h-10 w-10 shrink-0">
-          <ProgressRing percent={percent} size={40} strokeWidth={4} color={ringColor} />
-          <span className="absolute inset-0 grid place-items-center text-[10px] font-bold text-ink">{percent}%</span>
-        </div>
-      </div>
-      <p className="mt-3 text-xs text-muted">{etiqueta}</p>
-      <p className="text-lg font-bold text-ink leading-tight">{valor}</p>
     </div>
   );
 }
@@ -234,41 +199,41 @@ export default function ResumenPage() {
           referencia que compartió el usuario. */}
       <div className="lg:hidden space-y-5">
         <div className="grid grid-cols-2 gap-3">
-          <ResumenStatCardMobile
+          <StatCardMobile
             icon={<PedidosIcon className="w-5 h-5" />}
             iconBg="bg-ink/5"
             iconColor="text-ink"
             ringColor="#16181d"
             percent={pctPedidosConCupon}
-            etiqueta="Pedidos"
-            valor={orders.length}
+            label="Pedidos"
+            value={orders.length}
           />
-          <ResumenStatCardMobile
+          <StatCardMobile
             icon={<UsuariosIcon className="w-5 h-5" />}
             iconBg="bg-sky/15"
             iconColor="text-sky"
             ringColor="#7e9ce3"
             percent={pctUsuariosNuevos}
-            etiqueta="Usuarios"
-            valor={users.length}
+            label="Usuarios"
+            value={users.length}
           />
-          <ResumenStatCardMobile
+          <StatCardMobile
             icon={<ProductosIcon className="w-5 h-5" />}
             iconBg="bg-coral/15"
             iconColor="text-coral"
             ringColor="#e2766f"
             percent={pctProductosDisponibles}
-            etiqueta="Productos"
-            valor={products.length}
+            label="Productos"
+            value={products.length}
           />
-          <ResumenStatCardMobile
+          <StatCardMobile
             icon={<CuponesIcon className="w-5 h-5" />}
             iconBg="bg-[#eef0f4]"
             iconColor="text-muted"
             ringColor="#8a8f9a"
             percent={pctCuponesActivos}
-            etiqueta="Cupones activos"
-            valor={`${cuponesActivos}/${coupons.length}`}
+            label="Cupones activos"
+            value={`${cuponesActivos}/${coupons.length}`}
           />
         </div>
 

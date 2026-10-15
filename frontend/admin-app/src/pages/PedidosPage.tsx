@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import PageHeader from '../components/ui/PageHeader';
 import { KpiCard, KpiRow } from '../components/ui/KpiCard';
+import StatCardMobile from '../components/ui/StatCardMobile';
 import Switch from '../components/ui/Switch';
 import DonutChart from '../components/ui/DonutChart';
 import Pagination from '../components/ui/Pagination';
@@ -31,6 +32,12 @@ export default function PedidosPage() {
   const conCupon = filtrados.filter((o) => !!o.couponCode).length;
   const sinCupon = filtrados.length - conCupon;
 
+  // Porcentajes para los anillos de progreso de las tarjetas de estadística
+  // en móvil: % de pedidos con cupón, y qué fracción de los ingresos se fue
+  // en descuentos.
+  const pctConCupon = filtrados.length ? Math.round((conCupon / filtrados.length) * 100) : 0;
+  const pctDescuentos = ingresos ? Math.round((descuentos / ingresos) * 100) : 0;
+
   const inicio = (pagina - 1) * PEDIDOS_POR_PAGINA;
   const pedidosPagina = filtrados.slice(inicio, inicio + PEDIDOS_POR_PAGINA);
 
@@ -48,6 +55,45 @@ export default function PedidosPage() {
         title="Pedidos registrados"
         description="Revisa los pedidos realizados por los clientes, filtra por fecha o cupón, y consulta ingresos y descuentos aplicados."
       />
+
+      <div className="grid grid-cols-2 gap-3 mb-6 lg:hidden">
+        <StatCardMobile
+          icon={<PedidosIcon className="w-5 h-5" />}
+          iconBg="bg-ink/5"
+          iconColor="text-ink"
+          ringColor="#16181d"
+          percent={pctConCupon}
+          label="Total pedidos"
+          value={filtrados.length}
+        />
+        <StatCardMobile
+          icon={<DollarIcon className="w-5 h-5" />}
+          iconBg="bg-sky/15"
+          iconColor="text-sky"
+          ringColor="#7e9ce3"
+          percent={100}
+          label="Ingresos"
+          value={formatoMoneda(ingresos)}
+        />
+        <StatCardMobile
+          icon={<CuponesIcon className="w-5 h-5" />}
+          iconBg="bg-coral/15"
+          iconColor="text-coral"
+          ringColor="#e2766f"
+          percent={pctDescuentos}
+          label="Descuentos"
+          value={formatoMoneda(descuentos)}
+        />
+        <StatCardMobile
+          icon={<BarsIcon className="w-5 h-5" />}
+          iconBg="bg-[#eef0f4]"
+          iconColor="text-muted"
+          ringColor="#8a8f9a"
+          percent={100}
+          label="Ticket promedio"
+          value={formatoMoneda(promedio)}
+        />
+      </div>
 
       <KpiRow>
         <KpiCard

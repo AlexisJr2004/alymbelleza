@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import PageHeader from '../components/ui/PageHeader';
 import { KpiCard, KpiRow } from '../components/ui/KpiCard';
+import StatCardMobile from '../components/ui/StatCardMobile';
 import Switch from '../components/ui/Switch';
 import Pagination from '../components/ui/Pagination';
 import PercentBarList from '../components/ui/PercentBarList';
@@ -84,6 +85,45 @@ export default function UsuariosPage() {
         title="Clientes registrados"
         description="Administra los usuarios registrados en Bella Beauty. Puedes buscar, filtrar por rol o estado, habilitar/deshabilitar cuentas y cambiar el rol de administrador."
       />
+
+      <div className="grid grid-cols-2 gap-3 mb-6 lg:hidden">
+        <StatCardMobile
+          icon={<UsuariosIcon className="w-5 h-5" />}
+          iconBg="bg-ink/5"
+          iconColor="text-ink"
+          ringColor="#16181d"
+          percent={100}
+          label="Total clientes"
+          value={total}
+        />
+        <StatCardMobile
+          icon={<CheckIcon className="w-5 h-5" />}
+          iconBg="bg-sky/15"
+          iconColor="text-sky"
+          ringColor="#7e9ce3"
+          percent={pct(activos)}
+          label="Activos"
+          value={activos}
+        />
+        <StatCardMobile
+          icon={<ShieldCheckIcon className="w-5 h-5" />}
+          iconBg="bg-coral/15"
+          iconColor="text-coral"
+          ringColor="#e2766f"
+          percent={pct(admins)}
+          label="Administradores"
+          value={admins}
+        />
+        <StatCardMobile
+          icon={<UsersInactiveIcon className="w-5 h-5" />}
+          iconBg="bg-[#eef0f4]"
+          iconColor="text-muted"
+          ringColor="#8a8f9a"
+          percent={pct(inactivos)}
+          label="Inactivos"
+          value={inactivos}
+        />
+      </div>
 
       <KpiRow>
         <KpiCard

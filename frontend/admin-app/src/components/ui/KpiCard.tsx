@@ -25,6 +25,9 @@ export function KpiCard({ label, value, note, valueClassName = 'text-ink', iconB
   );
 }
 
+// Oculto bajo lg: — cada página que usa KpiRow trae su propia grilla
+// lg:hidden de StatCardMobile (ícono + anillo de progreso) como reemplazo en
+// móvil, igual que se hizo primero en ResumenPage.tsx.
 export function KpiRow({ children }: { children: React.ReactNode }) {
-  return <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">{children}</div>;
+  return <div className="hidden lg:grid lg:grid-cols-4 gap-4 mb-6">{children}</div>;
 }

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import PageHeader from '../components/ui/PageHeader';
 import { KpiCard, KpiRow } from '../components/ui/KpiCard';
+import StatCardMobile from '../components/ui/StatCardMobile';
 import ClienteRankingCard from '../components/ui/ClienteRankingCard';
 import Pagination from '../components/ui/Pagination';
 import { TrophyIcon, UsuariosIcon, DollarIcon, BarsIcon, SearchIcon } from '../components/icons';
@@ -33,6 +34,13 @@ export default function RankingPage() {
   const promedio = clientesActivos.length ? totalGastado / clientesActivos.length : 0;
   const lider = clientesActivos[0];
 
+  // Porcentajes para los anillos de progreso de las tarjetas de estadística
+  // en móvil: % de usuarios registrados que han comprado, y qué fracción de
+  // los pedidos totales (entre clientes con compras) representa el líder.
+  const totalPedidosClientes = clientesActivos.reduce((sum, c) => sum + c.total, 0);
+  const pctClientesConCompra = users.length ? Math.round((clientesActivos.length / users.length) * 100) : 0;
+  const pctLider = lider && totalPedidosClientes ? Math.round((lider.total / totalPedidosClientes) * 100) : 0;
+
   const inicio = (pagina - 1) * RANKING_POR_PAGINA;
   const paginaActual = filtrados.slice(inicio, inicio + RANKING_POR_PAGINA);
 
@@ -43,6 +51,45 @@ export default function RankingPage() {
         title="Ranking de clientes"
         description="Todos los clientes con compras realizadas, ordenados por cantidad de pedidos."
       />
+
+      <div className="grid grid-cols-2 gap-3 mb-6 lg:hidden">
+        <StatCardMobile
+          icon={<UsuariosIcon className="w-5 h-5" />}
+          iconBg="bg-ink/5"
+          iconColor="text-ink"
+          ringColor="#16181d"
+          percent={pctClientesConCompra}
+          label="Clientes con compras"
+          value={clientesActivos.length}
+        />
+        <StatCardMobile
+          icon={<TrophyIcon className="w-5 h-5" />}
+          iconBg="bg-coral/15"
+          iconColor="text-coral"
+          ringColor="#e2766f"
+          percent={pctLider}
+          label="Líder actual"
+          value={lider ? lider.nombre : '—'}
+        />
+        <StatCardMobile
+          icon={<DollarIcon className="w-5 h-5" />}
+          iconBg="bg-sky/15"
+          iconColor="text-sky"
+          ringColor="#7e9ce3"
+          percent={100}
+          label="Total en compras"
+          value={formatoMoneda(totalGastado)}
+        />
+        <StatCardMobile
+          icon={<BarsIcon className="w-5 h-5" />}
+          iconBg="bg-[#eef0f4]"
+          iconColor="text-muted"
+          ringColor="#8a8f9a"
+          percent={100}
+          label="Promedio por cliente"
+          value={formatoMoneda(promedio)}
+        />
+      </div>
 
       <KpiRow>
         <KpiCard

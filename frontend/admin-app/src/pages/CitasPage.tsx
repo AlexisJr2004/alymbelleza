@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import PageHeader from '../components/ui/PageHeader';
 import { KpiCard, KpiRow } from '../components/ui/KpiCard';
+import StatCardMobile from '../components/ui/StatCardMobile';
 import Switch from '../components/ui/Switch';
 import Pagination from '../components/ui/Pagination';
 import { CitasIcon, ClockIcon, CheckIcon, XCircleIcon } from '../components/icons';
@@ -53,6 +54,11 @@ export default function CitasPage() {
   ]);
   const centerPct = donut.total > 0 ? Math.round((realizadas / donut.total) * 100) : 0;
 
+  // Porcentajes para los anillos de progreso de las tarjetas de estadística
+  // en móvil (Realizadas reusa centerPct, ya es la misma fracción).
+  const pctPendientes = filtrados.length ? Math.round((pendientes / filtrados.length) * 100) : 0;
+  const pctCanceladas = filtrados.length ? Math.round((canceladas / filtrados.length) * 100) : 0;
+
   const inicio = (pagina - 1) * CITAS_POR_PAGINA;
   const citasPagina = filtrados.slice(inicio, inicio + CITAS_POR_PAGINA);
 
@@ -78,6 +84,45 @@ export default function CitasPage() {
         title="Citas registradas"
         description="Revisa las citas agendadas por los clientes, filtra por fecha o estado, y marca cada una como realizada o cancelada."
       />
+
+      <div className="grid grid-cols-2 gap-3 mb-6 lg:hidden">
+        <StatCardMobile
+          icon={<CitasIcon className="w-5 h-5" />}
+          iconBg="bg-ink/5"
+          iconColor="text-ink"
+          ringColor="#16181d"
+          percent={100}
+          label="Total citas"
+          value={filtrados.length}
+        />
+        <StatCardMobile
+          icon={<ClockIcon className="w-5 h-5" />}
+          iconBg="bg-coral/15"
+          iconColor="text-coral"
+          ringColor="#e2766f"
+          percent={pctPendientes}
+          label="Pendientes"
+          value={pendientes}
+        />
+        <StatCardMobile
+          icon={<CheckIcon className="w-5 h-5" />}
+          iconBg="bg-sky/15"
+          iconColor="text-sky"
+          ringColor="#7e9ce3"
+          percent={centerPct}
+          label="Realizadas"
+          value={realizadas}
+        />
+        <StatCardMobile
+          icon={<XCircleIcon className="w-5 h-5" />}
+          iconBg="bg-[#eef0f4]"
+          iconColor="text-muted"
+          ringColor="#8a8f9a"
+          percent={pctCanceladas}
+          label="Canceladas"
+          value={canceladas}
+        />
+      </div>
 
       <KpiRow>
         <KpiCard

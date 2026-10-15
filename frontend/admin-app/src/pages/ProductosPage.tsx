@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import PageHeader from '../components/ui/PageHeader';
 import { KpiCard, KpiRow } from '../components/ui/KpiCard';
+import StatCardMobile from '../components/ui/StatCardMobile';
 import Switch from '../components/ui/Switch';
 import DonutChart from '../components/ui/DonutChart';
 import Pagination from '../components/ui/Pagination';
@@ -46,6 +47,12 @@ export default function ProductosPage() {
   const disponibles = productos.filter((p) => !!p.availability).length;
   const agotados = productos.length - disponibles;
   const destacados = productos.filter((p) => !!p.featured).length;
+
+  // Porcentajes para los anillos de progreso de las tarjetas de estadística
+  // en móvil, todos como fracción del catálogo completo.
+  const pctDisponibles = productos.length ? Math.round((disponibles / productos.length) * 100) : 0;
+  const pctAgotados = productos.length ? Math.round((agotados / productos.length) * 100) : 0;
+  const pctDestacados = productos.length ? Math.round((destacados / productos.length) * 100) : 0;
 
   const filtrados = useMemo(() => {
     const texto = search.trim().toLowerCase();
@@ -127,6 +134,45 @@ export default function ProductosPage() {
           </button>
         }
       />
+
+      <div className="grid grid-cols-2 gap-3 mb-6 lg:hidden">
+        <StatCardMobile
+          icon={<ProductosIcon className="w-5 h-5" />}
+          iconBg="bg-ink/5"
+          iconColor="text-ink"
+          ringColor="#16181d"
+          percent={100}
+          label="Total productos"
+          value={productos.length}
+        />
+        <StatCardMobile
+          icon={<CheckIcon className="w-5 h-5" />}
+          iconBg="bg-sky/15"
+          iconColor="text-sky"
+          ringColor="#7e9ce3"
+          percent={pctDisponibles}
+          label="Disponibles"
+          value={disponibles}
+        />
+        <StatCardMobile
+          icon={<XIcon className="w-5 h-5" />}
+          iconBg="bg-coral/15"
+          iconColor="text-coral"
+          ringColor="#e2766f"
+          percent={pctAgotados}
+          label="Agotados"
+          value={agotados}
+        />
+        <StatCardMobile
+          icon={<StarIcon className="w-5 h-5" />}
+          iconBg="bg-[#eef0f4]"
+          iconColor="text-muted"
+          ringColor="#8a8f9a"
+          percent={pctDestacados}
+          label="Destacados"
+          value={destacados}
+        />
+      </div>
 
       <KpiRow>
         <KpiCard
