@@ -59,36 +59,25 @@ export default function PedidosPage() {
       <div className="grid grid-cols-2 gap-3 mb-6 lg:hidden">
         <StatCardMobile
           icon={<PedidosIcon className="w-5 h-5" />}
-          iconBg="bg-ink/5"
-          iconColor="text-ink"
-          ringColor="#16181d"
           percent={pctConCupon}
           label="Total pedidos"
           value={filtrados.length}
         />
         <StatCardMobile
           icon={<DollarIcon className="w-5 h-5" />}
-          iconBg="bg-sky/15"
-          iconColor="text-sky"
-          ringColor="#7e9ce3"
           percent={100}
           label="Ingresos"
           value={formatoMoneda(ingresos)}
+          highlighted
         />
         <StatCardMobile
           icon={<CuponesIcon className="w-5 h-5" />}
-          iconBg="bg-coral/15"
-          iconColor="text-coral"
-          ringColor="#e2766f"
           percent={pctDescuentos}
           label="Descuentos"
           value={formatoMoneda(descuentos)}
         />
         <StatCardMobile
           icon={<BarsIcon className="w-5 h-5" />}
-          iconBg="bg-[#eef0f4]"
-          iconColor="text-muted"
-          ringColor="#8a8f9a"
           percent={100}
           label="Ticket promedio"
           value={formatoMoneda(promedio)}

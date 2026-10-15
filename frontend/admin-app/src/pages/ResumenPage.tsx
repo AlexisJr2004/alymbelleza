@@ -71,7 +71,10 @@ function ResumenKpiCard({
 
 // Acceso rápido del resumen móvil — grilla 2x2 de accesos directos a las
 // secciones más usadas, reemplazando la fila de botones "Ver pedidos/Ver
-// citas/+" (que sigue existiendo tal cual para escritorio).
+// citas/+" (que sigue existiendo tal cual para escritorio). Colores copiados
+// literalmente de la plantilla de referencia (acceso activo relleno de
+// morado/lavanda, texto oscuro) a pedido del usuario, no el estilo glass del
+// resto del admin-app.
 function ResumenQuickAction({
   to,
   icon,
@@ -86,11 +89,17 @@ function ResumenQuickAction({
   return (
     <Link
       to={to}
-      className={`flex flex-col items-center justify-center gap-2 rounded-2xl p-4 text-center transition ${
-        active ? 'bg-ink text-white' : 'glass text-ink hover:bg-white/50'
+      className={`flex flex-col items-center justify-center gap-2 rounded-2xl p-4 text-center text-ink transition ${
+        active ? 'shadow-sm' : 'border border-black/5 bg-white shadow-sm hover:bg-black/[0.02]'
       }`}
+      style={active ? { backgroundColor: '#C7BBF5' } : undefined}
     >
-      <span className={`grid h-10 w-10 place-items-center rounded-xl ${active ? 'bg-white/15' : 'bg-ink/5'}`}>{icon}</span>
+      <span
+        className="grid h-10 w-10 place-items-center rounded-xl"
+        style={{ backgroundColor: active ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.05)' }}
+      >
+        {icon}
+      </span>
       <span className="text-xs font-medium">{label}</span>
     </Link>
   );
@@ -201,36 +210,25 @@ export default function ResumenPage() {
         <div className="grid grid-cols-2 gap-3">
           <StatCardMobile
             icon={<PedidosIcon className="w-5 h-5" />}
-            iconBg="bg-ink/5"
-            iconColor="text-ink"
-            ringColor="#16181d"
             percent={pctPedidosConCupon}
             label="Pedidos"
             value={orders.length}
           />
           <StatCardMobile
             icon={<UsuariosIcon className="w-5 h-5" />}
-            iconBg="bg-sky/15"
-            iconColor="text-sky"
-            ringColor="#7e9ce3"
             percent={pctUsuariosNuevos}
             label="Usuarios"
             value={users.length}
+            highlighted
           />
           <StatCardMobile
             icon={<ProductosIcon className="w-5 h-5" />}
-            iconBg="bg-coral/15"
-            iconColor="text-coral"
-            ringColor="#e2766f"
             percent={pctProductosDisponibles}
             label="Productos"
             value={products.length}
           />
           <StatCardMobile
             icon={<CuponesIcon className="w-5 h-5" />}
-            iconBg="bg-[#eef0f4]"
-            iconColor="text-muted"
-            ringColor="#8a8f9a"
             percent={pctCuponesActivos}
             label="Cupones activos"
             value={`${cuponesActivos}/${coupons.length}`}
@@ -247,26 +245,26 @@ export default function ResumenPage() {
           </div>
         </div>
 
-        <div className="glass overflow-hidden">
-          <div className="px-5 py-3 border-b border-white/70 flex items-center justify-between">
+        <div className="rounded-[28px] border border-black/5 bg-white shadow-sm overflow-hidden">
+          <div className="px-5 py-3 border-b border-black/5 flex items-center justify-between">
             <h3 className="text-sm font-semibold text-ink">Pedidos recientes</h3>
-            <Link to="/pedidos" className="text-xs text-sky hover:text-sky/70 font-medium">
+            <Link to="/pedidos" className="text-xs font-medium" style={{ color: '#8B7FE0' }}>
               Ver todos
             </Link>
           </div>
-          <div className="divide-y divide-white/60">
+          <div className="divide-y divide-black/5">
             {ultimosPedidos.length ? (
               ultimosPedidos.map((o) => (
                 <div key={o._id} className="flex items-center justify-between px-5 py-2.5">
                   <div className="min-w-0">
                     <p className="text-sm font-medium text-ink truncate">{o.user?.name || 'Cliente'}</p>
-                    <p className="text-xs text-muted">{formatoFechaCorta(o.createdAt)}</p>
+                    <p className="text-xs text-ink/50">{formatoFechaCorta(o.createdAt)}</p>
                   </div>
-                  <span className="text-sm font-semibold text-sky">{formatoMoneda(o.total)}</span>
+                  <span className="text-sm font-semibold text-ink">{formatoMoneda(o.total)}</span>
                 </div>
               ))
             ) : (
-              <p className="text-sm text-muted px-5 py-5 text-center">Todavía no hay pedidos.</p>
+              <p className="text-sm text-ink/50 px-5 py-5 text-center">Todavía no hay pedidos.</p>
             )}
           </div>
         </div>

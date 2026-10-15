@@ -55,36 +55,25 @@ export default function RankingPage() {
       <div className="grid grid-cols-2 gap-3 mb-6 lg:hidden">
         <StatCardMobile
           icon={<UsuariosIcon className="w-5 h-5" />}
-          iconBg="bg-ink/5"
-          iconColor="text-ink"
-          ringColor="#16181d"
           percent={pctClientesConCompra}
           label="Clientes con compras"
           value={clientesActivos.length}
         />
         <StatCardMobile
           icon={<TrophyIcon className="w-5 h-5" />}
-          iconBg="bg-coral/15"
-          iconColor="text-coral"
-          ringColor="#e2766f"
           percent={pctLider}
           label="Líder actual"
           value={lider ? lider.nombre : '—'}
+          highlighted
         />
         <StatCardMobile
           icon={<DollarIcon className="w-5 h-5" />}
-          iconBg="bg-sky/15"
-          iconColor="text-sky"
-          ringColor="#7e9ce3"
           percent={100}
           label="Total en compras"
           value={formatoMoneda(totalGastado)}
         />
         <StatCardMobile
           icon={<BarsIcon className="w-5 h-5" />}
-          iconBg="bg-[#eef0f4]"
-          iconColor="text-muted"
-          ringColor="#8a8f9a"
           percent={100}
           label="Promedio por cliente"
           value={formatoMoneda(promedio)}

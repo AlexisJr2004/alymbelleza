@@ -89,36 +89,25 @@ export default function UsuariosPage() {
       <div className="grid grid-cols-2 gap-3 mb-6 lg:hidden">
         <StatCardMobile
           icon={<UsuariosIcon className="w-5 h-5" />}
-          iconBg="bg-ink/5"
-          iconColor="text-ink"
-          ringColor="#16181d"
           percent={100}
           label="Total clientes"
           value={total}
         />
         <StatCardMobile
           icon={<CheckIcon className="w-5 h-5" />}
-          iconBg="bg-sky/15"
-          iconColor="text-sky"
-          ringColor="#7e9ce3"
           percent={pct(activos)}
           label="Activos"
           value={activos}
+          highlighted
         />
         <StatCardMobile
           icon={<ShieldCheckIcon className="w-5 h-5" />}
-          iconBg="bg-coral/15"
-          iconColor="text-coral"
-          ringColor="#e2766f"
           percent={pct(admins)}
           label="Administradores"
           value={admins}
         />
         <StatCardMobile
           icon={<UsersInactiveIcon className="w-5 h-5" />}
-          iconBg="bg-[#eef0f4]"
-          iconColor="text-muted"
-          ringColor="#8a8f9a"
           percent={pct(inactivos)}
           label="Inactivos"
           value={inactivos}

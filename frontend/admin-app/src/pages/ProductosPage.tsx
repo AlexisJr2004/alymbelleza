@@ -138,36 +138,25 @@ export default function ProductosPage() {
       <div className="grid grid-cols-2 gap-3 mb-6 lg:hidden">
         <StatCardMobile
           icon={<ProductosIcon className="w-5 h-5" />}
-          iconBg="bg-ink/5"
-          iconColor="text-ink"
-          ringColor="#16181d"
           percent={100}
           label="Total productos"
           value={productos.length}
         />
         <StatCardMobile
           icon={<CheckIcon className="w-5 h-5" />}
-          iconBg="bg-sky/15"
-          iconColor="text-sky"
-          ringColor="#7e9ce3"
           percent={pctDisponibles}
           label="Disponibles"
           value={disponibles}
+          highlighted
         />
         <StatCardMobile
           icon={<XIcon className="w-5 h-5" />}
-          iconBg="bg-coral/15"
-          iconColor="text-coral"
-          ringColor="#e2766f"
           percent={pctAgotados}
           label="Agotados"
           value={agotados}
         />
         <StatCardMobile
           icon={<StarIcon className="w-5 h-5" />}
-          iconBg="bg-[#eef0f4]"
-          iconColor="text-muted"
-          ringColor="#8a8f9a"
           percent={pctDestacados}
           label="Destacados"
           value={destacados}
