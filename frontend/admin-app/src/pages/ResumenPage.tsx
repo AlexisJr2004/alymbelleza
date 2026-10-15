@@ -69,9 +69,9 @@ function ResumenKpiCard({
   );
 }
 
-// Acceso rápido del resumen móvil — grilla 2x2 de accesos directos a las
-// secciones más usadas, reemplazando la fila de botones "Ver pedidos/Ver
-// citas/+" (que sigue existiendo tal cual para escritorio). Colores copiados
+// Acceso rápido del resumen móvil — las 4 en una sola fila, como en la
+// plantilla de referencia (reemplaza la fila de botones "Ver pedidos/Ver
+// citas/+" que sigue existiendo tal cual para escritorio). Colores copiados
 // literalmente de la plantilla de referencia (acceso activo relleno de
 // morado/lavanda, texto oscuro) a pedido del usuario, no el estilo glass del
 // resto del admin-app.
@@ -89,18 +89,18 @@ function ResumenQuickAction({
   return (
     <Link
       to={to}
-      className={`flex flex-col items-center justify-center gap-2 rounded-2xl p-4 text-center text-ink transition ${
+      className={`flex flex-col items-center justify-center gap-1.5 rounded-2xl px-2 py-3 text-center text-ink transition ${
         active ? 'shadow-sm' : 'border border-black/5 bg-white shadow-sm hover:bg-black/[0.02]'
       }`}
       style={active ? { backgroundColor: '#C7BBF5' } : undefined}
     >
       <span
-        className="grid h-10 w-10 place-items-center rounded-xl"
+        className="grid h-9 w-9 shrink-0 place-items-center rounded-xl"
         style={{ backgroundColor: active ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.05)' }}
       >
         {icon}
       </span>
-      <span className="text-xs font-medium">{label}</span>
+      <span className="w-full truncate text-[11px] font-medium">{label}</span>
     </Link>
   );
 }
@@ -237,7 +237,7 @@ export default function ResumenPage() {
 
         <div>
           <h3 className="text-sm font-semibold text-ink mb-3">Accesos rápidos</h3>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-4 gap-2">
             <ResumenQuickAction to="/pedidos" icon={<PedidosIcon className="w-5 h-5" />} label="Pedidos" active />
             <ResumenQuickAction to="/citas" icon={<CitasIcon className="w-5 h-5" />} label="Citas" />
             <ResumenQuickAction to="/ranking" icon={<TrophyIcon className="w-5 h-5" />} label="Ranking" />
