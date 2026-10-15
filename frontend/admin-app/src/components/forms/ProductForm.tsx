@@ -22,9 +22,9 @@ const TIPOS = [
 ];
 
 const inputClass =
-  'w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all';
+  'w-full pl-9 pr-3 py-2 text-sm border border-white/80 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none transition-all';
 const plainInputClass =
-  'w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent';
+  'w-full px-3 py-2 text-sm border border-white/80 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none';
 
 // El componente se remonta con un `key` distinto cada vez que se abre el modal
 // (ver ProductosPage), así que el estado local siempre arranca desde
@@ -73,9 +73,9 @@ export default function ProductForm({ initialData, onSubmit, onCancel, submittin
     <form onSubmit={handleSubmit}>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-1.5 sm:col-span-2">
-          <label className="block text-sm font-medium text-gray-700">Nombre del Producto</label>
+          <label className="block text-sm font-medium text-[#3a3d45]">Nombre del Producto</label>
           <div className="relative">
-            <CuponesIcon className="w-4 h-4 absolute left-3 top-2.5 text-gray-400" />
+            <CuponesIcon className="w-4 h-4 absolute left-3 top-2.5 text-muted" />
             <input
               type="text"
               required
@@ -88,9 +88,9 @@ export default function ProductForm({ initialData, onSubmit, onCancel, submittin
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-gray-700">Precio</label>
+          <label className="block text-sm font-medium text-[#3a3d45]">Precio</label>
           <div className="relative">
-            <DollarIcon className="w-4 h-4 absolute left-3 top-2.5 text-gray-400" />
+            <DollarIcon className="w-4 h-4 absolute left-3 top-2.5 text-muted" />
             <input
               type="number"
               required
@@ -105,7 +105,7 @@ export default function ProductForm({ initialData, onSubmit, onCancel, submittin
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-gray-700">Precio Anterior (opcional)</label>
+          <label className="block text-sm font-medium text-[#3a3d45]">Precio Anterior (opcional)</label>
           <input
             type="number"
             min={0}
@@ -118,21 +118,21 @@ export default function ProductForm({ initialData, onSubmit, onCancel, submittin
         </div>
 
         <div className="space-y-1.5 sm:col-span-2">
-          <label className="block text-sm font-medium text-gray-700">Descripción</label>
+          <label className="block text-sm font-medium text-[#3a3d45]">Descripción</label>
           <textarea
             required
             rows={2}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Descripción detallada del producto..."
-            className={plainInputClass}
+            className="w-full px-3 py-2 text-sm border border-white/80 bg-white/60 rounded-2xl focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none"
           />
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-gray-700">Categoría</label>
+          <label className="block text-sm font-medium text-[#3a3d45]">Categoría</label>
           <div className="relative">
-            <ListIcon className="w-4 h-4 absolute left-3 top-2.5 text-gray-400" />
+            <ListIcon className="w-4 h-4 absolute left-3 top-2.5 text-muted" />
             <select
               required
               value={category}
@@ -143,14 +143,14 @@ export default function ProductForm({ initialData, onSubmit, onCancel, submittin
               <option value="capilar">Productos Capilares</option>
               <option value="facial">Productos Faciales</option>
             </select>
-            <ChevronDownIcon className="w-3.5 h-3.5 absolute right-3 top-3 text-gray-400" />
+            <ChevronDownIcon className="w-3.5 h-3.5 absolute right-3 top-3 text-muted" />
           </div>
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-gray-700">Tipo de producto</label>
+          <label className="block text-sm font-medium text-[#3a3d45]">Tipo de producto</label>
           <div className="relative">
-            <BeakerIcon className="w-4 h-4 absolute left-3 top-2.5 text-gray-400" />
+            <BeakerIcon className="w-4 h-4 absolute left-3 top-2.5 text-muted" />
             <select value={type} onChange={(e) => setType(e.target.value)} className={`${inputClass} appearance-none`}>
               {TIPOS.map((t) => (
                 <option key={t.value} value={t.value}>
@@ -158,12 +158,12 @@ export default function ProductForm({ initialData, onSubmit, onCancel, submittin
                 </option>
               ))}
             </select>
-            <ChevronDownIcon className="w-3.5 h-3.5 absolute right-3 top-3 text-gray-400" />
+            <ChevronDownIcon className="w-3.5 h-3.5 absolute right-3 top-3 text-muted" />
           </div>
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-gray-700">Calificación</label>
+          <label className="block text-sm font-medium text-[#3a3d45]">Calificación</label>
           <input
             type="number"
             min={0}
@@ -177,7 +177,7 @@ export default function ProductForm({ initialData, onSubmit, onCancel, submittin
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-gray-700">Unidades disponibles (opcional)</label>
+          <label className="block text-sm font-medium text-[#3a3d45]">Unidades disponibles (opcional)</label>
           <input
             type="number"
             min={0}
@@ -189,8 +189,8 @@ export default function ProductForm({ initialData, onSubmit, onCancel, submittin
           />
         </div>
 
-        <div className="sm:col-span-2 pt-3 mt-1 border-t border-gray-100">
-          <label className="block text-sm font-medium text-gray-700 mb-3">Estado del producto</label>
+        <div className="sm:col-span-2 pt-3 mt-1 border-t border-white/70">
+          <label className="block text-sm font-medium text-[#3a3d45] mb-3">Estado del producto</label>
           <div className="flex flex-wrap items-center gap-x-10 gap-y-3">
             <Switch checked={featured} onChange={setFeatured} label="Destacado" />
             <Switch
@@ -207,36 +207,36 @@ export default function ProductForm({ initialData, onSubmit, onCancel, submittin
         </div>
 
         <div className="space-y-1.5 sm:col-span-2">
-          <label className="block text-sm font-medium text-gray-700">Imagen del Producto</label>
+          <label className="block text-sm font-medium text-[#3a3d45]">Imagen del Producto</label>
           <label
             htmlFor="imagen-producto"
-            className="flex items-center gap-3 w-full px-3 py-2.5 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+            className="flex items-center gap-3 w-full px-3 py-2.5 border-2 border-white/80 border-dashed rounded-2xl cursor-pointer bg-white/40 hover:bg-white/60 transition-colors"
           >
-            <UploadIcon className="w-6 h-6 text-gray-400" />
-            <span className="text-xs text-gray-500">Click para subir o arrastra la imagen (PNG/JPG, máx. 5MB)</span>
+            <UploadIcon className="w-6 h-6 text-muted" />
+            <span className="text-xs text-muted">Click para subir o arrastra la imagen (PNG/JPG, máx. 5MB)</span>
             <input id="imagen-producto" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
           </label>
           {previewUrl && (
             <div>
-              <img src={previewUrl} alt="Vista previa" className="h-20 rounded-lg border" />
+              <img src={previewUrl} alt="Vista previa" className="h-20 rounded-2xl border border-white/80" />
             </div>
           )}
         </div>
       </div>
 
-      <div className="flex justify-end gap-2 pt-4 mt-4 border-t border-gray-200">
+      <div className="flex justify-end gap-2.5 pt-4 mt-4 border-t border-white/70">
         <button
           type="button"
           onClick={onCancel}
           disabled={submitting}
-          className="px-4 py-2 text-sm border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors flex items-center"
+          className="px-4 py-2 text-sm border border-white/80 bg-white/50 rounded-full text-[#3a3d45] hover:bg-white/90 transition-colors flex items-center disabled:opacity-60"
         >
           <XIcon className="w-4 h-4 mr-1.5" /> Cancelar
         </button>
         <button
           type="submit"
           disabled={submitting}
-          className="px-5 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center disabled:opacity-60"
+          className="px-5 py-2 text-sm bg-ink text-white rounded-full hover:bg-ink/85 transition-colors flex items-center justify-center disabled:opacity-60"
         >
           <CheckIcon className="w-4 h-4 mr-1.5" /> {submitting ? 'Guardando...' : 'Guardar Producto'}
         </button>
