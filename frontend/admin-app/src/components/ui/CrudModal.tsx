@@ -30,7 +30,7 @@ export default function CrudModal({ open, title, onClose, children, maxWidth = '
       onClose={onClose}
       desktopMaxWidthClassName={maxWidth}
       labelledBy={titleId}
-      panelClassName="bg-white/80 backdrop-blur-xl border border-white/70 rounded-t-3xl md:rounded-[26px]"
+      panelClassName="bg-white/60 backdrop-blur-2xl border border-white/70 rounded-t-3xl md:rounded-[26px]"
     >
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">
