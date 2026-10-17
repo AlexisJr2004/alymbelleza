@@ -13,7 +13,7 @@ export default function AdminLayout() {
   return (
     <RequireAdmin>
       <div className="app-bg font-sans text-ink antialiased min-h-screen">
-        <TopNav />
+        <TopNav onOpenMenu={() => setMobileOpen(true)} />
         <IconRail />
         <BottomMobileNav onOpenMore={() => setMobileOpen(true)} />
 

@@ -142,6 +142,19 @@ export function MenuIcon(props: IconProps) {
   );
 }
 
+// Botón "Menú" del header móvil (surveys-app.html .round-btn) — 4 puntos en
+// grilla, distinto del ícono de 3 líneas de MenuIcon.
+export function MenuGridIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <circle cx="7" cy="7" r="3" />
+      <circle cx="17" cy="7" r="3" />
+      <circle cx="7" cy="17" r="3" />
+      <circle cx="17" cy="17" r="3" />
+    </Icon>
+  );
+}
+
 export function DollarIcon(props: IconProps) {
   return (
     <Icon {...props}>
