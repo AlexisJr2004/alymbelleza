@@ -16,9 +16,9 @@ import type { PaymentCardPayload } from '../hooks/usePaymentCards';
 
 const RESUMEN_TARJETA_ESTILOS = [
   'from-emerald-500 to-emerald-600',
-  'from-violet-500 to-purple-600',
+  'from-indigo-500 to-purple-600',
   'from-orange-400 to-orange-500',
-  'from-sky-400 to-blue-500',
+  'from-cyan-400 to-blue-500',
 ];
 const DONUT_COLORES = ['#8b5cf6', '#f59e0b', '#10b981', '#3b82f6', '#ec4899', '#14b8a6'];
 

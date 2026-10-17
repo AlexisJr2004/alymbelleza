@@ -36,9 +36,9 @@ import type { Order } from '../types/models';
 // tarjeta en vez del estilo "banco real" (BankCardPreview) que tenía antes.
 const RESUMEN_TARJETA_ESTILOS = [
   'from-emerald-500 to-emerald-600',
-  'from-violet-500 to-purple-600',
+  'from-indigo-500 to-purple-600',
   'from-orange-400 to-orange-500',
-  'from-sky-400 to-blue-500',
+  'from-cyan-400 to-blue-500',
 ];
 
 function ResumenKpiCard({
