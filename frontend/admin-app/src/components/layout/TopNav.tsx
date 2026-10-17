@@ -33,47 +33,34 @@ export default function TopNav({ onOpenMenu }: { onOpenMenu: () => void }) {
     setFecha(raw.charAt(0).toUpperCase() + raw.slice(1));
   }, []);
 
-  const avatar = (
-    <img
-      className="h-[51px] w-[51px] rounded-full object-cover"
-      src={resolveProfileImage(user)}
-      alt="Foto de perfil"
-      onError={(e) => {
-        e.currentTarget.onerror = null;
-        e.currentTarget.src = FALLBACK_AVATAR;
-      }}
-    />
-  );
-
   return (
     <header className="sticky top-0 z-20 px-4 lg:px-8">
-      {/* Header móvil — copiado literalmente de surveys-app.html (botones
-          .round-btn blancos sueltos: menú a la izquierda, notificación +
-          avatar a la derecha), a pedido explícito del usuario. El botón de
-          menú abre el mismo MobileDrawer que el ícono "Más" de
-          BottomMobileNav. */}
+      {/* Header móvil — mismos íconos que surveys-app.html (menú en grilla,
+          campana, avatar), pero envueltos en las cápsulas glass propias del
+          admin-app en vez de los .round-btn blancos sueltos de la
+          referencia -- el usuario pidió explícitamente volver a esa
+          envoltura. El botón de menú abre el mismo MobileDrawer que el
+          ícono "Más" de BottomMobileNav. */}
       <div className="flex h-[74px] items-center justify-between lg:hidden">
-        <button
-          type="button"
-          onClick={onOpenMenu}
-          aria-label="Menú"
-          className="grid h-[49px] w-[49px] place-items-center rounded-full bg-white text-ink transition hover:bg-white/70"
-        >
-          <MenuGridIcon className="h-[19px] w-[19px]" />
+        <button type="button" onClick={onOpenMenu} aria-label="Menú" className="circle-btn">
+          <MenuGridIcon className="h-[18px] w-[18px]" />
         </button>
-        <div className="flex items-center gap-[11px]">
-          <Link
-            to="/citas"
-            title="Citas pendientes"
-            aria-label="Citas pendientes"
-            className="relative grid h-[49px] w-[49px] place-items-center rounded-full bg-white text-ink transition hover:bg-white/70"
-          >
-            <BellIcon className="h-[19px] w-[19px]" />
+        <div className="flex shrink-0 items-center gap-2 rounded-full border border-white/70 bg-white/30 py-1.5 pl-1.5 pr-1.5">
+          <Link to="/citas" title="Citas pendientes" aria-label="Citas pendientes" className="rail-btn relative">
+            <BellIcon className="h-[18px] w-[18px]" />
             {hayPendientes && (
-              <span className="absolute right-[15px] top-[13px] h-[7px] w-[7px] rounded-full bg-[#ef4444] ring-2 ring-white" />
+              <span className="absolute right-[11px] top-[11px] h-[7px] w-[7px] rounded-full bg-coral ring-2 ring-white" />
             )}
           </Link>
-          {avatar}
+          <img
+            className="h-[44px] w-[44px] rounded-full object-cover ring-[3px] ring-white/80"
+            src={resolveProfileImage(user)}
+            alt="Foto de perfil"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = FALLBACK_AVATAR;
+            }}
+          />
         </div>
       </div>
 

@@ -9,7 +9,7 @@ export default function PageHeader({ eyebrow, title, description, action }: Page
   return (
     <div className="flex items-start justify-between gap-4 mb-6">
       <div className="max-w-2xl">
-        <p className="text-xs font-semibold text-coral uppercase tracking-wider mb-1">{eyebrow}</p>
+        <p className="text-xs font-semibold text-ink uppercase tracking-wider mb-1 lg:text-coral">{eyebrow}</p>
         <h1 className="text-2xl font-bold text-ink">{title}</h1>
         <p className="text-sm text-muted mt-2">{description}</p>
       </div>
