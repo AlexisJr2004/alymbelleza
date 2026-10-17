@@ -71,10 +71,9 @@ function ResumenKpiCard({
 
 // Acceso rápido del resumen móvil — las 4 en una sola fila, como en la
 // plantilla de referencia (reemplaza la fila de botones "Ver pedidos/Ver
-// citas/+" que sigue existiendo tal cual para escritorio). Colores copiados
-// literalmente de la plantilla de referencia (acceso activo relleno de
-// morado/lavanda, texto oscuro) a pedido del usuario, no el estilo glass del
-// resto del admin-app.
+// citas/+" que sigue existiendo tal cual para escritorio). Proporciones y
+// colores copiados literalmente de surveys-app.html (.action/.action-ico) a
+// pedido explícito del usuario, no el estilo glass del resto del admin-app.
 function ResumenQuickAction({
   to,
   icon,
@@ -89,18 +88,12 @@ function ResumenQuickAction({
   return (
     <Link
       to={to}
-      className={`flex flex-col items-center justify-center gap-1.5 rounded-2xl px-2 py-3 text-center text-ink transition ${
-        active ? 'shadow-sm' : 'border border-black/5 bg-white shadow-sm hover:bg-black/[0.02]'
+      className={`flex h-[83px] flex-col items-center rounded-[19px] pt-[10px] text-center text-[11.5px] text-ink shadow-sm transition ${
+        active ? 'bg-lilac hover:bg-lilac/80' : 'border border-black/5 bg-white hover:bg-black/[0.03]'
       }`}
-      style={active ? { backgroundColor: '#C7BBF5' } : undefined}
     >
-      <span
-        className="grid h-9 w-9 shrink-0 place-items-center rounded-xl"
-        style={{ backgroundColor: active ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.05)' }}
-      >
-        {icon}
-      </span>
-      <span className="w-full truncate text-[11px] font-medium">{label}</span>
+      <span className={`mb-2 grid h-8 w-8 shrink-0 place-items-center rounded-full ${active ? 'bg-white/50' : 'bg-mist'}`}>{icon}</span>
+      <span className="w-full truncate px-1 font-medium">{label}</span>
     </Link>
   );
 }
@@ -245,26 +238,35 @@ export default function ResumenPage() {
           </div>
         </div>
 
-        <div className="rounded-[28px] border border-black/5 bg-white shadow-sm overflow-hidden">
-          <div className="px-5 py-3 border-b border-black/5 flex items-center justify-between">
+        <div>
+          <div className="flex items-center justify-between">
             <h3 className="text-sm font-semibold text-ink">Pedidos recientes</h3>
-            <Link to="/pedidos" className="text-xs font-medium" style={{ color: '#8B7FE0' }}>
+            <Link to="/pedidos" className="text-xs text-ink hover:opacity-60">
               Ver todos
             </Link>
           </div>
-          <div className="divide-y divide-black/5">
+          <div className="mt-3 space-y-2.5">
             {ultimosPedidos.length ? (
               ultimosPedidos.map((o) => (
-                <div key={o._id} className="flex items-center justify-between px-5 py-2.5">
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-ink truncate">{o.user?.name || 'Cliente'}</p>
-                    <p className="text-xs text-ink/50">{formatoFechaCorta(o.createdAt)}</p>
+                <Link
+                  key={o._id}
+                  to="/pedidos"
+                  className="flex h-[72px] items-center rounded-[22px] border border-black/5 bg-white pl-[15px] pr-[18px] shadow-sm transition hover:bg-black/[0.02]"
+                >
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-mist">
+                    <PedidosIcon className="w-[19px] h-[19px] text-ink" />
+                  </span>
+                  <p className="ml-3.5 min-w-0 flex-1 truncate text-[13.5px] font-medium text-ink">{o.user?.name || 'Cliente'}</p>
+                  <div className="shrink-0 text-right leading-tight">
+                    <p className="text-base font-semibold text-ink">{formatoMoneda(o.total)}</p>
+                    <p className="mt-1 text-[11px] text-dim">{formatoFechaCorta(o.createdAt)}</p>
                   </div>
-                  <span className="text-sm font-semibold text-ink">{formatoMoneda(o.total)}</span>
-                </div>
+                </Link>
               ))
             ) : (
-              <p className="text-sm text-ink/50 px-5 py-5 text-center">Todavía no hay pedidos.</p>
+              <p className="rounded-[22px] border border-black/5 bg-white py-5 text-center text-sm text-dim shadow-sm">
+                Todavía no hay pedidos.
+              </p>
             )}
           </div>
         </div>
