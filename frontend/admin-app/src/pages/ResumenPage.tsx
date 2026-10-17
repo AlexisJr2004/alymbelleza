@@ -6,6 +6,7 @@ import TrendChart from '../components/ui/TrendChart';
 import AnnularDonut from '../components/ui/AnnularDonut';
 import ClienteRankingCard from '../components/ui/ClienteRankingCard';
 import StatCardMobile from '../components/ui/StatCardMobile';
+import AreaTrendCardMobile from '../components/ui/AreaTrendCardMobile';
 import {
   PedidosIcon,
   UsuariosIcon,
@@ -272,6 +273,36 @@ export default function ResumenPage() {
         </div>
       </div>
 
+      {/* Gráficos de tendencia del resumen móvil — reemplazan, solo bajo lg:,
+          el gráfico de Ingresos (Fila 2, con su tarjeta oscura "Ingresos de
+          este mes" — redundante ahora que esta tarjeta ya muestra el total
+          del mes + cambio %) y la mitad de gráfico de Fila 3 (Pedidos) y
+          Fila 5 (Usuarios nuevos) — sus otras mitades (Estado de citas,
+          Últimos usuarios) se quedan visibles en móvil sin cambios. */}
+      <div className="lg:hidden space-y-3">
+        <AreaTrendCardMobile
+          data={serieIngresos}
+          formatValue={formatoMoneda}
+          title="Ingresos de los últimos 6 meses"
+          description="Total facturado por mes según los pedidos registrados."
+          totalLabel="Ingresos de este mes"
+        />
+        <AreaTrendCardMobile
+          data={seriePedidos}
+          formatValue={(v) => String(v)}
+          title="Pedidos de los últimos 6 meses"
+          description="Cantidad de pedidos registrados por mes."
+          totalLabel="Pedidos este mes"
+        />
+        <AreaTrendCardMobile
+          data={serieUsuariosNuevos}
+          formatValue={(v) => String(v)}
+          title="Usuarios nuevos por mes"
+          description="Registros nuevos en los últimos 6 meses."
+          totalLabel="Usuarios nuevos este mes"
+        />
+      </div>
+
       {/* Fila 1: ingresos totales (izquierda) + las 4 KPIs (centro) +
           ranking de clientes (derecha). Por defecto CSS Grid estira (stretch)
           las 3 columnas a la misma altura — la del ranking es la más alta, así
@@ -389,8 +420,10 @@ export default function ResumenPage() {
         <ClienteRankingCard clientes={clientesActivos} verTodosHref="/ranking" />
       </div>
 
-      {/* Fila 2: gráfico de ingresos + ingresos de este mes, a la derecha */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      {/* Fila 2: gráfico de ingresos + ingresos de este mes, a la derecha.
+          Solo desde lg: — en móvil, AreaTrendCardMobile de más arriba ya
+          cubre esta información. */}
+      <div className="hidden lg:grid lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2 glass p-5">
           <h3 className="text-base font-semibold text-ink mb-1">Ingresos de los últimos 6 meses</h3>
           <p className="text-sm text-muted mb-4">Total facturado por mes según los pedidos registrados.</p>
@@ -434,7 +467,7 @@ export default function ResumenPage() {
             </div>
           </div>
         </div>
-        <div className="glass p-5">
+        <div className="hidden lg:block glass p-5">
           <h3 className="text-base font-semibold text-ink mb-1">Pedidos de los últimos 6 meses</h3>
           <p className="text-sm text-muted mb-4">Cantidad de pedidos registrados por mes.</p>
           <div className="h-32">
@@ -595,7 +628,7 @@ export default function ResumenPage() {
 
       {/* Fila 5: usuarios nuevos */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <div className="glass p-5">
+        <div className="hidden lg:block glass p-5">
           <h3 className="text-base font-semibold text-ink mb-1">Usuarios nuevos por mes</h3>
           <p className="text-sm text-muted mb-4">Registros nuevos en los últimos 6 meses.</p>
           <div className="h-32">
