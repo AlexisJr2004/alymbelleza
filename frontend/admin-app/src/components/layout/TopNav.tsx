@@ -39,12 +39,17 @@ export default function TopNav({ onOpenMenu }: { onOpenMenu: () => void }) {
           campana, avatar), pero envueltos en las cápsulas glass propias del
           admin-app en vez de los .round-btn blancos sueltos de la
           referencia -- el usuario pidió explícitamente volver a esa
-          envoltura. El botón de menú abre el mismo MobileDrawer que el
-          ícono "Más" de BottomMobileNav. */}
+          envoltura, y que el ícono de menú tenga la misma cápsula que el
+          de notificaciones (antes era un .circle-btn suelto). El botón de
+          menú es ahora el único disparador de MobileDrawer -- BottomMobileNav
+          ya no tiene un botón "Más", su último cupo es un acceso directo a
+          Productos. */}
       <div className="flex h-[74px] items-center justify-between lg:hidden">
-        <button type="button" onClick={onOpenMenu} aria-label="Menú" className="circle-btn">
-          <MenuGridIcon className="h-[18px] w-[18px]" />
-        </button>
+        <div className="shrink-0 rounded-full border border-white/70 bg-white/30 p-1.5">
+          <button type="button" onClick={onOpenMenu} aria-label="Menú" className="rail-btn">
+            <MenuGridIcon className="h-[18px] w-[18px]" />
+          </button>
+        </div>
         <div className="flex shrink-0 items-center gap-2 rounded-full border border-white/70 bg-white/30 py-1.5 pl-1.5 pr-1.5">
           <Link to="/citas" title="Citas pendientes" aria-label="Citas pendientes" className="rail-btn relative">
             <BellIcon className="h-[18px] w-[18px]" />

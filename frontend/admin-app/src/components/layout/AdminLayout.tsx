@@ -15,7 +15,7 @@ export default function AdminLayout() {
       <div className="app-bg font-sans text-ink antialiased min-h-screen">
         <TopNav onOpenMenu={() => setMobileOpen(true)} />
         <IconRail />
-        <BottomMobileNav onOpenMore={() => setMobileOpen(true)} />
+        <BottomMobileNav />
 
         {/* Siempre montado (no solo cuando mobileOpen) para poder animar su
             opacidad al abrir/cerrar, igual que el overlay del menú móvil
