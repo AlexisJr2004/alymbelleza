@@ -3,6 +3,7 @@ const dns = require("dns");
 const mongoose = require("mongoose");
 const app = require("./app");
 const PaymentCard = require("./gestion-roles-productos/src/models/paymentCard");
+const { missingEmailSettings } = require("./gestion-roles-productos/src/utils/email");
 
 // En Render (y otras plataformas similares) las conexiones salientes por IPv6 a veces se
 // quedan esperando sin responder, aunque el host sí resuelva por IPv6 (ej. smtp.gmail.com).
@@ -19,8 +20,6 @@ if (missing.length > 0) {
 
 // Variables opcionales cuya ausencia solo apaga una función concreta (correo, imágenes, etc.)
 const OPTIONAL_ENV_VARS = [
-  "EMAIL_USER",
-  "EMAIL_PASS",
   "CLOUDINARY_CLOUD_NAME",
   "CLOUDINARY_API_KEY",
   "CLOUDINARY_API_SECRET",
@@ -29,6 +28,13 @@ const OPTIONAL_ENV_VARS = [
 OPTIONAL_ENV_VARS.filter((key) => !process.env[key]).forEach((key) => {
   console.warn(`⚠️  Variable de entorno "${key}" no definida — algunas funciones no estarán disponibles.`);
 });
+const missingMail = missingEmailSettings();
+if (!process.env.CONTACT_EMAIL?.trim() && !process.env.EMAIL_USER?.trim()) {
+  missingMail.push('CONTACT_EMAIL (o EMAIL_USER)');
+}
+if (missingMail.length) {
+  console.warn(`⚠️  Correo sin configurar: ${missingMail.join(', ')}.`);
+}
 
 const PORT = process.env.PORT || 5000;
 

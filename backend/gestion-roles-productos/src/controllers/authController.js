@@ -2,40 +2,20 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const nodemailer = require('nodemailer');
+const { sendEmail } = require('../utils/email');
 const cloudinary = require('../utils/cloudinary');
 const publicIdFromUrl = require('../utils/cloudinaryPublicId');
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_PASSWORD_LENGTH = 8;
 
-// Configuración de Nodemailer
-// Google muestra las contraseñas de aplicación agrupadas con espacios (ej. "abcd efgh ijkl mnop")
-// solo para que se lean fácil; la contraseña real no los lleva. Se quitan aquí por si
-// EMAIL_PASS se copió tal cual se ve en pantalla, para no depender de que el valor en
-// Render esté guardado exactamente sin espacios.
-// "service: gmail" usa el puerto 465 (SSL) por defecto; se prueba el 587 (STARTTLS)
-// explícitamente porque el 465 se quedaba en ETIMEDOUT al conectar desde Render.
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  requireTLS: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: (process.env.EMAIL_PASS || "").replace(/\s+/g, ""),
-  },
-  // Sin esto, si Gmail no responde, nodemailer puede tardar hasta 2 minutos en
-  // fallar y la petición se queda "colgada" en vez de devolver un error rápido.
-  connectionTimeout: 15000,
-  greetingTimeout: 15000,
-  socketTimeout: 20000,
-});
-
 // Controlador para enviar un correo de contacto
 exports.sendContactEmail = async (req, res) => {
   try {
-    const { name, email, message } = req.body;
+    const fields = req.body || {};
+    const name = typeof fields.name === 'string' ? fields.name.trim() : '';
+    const email = typeof fields.email === 'string' ? fields.email.trim() : '';
+    const message = typeof fields.message === 'string' ? fields.message.trim() : '';
 
     if (!name?.trim() || !email?.trim() || !message?.trim()) {
       return res.status(400).json({
@@ -57,9 +37,8 @@ exports.sendContactEmail = async (req, res) => {
     const nombreSeguro = name.replace(/[\r\n]+/g, ' ').trim();
 
     const mailOptions = {
-      from: `"Bella Beauty Contacto" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER,
-      replyTo: `${nombreSeguro} <${email}>`,
+      to: process.env.CONTACT_EMAIL?.trim() || process.env.EMAIL_USER?.trim(),
+      replyTo: email,
       subject: `Nuevo mensaje de contacto de ${nombreSeguro}`,
       text: `Nombre: ${name}\nEmail: ${email}\n\nMensaje:\n${message}`,
       html: `
@@ -106,9 +85,7 @@ exports.sendContactEmail = async (req, res) => {
       `,
     };
 
-    // sendMail ya intenta la conexión y autenticación; no hace falta un verify()
-    // previo, que solo duplicaba el tiempo de espera ante cualquier problema de red.
-    const info = await transporter.sendMail(mailOptions);
+    const info = await sendEmail(mailOptions);
 
     res.json({
       success: true,
@@ -119,13 +96,24 @@ exports.sendContactEmail = async (req, res) => {
     console.error("Error al enviar correo:", error);
 
     let errorMessage = "Error al enviar el mensaje";
+    let status = 500;
     if (error.code === "EAUTH") {
       errorMessage = "Error de autenticación con el servidor de correo";
-    } else if (error.code === "ECONNECTION") {
-      errorMessage = "No se pudo conectar al servidor de correo";
+    } else if (error.code === "EMAIL_CONFIG") {
+      status = 503;
+      errorMessage = "El servicio de correo no está configurado. Contacta con el negocio por otro medio.";
+    } else if (error.code === "EMAIL_RATE_LIMIT") {
+      status = 503;
+      errorMessage = "El servicio de correo está temporalmente ocupado. Intenta más tarde.";
+    } else if (error.code === "EMAIL_DELIVERY_ERROR") {
+      status = 502;
+      errorMessage = "No se pudo confirmar el envío con el servicio de correo. Intenta más tarde.";
+    } else if (["ETIMEDOUT", "ECONNECTION", "ECONNREFUSED", "EDNS", "ESOCKET"].includes(error.code)) {
+      status = 503;
+      errorMessage = "No se pudo confirmar el envío con el servicio de correo. Intenta más tarde.";
     }
 
-    res.status(500).json({
+    res.status(status).json({
       success: false,
       error: errorMessage,
       details:
@@ -155,7 +143,6 @@ exports.forgotPassword = async (req, res) => {
 
     const mailOptions = {
       to: user.email,
-      from: `"Bella Beauty Contacto" <${process.env.EMAIL_USER}>`,
       subject: 'Recuperación de contraseña - Bella Beauty',
       html: `
         <div style="font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: 0 auto; color: #333;">
@@ -191,7 +178,7 @@ exports.forgotPassword = async (req, res) => {
       `
     };
 
-    await transporter.sendMail(mailOptions);
+    await sendEmail(mailOptions);
     res.json({ message: 'Correo enviado con instrucciones.' });
   } catch (err) {
     console.error('Error al solicitar recuperación de contraseña:', err);
