@@ -17,7 +17,7 @@
   body {
     margin: 0;
     min-width: 320px;
-    background: #eaf0f8;
+    background: #fff;
     color: #202b42;
     -webkit-tap-highlight-color: transparent;
   }
@@ -42,15 +42,10 @@
 }
 
 @layer components {
-  /* Static ambient light supplies the color visible through every glass surface. */
+  /* Fondo blanco compartido por todas las páginas del panel. */
   .app-bg {
     min-height: 100svh;
-    background:
-      radial-gradient(ellipse at 4% 6%, rgb(217 208 251 / 0.72), transparent 40%),
-      radial-gradient(ellipse at 96% 30%, rgb(188 221 250 / 0.68), transparent 43%),
-      radial-gradient(ellipse at 42% 95%, rgb(243 217 235 / 0.52), transparent 45%),
-      linear-gradient(135deg, #f4f5fc, #e9eff8 52%, #e9eafa);
-    background-attachment: fixed;
+    background: #fff;
   }
 
   .glass, .glass-chrome, .glass-sheet {
@@ -354,10 +349,6 @@
 }
 
 @media (max-width: 767px) {
-  .app-bg {
-    background-attachment: scroll;
-  }
-
   .glass {
     border-radius: 24px;
   }
