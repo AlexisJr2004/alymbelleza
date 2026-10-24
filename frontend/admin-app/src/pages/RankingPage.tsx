@@ -127,7 +127,7 @@ export default function RankingPage() {
         </div>
 
         <div className="lg:col-span-3 glass p-6 md:p-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+          <div className="glass-toolbar flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
             <div>
               <h2 className="text-2xl font-bold text-ink flex items-center">
                 <TrophyIcon className="w-5 h-5 mr-2 text-coral" />
@@ -138,7 +138,7 @@ export default function RankingPage() {
               </p>
             </div>
             <div className="relative">
-              <SearchIcon className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
+              <SearchIcon className="pointer-events-none z-10 w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
               <input
                 type="text"
                 value={search}
@@ -147,14 +147,14 @@ export default function RankingPage() {
                   setPagina(1);
                 }}
                 placeholder="Buscar por nombre o email..."
-                className="pl-10 pr-4 py-2 border border-white/80 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none w-full md:w-72"
+                className="glass-input pl-10 pr-4 py-2.5 rounded-full text-sm w-full md:w-72"
               />
             </div>
           </div>
 
-          <div className="overflow-x-auto rounded-[22px] border border-white/70">
-            <table className="min-w-full divide-y divide-white/70">
-              <thead className="bg-white/40">
+          <div className="glass-inset overflow-x-auto rounded-[22px]">
+            <table className="glass-table min-w-full">
+              <thead>
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">#</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Cliente</th>
@@ -164,7 +164,7 @@ export default function RankingPage() {
                   <th className="px-6 py-3 text-right text-xs font-medium text-muted uppercase tracking-wider">Total gastado</th>
                 </tr>
               </thead>
-              <tbody className="bg-white/20 divide-y divide-white/60">
+              <tbody>
                 {paginaActual.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="p-6 text-center text-muted">
@@ -175,7 +175,7 @@ export default function RankingPage() {
                   paginaActual.map((c, i) => (
                     <tr key={c.email}>
                       <td className="p-3 pl-6">
-                        <span className="grid h-7 w-7 place-items-center rounded-full border border-white/80 bg-white/60 text-xs font-semibold text-[#3a3d45]">
+                        <span className="glass-inset grid h-7 w-7 place-items-center rounded-full text-xs font-semibold text-ink">
                           {inicio + i + 1}
                         </span>
                       </td>

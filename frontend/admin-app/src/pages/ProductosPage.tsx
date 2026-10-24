@@ -128,7 +128,7 @@ export default function ProductosPage() {
           <button
             type="button"
             onClick={abrirNuevo}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-ink text-white rounded-full text-sm font-medium hover:bg-ink/85 transition-colors shrink-0"
+            className="glass-button-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium shrink-0"
           >
             <PlusIcon className="w-4 h-4" /> Nuevo Producto
           </button>
@@ -206,7 +206,7 @@ export default function ProductosPage() {
           <div className="glass p-5 space-y-5">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-ink uppercase tracking-wide">Filtros</h3>
-              <button type="button" onClick={limpiarFiltros} className="text-xs font-medium text-coral hover:text-coral/80">
+              <button type="button" onClick={limpiarFiltros} className="glass-button px-3 py-1.5 rounded-full text-xs font-medium">
                 Limpiar
               </button>
             </div>
@@ -219,7 +219,7 @@ export default function ProductosPage() {
                     setCategoriaFiltro(e.target.value);
                     setPagina(1);
                   }}
-                  className="w-full px-3 py-1.5 border border-white/80 bg-white/60 rounded-full text-sm focus:ring-2 focus:ring-sky/50 focus:outline-none"
+                  className="glass-input w-full px-3 py-2 rounded-full text-sm"
                 >
                   <option value="">Todas</option>
                   <option value="capilar">Productos Capilares</option>
@@ -235,7 +235,7 @@ export default function ProductosPage() {
                   setTipoFiltro(e.target.value);
                   setPagina(1);
                 }}
-                className="w-full px-3 py-1.5 border border-white/80 bg-white/60 rounded-full text-sm focus:ring-2 focus:ring-sky/50 focus:outline-none"
+                className="glass-input w-full px-3 py-2 rounded-full text-sm"
               >
                 <option value="">Todos</option>
                 {TIPOS.map((t) => (
@@ -290,13 +290,13 @@ export default function ProductosPage() {
 
         <div className="flex-1 min-w-0 w-full">
           <div className="glass p-6 md:p-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div className="glass-toolbar flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
               <h2 className="text-2xl font-bold text-ink flex items-center">
                 <ProductosIcon className="w-5 h-5 mr-2 text-coral" />
                 Productos
               </h2>
               <div className="relative">
-                <SearchIcon className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
+                <SearchIcon className="pointer-events-none z-10 w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
                 <input
                   type="text"
                   value={search}
@@ -305,14 +305,14 @@ export default function ProductosPage() {
                     setPagina(1);
                   }}
                   placeholder="Buscar producto..."
-                  className="pl-10 pr-4 py-2 border border-white/80 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none w-full md:w-72"
+                  className="glass-input pl-10 pr-4 py-2.5 rounded-full text-sm w-full md:w-72"
                 />
               </div>
             </div>
 
-            <div className="overflow-x-auto rounded-[22px] border border-white/70">
-              <table className="min-w-full divide-y divide-white/70">
-                <thead className="bg-white/40">
+            <div className="glass-inset overflow-x-auto rounded-[22px]">
+              <table className="glass-table min-w-full">
+                <thead>
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Producto</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Precio</th>
@@ -324,7 +324,7 @@ export default function ProductosPage() {
                     <th className="px-6 py-3 text-right text-xs font-medium text-muted uppercase tracking-wider">Acciones</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white/20 divide-y divide-white/60">
+                <tbody>
                   {isLoading ? (
                     <tr>
                       <td colSpan={8} className="p-6 text-center text-muted">Cargando...</td>
@@ -355,7 +355,7 @@ export default function ProductosPage() {
                               type="button"
                               title="Editar"
                               onClick={() => abrirEditar(p)}
-                              className="text-sky hover:text-sky/70 p-2 rounded-full bg-sky/10 hover:bg-sky/20 transition"
+                              className="glass-icon-button text-sky p-2 rounded-full"
                             >
                               <PencilIcon className="w-4 h-4" />
                             </button>
@@ -363,7 +363,7 @@ export default function ProductosPage() {
                               type="button"
                               title="Eliminar"
                               onClick={() => handleDelete(p)}
-                              className="text-coral hover:text-coral/70 p-2 rounded-full bg-coral/10 hover:bg-coral/20 transition"
+                              className="glass-button-danger p-2 rounded-full"
                             >
                               <TrashIcon className="w-4 h-4" />
                             </button>

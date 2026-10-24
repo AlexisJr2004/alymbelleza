@@ -34,23 +34,18 @@ export default function TopNav({ onOpenMenu }: { onOpenMenu: () => void }) {
   }, []);
 
   return (
-    <header className="sticky top-0 z-20 px-4 lg:px-8">
-      {/* Header móvil — mismos íconos que surveys-app.html (menú en grilla,
-          campana, avatar), pero envueltos en las cápsulas glass propias del
-          admin-app en vez de los .round-btn blancos sueltos de la
-          referencia -- el usuario pidió explícitamente volver a esa
-          envoltura, y que el ícono de menú tenga la misma cápsula que el
-          de notificaciones (antes era un .circle-btn suelto). El botón de
-          menú es ahora el único disparador de MobileDrawer -- BottomMobileNav
-          ya no tiene un botón "Más", su último cupo es un acceso directo a
-          Productos. */}
-      <div className="flex h-[74px] items-center justify-between lg:hidden">
-        <div className="shrink-0 rounded-full border border-white/70 bg-white/30 p-1.5">
-          <button type="button" onClick={onOpenMenu} aria-label="Menú" className="rail-btn">
+    <header className="sticky top-0 z-20 mx-auto max-w-[2000px] px-4 xl:px-6">
+      <div className="flex h-[84px] items-center justify-between gap-3 xl:hidden">
+        <div className="glass-chrome shrink-0 rounded-full p-1.5">
+          <button type="button" onClick={onOpenMenu} aria-label="Abrir menú" aria-haspopup="dialog" className="rail-btn">
             <MenuGridIcon className="h-[18px] w-[18px]" />
           </button>
         </div>
-        <div className="flex shrink-0 items-center gap-2 rounded-full border border-white/70 bg-white/30 py-1.5 pl-1.5 pr-1.5">
+        <Link to="/resumen" className="min-w-0 text-center">
+          <span className="block truncate text-[15px] font-semibold tracking-tight text-ink sm:text-lg">Bella Beauty</span>
+          <span className="mt-0.5 block text-[10px] font-medium tracking-[0.12em] text-muted">ADMINISTRACIÓN</span>
+        </Link>
+        <div className="glass-chrome flex shrink-0 items-center gap-1.5 rounded-full p-1.5">
           <Link to="/citas" title="Citas pendientes" aria-label="Citas pendientes" className="rail-btn relative">
             <BellIcon className="h-[18px] w-[18px]" />
             {hayPendientes && (
@@ -58,7 +53,7 @@ export default function TopNav({ onOpenMenu }: { onOpenMenu: () => void }) {
             )}
           </Link>
           <img
-            className="h-[44px] w-[44px] rounded-full object-cover ring-[3px] ring-white/80"
+            className="h-10 w-10 rounded-full object-cover ring-2 ring-white/90"
             src={resolveProfileImage(user)}
             alt="Foto de perfil"
             onError={(e) => {
@@ -69,23 +64,22 @@ export default function TopNav({ onOpenMenu }: { onOpenMenu: () => void }) {
         </div>
       </div>
 
-      {/* Header de escritorio — cápsulas glass sin cambios */}
-      <div className="hidden h-[74px] items-center gap-3 lg:flex">
+      <div className="hidden h-[90px] items-center gap-3 xl:flex">
         <Link
           to="/resumen"
-          className="flex shrink-0 items-center gap-2.5 rounded-full border border-white/70 bg-white/30 py-1.5 pl-1.5 pr-4"
+          className="glass-chrome flex shrink-0 items-center gap-2.5 rounded-full py-1.5 pl-1.5 pr-4"
         >
-          <span className="grid h-9 w-9 place-items-center rounded-full bg-ink text-[14px] font-bold text-white">
+          <span className="glass-button-primary grid h-10 w-10 place-items-center rounded-full text-sm font-semibold">
             B
           </span>
-          <span className="text-[20px] font-semibold tracking-[-0.01em] text-ink">Bella Beauty</span>
+          <span className="text-[17px] font-semibold tracking-tight text-ink">Bella Beauty</span>
         </Link>
 
-        <nav className="flex flex-1 justify-center" aria-label="Secciones">
-          <ul className="flex items-center gap-[2px] rounded-full border border-white/70 bg-white/30 p-[3px]">
+        <nav className="flex min-w-0 flex-1 justify-center" aria-label="Secciones">
+          <ul className="glass-chrome flex items-center gap-0.5 rounded-full p-1.5">
             {NAV_ITEMS.map((item) => (
               <li key={item.to}>
-                <NavLink to={item.to} className={({ isActive }) => `nav-pill ${isActive ? 'is-active' : ''}`}>
+                <NavLink to={item.to} className={({ isActive }) => `nav-pill whitespace-nowrap px-3 2xl:px-4 ${isActive ? 'is-active' : ''}`}>
                   {item.label}
                 </NavLink>
               </li>
@@ -95,12 +89,12 @@ export default function TopNav({ onOpenMenu }: { onOpenMenu: () => void }) {
 
         <div className="ml-auto flex shrink-0 items-center gap-3">
           {fecha && (
-            <p className="hidden rounded-full border border-white/70 bg-white/30 px-5 py-2.5 text-sm text-[#3a3d45] 2xl:block">
+            <p className="glass-chrome hidden rounded-full px-4 py-3 text-xs font-medium text-muted min-[1800px]:block">
               {fecha}
             </p>
           )}
 
-          <div className="flex shrink-0 items-center gap-2 rounded-full border border-white/70 bg-white/30 py-1.5 pl-1.5 pr-4">
+          <div className="glass-chrome flex shrink-0 items-center gap-2 rounded-full p-1.5 2xl:pr-4">
             <Link
               to="/citas"
               title="Citas pendientes"
@@ -113,7 +107,7 @@ export default function TopNav({ onOpenMenu }: { onOpenMenu: () => void }) {
               )}
             </Link>
             <img
-              className="h-[44px] w-[44px] rounded-full object-cover ring-[3px] ring-white/80"
+              className="h-10 w-10 rounded-full object-cover ring-2 ring-white/90"
               src={resolveProfileImage(user)}
               alt="Foto de perfil"
               onError={(e) => {

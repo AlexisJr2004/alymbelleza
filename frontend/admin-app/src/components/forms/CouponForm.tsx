@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import Switch from '../ui/Switch';
 import { CuponesIcon, PercentIcon, DollarIcon, ChevronDownIcon, XIcon, CheckIcon } from '../icons';
 import type { Coupon } from '../../types/models';
@@ -12,11 +12,12 @@ interface CouponFormProps {
 }
 
 const inputClass =
-  'w-full pl-9 pr-3 py-2 text-sm border border-white/80 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none transition-all';
+  'glass-input w-full pl-10 pr-4 py-2.5 text-sm';
 const plainInputClass =
-  'w-full px-3 py-2 text-sm border border-white/80 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none';
+  'glass-input w-full px-4 py-2.5 text-sm';
 
 export default function CouponForm({ initialData, onSubmit, onCancel, submitting }: CouponFormProps) {
+  const formId = useId();
   const [code, setCode] = useState(initialData?.code ?? '');
   const [type, setType] = useState<'percentage' | 'fixed'>(initialData?.type ?? 'percentage');
   const [value, setValue] = useState(initialData ? String(initialData.value) : '');
@@ -40,10 +41,11 @@ export default function CouponForm({ initialData, onSubmit, onCancel, submitting
     <form onSubmit={handleSubmit}>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-1.5 sm:col-span-2">
-          <label className="block text-sm font-medium text-[#3a3d45]">Código</label>
+          <label htmlFor={`${formId}-code`} className="block text-sm font-medium text-ink">Código</label>
           <div className="relative">
-            <CuponesIcon className="w-4 h-4 absolute left-3 top-2.5 text-muted" />
+            <CuponesIcon className="pointer-events-none w-4 h-4 absolute left-3.5 top-3 text-muted" />
             <input
+              id={`${formId}-code`}
               type="text"
               required
               value={code}
@@ -55,27 +57,29 @@ export default function CouponForm({ initialData, onSubmit, onCancel, submitting
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-[#3a3d45]">Tipo de descuento</label>
+          <label htmlFor={`${formId}-type`} className="block text-sm font-medium text-ink">Tipo de descuento</label>
           <div className="relative">
-            <PercentIcon className="w-4 h-4 absolute left-3 top-2.5 text-muted" />
+            <PercentIcon className="pointer-events-none w-4 h-4 absolute left-3.5 top-3 text-muted" />
             <select
+              id={`${formId}-type`}
               required
               value={type}
               onChange={(e) => setType(e.target.value as 'percentage' | 'fixed')}
-              className={`${inputClass} appearance-none`}
+              className={`${inputClass} appearance-none pr-9`}
             >
               <option value="percentage">Porcentaje (%)</option>
               <option value="fixed">Monto fijo ($)</option>
             </select>
-            <ChevronDownIcon className="w-3.5 h-3.5 absolute right-3 top-3 text-muted" />
+            <ChevronDownIcon className="pointer-events-none w-3.5 h-3.5 absolute right-3.5 top-3.5 text-muted" />
           </div>
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-[#3a3d45]">Valor</label>
+          <label htmlFor={`${formId}-value`} className="block text-sm font-medium text-ink">Valor</label>
           <div className="relative">
-            <DollarIcon className="w-4 h-4 absolute left-3 top-2.5 text-muted" />
+            <DollarIcon className="pointer-events-none w-4 h-4 absolute left-3.5 top-3 text-muted" />
             <input
+              id={`${formId}-value`}
               type="number"
               required
               min={0}
@@ -89,8 +93,9 @@ export default function CouponForm({ initialData, onSubmit, onCancel, submitting
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-[#3a3d45]">Compra mínima (opcional)</label>
+          <label htmlFor={`${formId}-minimum`} className="block text-sm font-medium text-ink">Compra mínima (opcional)</label>
           <input
+            id={`${formId}-minimum`}
             type="number"
             min={0}
             step={0.01}
@@ -102,8 +107,9 @@ export default function CouponForm({ initialData, onSubmit, onCancel, submitting
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-[#3a3d45]">Fecha de expiración (opcional)</label>
+          <label htmlFor={`${formId}-expires`} className="block text-sm font-medium text-ink">Fecha de expiración (opcional)</label>
           <input
+            id={`${formId}-expires`}
             type="date"
             value={expiresAt}
             onChange={(e) => setExpiresAt(e.target.value)}
@@ -118,19 +124,19 @@ export default function CouponForm({ initialData, onSubmit, onCancel, submitting
         </div>
       </div>
 
-      <div className="flex justify-end gap-2.5 pt-4 mt-4 border-t border-white/70">
+      <div className="flex flex-wrap justify-end gap-2.5 pt-5 mt-6 border-t border-slate-400/15">
         <button
           type="button"
           onClick={onCancel}
           disabled={submitting}
-          className="px-4 py-2 text-sm border border-white/80 bg-white/50 rounded-full text-[#3a3d45] hover:bg-white/90 transition-colors flex items-center disabled:opacity-60"
+          className="glass-button px-4 py-2.5 text-sm font-medium flex items-center"
         >
           <XIcon className="w-4 h-4 mr-1.5" /> Cancelar
         </button>
         <button
           type="submit"
           disabled={submitting}
-          className="px-5 py-2 text-sm bg-ink text-white rounded-full hover:bg-ink/85 transition-colors flex items-center justify-center disabled:opacity-60"
+          className="glass-button-primary px-5 py-2.5 text-sm font-medium flex items-center justify-center"
         >
           <CheckIcon className="w-4 h-4 mr-1.5" /> {submitting ? 'Guardando...' : 'Guardar Cupón'}
         </button>

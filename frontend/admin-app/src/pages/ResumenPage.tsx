@@ -70,11 +70,7 @@ function ResumenKpiCard({
   );
 }
 
-// Acceso rápido del resumen móvil — las 4 en una sola fila, como en la
-// plantilla de referencia (reemplaza la fila de botones "Ver pedidos/Ver
-// citas/+" que sigue existiendo tal cual para escritorio). Proporciones y
-// colores copiados literalmente de surveys-app.html (.action/.action-ico) a
-// pedido explícito del usuario, no el estilo glass del resto del admin-app.
+// Accesos móviles con el mismo material y jerarquía visual del panel.
 function ResumenQuickAction({
   to,
   icon,
@@ -89,11 +85,11 @@ function ResumenQuickAction({
   return (
     <Link
       to={to}
-      className={`flex h-[83px] flex-col items-center rounded-[19px] pt-[10px] text-center text-[11.5px] text-ink shadow-sm transition ${
-        active ? 'bg-lilac hover:bg-lilac/80' : 'border border-black/5 bg-white hover:bg-black/[0.03]'
+      className={`flex h-[88px] flex-col items-center justify-center rounded-[22px] text-center text-[11.5px] ${
+        active ? 'glass-button-primary' : 'glass-button'
       }`}
     >
-      <span className={`mb-2 grid h-8 w-8 shrink-0 place-items-center rounded-full ${active ? 'bg-white/50' : 'bg-mist'}`}>{icon}</span>
+      <span className={`mb-2 grid h-8 w-8 shrink-0 place-items-center rounded-full ${active ? 'bg-white/15' : 'bg-white/60'}`}>{icon}</span>
       <span className="w-full truncate px-1 font-medium">{label}</span>
     </Link>
   );
@@ -252,9 +248,9 @@ export default function ResumenPage() {
                 <Link
                   key={o._id}
                   to="/pedidos"
-                  className="flex h-[72px] items-center rounded-[22px] border border-black/5 bg-white pl-[15px] pr-[18px] shadow-sm transition hover:bg-black/[0.02]"
+                  className="glass flex h-[76px] items-center rounded-[22px] pl-[15px] pr-[18px] transition hover:border-white hover:shadow-lg"
                 >
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-mist">
+                  <span className="glass-inset grid h-11 w-11 shrink-0 place-items-center rounded-full">
                     <PedidosIcon className="w-[19px] h-[19px] text-ink" />
                   </span>
                   <p className="ml-3.5 min-w-0 flex-1 truncate text-[13.5px] font-medium text-ink">{o.user?.name || 'Cliente'}</p>
@@ -265,7 +261,7 @@ export default function ResumenPage() {
                 </Link>
               ))
             ) : (
-              <p className="rounded-[22px] border border-black/5 bg-white py-5 text-center text-sm text-dim shadow-sm">
+              <p className="glass rounded-[22px] py-5 text-center text-sm text-dim">
                 Todavía no hay pedidos.
               </p>
             )}
@@ -355,14 +351,14 @@ export default function ResumenPage() {
           <div className="flex gap-2.5">
             <Link
               to="/pedidos"
-              className="flex-1 bg-ink text-white py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 hover:bg-ink/85 transition-colors"
+              className="glass-button-primary flex-1 py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2"
             >
               <PedidosIcon className="w-4 h-4" />
               Ver pedidos
             </Link>
             <Link
               to="/citas"
-              className="flex-1 bg-white/50 border border-white/80 text-[#3a3d45] py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 hover:bg-white/90 transition-colors"
+              className="glass-button flex-1 py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2"
             >
               <CitasIcon className="w-4 h-4" />
               Ver citas
@@ -370,7 +366,7 @@ export default function ResumenPage() {
             <Link
               to="/productos"
               title="Agregar producto"
-              className="w-11 h-11 shrink-0 bg-white/50 border border-white/80 text-[#3a3d45] rounded-full flex items-center justify-center hover:bg-white/90 transition-colors"
+              className="glass-icon-button w-11 h-11 shrink-0 rounded-full flex items-center justify-center"
             >
               <PlusIcon className="w-4 h-4" />
             </Link>
@@ -432,7 +428,7 @@ export default function ResumenPage() {
           </div>
         </div>
 
-        <div className="rounded-[26px] bg-ink p-5 text-white relative overflow-hidden">
+        <div className="glass-hero rounded-[26px] p-5 text-white relative overflow-hidden">
           <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full pointer-events-none" />
           <div className="absolute -bottom-10 -left-6 w-28 h-28 bg-white/10 rounded-full pointer-events-none" />
           <p className="text-sm text-white/70 relative">Ingresos de este mes</p>
@@ -450,7 +446,7 @@ export default function ResumenPage() {
               <p className="text-xs uppercase tracking-wider text-coral font-semibold">Estado general</p>
               <h3 className="text-base font-semibold text-ink mt-1">Estado de las citas</h3>
             </div>
-            <span className="text-xs px-2 py-1 bg-white/50 text-[#3a3d45] rounded-full border border-white/80 shrink-0">
+            <span className="glass-inset text-xs px-2.5 py-1 text-ink rounded-full shrink-0">
               Total: <span className="font-semibold">{totalCitas}</span>
             </span>
           </div>
@@ -546,7 +542,7 @@ export default function ResumenPage() {
                 type="button"
                 disabled={!tarjetasActivas.length}
                 onClick={() => setTarjetaIndex((i) => (i - 1 + tarjetasActivas.length) % tarjetasActivas.length)}
-                className="w-8 h-8 rounded-full border border-white/80 bg-white/50 flex items-center justify-center text-[#3a3d45] hover:bg-white/90 transition disabled:opacity-40"
+                className="glass-icon-button w-9 h-9 rounded-full flex items-center justify-center disabled:opacity-40"
               >
                 <ChevronDownIcon className="w-3.5 h-3.5 rotate-90" />
               </button>
@@ -557,7 +553,7 @@ export default function ResumenPage() {
                 type="button"
                 disabled={!tarjetasActivas.length}
                 onClick={() => setTarjetaIndex((i) => (i + 1) % tarjetasActivas.length)}
-                className="w-8 h-8 rounded-full border border-white/80 bg-white/50 flex items-center justify-center text-[#3a3d45] hover:bg-white/90 transition disabled:opacity-40"
+                className="glass-icon-button w-9 h-9 rounded-full flex items-center justify-center disabled:opacity-40"
               >
                 <ChevronDownIcon className="w-3.5 h-3.5 -rotate-90" />
               </button>
@@ -576,8 +572,8 @@ export default function ResumenPage() {
           </Link>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-white/70">
-            <thead className="bg-white/40">
+          <table className="glass-table min-w-full">
+            <thead>
               <tr>
                 <th className="px-5 py-2.5 text-left text-xs font-medium text-muted uppercase tracking-wider">Cliente</th>
                 <th className="px-5 py-2.5 text-left text-xs font-medium text-muted uppercase tracking-wider">Productos</th>
@@ -586,12 +582,12 @@ export default function ResumenPage() {
                 <th className="px-5 py-2.5 text-right text-xs font-medium text-muted uppercase tracking-wider">Total</th>
               </tr>
             </thead>
-            <tbody className="bg-white/20 divide-y divide-white/60">
+            <tbody>
               {pedidosTabla.length ? (
                 pedidosTabla.map((o) => {
                   const productosPlano = (o.items || []).map((i) => `${i.cantidad}× ${i.name}`).join(', ');
                   return (
-                    <tr key={o._id} className="hover:bg-white/40 transition-colors">
+                    <tr key={o._id}>
                       <td className="px-5 py-3 text-sm text-[#3a3d45]">
                         {o.user ? (
                           <>
@@ -669,14 +665,14 @@ export default function ResumenPage() {
               <p className="text-xs uppercase tracking-wider text-coral font-semibold">Usuarios</p>
               <h3 className="text-base font-bold text-ink mt-1">Clientes más activos</h3>
             </div>
-            <span className="text-xs px-2 py-1 bg-white/50 text-[#3a3d45] rounded-full border border-white/80 shrink-0">
+            <span className="glass-inset text-xs px-2.5 py-1 text-ink rounded-full shrink-0">
               {clientesActivos.length} con pedidos
             </span>
           </div>
           {clientesActivos.length ? (
             <div className="grid grid-cols-2 gap-2.5">
               {clientesActivos.slice(0, 4).map((u, i) => (
-                <div key={u.email} className="rounded-2xl border border-white/80 bg-white/40 p-2.5">
+                <div key={u.email} className="glass-inset rounded-2xl p-3">
                   <p className="text-[10px] uppercase tracking-wide text-muted">Cliente {i + 1}</p>
                   <h4 className="mt-0.5 text-sm font-semibold text-ink truncate">{u.nombre}</h4>
                   <div className="mt-2 flex items-end justify-between gap-2">
@@ -707,7 +703,7 @@ export default function ResumenPage() {
           {clientesInactivos.length ? (
             <div className="grid grid-cols-2 gap-2.5">
               {clientesInactivos.slice(0, 4).map((u) => (
-                <div key={u.email} className="rounded-2xl border border-coral/25 bg-coral/5 p-2.5">
+                <div key={u.email} className="glass-inset rounded-2xl border-coral/25 p-3">
                   <h4 className="text-sm font-semibold text-ink truncate">{u.name || 'Cliente'}</h4>
                   <p className="text-xs text-muted mt-0.5 truncate">{u.email || ''}</p>
                   <div className="mt-2 flex items-center justify-between">

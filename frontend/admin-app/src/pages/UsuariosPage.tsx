@@ -157,7 +157,7 @@ export default function UsuariosPage() {
           <div className="glass p-5 space-y-5">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-ink uppercase tracking-wide">Filtros</h3>
-              <button type="button" onClick={limpiarFiltros} className="text-xs font-medium text-coral hover:text-coral/80">
+              <button type="button" onClick={limpiarFiltros} className="glass-button px-3 py-1.5 rounded-full text-xs font-medium">
                 Limpiar
               </button>
             </div>
@@ -172,7 +172,7 @@ export default function UsuariosPage() {
                     setFechaDesde(e.target.value);
                     setPagina(1);
                   }}
-                  className="w-full px-3 py-1.5 border border-white/80 bg-white/60 rounded-full text-sm focus:ring-2 focus:ring-sky/50 focus:outline-none"
+                  className="glass-input w-full px-3 py-2 rounded-full text-sm"
                 />
                 <input
                   type="date"
@@ -182,7 +182,7 @@ export default function UsuariosPage() {
                     setFechaHasta(e.target.value);
                     setPagina(1);
                   }}
-                  className="w-full px-3 py-1.5 border border-white/80 bg-white/60 rounded-full text-sm focus:ring-2 focus:ring-sky/50 focus:outline-none"
+                  className="glass-input w-full px-3 py-2 rounded-full text-sm"
                 />
               </div>
             </div>
@@ -210,7 +210,7 @@ export default function UsuariosPage() {
 
         <div className="flex-1 min-w-0 w-full">
           <div className="glass p-6 md:p-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div className="glass-toolbar flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-ink flex items-center">
                   <UsuariosIcon className="w-5 h-5 mr-2 text-coral" />
@@ -221,7 +221,7 @@ export default function UsuariosPage() {
                 </p>
               </div>
               <div className="relative">
-                <SearchIcon className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
+                <SearchIcon className="pointer-events-none z-10 w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
                 <input
                   type="text"
                   value={search}
@@ -230,14 +230,14 @@ export default function UsuariosPage() {
                     setPagina(1);
                   }}
                   placeholder="Buscar por nombre o email..."
-                  className="pl-10 pr-4 py-2 border border-white/80 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none w-full md:w-72"
+                  className="glass-input pl-10 pr-4 py-2.5 rounded-full text-sm w-full md:w-72"
                 />
               </div>
             </div>
 
-            <div className="overflow-x-auto rounded-[22px] border border-white/70">
-              <table className="min-w-full divide-y divide-white/70">
-                <thead className="bg-white/40">
+            <div className="glass-inset overflow-x-auto rounded-[22px]">
+              <table className="glass-table min-w-full">
+                <thead>
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Foto</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Usuario</th>
@@ -249,7 +249,7 @@ export default function UsuariosPage() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Acción</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white/20 divide-y divide-white/60">
+                <tbody>
                   {isLoading ? (
                     <tr>
                       <td colSpan={8} className="p-6 text-center text-muted">Cargando...</td>
@@ -325,8 +325,8 @@ export default function UsuariosPage() {
                                   type="button"
                                   disabled={pendienteToggle}
                                   onClick={() => handleToggleActive(u)}
-                                  className={`text-xs font-semibold px-2.5 py-1 rounded-full transition disabled:opacity-60 ${
-                                    activo ? 'bg-coral/10 text-coral hover:bg-coral/20' : 'bg-sky/10 text-sky hover:bg-sky/20'
+                                  className={`text-xs font-semibold px-3 py-1.5 rounded-full disabled:opacity-60 ${
+                                    activo ? 'glass-button-danger' : 'glass-button text-sky'
                                   }`}
                                 >
                                   {pendienteToggle ? '...' : activo ? 'Deshabilitar' : 'Habilitar'}
@@ -335,7 +335,7 @@ export default function UsuariosPage() {
                                   type="button"
                                   disabled={pendienteRol}
                                   onClick={() => handleChangeRole(u)}
-                                  className="text-xs font-semibold px-2.5 py-1 rounded-full bg-white/60 text-[#3a3d45] hover:bg-white/90 transition disabled:opacity-60"
+                                  className="glass-button text-xs font-semibold px-3 py-1.5 rounded-full disabled:opacity-60"
                                 >
                                   {pendienteRol ? '...' : 'Cambiar Rol'}
                                 </button>

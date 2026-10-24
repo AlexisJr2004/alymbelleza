@@ -127,7 +127,7 @@ export default function PedidosPage() {
           <div className="glass p-5 space-y-5">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-ink uppercase tracking-wide">Filtros</h3>
-              <button type="button" onClick={limpiarFiltros} className="text-xs font-medium text-coral hover:text-coral/80">
+              <button type="button" onClick={limpiarFiltros} className="glass-button px-3 py-1.5 rounded-full text-xs font-medium">
                 Limpiar
               </button>
             </div>
@@ -142,7 +142,7 @@ export default function PedidosPage() {
                     setFechaDesde(e.target.value);
                     setPagina(1);
                   }}
-                  className="w-full px-3 py-1.5 border border-white/80 bg-white/60 rounded-full text-sm focus:ring-2 focus:ring-sky/50 focus:outline-none"
+                  className="glass-input w-full px-3 py-2 rounded-full text-sm"
                 />
                 <input
                   type="date"
@@ -152,7 +152,7 @@ export default function PedidosPage() {
                     setFechaHasta(e.target.value);
                     setPagina(1);
                   }}
-                  className="w-full px-3 py-1.5 border border-white/80 bg-white/60 rounded-full text-sm focus:ring-2 focus:ring-sky/50 focus:outline-none"
+                  className="glass-input w-full px-3 py-2 rounded-full text-sm"
                 />
               </div>
             </div>
@@ -182,15 +182,15 @@ export default function PedidosPage() {
 
         <div className="flex-1 min-w-0 w-full">
           <div className="glass p-6 md:p-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div className="glass-toolbar flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
               <h2 className="text-2xl font-bold text-ink flex items-center">
                 <PedidosIcon className="w-5 h-5 mr-2 text-coral" />
                 Pedidos
               </h2>
             </div>
-            <div className="overflow-x-auto rounded-[22px] border border-white/70">
-              <table className="min-w-full divide-y divide-white/70">
-                <thead className="bg-white/40">
+            <div className="glass-inset overflow-x-auto rounded-[22px]">
+              <table className="glass-table min-w-full">
+                <thead>
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Cliente</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Productos</th>
@@ -200,7 +200,7 @@ export default function PedidosPage() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Fecha</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white/20 divide-y divide-white/60">
+                <tbody>
                   {isLoading ? (
                     <tr>
                       <td colSpan={6} className="p-6 text-center text-muted">Cargando...</td>

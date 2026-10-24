@@ -102,7 +102,7 @@ export default function TarjetasPage() {
           <button
             type="button"
             onClick={abrirNueva}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-ink text-white rounded-full text-sm font-medium hover:bg-ink/85 transition-colors shrink-0"
+            className="glass-button-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium shrink-0"
           >
             <PlusIcon className="w-4 h-4" /> Tarjeta nueva
           </button>
@@ -111,7 +111,7 @@ export default function TarjetasPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
         {isLoading ? null : tarjetas.length === 0 ? (
-          <p className="sm:col-span-2 xl:col-span-4 text-center text-muted py-6">No hay tarjetas de pago creadas todavía.</p>
+          <p className="glass sm:col-span-2 xl:col-span-4 text-center text-muted py-6">No hay tarjetas de pago creadas todavía.</p>
         ) : (
           tarjetas.map((c, i) => (
             <div
@@ -146,21 +146,21 @@ export default function TarjetasPage() {
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <div className="xl:col-span-2 glass p-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-1">
+          <div className="glass-toolbar flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
             <h3 className="text-lg font-bold text-ink">Lista de tarjetas</h3>
             <div className="relative">
-              <SearchIcon className="w-3.5 h-3.5 absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
+              <SearchIcon className="pointer-events-none z-10 w-3.5 h-3.5 absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Buscar por banco, cuenta o titular..."
-                className="pl-9 pr-3 py-1.5 text-sm border border-white/80 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none w-full sm:w-64"
+                className="glass-input pl-9 pr-3 py-2.5 text-sm rounded-full w-full sm:w-64"
               />
             </div>
           </div>
           <p className="text-sm text-muted mb-4">Todas las cuentas bancarias registradas.</p>
-          <div className="divide-y divide-white/60">
+          <div className="space-y-3">
             {filtradas.length === 0 ? (
               <p className="text-center text-muted py-6">No se encontraron tarjetas de pago.</p>
             ) : (
@@ -168,7 +168,7 @@ export default function TarjetasPage() {
                 const indiceOriginal = tarjetas.indexOf(c);
                 const estilo = RESUMEN_TARJETA_ESTILOS[indiceOriginal % RESUMEN_TARJETA_ESTILOS.length];
                 return (
-                  <div key={c._id} className="flex flex-wrap items-center gap-4 py-3.5">
+                  <div key={c._id} className="glass-inset flex flex-wrap items-center gap-4 p-3.5 rounded-[22px]">
                     <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${estilo} shrink-0`} />
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 flex-1 min-w-[200px] text-sm">
                       <div className="min-w-0">
@@ -198,7 +198,7 @@ export default function TarjetasPage() {
                         type="button"
                         title="Editar"
                         onClick={() => abrirEditar(c)}
-                        className="text-sky hover:text-sky/70 p-2 rounded-full bg-sky/10 hover:bg-sky/20 transition"
+                        className="glass-icon-button text-sky p-2 rounded-full"
                       >
                         <PencilIcon className="w-4 h-4" />
                       </button>
@@ -206,7 +206,7 @@ export default function TarjetasPage() {
                         type="button"
                         title="Eliminar"
                         onClick={() => handleDelete(c)}
-                        className="text-coral hover:text-coral/70 p-2 rounded-full bg-coral/10 hover:bg-coral/20 transition"
+                        className="glass-button-danger p-2 rounded-full"
                       >
                         <TrashIcon className="w-4 h-4" />
                       </button>
@@ -222,9 +222,13 @@ export default function TarjetasPage() {
           <h3 className="text-lg font-bold text-ink mb-1">Estadística de tarjetas</h3>
           <p className="text-sm text-muted mb-5">Distribución por banco.</p>
           <div className="flex justify-center">
-            <div className="relative w-36 h-36 rounded-full" style={{ background: computeConicGradient(donutGroups).background }}>
-              <div className="absolute inset-[14px] bg-white rounded-full" />
-            </div>
+            <div
+              className="relative w-36 h-36 rounded-full"
+              style={{
+                background: computeConicGradient(donutGroups).background,
+                maskImage: 'radial-gradient(closest-side, transparent calc(100% - 14px), #000 calc(100% - 13px))',
+              }}
+            />
           </div>
           <div className="mt-6 space-y-2.5">
             {donutGroups.length === 0 ? (

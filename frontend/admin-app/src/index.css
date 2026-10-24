@@ -1,86 +1,368 @@
-/* Rediseño del admin (plantilla customer-journeys.html): Urbanist como fuente
-   base de toda la app — ver tailwind.config.js (theme.fontFamily.sans). */
-@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Igual que en admin-productos.html: estas clases no cargan la fuente de Google
-   Fonts (esa página nunca la vincula), así que caen al fallback serif/sans-serif
-   del sistema — se porta tal cual para no cambiar el aspecto actual. */
-.font-display {
-    font-family: 'Italiana', serif;
-}
-.font-body {
-    font-family: 'Montserrat', sans-serif;
+@layer base {
+  :root {
+    color-scheme: light;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --glass-border: rgb(255 255 255 / 0.85);
+    --glass-shadow: 0 12px 40px -18px rgb(44 59 104 / 0.24),
+      0 2px 6px rgb(44 59 104 / 0.035),
+      inset 0 1px 0 rgb(255 255 255 / 0.96),
+      inset 0 -1px 0 rgb(255 255 255 / 0.35);
+    --glass-focus: #5774c3;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    background: #eaf0f8;
+    color: #202b42;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button, input, select, textarea {
+    font: inherit;
+  }
+
+  button, a, input, select, textarea {
+    touch-action: manipulation;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--glass-focus);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background: #d7d5f5;
+    color: #202b42;
+  }
 }
 
-/* ===== Lenguaje visual de customer-journeys.html, portado a clases reales
-   (la plantilla las define vía @layer components en un <style> inline) ===== */
 @layer components {
-  .circle-btn {
-    @apply grid h-[44px] w-[44px] shrink-0 place-items-center rounded-full border border-[#d1d5de] bg-white/45 text-[#2a2c33] transition hover:bg-white/85;
+  /* Static ambient light supplies the color visible through every glass surface. */
+  .app-bg {
+    min-height: 100svh;
+    background:
+      radial-gradient(ellipse at 4% 6%, rgb(217 208 251 / 0.72), transparent 40%),
+      radial-gradient(ellipse at 96% 30%, rgb(188 221 250 / 0.68), transparent 43%),
+      radial-gradient(ellipse at 42% 95%, rgb(243 217 235 / 0.52), transparent 45%),
+      linear-gradient(135deg, #f4f5fc, #e9eff8 52%, #e9eafa);
+    background-attachment: fixed;
   }
-  .rail-btn {
-    @apply grid h-[44px] w-[44px] place-items-center rounded-full border border-white/80 bg-white/55 text-[#3a3d45] transition hover:bg-white;
+
+  .glass, .glass-chrome, .glass-sheet {
+    border: 1px solid var(--glass-border);
+    background: linear-gradient(135deg, rgb(255 255 255 / 0.76), rgb(255 255 255 / 0.38) 55%, rgb(245 247 255 / 0.54));
+    background-clip: padding-box;
+    box-shadow: var(--glass-shadow);
+    -webkit-backdrop-filter: blur(24px) saturate(145%);
+    backdrop-filter: blur(24px) saturate(145%);
   }
-  .nav-pill {
-    @apply inline-flex h-[42px] items-center rounded-full px-5 text-[13px] font-medium text-[#2a2c33] transition hover:bg-white/50;
-  }
-  .nav-pill.is-active {
-    @apply bg-ink text-white hover:bg-ink;
-  }
+
   .glass {
-    @apply rounded-[26px] border border-white/75 bg-white/35 backdrop-blur-md;
+    border-radius: 28px;
   }
+
+  .glass-chrome {
+    background: linear-gradient(140deg, rgb(255 255 255 / 0.8), rgb(248 249 255 / 0.52));
+    box-shadow: 0 8px 30px -12px rgb(49 61 100 / 0.24),
+      inset 0 1px 1px #fff, inset 0 -1px 1px rgb(255 255 255 / 0.55);
+    -webkit-backdrop-filter: blur(32px) saturate(160%);
+    backdrop-filter: blur(32px) saturate(160%);
+  }
+
+  .glass-sheet {
+    background: linear-gradient(135deg, rgb(255 255 255 / 0.94), rgb(240 242 253 / 0.86));
+    box-shadow: 0 32px 100px rgb(27 38 69 / 0.22), inset 0 1px 0 #fff;
+    -webkit-backdrop-filter: blur(36px) saturate(145%);
+    backdrop-filter: blur(36px) saturate(145%);
+    overscroll-behavior: contain;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* Nested surfaces use highlights without another costly backdrop blur. */
+  .glass-inset {
+    border: 1px solid rgb(255 255 255 / 0.8);
+    background: linear-gradient(135deg, rgb(255 255 255 / 0.62), rgb(255 255 255 / 0.28));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.8), 0 2px 5px rgb(44 59 104 / 0.025);
+  }
+
+  .glass-toolbar {
+    background: linear-gradient(115deg, rgb(255 255 255 / 0.42), rgb(247 249 255 / 0.18));
+    border-color: rgb(255 255 255 / 0.8);
+  }
+
+  .glass-hero {
+    border: 1px solid rgb(255 255 255 / 0.5);
+    background:
+      radial-gradient(ellipse at 100% 0%, rgb(162 157 231 / 0.65), transparent 64%),
+      linear-gradient(135deg, #25334e, #454569);
+    color: #fff;
+    box-shadow: 0 16px 32px -16px rgb(43 48 90 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.4);
+  }
+
+  .glass-button, .glass-button-primary, .glass-button-danger,
+  .glass-icon-button, .circle-btn, .rail-btn {
+    border-radius: 9999px;
+    border: 1px solid rgb(255 255 255 / 0.9);
+    background: linear-gradient(150deg, rgb(255 255 255 / 0.86), rgb(255 255 255 / 0.45));
+    box-shadow: 0 3px 8px rgb(44 59 104 / 0.055), inset 0 1px 0 #fff;
+    transition: background-color 180ms ease, box-shadow 180ms ease, border-color 180ms ease, transform 180ms ease;
+  }
+
+  .glass-button, .glass-button-primary, .glass-button-danger {
+    font-weight: 600;
+  }
+
+  button.glass-button, button.glass-button-primary, button.glass-button-danger,
+  a.glass-button, a.glass-button-primary {
+    min-height: 40px;
+  }
+
+  .glass-button-primary {
+    border-color: rgb(64 79 112 / 0.7);
+    background: linear-gradient(145deg, #4a5876, #28364f 65%, #26324a);
+    color: #fff;
+    box-shadow: 0 5px 12px rgb(35 48 78 / 0.17), inset 0 1px 0 rgb(255 255 255 / 0.3);
+  }
+
+  .glass-button-danger {
+    border-color: rgb(183 54 83 / 0.65);
+    background: linear-gradient(145deg, #c34c69, #a72f50);
+    color: #fff;
+    box-shadow: 0 5px 12px rgb(151 41 70 / 0.14), inset 0 1px 0 rgb(255 255 255 / 0.3);
+  }
+
+  .circle-btn, .rail-btn {
+    display: grid;
+    height: 44px;
+    width: 44px;
+    flex-shrink: 0;
+    place-items: center;
+    border-radius: 9999px;
+    color: #3e4c66;
+  }
+
+  .nav-pill {
+    display: inline-flex;
+    height: 42px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    padding: 0 18px;
+    color: #526078;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+  }
+
+  .nav-pill.is-active {
+    border-color: rgb(64 79 112 / 0.7);
+    background: linear-gradient(145deg, #4a5876, #28364f);
+    box-shadow: 0 4px 9px rgb(35 48 78 / 0.18), inset 0 1px 0 rgb(255 255 255 / 0.25);
+    color: white;
+  }
+
+  .glass-input {
+    border-radius: 9999px;
+    min-height: 42px;
+    border: 1px solid rgb(136 153 187 / 0.26);
+    background: rgb(255 255 255 / 0.62);
+    color: #202b42;
+    box-shadow: inset 0 1px 3px rgb(44 59 104 / 0.035), 0 1px 0 rgb(255 255 255 / 0.8);
+    transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  }
+
+  .glass-input::placeholder {
+    color: #667187;
+    opacity: 1;
+  }
+
+  .glass-input:focus {
+    outline: none;
+    border-color: var(--glass-focus);
+    background: rgb(255 255 255 / 0.9);
+    box-shadow: 0 0 0 3px rgb(87 116 195 / 0.17), inset 0 1px 0 #fff;
+  }
+
+  select.glass-input {
+    padding-right: 2rem;
+  }
+
+  select option {
+    background: #f8f9fd;
+    color: #202b42;
+  }
+
+  select.appearance-none::picker-icon {
+    display: none;
+  }
+
+  .glass-overlay {
+    background: rgb(33 43 69 / 0.3);
+    -webkit-backdrop-filter: blur(7px);
+    backdrop-filter: blur(7px);
+  }
+
+  .glass-table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .glass-table thead {
+    background: rgb(237 241 251 / 0.65);
+  }
+
+  .glass-table th {
+    border-bottom: 1px solid rgb(255 255 255 / 0.9);
+    color: #5d687d;
+    font-weight: 600;
+  }
+
+  .glass-table tbody {
+    background: rgb(255 255 255 / 0.12);
+  }
+
+  .glass-table tbody tr + tr td {
+    border-top: 1px solid rgb(255 255 255 / 0.68);
+  }
+
+  .glass-table tbody tr {
+    transition: background-color 160ms ease;
+  }
+
   .status {
-    @apply inline-flex h-[22px] items-center rounded-full px-[11px] text-[11px] font-medium text-white;
+    display: inline-flex;
+    min-height: 24px;
+    align-items: center;
+    border: 1px solid rgb(255 255 255 / 0.35);
+    border-radius: 9999px;
+    padding: 2px 10px;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.2);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
   }
+
   .badge-dot {
     @apply absolute -bottom-[7px] left-1/2 grid h-[16px] min-w-[16px] -translate-x-1/2 place-items-center rounded-full border-2 border-[#e4e6eb] px-[3px] text-[9px] font-semibold text-white;
   }
-}
 
-/* Fondo general del admin — mismo degradé frío de .app-bg en la plantilla. */
-.app-bg {
-  background:
-    radial-gradient(60% 50% at 80% 100%, rgba(173, 190, 232, .35), rgba(173, 190, 232, 0) 70%),
-    radial-gradient(50% 40% at 10% 90%, rgba(190, 200, 235, .3), rgba(190, 200, 235, 0) 70%),
-    linear-gradient(180deg, #f1f2f4 0%, #eaecf1 45%, #e3e7ef 100%);
-}
-
-/* Chrome/Edge recientes dibujan una flecha nativa propia (::picker-icon) incluso con
-   appearance:none, duplicando el ícono de flecha que ya agregamos a mano en los selects. */
-select.appearance-none::picker-icon {
-    display: none;
-}
-
-/* Switch reutilizable: <input type="checkbox" class="sr-only peer"> + <span class="switch-track"> */
-.switch-track {
+  .switch-track {
     position: relative;
-    width: 2.25rem;
-    height: 1.25rem;
+    width: 2.5rem;
+    height: 1.5rem;
     flex-shrink: 0;
-    background-color: #e5e7eb;
+    border: 1px solid rgb(128 144 176 / 0.2);
     border-radius: 9999px;
-    transition: background-color 150ms;
-}
-.switch-track::after {
+    background: rgb(166 179 202 / 0.28);
+    box-shadow: inset 0 1px 3px rgb(43 60 98 / 0.09), 0 1px 0 rgb(255 255 255 / 0.75);
+    transition: background-color 180ms ease;
+  }
+
+  .switch-track::after {
     content: '';
     position: absolute;
-    top: 0.125rem;
-    left: 0.125rem;
-    width: 1rem;
-    height: 1rem;
-    background-color: #fff;
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    border: 1px solid white;
     border-radius: 9999px;
-    transition: transform 150ms;
-    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-}
-.peer:checked~.switch-track {
-    background-color: #16181d;
-}
-.peer:checked~.switch-track::after {
+    background: linear-gradient(145deg, white, #edf0f8);
+    box-shadow: 0 2px 5px rgb(36 49 79 / 0.2);
+    transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .peer:checked ~ .switch-track {
+    background: #536993;
+  }
+
+  .peer:checked ~ .switch-track::after {
     transform: translateX(1rem);
+  }
+
+  .peer:focus-visible ~ .switch-track {
+    outline: 3px solid var(--glass-focus);
+    outline-offset: 3px;
+  }
+
+  :is(.glass-button, .glass-button-primary, .glass-button-danger, .glass-icon-button, .circle-btn, .rail-btn):disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  @media (hover: hover) {
+    :is(.glass-button, .glass-icon-button, .circle-btn, .rail-btn):not(:disabled):hover {
+      background-color: rgb(255 255 255 / 0.75);
+      box-shadow: 0 5px 14px rgb(44 59 104 / 0.1), inset 0 1px 0 #fff;
+    }
+
+    :is(button, a):is(.glass-button-primary, .glass-button-danger):not(:disabled):hover {
+      box-shadow: 0 7px 18px rgb(35 48 78 / 0.24), inset 0 1px 0 rgb(255 255 255 / 0.5);
+    }
+
+    .nav-pill:not(.is-active):hover {
+      background-color: rgb(255 255 255 / 0.65);
+      color: #202b42;
+    }
+
+    .glass-table tbody tr:hover {
+      background-color: rgb(255 255 255 / 0.5);
+    }
+  }
+
+  :is(button, a):is(.glass-button, .glass-button-primary, .glass-button-danger, .glass-icon-button, .circle-btn, .rail-btn):not(:disabled):active {
+    transform: scale(0.97);
+  }
+}
+
+/* Keep the same legible hierarchy when system accessibility settings change. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass, .glass-chrome, .glass-sheet {
+    background: #f5f7fd;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass, .glass-chrome, .glass-sheet, .glass-inset, .glass-input {
+    background: #f5f7fd;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .glass-overlay {
+    background: rgb(33 43 69 / 0.5);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .app-bg {
+    background-attachment: scroll;
+  }
+
+  .glass {
+    border-radius: 24px;
+  }
+
+  .glass-input {
+    font-size: 16px;
+  }
 }

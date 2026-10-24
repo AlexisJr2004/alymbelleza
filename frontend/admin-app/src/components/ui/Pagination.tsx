@@ -10,19 +10,21 @@ export default function Pagination({ totalItems, porPagina, paginaActiva, onChan
   if (totalPaginas <= 1) return null;
 
   return (
-    <div className="flex justify-center mt-4 gap-1.5">
+    <nav aria-label="Paginación" className="flex flex-wrap justify-center mt-5 gap-2">
       {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((i) => (
         <button
           key={i}
           type="button"
+          aria-label={`Página ${i}`}
+          aria-current={i === paginaActiva ? 'page' : undefined}
           onClick={() => onChange(i)}
-          className={`h-8 w-8 rounded-full text-sm font-medium transition ${
-            i === paginaActiva ? 'bg-ink text-white' : 'bg-white/50 text-[#3a3d45] hover:bg-white/90'
+          className={`h-10 min-w-10 px-3 text-sm font-semibold ${
+            i === paginaActiva ? 'glass-button-primary' : 'glass-button'
           }`}
         >
           {i}
         </button>
       ))}
-    </div>
+    </nav>
   );
 }

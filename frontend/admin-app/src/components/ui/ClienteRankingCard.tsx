@@ -18,11 +18,11 @@ export default function ClienteRankingCard({ clientes, verTodosHref }: ClienteRa
     <div className="glass p-5">
       <div className="mb-4 flex items-center justify-between gap-3">
         <div>
-          <p className="text-xs uppercase tracking-wider text-coral font-semibold">Ranking</p>
-          <h3 className="text-base font-bold text-ink mt-1">Clientes con más compras</h3>
+          <p className="text-[10px] uppercase tracking-[0.16em] text-muted font-semibold">Ranking</p>
+          <h3 className="text-base font-semibold tracking-tight text-ink mt-1">Clientes con más compras</h3>
         </div>
         {verTodosHref && (
-          <Link to={verTodosHref} className="text-xs font-medium text-sky hover:text-sky/70 shrink-0">
+          <Link to={verTodosHref} className="glass-button px-3 py-2 text-xs font-medium shrink-0">
             Ver todos
           </Link>
         )}
@@ -30,12 +30,12 @@ export default function ClienteRankingCard({ clientes, verTodosHref }: ClienteRa
 
       {clientes.length ? (
         <>
-          <div className="flex flex-col items-center rounded-2xl border border-white/80 bg-white/40 p-6 text-center">
+          <div className="glass-inset flex flex-col items-center rounded-[22px] p-6 text-center">
             <div className="relative">
               <img
                 src={clientes[0].profileImage || FALLBACK_AVATAR}
                 alt={clientes[0].nombre}
-                className="h-24 w-24 rounded-full object-cover ring-[3px] ring-white"
+                className="h-24 w-24 rounded-full object-cover ring-[3px] ring-white/90 shadow-lg shadow-slate-400/15"
                 onError={(e) => {
                   e.currentTarget.onerror = null;
                   e.currentTarget.src = FALLBACK_AVATAR;
@@ -45,8 +45,8 @@ export default function ClienteRankingCard({ clientes, verTodosHref }: ClienteRa
                 1
               </span>
             </div>
-            <h4 className="mt-3 text-lg font-bold text-ink">{clientes[0].nombre}</h4>
-            <p className="mt-1 text-sm text-muted">{clientes[0].email}</p>
+            <h4 className="mt-3 text-lg font-semibold tracking-tight text-ink">{clientes[0].nombre}</h4>
+            <p className="mt-1 max-w-full break-all text-sm text-muted">{clientes[0].email}</p>
             {clientes[0].phone ? (
               <a
                 href={`https://wa.me/${numeroWhatsapp(clientes[0].phone)}`}
@@ -59,18 +59,18 @@ export default function ClienteRankingCard({ clientes, verTodosHref }: ClienteRa
             ) : (
               <p className="text-sm text-muted">Sin teléfono</p>
             )}
-            <div className="mt-3 flex items-center gap-2 text-xs">
+            <div className="mt-4 flex flex-wrap justify-center items-center gap-2 text-xs">
               <span className="rounded-full border border-white/80 bg-white/60 px-3 py-1 font-medium text-[#3a3d45]">
                 {clientes[0].total} pedidos
               </span>
-              <span className="rounded-full bg-sky/15 px-3 py-1 font-semibold text-sky">
+              <span className="rounded-full border border-sky/10 bg-sky/10 px-3 py-1 font-semibold text-sky">
                 {formatoMoneda(clientes[0].gastado)}
               </span>
             </div>
           </div>
 
           {clientes.length > 1 && (
-            <div className="mt-4 divide-y divide-white/60 rounded-2xl border border-white/80 bg-white/25 px-4">
+            <div className="glass-inset mt-4 divide-y divide-slate-400/15 rounded-2xl px-4">
               {clientes.slice(1, 3).map((c, i) => (
                 <div key={c.email} className="flex items-center gap-3 py-2.5">
                   <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-white/80 bg-white/60 text-xs font-semibold text-[#3a3d45]">

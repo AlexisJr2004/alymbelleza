@@ -4,20 +4,17 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Urbanist', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
-        ink: '#16181d',
-        muted: '#8a8f9a',
-        sky: '#7e9ce3',
-        coral: '#e2766f',
-        // Paleta literal de surveys-app.html — solo para los widgets tipo
-        // dashboard de la vista móvil (StatCardMobile, BottomMobileNav,
-        // ResumenQuickAction). Escritorio sigue en ink/muted/sky/coral.
-        mist: '#f0eff4',
-        lilac: '#cbc2f6',
-        violet: '#8b78ee',
-        dim: '#6d6d75',
+        ink: '#202b42',
+        muted: '#5d687d',
+        sky: '#466cac',
+        coral: '#b75467',
+        mist: '#eef1f9',
+        lilac: '#d6cff4',
+        violet: '#7051c7',
+        dim: '#606a7e',
       },
     },
   },

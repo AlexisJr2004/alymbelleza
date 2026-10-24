@@ -35,26 +35,26 @@ export default function DonutChart({ title, groups, centerCaption, emptyMessage 
 
   return (
     <div className="glass p-5">
-      <h3 className="text-sm font-semibold text-ink uppercase tracking-wide mb-4">{title}</h3>
+      <h3 className="text-sm font-semibold tracking-tight text-ink mb-5">{title}</h3>
       <div className="flex justify-center">
         <div className="relative">
           <div className="relative w-32 h-32 rounded-full" style={{ background }}>
-            <div className="absolute inset-[13px] bg-white rounded-full" />
+            <div className="absolute inset-[13px] bg-[#f4f6fb] rounded-full shadow-[inset_0_1px_5px_rgba(70,83,118,0.08)]" />
           </div>
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <span className="text-xl font-bold text-ink">{total > 0 ? `${centerPct}%` : '0%'}</span>
+            <span className="text-xl font-semibold tracking-tight tabular-nums text-ink">{total > 0 ? `${centerPct}%` : '0%'}</span>
             <span className="text-[10px] text-muted">{centerCaption}</span>
           </div>
         </div>
       </div>
-      <div className="mt-4 space-y-2.5">
+      <div className="mt-5 space-y-2.5">
         {total === 0 ? (
           <p className="text-sm text-muted text-center">{emptyMessage}</p>
         ) : (
           groups.map((g) => (
             <div key={g.label} className="flex items-center gap-2 text-sm">
               <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: g.color }} />
-              <span className="text-[#3a3d45]">{g.label}</span>
+              <span className="text-muted">{g.label}</span>
               <span className="ml-auto font-medium text-ink">{g.count}</span>
             </div>
           ))

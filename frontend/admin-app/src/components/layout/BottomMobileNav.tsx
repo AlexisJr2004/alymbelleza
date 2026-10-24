@@ -9,33 +9,21 @@ const PRIMARY_ITEMS = [
   { to: '/productos', label: 'Productos', icon: ProductosIcon },
 ];
 
-// Cápsula de navegación flotante para móvil — reemplaza el botón de
-// hamburguesa de TopNav como gesto principal. Estilo glass/translúcido
-// propio del admin-app (el usuario rechazó el fondo negro sólido copiado
-// literalmente de surveys-app.html), con el acento lilac en el ícono
-// activo, en línea con las tarjetas/accesos rápidos.
-//
-// El 5.º cupo era antes un botón "Más" (3 rayas) que abría MobileDrawer —
-// el usuario lo quería reemplazado por un acceso directo real, así que
-// ahora es Productos (el mismo gesto que los otros 4). El botón de menú de
-// TopNav ya abre ese mismo MobileDrawer completo (Ranking/Cupones/Tarjetas
-// y el resto), así que esa función no se pierde, solo deja de duplicarse acá.
 export default function BottomMobileNav() {
   return (
-    <nav aria-label="Navegación principal" className="fixed inset-x-0 bottom-[18px] z-20 flex justify-center lg:hidden">
-      <div className="flex items-center gap-2 rounded-full border border-white/70 bg-white/55 p-2 shadow-lg shadow-ink/10 backdrop-blur-md">
+    <nav aria-label="Navegación principal" className="pointer-events-none fixed inset-x-0 bottom-[max(12px,env(safe-area-inset-bottom))] z-20 flex justify-center px-3 xl:hidden">
+      <div className="glass-chrome pointer-events-auto grid w-full max-w-[400px] grid-cols-5 gap-1 rounded-[30px] p-1.5">
         {PRIMARY_ITEMS.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
             aria-label={item.label}
             className={({ isActive }) =>
-              `grid h-14 w-14 place-items-center rounded-full transition ${
-                isActive ? 'bg-lilac text-ink' : 'text-muted hover:bg-white/70'
-              }`
+              `nav-pill h-[58px] min-w-0 flex-col justify-center gap-1 rounded-[24px] px-0 ${isActive ? 'is-active' : ''}`
             }
           >
-            <item.icon className="h-[22px] w-[22px]" />
+            <item.icon className="h-5 w-5" />
+            <span className="text-[9px] font-medium leading-none sm:text-[10px]">{item.label}</span>
           </NavLink>
         ))}
       </div>
