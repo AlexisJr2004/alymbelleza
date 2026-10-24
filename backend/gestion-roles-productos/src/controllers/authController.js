@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const { sendEmail } = require('../utils/email');
+const { getFrontendUrl } = require('../utils/frontendUrl');
 const cloudinary = require('../utils/cloudinary');
 const publicIdFromUrl = require('../utils/cloudinaryPublicId');
 
@@ -133,13 +134,15 @@ exports.forgotPassword = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ error: 'Usuario no encontrado.' });
 
+    // Valida el destino antes de reemplazar el token o enviar el correo.
+    const frontendUrl = getFrontendUrl();
     const token = crypto.randomBytes(20).toString('hex');
+    const resetLink = new URL('/reset-password', frontendUrl);
+    resetLink.searchParams.set('token', token);
+    const resetUrl = resetLink.href;
     user.resetPasswordToken = token;
     user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
     await user.save();
-
-    const frontendUrl = process.env.FRONTEND_URL;
-    const resetUrl = `${frontendUrl}/reset-password?token=${token}`;
 
     const mailOptions = {
       to: user.email,
@@ -182,6 +185,9 @@ exports.forgotPassword = async (req, res) => {
     res.json({ message: 'Correo enviado con instrucciones.' });
   } catch (err) {
     console.error('Error al solicitar recuperación de contraseña:', err);
+    if (err.code === 'FRONTEND_URL_CONFIG') {
+      return res.status(503).json({ error: 'La recuperación de contraseña no está configurada. Contacta al administrador.' });
+    }
     res.status(500).json({ error: 'No se pudo enviar el correo de recuperación.' });
   }
 };

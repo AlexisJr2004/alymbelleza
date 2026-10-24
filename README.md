@@ -178,7 +178,7 @@ Definidas en `backend/.env.example`. En Render se configuran desde el panel del 
 | `JWT_SECRET` | Sí | Clave para firmar y verificar los tokens de sesión. |
 | `PORT` | No | Puerto del servidor (por defecto 5000). |
 | `NODE_ENV` | No | `development` o `production`. |
-| `FRONTEND_URL` | No | URL pública del frontend; se usa en el enlace de recuperación de contraseña. |
+| `FRONTEND_URL` | Fuera de Render | URL raíz del sitio público, sin rutas ni parámetros. Se usa en recuperación de contraseña; si falta, usa `RENDER_EXTERNAL_URL`, proporcionada automáticamente por Render. |
 | `EMAIL_PROVIDER` | No | `resend` para correo por HTTPS o `smtp` para Gmail. Sin valor, selecciona Resend si existe `RESEND_API_KEY`; de lo contrario SMTP. |
 | `RESEND_API_KEY` | Para Resend | Clave de envío guardada solo en el backend. |
 | `EMAIL_FROM` | Para Resend | Remitente autorizado, por ejemplo `Bella Beauty <contacto@tu-dominio.com>`. |
@@ -194,7 +194,7 @@ El error `ETIMEDOUT` con `command: 'CONN'` indica que la conexión SMTP no lleg�
 
 1. Crea una cuenta en Resend, verifica un dominio que controles y genera una clave con permiso de envío para ese dominio.
 2. En Render → servicio del backend → **Environment**, añade `EMAIL_PROVIDER=resend`, `RESEND_API_KEY`, `EMAIL_FROM` y `CONTACT_EMAIL`. El remitente debe pertenecer al dominio verificado; el destino puede ser tu Gmail.
-3. Guarda las variables y despliega la versión del backend que incorpora esta integración. Las claves nunca se ponen en Git ni en variables `VITE_*`.
+3. Para los enlaces de recuperación, configura `FRONTEND_URL` con la URL raíz del sitio (en este despliegue, `https://aly-mbelleza-backend.onrender.com`). Si se omite, el backend usa la [URL pública que Render proporciona en `RENDER_EXTERNAL_URL`](https://render.com/docs/environment-variables). No uses `undefined`, `/admin` ni `/reset-password` como valor. Guarda las variables y despliega la versión del backend que incorpora esta integración. Las claves nunca se ponen en Git ni en variables `VITE_*`.
 4. Envía una consulta desde el formulario y comprueba la recepción en la bandeja y el estado en Resend. La respuesta exitosa del backend confirma que el proveedor aceptó el mensaje, no que el destinatario ya lo haya recibido.
 
 Para una prueba inicial sin dominio propio, puedes usar `EMAIL_FROM=onboarding@resend.dev` y como `CONTACT_EMAIL` **el mismo correo con el que registraste la cuenta de Resend**. [Ese remitente de prueba solo permite enviar a tu propia cuenta](https://resend.com/docs/knowledge-base/403-error-resend-dev-domain): no sirve para recuperar contraseñas de otros usuarios. Para uso completo, verifica tu dominio y cambia `EMAIL_FROM` a una dirección de ese dominio.
