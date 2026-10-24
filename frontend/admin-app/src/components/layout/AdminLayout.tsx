@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { useLayoutEffect, useState } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import RequireAdmin from './RequireAdmin';
 import TopNav from './TopNav';
 import IconRail from './IconRail';
@@ -9,6 +9,12 @@ import ChatPanel from './ChatPanel';
 
 export default function AdminLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { pathname } = useLocation();
+
+  // Reinicia el desplazamiento antes de mostrar una nueva sección.
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [pathname]);
 
   return (
     <RequireAdmin>

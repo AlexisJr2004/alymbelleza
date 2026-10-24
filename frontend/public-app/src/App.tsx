@@ -1,5 +1,5 @@
-import { lazy, Suspense } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { lazy, Suspense, useLayoutEffect } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import PublicLayout from './components/layout/PublicLayout';
 import AuthLayout from './components/layout/AuthLayout';
 
@@ -28,6 +28,15 @@ function PageFallback() {
 }
 
 function App() {
+  const { pathname, hash } = useLocation();
+
+  // Reinicia el desplazamiento al navegar, también entre páginas públicas y de acceso.
+  useLayoutEffect(() => {
+    // Conserva los enlaces a secciones como /#servicios y /#contacto.
+    if (hash) return;
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [pathname, hash]);
+
   return (
     <Suspense fallback={<PageFallback />}>
       <Routes>
