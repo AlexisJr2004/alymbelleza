@@ -156,7 +156,7 @@ export default function CitasPage() {
           <div className="glass p-5 space-y-5">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-ink uppercase tracking-wide">Filtros</h3>
-              <button type="button" onClick={limpiarFiltros} className="glass-button px-3 py-1.5 rounded-full text-xs font-medium">
+              <button type="button" onClick={limpiarFiltros} className="text-xs font-medium text-coral hover:text-coral/80">
                 Limpiar
               </button>
             </div>
@@ -171,7 +171,7 @@ export default function CitasPage() {
                     setFechaDesde(e.target.value);
                     setPagina(1);
                   }}
-                  className="glass-input w-full px-3 py-2 rounded-full text-sm"
+                  className="w-full px-3 py-1.5 border border-white/80 bg-white/60 rounded-full text-sm focus:ring-2 focus:ring-sky/50 focus:outline-none"
                 />
                 <input
                   type="date"
@@ -181,7 +181,7 @@ export default function CitasPage() {
                     setFechaHasta(e.target.value);
                     setPagina(1);
                   }}
-                  className="glass-input w-full px-3 py-2 rounded-full text-sm"
+                  className="w-full px-3 py-1.5 border border-white/80 bg-white/60 rounded-full text-sm focus:ring-2 focus:ring-sky/50 focus:outline-none"
                 />
               </div>
             </div>
@@ -197,13 +197,9 @@ export default function CitasPage() {
             <h3 className="text-sm font-semibold text-ink uppercase tracking-wide mb-4">Distribución de citas</h3>
             <div className="flex justify-center">
               <div className="relative">
-                <div
-                  className="relative w-32 h-32 rounded-full"
-                  style={{
-                    background: donut.background,
-                    maskImage: 'radial-gradient(closest-side, transparent calc(100% - 13px), #000 calc(100% - 12px))',
-                  }}
-                />
+                <div className="relative w-32 h-32 rounded-full" style={{ background: donut.background }}>
+                  <div className="absolute inset-[13px] bg-white rounded-full" />
+                </div>
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                   <span className="text-xl font-bold text-ink">{centerPct}%</span>
                   <span className="text-[10px] text-muted">Realizadas</span>
@@ -232,15 +228,15 @@ export default function CitasPage() {
 
         <div className="flex-1 min-w-0 w-full">
           <div className="glass p-6 md:p-8">
-            <div className="glass-toolbar flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
               <h2 className="text-2xl font-bold text-ink flex items-center">
                 <CitasIcon className="w-5 h-5 mr-2 text-coral" />
                 Citas
               </h2>
             </div>
-            <div className="glass-inset overflow-x-auto rounded-[22px]">
-              <table className="glass-table min-w-full">
-                <thead>
+            <div className="overflow-x-auto rounded-[22px] border border-white/70">
+              <table className="min-w-full divide-y divide-white/70">
+                <thead className="bg-white/40">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Cliente</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Fecha</th>
@@ -248,7 +244,7 @@ export default function CitasPage() {
                     <th className="px-6 py-3 text-right text-xs font-medium text-muted uppercase tracking-wider">Acciones</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="bg-white/20 divide-y divide-white/60">
                   {isLoading ? (
                     <tr>
                       <td colSpan={4} className="p-6 text-center text-muted">Cargando...</td>
@@ -286,7 +282,7 @@ export default function CitasPage() {
                                   disabled={pendienteAccion}
                                   onClick={() => handleCambiarEstado(c._id, 'realizada')}
                                   title="Marcar como realizada"
-                                  className="glass-icon-button text-sky p-2 rounded-full disabled:opacity-60"
+                                  className="text-sky hover:text-sky/70 p-2 rounded-full bg-sky/10 hover:bg-sky/20 transition disabled:opacity-60"
                                 >
                                   <CheckIcon className="w-4 h-4" />
                                 </button>
@@ -295,7 +291,7 @@ export default function CitasPage() {
                                   disabled={pendienteAccion}
                                   onClick={() => handleCambiarEstado(c._id, 'cancelada')}
                                   title="Cancelar"
-                                  className="glass-button-danger p-2 rounded-full disabled:opacity-60"
+                                  className="text-coral hover:text-coral/70 p-2 rounded-full bg-coral/10 hover:bg-coral/20 transition disabled:opacity-60"
                                 >
                                   <XCircleIcon className="w-4 h-4" />
                                 </button>

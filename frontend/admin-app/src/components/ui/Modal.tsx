@@ -48,21 +48,21 @@ function ModalCard({ modal }: { modal: ActiveModal }) {
       onFullyClosed={() => resolveModal(modal.id, resultRef.current)}
       labelledBy={titleId}
     >
-      <div className="px-6 pb-6 pt-4 md:pt-8 text-center">
-        <span className={`mx-auto flex items-center justify-center w-16 h-16 rounded-[22px] border border-white/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_8px_20px_rgba(40,54,89,0.06)] ${bg}`}>
+      <div className="px-6 pb-6 pt-3 text-center">
+        <span className={`mx-auto flex items-center justify-center w-14 h-14 rounded-full ${bg}`}>
           <Icon className={`w-7 h-7 ${fg}`} />
         </span>
-        <h3 id={titleId} className="mt-5 text-xl font-semibold tracking-tight text-ink">
+        <h3 id={titleId} className="mt-4 text-lg font-semibold text-gray-900">
           {modal.title}
         </h3>
-        {modal.text && <p className="mt-2 text-sm leading-relaxed text-muted">{modal.text}</p>}
+        {modal.text && <p className="mt-1.5 text-sm text-gray-500">{modal.text}</p>}
         {modal.kind !== 'success' && (
           <div className="mt-5 flex gap-3">
             {modal.kind === 'confirm' && (
               <button
                 type="button"
                 onClick={() => requestClose(false)}
-                className="glass-button flex-1 px-4 py-2.5 text-sm font-medium"
+                className="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors"
               >
                 {modal.cancelText ?? 'Cancelar'}
               </button>
@@ -70,10 +70,10 @@ function ModalCard({ modal }: { modal: ActiveModal }) {
             <button
               type="button"
               onClick={() => requestClose(true)}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium ${
+              className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-colors ${
                 modal.tone === 'danger'
-                  ? 'glass-button-danger'
-                  : 'glass-button-primary'
+                  ? 'bg-rose-600 hover:bg-rose-700'
+                  : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
               }`}
             >
               {modal.confirmText ?? 'Entendido'}

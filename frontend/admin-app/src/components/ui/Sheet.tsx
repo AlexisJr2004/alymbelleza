@@ -28,11 +28,11 @@ interface SheetProps {
   labelledBy?: string;
   /** Ancho máximo en escritorio. Default: diálogo chico (usado por confirmaciones). */
   desktopMaxWidthClassName?: string;
-  /** Fondo/bordes/radios del panel. Default: superficie Liquid Glass. */
+  /** Fondo/bordes/radios del panel. Default: tarjeta blanca. */
   panelClassName?: string;
   /** Color de la manija de arrastre (móvil). Default: gris. */
   handleClassName?: string;
-  /** Fondo oscurecido que separa el diálogo de la página. */
+  /** Color/opacidad del fondo oscurecido. Default: negro 50%. */
   backdropClassName?: string;
   /** Se dispara una vez terminada la animación de salida y el nodo ya se
    * desmontó — útil para consumidores imperativos (ver Modal.tsx) que
@@ -46,9 +46,9 @@ export default function Sheet({
   children,
   labelledBy,
   desktopMaxWidthClassName = 'md:max-w-sm',
-  panelClassName = 'glass-sheet rounded-t-[30px] md:rounded-[30px]',
-  handleClassName = 'bg-slate-400/45',
-  backdropClassName = 'glass-overlay',
+  panelClassName = 'bg-white rounded-t-3xl md:rounded-2xl',
+  handleClassName = 'bg-gray-300',
+  backdropClassName = 'bg-gray-900/50',
   onFullyClosed,
 }: SheetProps) {
   const isMobile = useIsMobile();
@@ -59,8 +59,6 @@ export default function Sheet({
   const draggingRef = useRef(false);
   const startYRef = useRef(0);
   const sheetRef = useRef<HTMLDivElement>(null);
-  const onCloseRef = useRef(onClose);
-  onCloseRef.current = onClose;
   const onFullyClosedRef = useRef(onFullyClosed);
   onFullyClosedRef.current = onFullyClosed;
   // Distingue "todavía no se abrió nunca" de "se acaba de cerrar", para no
@@ -99,45 +97,6 @@ export default function Sheet({
     }, SHEET_EXIT_MS);
     return () => window.clearTimeout(t);
   }, [open]);
-
-  // Mantiene el foco dentro del diálogo y lo devuelve al control que lo abrió.
-  // Solo el diálogo superior responde cuando hay una confirmación sobre un formulario.
-  useEffect(() => {
-    if (!mounted) return undefined;
-    const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const panel = sheetRef.current;
-    const frame = requestAnimationFrame(() => panel?.focus({ preventScroll: true }));
-    const onKeyDown = (event: KeyboardEvent) => {
-      const dialogs = document.querySelectorAll('[data-admin-sheet]');
-      if (!panel || dialogs[dialogs.length - 1] !== panel) return;
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        onCloseRef.current();
-      }
-      if (event.key !== 'Tab') return;
-      const focusable = Array.from(panel.querySelectorAll<HTMLElement>(
-        'button:not([disabled]), a[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-      )).filter((element) => element.getClientRects().length > 0);
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (!first || !last) {
-        event.preventDefault();
-        panel.focus();
-      } else if (event.shiftKey && (document.activeElement === first || document.activeElement === panel)) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && (document.activeElement === last || document.activeElement === panel)) {
-        event.preventDefault();
-        first.focus();
-      }
-    };
-    document.addEventListener('keydown', onKeyDown);
-    return () => {
-      cancelAnimationFrame(frame);
-      document.removeEventListener('keydown', onKeyDown);
-      if (previouslyFocused?.isConnected) previouslyFocused.focus({ preventScroll: true });
-    };
-  }, [mounted]);
 
   // Arrastre estilo iOS: solo la manija dispara el gesto (no toda la tarjeta,
   // para no interferir con taps en el contenido). Deslizar hacia abajo pasado
@@ -197,16 +156,14 @@ export default function Sheet({
       <div
         ref={sheetRef}
         role="dialog"
-        data-admin-sheet=""
-        tabIndex={-1}
         aria-modal="true"
         aria-labelledby={labelledBy}
-        className={`fixed z-[2001] inset-x-0 bottom-0 max-h-[85dvh] overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)] outline-none md:inset-auto md:left-1/2 md:top-1/2 md:bottom-auto md:w-full md:max-h-[90dvh] md:pb-0 ${desktopMaxWidthClassName} ${panelClassName}`}
+        className={`fixed z-[2001] inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto md:inset-auto md:left-1/2 md:top-1/2 md:bottom-auto md:w-full md:max-h-[90vh] ${desktopMaxWidthClassName} ${panelClassName}`}
         style={style}
       >
         {isMobile && (
           <div
-            className="pt-3 pb-2 flex justify-center cursor-grab active:cursor-grabbing touch-none sticky top-0 z-10"
+            className="pt-2.5 pb-1.5 flex justify-center cursor-grab active:cursor-grabbing touch-none sticky top-0"
             onPointerDown={onHandlePointerDown}
             onPointerMove={onHandlePointerMove}
             onPointerUp={endDrag}

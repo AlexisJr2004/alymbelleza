@@ -25,7 +25,7 @@ export default function AnnularDonut({ groups, centerPct, centerCaption, size = 
   return (
     <div className="relative mx-auto sm:mx-0" style={{ width: size, height: size }}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(111,125,156,0.1)" strokeWidth={thickness} />
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke="#f1f5f9" strokeWidth={thickness} />
         {groups.map((g) => {
           if (g.count <= 0) return null;
           const dash = (g.count / total) * circ;
@@ -48,8 +48,8 @@ export default function AnnularDonut({ groups, centerPct, centerCaption, size = 
         })}
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-        <span className="text-2xl font-semibold tracking-tight tabular-nums text-ink">{centerPct}%</span>
-        <span className="text-xs text-muted">{centerCaption}</span>
+        <span className="text-2xl font-bold text-gray-900">{centerPct}%</span>
+        <span className="text-xs text-gray-500">{centerCaption}</span>
       </div>
     </div>
   );

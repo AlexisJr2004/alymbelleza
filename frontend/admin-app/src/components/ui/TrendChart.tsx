@@ -16,12 +16,12 @@ const PY = 18;
 // Gráfico de línea en SVG con tooltip al pasar el mouse. Puerto directo de
 // renderizarGraficoBarras(), reemplazando los listeners de DOM a mano por
 // estado de React para el índice sobre el que está el mouse.
-export default function TrendChart({ data, formatValue, color = '#8271c6' }: TrendChartProps) {
+export default function TrendChart({ data, formatValue, color = '#9333ea' }: TrendChartProps) {
   const gradId = useId();
   const [hover, setHover] = useState<number | null>(null);
 
   if (!data.length) {
-    return <div className="flex items-center justify-center h-full text-muted text-sm">Sin datos</div>;
+    return <div className="flex items-center justify-center h-full text-gray-400 text-sm">Sin datos</div>;
   }
 
   const max = Math.max(...data.map((m) => m.total), 1);
@@ -52,8 +52,8 @@ export default function TrendChart({ data, formatValue, color = '#8271c6' }: Tre
 
       {lineasGuia.map((g, i) => (
         <g key={i}>
-          <line x1={PXL} y1={g.y} x2={W - PXR} y2={g.y} stroke="rgba(111,125,156,0.16)" strokeWidth={1} strokeDasharray="3,3" />
-          <text x={PXL - 6} y={g.y + 3} textAnchor="end" fontSize={9} fill="#627089">
+          <line x1={PXL} y1={g.y} x2={W - PXR} y2={g.y} stroke="#f1f5f9" strokeWidth={1} strokeDasharray="3,3" />
+          <text x={PXL - 6} y={g.y + 3} textAnchor="end" fontSize={9} fill="#94a3b8">
             {g.texto}
           </text>
         </g>
@@ -73,7 +73,7 @@ export default function TrendChart({ data, formatValue, color = '#8271c6' }: Tre
       {pts.map(
         (p, i) =>
           (i % cadaEtiqueta === 0 || i === pts.length - 1) && (
-            <text key={i} x={p.x} y={H - 3} textAnchor="middle" fontSize={9} fill="#627089" className="capitalize">
+            <text key={i} x={p.x} y={H - 3} textAnchor="middle" fontSize={9} fill="#94a3b8" className="capitalize">
               {p.label}
             </text>
           )
@@ -100,7 +100,7 @@ export default function TrendChart({ data, formatValue, color = '#8271c6' }: Tre
         const tipY = arriba ? p.y - 34 : p.y + 12;
         return (
           <g key={i} style={{ pointerEvents: 'none' }}>
-            <rect x={tipX} y={tipY} width={tipW} height={26} rx={9} fill="#293954" stroke="rgba(255,255,255,0.4)" opacity={0.96} />
+            <rect x={tipX} y={tipY} width={tipW} height={26} rx={6} fill="#1f2937" opacity={0.95} />
             <text x={tipX + tipW / 2} y={tipY + 11} textAnchor="middle" fontSize={8.5} fill="#cbd5e1" className="capitalize">
               {p.label}
             </text>

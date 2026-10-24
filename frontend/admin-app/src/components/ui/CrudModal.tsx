@@ -1,4 +1,3 @@
-import { useId } from 'react';
 import { XIcon } from '../icons';
 import Sheet from './Sheet';
 
@@ -23,7 +22,7 @@ interface CrudModalProps {
 // generaba las variantes sin prefijo, dejando el modal sin max-width real en
 // escritorio y ocupando toda la pantalla).
 export default function CrudModal({ open, title, onClose, children, maxWidth = 'md:max-w-2xl' }: CrudModalProps) {
-  const titleId = useId();
+  const titleId = 'crud-modal-title';
 
   return (
     <Sheet
@@ -31,18 +30,17 @@ export default function CrudModal({ open, title, onClose, children, maxWidth = '
       onClose={onClose}
       desktopMaxWidthClassName={maxWidth}
       labelledBy={titleId}
-      panelClassName="glass-sheet rounded-t-[30px] md:rounded-[30px]"
+      panelClassName="bg-white/60 backdrop-blur-2xl border border-white/70 rounded-t-3xl md:rounded-[26px]"
     >
-      <div className="p-5 sm:p-6">
-        <div className="flex items-center justify-between gap-4 mb-6">
-          <h3 id={titleId} className="text-xl font-semibold tracking-tight text-ink">
+      <div className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 id={titleId} className="text-lg font-bold text-ink">
             {title}
           </h3>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Cerrar formulario"
-            className="glass-icon-button grid h-10 w-10 shrink-0 place-items-center"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/80 bg-white/60 text-muted transition hover:bg-white/90 hover:text-ink"
           >
             <XIcon className="w-4 h-4" />
           </button>

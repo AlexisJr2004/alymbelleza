@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   ResumenIcon,
@@ -41,46 +40,13 @@ interface MobileDrawerProps {
   onClose: () => void;
 }
 
+// Versión móvil de la navegación — en escritorio TopNav ya es la barra de
+// píldoras + IconRail de la plantilla; esa barra horizontal no entra en una
+// pantalla chica, así que acá se pliega a una lista vertical (mismas píldoras,
+// apiladas) dentro de un cajón deslizante, reusando la animación del Sidebar
+// original.
 export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
   const user = getStoredUser();
-  const drawerRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-
-    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    drawerRef.current?.querySelector<HTMLButtonElement>('button')?.focus();
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (document.querySelector('[data-admin-sheet]')) return;
-      if (event.key === 'Escape') onClose();
-      if (event.key !== 'Tab') return;
-      const controls = drawerRef.current?.querySelectorAll<HTMLElement>('a[href], button:not(:disabled)');
-      if (!controls?.length) return;
-      const first = controls[0];
-      const last = controls[controls.length - 1];
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    };
-    const desktop = window.matchMedia('(min-width: 1280px)');
-    const closeOnDesktop = () => { if (desktop.matches) onClose(); };
-    document.addEventListener('keydown', handleKeyDown);
-    desktop.addEventListener('change', closeOnDesktop);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener('keydown', handleKeyDown);
-      desktop.removeEventListener('change', closeOnDesktop);
-      previousFocus?.focus();
-    };
-  }, [open, onClose]);
 
   const handleLogout = async () => {
     const confirmed = await confirmAction({
@@ -94,19 +60,13 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
 
   return (
     <aside
-      ref={drawerRef}
-      role="dialog"
-      aria-modal={open ? true : undefined}
-      aria-label="Navegación de administración"
-      aria-hidden={!open}
-      inert={!open}
-      className={`glass-sheet fixed inset-y-3 left-3 z-40 flex w-[340px] max-w-[calc(100vw-24px)] flex-col rounded-[30px] transition-transform duration-300 ease-out xl:hidden ${
-        open ? 'translate-x-0' : '-translate-x-[calc(100%+16px)]'
+      className={`fixed inset-y-0 left-0 z-40 flex w-80 flex-col rounded-r-[30px] border-r border-white/70 bg-white/90 shadow-xl backdrop-blur-xl transition-transform duration-300 ease-out lg:hidden ${
+        open ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
-      <div className="flex h-[76px] shrink-0 items-center justify-between border-b border-white/60 px-5">
+      <div className="flex h-[70px] shrink-0 items-center justify-between border-b border-gray-100 px-5">
         <div className="flex items-center gap-2.5">
-          <span className="glass-button-primary grid h-9 w-9 place-items-center rounded-full text-[13px] font-semibold">
+          <span className="grid h-8 w-8 place-items-center rounded-full bg-ink text-[13px] font-bold text-white">
             B
           </span>
           <span className="text-[19px] font-semibold text-ink">Bella Beauty</span>
@@ -116,7 +76,7 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
         </button>
       </div>
 
-      <div className="glass-inset mx-4 mt-4 flex shrink-0 items-center gap-3 rounded-[22px] p-4">
+      <div className="flex shrink-0 items-center gap-3 border-b border-gray-100 px-5 py-4">
         <img
           className="h-12 w-12 rounded-full object-cover ring-2 ring-white"
           src={resolveProfileImage(user)}
@@ -132,14 +92,16 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
         </div>
       </div>
 
-      <nav aria-label="Todas las secciones" className="min-h-0 flex-1 space-y-1 overflow-y-auto px-4 py-4">
+      <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-4">
         {NAV_ITEMS.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
             onClick={onClose}
             className={({ isActive }) =>
-              `nav-pill flex h-11 w-full gap-3 rounded-[18px] px-4 text-sm ${isActive ? 'is-active' : ''}`
+              `flex items-center gap-3 rounded-full px-4 py-2.5 text-[14px] font-medium transition ${
+                isActive ? 'bg-ink text-white' : 'text-[#2a2c33] hover:bg-white/70'
+              }`
             }
           >
             <item.icon className="h-5 w-5 shrink-0" />
@@ -148,10 +110,10 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
         ))}
       </nav>
 
-      <div className="shrink-0 space-y-2 border-t border-white/60 p-4">
+      <div className="shrink-0 space-y-2 border-t border-gray-100 p-4">
         <a
           href="/"
-          className="glass-button flex w-full items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium"
+          className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-[#2a2c33] transition hover:bg-gray-50"
         >
           <BackArrowIcon className="h-4 w-4" />
           Volver al sitio
@@ -159,7 +121,7 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
         <button
           type="button"
           onClick={handleLogout}
-          className="glass-button flex w-full items-center justify-center gap-2 rounded-full border-coral/25 px-4 py-2.5 text-sm font-medium text-coral hover:bg-coral/10"
+          className="flex w-full items-center justify-center gap-2 rounded-full border border-coral/30 bg-coral/10 px-4 py-2.5 text-sm font-medium text-coral transition hover:bg-coral/20"
         >
           <LogoutIcon className="h-4 w-4" />
           Cerrar sesión

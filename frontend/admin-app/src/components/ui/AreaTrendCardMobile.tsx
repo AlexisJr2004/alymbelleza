@@ -14,7 +14,7 @@ const H = 150;
 const PXL = 8;
 const PXR = 8;
 const PY = 18;
-const ACCENT = '#8271c6';
+const ACCENT = '#8b78ee';
 
 // Curva suave entre puntos (control en el punto medio horizontal de cada
 // tramo) — técnica simple de suavizado, en vez de los segmentos rectos de
@@ -51,7 +51,7 @@ export default function AreaTrendCardMobile({ data, formatValue, title, descript
 
   if (!data.length) {
     return (
-      <div className="glass p-5">
+      <div className="rounded-[22px] border border-black/5 bg-white p-[13px] shadow-sm">
         <p className="text-sm text-dim">Sin datos todavía.</p>
       </div>
     );
@@ -74,9 +74,9 @@ export default function AreaTrendCardMobile({ data, formatValue, title, descript
   const tipY = tipArriba ? actualPt.y - 38 : actualPt.y + 18;
 
   return (
-    <div className="glass p-5">
-      <h3 className="text-[15px] font-semibold tracking-tight text-ink">{title}</h3>
-      <p className="mt-1 text-xs leading-relaxed text-muted">{description}</p>
+    <div className="rounded-[22px] border border-black/5 bg-white p-[13px] shadow-sm">
+      <h3 className="text-[15px] font-semibold text-ink">{title}</h3>
+      <p className="mt-0.5 text-xs text-dim">{description}</p>
 
       <div className="mt-3 h-[120px]">
         <svg viewBox={`0 0 ${W} ${H}`} className="h-full w-full overflow-visible">
@@ -105,7 +105,7 @@ export default function AreaTrendCardMobile({ data, formatValue, title, descript
           {pts.map(
             (p, i) =>
               (i === 0 || i === pts.length - 1 || i === 2) && (
-                <text key={i} x={p.x} y={H - 2} textAnchor="middle" fontSize={10} fill="#627089" className="capitalize">
+                <text key={i} x={p.x} y={H - 2} textAnchor="middle" fontSize={10} fill="#9a9aa2" className="capitalize">
                   {p.label}
                 </text>
               )
@@ -120,15 +120,15 @@ export default function AreaTrendCardMobile({ data, formatValue, title, descript
         </svg>
       </div>
 
-      <div className="mt-3 flex items-end justify-between gap-3 border-t border-slate-400/15 pt-4">
+      <div className="mt-2 flex items-end justify-between border-t border-black/5 pt-3">
         <div>
           <p className="text-xs text-dim">{totalLabel}</p>
-          <p className="mt-1 text-2xl font-semibold leading-tight tracking-tight tabular-nums text-ink">{formatValue(actual)}</p>
+          <p className="mt-0.5 text-xl font-bold leading-tight text-ink">{formatValue(actual)}</p>
         </div>
         {cambioPct !== null && (
           <span
             className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${
-              cambioPct >= 0 ? 'border border-emerald-200/60 bg-emerald-50/80 text-emerald-700' : 'border border-red-200/60 bg-red-50/80 text-red-700'
+              cambioPct >= 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-500'
             }`}
           >
             {cambioPct >= 0 ? '↗' : '↘'} {Math.abs(cambioPct)}%
