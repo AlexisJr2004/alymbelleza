@@ -1,6 +1,7 @@
 import { useEffect, useState, type ChangeEvent } from 'react';
 import { notifyError } from '../../lib/sweetalert';
 import Sheet from '../ui/Sheet';
+import { XIcon } from '../icons';
 
 interface ChangePhotoModalProps {
   open: boolean;
@@ -61,16 +62,16 @@ export default function ChangePhotoModal({ open, onClose, onConfirm }: ChangePho
 
   return (
     <Sheet open={open} onClose={onClose} desktopMaxWidthClassName="md:max-w-md" labelledBy="change-photo-title">
-      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 sticky top-0 bg-white z-10">
+      <div className="profile-photo-dialog flex items-center justify-between px-6 py-4 border-b border-gray-100 sticky top-0 bg-white z-10">
         <h3 id="change-photo-title" className="text-lg font-semibold text-gray-900">
           Cambiar foto de perfil
         </h3>
         <button type="button" onClick={onClose} aria-label="Cerrar" className="text-gray-400 hover:text-gray-700 transition-colors">
-          <i className="fas fa-times text-xl" />
+          <XIcon className="h-5 w-5" />
         </button>
       </div>
 
-      <div className="p-6 space-y-5">
+      <div className="profile-photo-dialog p-6 space-y-5">
         <div>
           <label htmlFor="newProfilePhoto" className="block text-xs font-medium text-gray-500 mb-1">
             Archivo
@@ -99,7 +100,7 @@ export default function ChangePhotoModal({ open, onClose, onConfirm }: ChangePho
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2 text-sm font-semibold text-gray-600 rounded-full border border-gray-200 hover:bg-gray-50 transition-all"
+            className="profile-button profile-button-secondary"
           >
             Cancelar
           </button>
@@ -107,7 +108,7 @@ export default function ChangePhotoModal({ open, onClose, onConfirm }: ChangePho
             type="button"
             onClick={handleConfirm}
             disabled={!selectedFile}
-            className="px-5 py-2 text-sm font-semibold text-white rounded-full bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 shadow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="profile-button profile-button-primary"
           >
             Usar esta foto
           </button>

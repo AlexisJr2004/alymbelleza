@@ -1,4 +1,5 @@
 import Sheet from '../ui/Sheet';
+import { XIcon } from '../icons';
 
 interface ProfilePhotoLightboxProps {
   open: boolean;
@@ -28,7 +29,7 @@ export default function ProfilePhotoLightbox({ open, src, onClose }: ProfilePhot
           aria-label="Cerrar"
           className="absolute top-0 right-2 md:top-2 z-10 w-11 h-11 rounded-full bg-black/10 md:bg-white/10 hover:bg-black/20 md:hover:bg-white/20 text-gray-700 md:text-white flex items-center justify-center backdrop-blur-sm transition-colors"
         >
-          <i className="fas fa-times" />
+          <XIcon className="h-5 w-5" />
         </button>
 
         <div className="w-full flex items-center justify-center pt-8 md:pt-0">

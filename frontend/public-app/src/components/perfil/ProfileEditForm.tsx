@@ -1,210 +1,130 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useRef, useState, type FormEvent, type ReactNode } from 'react';
 import type { ProfileUser } from '../../types/models';
+import { resolveProfileImage } from '../../lib/format';
+import { CheckIcon, EnvelopeIcon } from '../icons';
 import ChangePhotoModal from './ChangePhotoModal';
+import ProfileIcon from './ProfileIcons';
 
 interface ProfileEditFormProps {
   user: ProfileUser;
   isEditing: boolean;
   isSaving: boolean;
+  previewUrl: string | null;
   onStartEdit: () => void;
+  onCancel: () => void;
   onSubmit: (formData: FormData) => void;
   onPreviewUrl: (url: string | null) => void;
 }
 
-// Puerto del formulario "Editar perfil" (perfil.html ~566-661 + script
-// ~1010-1200). Nota deliberada: el `#cancel-btn` del HTML original nunca se
-// conecta a ningún handler (siempre se queda con la clase `hidden`, sin
-// forma de mostrarse) — es markup muerto, así que no se porta acá; inventarle
-// un "Cancelar" funcional sería agregar una función que el sitio real nunca tuvo.
-export default function ProfileEditForm({
-  user,
-  isEditing,
-  isSaving,
-  onStartEdit,
-  onSubmit,
-  onPreviewUrl,
-}: ProfileEditFormProps) {
+function Field({ id, label, value, editing, children }: {
+  id: string; label: string; value?: string; editing: boolean; children: ReactNode;
+}) {
+  return (
+    <div className="profile-field">
+      {editing ? <label htmlFor={id}>{label}</label> : <p className="profile-field-label">{label}</p>}
+      {editing ? children : <p className={`profile-field-value ${value ? '' : 'is-empty'}`}>{value || 'Sin añadir'}</p>}
+    </div>
+  );
+}
+
+export default function ProfileEditForm({ user, isEditing, isSaving, previewUrl, onStartEdit, onCancel, onSubmit, onPreviewUrl }: ProfileEditFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [photoModalOpen, setPhotoModalOpen] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
+  const birthdate = user.birthdate?.split('T')[0] || '';
+  const birthdateLabel = birthdate ? new Date(`${birthdate}T12:00:00`).toLocaleDateString('es', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+  const genderLabel = { masculino: 'Masculino', femenino: 'Femenino', otro: 'Otro' }[user.gender || 'otro'];
+  const inputClass = 'profile-input';
 
-  const formattedBirthdate = user.birthdate ? user.birthdate.split('T')[0] : '';
-
-  // El input de archivo real del formulario queda oculto y ya no se abre
-  // directo — ChangePhotoModal (mismo estilo/flujo que UploadModal.tsx de
-  // Galería: elegir archivo, ver vista previa, confirmar) hace su propia
-  // selección y valida el archivo; al confirmar, se lo inyecta acá vía
-  // DataTransfer para que "Guardar cambios" lo siga mandando junto al resto
-  // de campos del form, exactamente como antes.
   function handlePhotoConfirm(file: File, url: string) {
-    if (fileInputRef.current) {
-      const dt = new DataTransfer();
-      dt.items.add(file);
-      fileInputRef.current.files = dt.files;
-    }
+    setSelectedPhoto(file);
     onPreviewUrl(url);
     setPhotoModalOpen(false);
   }
 
-  function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    if (!formRef.current) return;
+  function handleCancel() {
+    if (isSaving) return;
+    formRef.current?.reset();
+    setSelectedPhoto(null);
+    setPhotoModalOpen(false);
+    onCancel();
+  }
+
+  function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+    if (!formRef.current || !isEditing || isSaving) return;
     const formData = new FormData(formRef.current);
-
-    // Puerto literal de la renormalización de perfil.html: el input date ya
-    // entrega YYYY-MM-DD, pero el original igual la hace pasar por
-    // new Date(...).toISOString().split('T')[0] antes de mandarla.
-    const birthdateValue = formData.get('birthdate');
-    if (typeof birthdateValue === 'string' && birthdateValue) {
-      formData.set('birthdate', new Date(birthdateValue).toISOString().split('T')[0]);
-    }
-
+    if (selectedPhoto) formData.set('profileImage', selectedPhoto);
     onSubmit(formData);
   }
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 mb-4" encType="multipart/form-data" autoComplete="off">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <form ref={formRef} onSubmit={handleSubmit} encType="multipart/form-data" className="profile-form" aria-busy={isSaving}>
+      <div className="profile-form-heading">
         <div>
-          <label htmlFor="edit-name" className="block text-sm font-medium text-gray-700 mb-1">
-            Nombre completo
-          </label>
-          <input
-            type="text"
-            name="name"
-            id="edit-name"
-            defaultValue={user.name || ''}
-            disabled={!isEditing}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
-          />
+          <h2>Información personal</h2>
+          <p>{isEditing ? 'Actualiza tus datos y guarda los cambios al terminar.' : 'Los detalles que hacen tu experiencia más personal.'}</p>
         </div>
-        <div>
-          <label htmlFor="edit-dni" className="block text-sm font-medium text-gray-700 mb-1">
-            Cédula
-          </label>
-          <input
-            type="text"
-            name="dni"
-            id="edit-dni"
-            defaultValue={user.dni || ''}
-            disabled={!isEditing}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="edit-birthdate" className="block text-sm font-medium text-gray-700 mb-1">
-            Fecha de nacimiento
-          </label>
-          <input
-            type="date"
-            name="birthdate"
-            id="edit-birthdate"
-            defaultValue={formattedBirthdate}
-            disabled={!isEditing}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
-          />
-        </div>
-        <div>
-          <label htmlFor="edit-gender" className="block text-sm font-medium text-gray-700 mb-1">
-            Género
-          </label>
-          <select
-            name="gender"
-            id="edit-gender"
-            defaultValue={user.gender || ''}
-            disabled={!isEditing}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
-          >
-            <option value="">Selecciona</option>
-            <option value="masculino">Masculino</option>
-            <option value="femenino">Femenino</option>
-            <option value="otro">Otro</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="edit-phone" className="block text-sm font-medium text-gray-700 mb-1">
-            Teléfono
-          </label>
-          <input
-            type="text"
-            name="phone"
-            id="edit-phone"
-            defaultValue={user.phone || ''}
-            disabled={!isEditing}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
-          />
-        </div>
-        <div>
-          <label htmlFor="edit-address" className="block text-sm font-medium text-gray-700 mb-1">
-            Dirección
-          </label>
-          <input
-            type="text"
-            name="address"
-            id="edit-address"
-            defaultValue={user.address || ''}
-            disabled={!isEditing}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
-          />
-        </div>
-      </div>
-
-      <div className="pt-2">
-        <label className="block text-sm font-medium text-gray-700 mb-2">Foto de perfil</label>
-        <div className="flex items-center gap-4">
-          <div className="flex-1">
-            <input ref={fileInputRef} type="file" name="profileImage" id="edit-profileImage" accept="image/*" className="hidden" />
-            <button
-              id="change-photo-btn"
-              type="button"
-              disabled={!isEditing}
-              onClick={() => setPhotoModalOpen(true)}
-              className="px-5 py-2 text-sm font-semibold text-gray-600 rounded-full border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-            >
-              <i className="fas fa-camera mr-1.5" />
-              Cambiar foto
-            </button>
-            <p className="text-xs text-gray-500 mt-1">Formatos: JPG, PNG (máx. 2MB)</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
-        {!isEditing && (
-          <button
-            id="edit-btn"
-            type="button"
-            onClick={onStartEdit}
-            className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full text-white font-semibold shadow-lg hover:from-purple-700 hover:to-pink-700 hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-300"
-          >
-            Editar perfil
+        {!isEditing ? (
+          <button id="edit-btn" type="button" onClick={onStartEdit} className="profile-button profile-button-secondary">
+            <ProfileIcon name="edit" className="h-4 w-4" /> Editar perfil
           </button>
-        )}
-        {isEditing && (
-          <button
-            id="save-btn"
-            type="submit"
-            disabled={isSaving}
-            className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full text-white font-semibold shadow-lg hover:from-purple-700 hover:to-pink-700 hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-          >
-            {isSaving ? (
-              <span>
-                <i className="fas fa-spinner fa-spin mr-2" />
-                Guardando...
-              </span>
-            ) : (
-              <span>Guardar cambios</span>
-            )}
-          </button>
-        )}
+        ) : <span className="profile-editing-label" role="status"><span aria-hidden="true" /> Editando perfil</span>}
       </div>
 
+      <fieldset disabled={isSaving} className="profile-form-fields">
+        {isEditing && <div className="profile-photo-editor">
+          <img src={previewUrl || resolveProfileImage(user)} alt="Foto de perfil actual" className="h-14 w-14 rounded-full object-cover" />
+          <div><strong>Tu foto de perfil</strong><p>{selectedPhoto ? 'Foto seleccionada. Guarda para aplicarla.' : 'Elige una imagen que te represente.'}</p></div>
+          <button type="button" onClick={() => setPhotoModalOpen(true)} className="profile-button profile-button-secondary">
+            <ProfileIcon name="camera" className="h-4 w-4" /> Cambiar foto
+          </button>
+        </div>}
+
+        <div className="profile-section-title"><span>01</span><h3>Datos personales</h3></div>
+        <div className="profile-fields-grid">
+          <Field id="edit-name" label="Nombre completo" value={user.name} editing={isEditing}>
+            <input id="edit-name" name="name" type="text" autoComplete="name" required defaultValue={user.name || ''} className={inputClass} placeholder="Tu nombre completo" />
+          </Field>
+          <Field id="edit-dni" label="Cédula" value={user.dni} editing={isEditing}>
+            <input id="edit-dni" name="dni" type="text" defaultValue={user.dni || ''} className={inputClass} placeholder="Tu número de identificación" />
+          </Field>
+          <Field id="edit-birthdate" label="Fecha de nacimiento" value={birthdateLabel} editing={isEditing}>
+            <input id="edit-birthdate" name="birthdate" type="date" autoComplete="bday" defaultValue={birthdate} className={inputClass} />
+          </Field>
+          <Field id="edit-gender" label="Género" value={user.gender ? genderLabel : ''} editing={isEditing}>
+            <select id="edit-gender" name="gender" defaultValue={user.gender || ''} className={inputClass}>
+              <option value="">Sin especificar</option><option value="masculino">Masculino</option><option value="femenino">Femenino</option><option value="otro">Otro</option>
+            </select>
+          </Field>
+        </div>
+
+        <div className="profile-section-title profile-section-title-contact"><span>02</span><h3>Datos de contacto</h3></div>
+        <div className="profile-fields-grid">
+          <Field id="edit-phone" label="Teléfono" value={user.phone} editing={isEditing}>
+            <input id="edit-phone" name="phone" type="tel" autoComplete="tel" defaultValue={user.phone || ''} className={inputClass} placeholder="Tu número de contacto" />
+          </Field>
+          <Field id="edit-address" label="Dirección" value={user.address} editing={isEditing}>
+            <input id="edit-address" name="address" type="text" autoComplete="street-address" defaultValue={user.address || ''} className={inputClass} placeholder="Tu dirección" />
+          </Field>
+        </div>
+        <div className="profile-email-note">
+          <EnvelopeIcon className="h-5 w-5 shrink-0" />
+          <div><span>Correo de acceso</span><p>{user.email}</p></div>
+          <span className="profile-email-caption">Asociado a tu cuenta</span>
+        </div>
+      </fieldset>
+
+      {isEditing && <div className="profile-form-actions">
+        <p role="status">{isSaving ? 'Estamos guardando tus cambios…' : 'Revisa tus datos antes de guardar.'}</p>
+        <div>
+          <button type="button" onClick={handleCancel} disabled={isSaving} className="profile-button profile-button-secondary">Cancelar</button>
+          <button id="save-btn" type="submit" disabled={isSaving} className="profile-button profile-button-primary">
+            {isSaving ? <span className="profile-spinner" aria-hidden="true" /> : <CheckIcon className="h-4 w-4" />}
+            {isSaving ? 'Guardando…' : 'Guardar cambios'}
+          </button>
+        </div>
+      </div>}
       <ChangePhotoModal open={photoModalOpen} onClose={() => setPhotoModalOpen(false)} onConfirm={handlePhotoConfirm} />
     </form>
   );

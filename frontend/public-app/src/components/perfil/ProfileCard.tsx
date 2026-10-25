@@ -1,7 +1,9 @@
 import { useState, type SyntheticEvent } from 'react';
 import { resolveProfileImage } from '../../lib/format';
+import { EnvelopeIcon, MapPinIcon, UserCircleIcon } from '../icons';
 import type { ProfileUser } from '../../types/models';
 import ProfilePhotoLightbox from './ProfilePhotoLightbox';
+import ProfileIcon from './ProfileIcons';
 
 interface ProfileCardProps {
   user: ProfileUser;
@@ -9,113 +11,48 @@ interface ProfileCardProps {
 }
 
 function handleImgError(e: SyntheticEvent<HTMLImageElement>) {
-  e.currentTarget.onerror = null;
-  e.currentTarget.src = 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
+  const fallback = 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
+  if (e.currentTarget.src !== fallback) e.currentTarget.src = fallback;
 }
 
-// Puerto de la tarjeta de perfil de solo lectura (perfil.html ~494-563).
-//
-// Desviación deliberada respecto al original: allí cada fila dni/phone/gender/
-// birthdate/address SIEMPRE existe en el DOM (solo se le vacía el textContent
-// cuando el campo no tiene valor), dejando una fila con icono y sin texto.
-// Acá se oculta la fila entera cuando el campo está vacío, que es lo que el
-// propio plan de esta sub-fase pide explícitamente ("only shown when the
-// field has a value") — un icono huérfano sin texto no aporta nada.
 export default function ProfileCard({ user, previewUrl }: ProfileCardProps) {
-  const formattedBirthdate = user.birthdate ? user.birthdate.split('T')[0] : '';
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const photoSrc = previewUrl || resolveProfileImage(user);
+  const joined = user.createdAt ? new Date(user.createdAt) : null;
+  const joinedLabel = joined && !Number.isNaN(joined.getTime())
+    ? joined.toLocaleDateString('es', { month: 'long', year: 'numeric' }) : null;
 
   return (
-    <div className="lg:w-1/3">
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 sticky top-6">
-        <div className="flex flex-col items-center">
-          <button
-            type="button"
-            onClick={() => setLightboxOpen(true)}
-            aria-label="Ver foto de perfil en grande"
-            className="relative mb-4 group rounded-full"
-          >
-            <img
-              src={photoSrc}
-              alt="Foto de perfil"
-              className="w-32 h-32 rounded-full object-cover border-4 border-purple-100 shadow-lg transition-transform duration-300 group-hover:scale-105"
-              onError={handleImgError}
-            />
-            <div className="absolute -bottom-2 -right-2 w-6 h-6 rounded-full border-2 border-white bg-green-500" />
-            <div className="absolute inset-0 rounded-full flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors duration-300">
-              <i className="fas fa-magnifying-glass text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </div>
-          </button>
-          <h2 className="text-xl font-bold text-gray-800 text-center">{user.name || 'Nombre Apellido'}</h2>
-          <p className="text-gray-500 text-sm mt-1 mb-3">{user.email || 'correo@ejemplo.com'}</p>
-
-          <div className="w-full px-3 py-2 rounded-lg bg-purple-50 text-center mb-4">
-            <span className="text-purple-700 font-medium">{user.role === 'admin' ? 'Administrador' : 'Usuario Activo'}</span>
-          </div>
-
-          <div className="w-full space-y-3 text-sm">
-            {user.dni && (
-              <div className="flex items-start">
-                <svg className="w-4 h-4 text-gray-400 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                <span className="text-gray-600">Cédula: {user.dni}</span>
-              </div>
-            )}
-            {user.phone && (
-              <div className="flex items-start">
-                <svg className="w-4 h-4 text-gray-400 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                  />
-                </svg>
-                <span className="text-gray-600"> | Tel: {user.phone}</span>
-              </div>
-            )}
-            {user.gender && (
-              <div className="flex items-start">
-                <svg className="w-4 h-4 text-gray-400 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-                <span className="text-gray-600"> | Género: {user.gender}</span>
-              </div>
-            )}
-            {formattedBirthdate && (
-              <div className="flex items-start">
-                <svg className="w-4 h-4 text-gray-400 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
-                <span className="text-gray-600"> | Nacimiento: {formattedBirthdate}</span>
-              </div>
-            )}
-            {user.address && (
-              <div className="flex items-start">
-                <svg className="w-4 h-4 text-gray-400 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <span className="text-gray-600"> | Dirección: {user.address}</span>
-              </div>
-            )}
-          </div>
+    <>
+      <section className="profile-identity profile-panel" aria-label="Resumen de tu perfil">
+        <div className="profile-cover">
+          <span>BELLA BEAUTY</span>
+          <span className="profile-cover-flower" aria-hidden="true">✳</span>
         </div>
-      </div>
+        <div className="profile-identity-body">
+          <button type="button" onClick={() => setLightboxOpen(true)} aria-label="Ampliar foto de perfil" className="profile-avatar-button">
+            <img src={photoSrc} alt={`Foto de ${user.name || 'perfil'}`} onError={handleImgError} className="profile-avatar" />
+            <span className="profile-avatar-detail"><ProfileIcon name="camera" className="h-4 w-4" /></span>
+          </button>
+          <span className="profile-role"><UserCircleIcon className="h-3.5 w-3.5" />{user.role === 'admin' ? 'Administración' : 'Miembro Bella Beauty'}</span>
+          <h2>{user.name || 'Tu perfil'}</h2>
+          {joinedLabel && <p className="profile-member-since">Contigo desde {joinedLabel}</p>}
+          {previewUrl && <p className="profile-preview-note" role="status">Vista previa · Foto sin guardar</p>}
 
+          <dl className="profile-contact-list">
+            <div>
+              <dt><EnvelopeIcon className="h-4 w-4" /><span>Correo electrónico</span></dt>
+              <dd>{user.email || 'Sin correo registrado'}</dd>
+            </div>
+            {user.address && <div>
+              <dt><MapPinIcon className="h-4 w-4" /><span>Dirección</span></dt>
+              <dd>{user.address}</dd>
+            </div>}
+          </dl>
+          <div className="profile-identity-footer"><span aria-hidden="true" /> Tu belleza, tu esencia.</div>
+        </div>
+      </section>
       <ProfilePhotoLightbox open={lightboxOpen} src={photoSrc} onClose={() => setLightboxOpen(false)} />
-    </div>
+    </>
   );
 }
