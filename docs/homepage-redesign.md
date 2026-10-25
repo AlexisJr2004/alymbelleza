@@ -1,0 +1,47 @@
+# Inicio de Bella Beauty
+
+La portada de `frontend/public-app` reproduce la composición de la referencia proporcionada: franja informativa, cabecera compacta, fotografía rosa, categorías, productos con promoción lateral, beneficios, testimonios y pie de página.
+
+Los productos, precios, existencias, valoraciones y testimonios vienen de las API existentes. El sello de descuento calcula el mayor descuento de los productos disponibles; no se muestra cuando no hay ofertas. No se añaden reseñas, calificaciones ni compras verificadas ficticias. Los favoritos se guardan en el navegador del visitante.
+
+La búsqueda enlaza a `/productos?q=...`; las categorías disponibles usan `categoria=facial` y `categoria=capilar`, y las ofertas usan `ofertas=1`. Maquillaje y perfumes buscan esos términos en el catálogo. Su disponibilidad depende de los productos registrados en administración.
+
+El formulario de contacto existente está en `/contacto`; servicios y preguntas frecuentes están en `/nosotros`. Los enlaces antiguos `/#contacto` y `/#servicios` redirigen a estas páginas.
+
+## Imágenes
+
+Generadas con la herramienta integrada `image_gen`, usando la imagen del usuario como referencia visual de la portada. No se usó la API ni el CLI alternativo. Los archivos finales se guardaron en el proyecto en JPEG, calidad 88, conservando las dimensiones originales. Son fotografías decorativas; las imágenes de los productos a la venta siguen viniendo del catálogo.
+
+| Archivo final | Uso |
+| --- | --- |
+| `frontend/public-app/public/img/storefront/beauty-hero.jpg` | Portada y categoría capilar |
+| `frontend/public-app/public/img/storefront/beauty-collection.jpg` | Promoción lateral |
+| `frontend/public-app/public/img/storefront/category-makeup.jpg` | Categoría maquillaje |
+| `frontend/public-app/public/img/storefront/category-skincare.jpg` | Categoría skincare |
+| `frontend/public-app/public/img/storefront/category-perfume.jpg` | Categoría perfumes |
+
+### Prompts finales
+
+**Portada**
+
+> Create a photorealistic luxury beauty ecommerce HERO BACKGROUND PHOTOGRAPH, very wide panoramic 3:1 aspect ratio. Inspired by the attached website screenshot's hero ONLY. No website UI, absolutely NO text, lettering, typography, logos or watermarks. Soft pale blush pink silk backdrop and warm daylight. Left 42% of image is near-empty pale ivory blush space for later HTML title, with a few delicate gold olive leaves only at far left edge. Center at 56%: beautiful adult brunette woman with swept up hair, natural glowing skin, subtle makeup and bare shoulder, looking at camera, editorial luxury cosmetics photography, cropped chest-up. Right 35%: luxurious unbranded transparent pink perfume bottle with gold lid, golden serum dropper bottle, white pink cream jar, pink lipstick and makeup brushes, on cream marble plinth, scattered white and blush flowers. Match the reference's soft feminine editorial style and composition, highly realistic product photography, no dark colors or harsh contrast. Keep woman's face and products in right 55% so left stays clean for text. Output a single banner photo suitable for a real online beauty shop.
+
+**Promoción**
+
+> Photorealistic luxury beauty campaign photograph for a website promotion card, landscape 2:1 ratio. Close-up of an adult brunette woman's face with luminous dewy skin, peach-pink eyeshadow and closed eyes on far right 40% of the image, her face framed by large soft pink cherry blossoms. Left 55% is empty very pale blush pink backdrop with subtle out of focus petals for later HTML text overlay. Elegant feminine cosmetics campaign, warm soft studio lighting, refined romantic aesthetic, realistic skin texture, premium magazine photography. NO text, logos, labels, borders, website mockup or watermarks. Single photo, no collages.
+
+**Maquillaje**
+
+> Luxury makeup still life, broken rose-pink face powder dust artfully scattered, one soft makeup brush with a shiny gold ferrule and black handle diagonally placed, and a pink lipstick in gold case. Delicate pastel blush pink background, close-up overhead view, warm natural soft light, photorealistic beauty ecommerce category image. Square composition, no text, no logos, no watermark, high-end commercial photography. Objects fill the frame.
+
+**Skincare**
+
+> Luxury skincare still life: a single open pale blush pink glass face cream jar filled with silky white cream with a sculpted swirl, surrounded by two fresh small green leaves and white flower petals on pale blush marble. Warm soft light, photorealistic beauty ecommerce category image, square composition, close-up three-quarter view. No text, no logos, no watermark. Refined pink cream color palette. Jar centered, fills frame.
+
+**Perfumes**
+
+> Luxury perfume still life: a single exquisite transparent rectangular pink perfume bottle with a shiny gold cap, delicate white and pink blossoms and a few olive leaves alongside it, on pale blush pink marble. Warm natural soft light, high-end photorealistic beauty ecommerce category photo, square composition, centered bottle fills the frame. No text, no logos, no watermark.
+
+## Tipografía
+
+Montserrat se sirve localmente desde `frontend/public-app/public/fonts`, con su licencia SIL Open Font License incluida. Los títulos utilizan Georgia. Los estilos de la portada están limitados a `.bb-storefront` y `.bb-home-layout`.

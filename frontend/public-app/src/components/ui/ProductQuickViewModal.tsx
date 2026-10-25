@@ -6,6 +6,7 @@ import { notifyError, notifySuccess } from '../../lib/sweetalert';
 import { useAddToCart } from '../../hooks/useCart';
 import Sheet from './Sheet';
 import StarRating from './StarRating';
+import { XIcon } from '../icons';
 import ProductReviews from './ProductReviews';
 
 // Puerto de buildProductQuickViewModal()/openProductQuickView() de js/main.js.
@@ -28,6 +29,8 @@ export default function ProductQuickViewModal({ product, onClose }: ProductQuick
   }, [product]);
 
   if (!rendered) return null;
+
+  const available = rendered.availability && !(typeof rendered.stock === 'number' && rendered.stock <= 0);
 
   const categoriaTag = rendered.featured ? 'DESTACADO' : rendered.category === 'capilar' ? 'CAPILAR' : 'FACIAL';
   const categoriaColor = rendered.featured ? 'bg-blue-500' : rendered.category === 'capilar' ? 'bg-yellow-500' : 'bg-pink-500';
@@ -62,7 +65,7 @@ export default function ProductQuickViewModal({ product, onClose }: ProductQuick
           Detalle del producto
         </h3>
         <button type="button" onClick={onClose} aria-label="Cerrar" className="text-gray-400 hover:text-gray-700 transition-colors">
-          <i className="fas fa-times text-xl" />
+          <XIcon className="w-5 h-5" />
         </button>
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-[1fr_1fr_320px] gap-6 p-6">
@@ -81,8 +84,8 @@ export default function ProductQuickViewModal({ product, onClose }: ProductQuick
           <div className="flex items-center mb-4">
             <StarRating rating={rendered.rating} className="w-4 h-4" />
             <span className="text-gray-400 text-xs ml-1.5">{rendered.rating ? Number(rendered.rating).toFixed(1) : 'N/A'}</span>
-            <span className={`text-xs font-medium ml-3 ${rendered.availability ? 'text-green-600' : 'text-red-500'}`}>
-              {rendered.availability ? 'Disponible' : 'Agotado'}
+            <span className={`text-xs font-medium ml-3 ${available ? 'text-green-600' : 'text-red-500'}`}>
+              {available ? 'Disponible' : 'Agotado'}
             </span>
           </div>
           <p className="text-gray-600 text-sm leading-relaxed mb-6">{rendered.description}</p>
@@ -93,7 +96,7 @@ export default function ProductQuickViewModal({ product, onClose }: ProductQuick
                 <span className="text-gray-400 text-sm line-through ml-2">${rendered.originalPrice}</span>
               ) : null}
             </div>
-            {rendered.availability && (
+            {available && (
               <button
                 id="quickViewAddToCart"
                 type="button"

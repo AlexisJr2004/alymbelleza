@@ -1,4 +1,5 @@
 import { useProductsQuery } from '../hooks/useProducts';
+import { useSearchParams } from 'react-router-dom';
 import { useProductFilters } from '../hooks/useProductFilters';
 import { ProductQuickViewProvider } from '../components/ui/ProductQuickViewProvider';
 import FiltrosSidebar from '../components/productos/FiltrosSidebar';
@@ -10,8 +11,18 @@ import ProductosGrid from '../components/productos/ProductosGrid';
 // original (ver useProductFilters), ahora como estado derivado en vez de
 // reconstrucción manual del DOM.
 export default function ProductosPage() {
+  const [params] = useSearchParams();
+  return <ProductCatalog key={params.toString()} params={params} />;
+}
+
+function ProductCatalog({ params }: { params: URLSearchParams }) {
   const { data: products, isLoading, isError } = useProductsQuery();
-  const filters = useProductFilters(products ?? []);
+  const category = params.get('categoria');
+  const filters = useProductFilters(products ?? [], {
+    search: params.get('q') ?? '',
+    category: category === 'facial' || category === 'capilar' ? category : undefined,
+    offers: params.get('ofertas') === '1',
+  });
 
   return (
     <ProductQuickViewProvider>

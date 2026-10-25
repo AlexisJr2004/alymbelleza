@@ -85,7 +85,7 @@ export default function AccessibilityWidget() {
         aria-label="Opciones de accesibilidad"
         className="animate-pulse fixed z-50 bottom-[140px] left-8 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition duration-300 w-[50px] h-[50px] rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300"
       >
-        <span className="fas fa-person text-lg text-white" />
+        <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="4" r="2" /><path d="m3 8 9 2 9-2m-9 2v5m0 0-4 7m4-7 4 7" /></svg>
       </button>
 
       <div

@@ -216,10 +216,11 @@ export default function ChatWidget() {
         <button
           type="button"
           id="open-chat"
+          aria-label="Abrir asistente de belleza"
           onClick={handleOpenClick}
           className="group bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300 z-[10000]"
         >
-          <i className="fas fa-message text-xl text-white group-hover:rotate-12 transition-transform duration-300" />
+          <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 11a9 9 0 0 1-9 9H5l-4 3 2-7a9 9 0 1 1 18-5Z" /><path d="M7 10h10M7 14h6" /></svg>
         </button>
       )}
 

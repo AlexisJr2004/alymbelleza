@@ -108,6 +108,7 @@ export default function FiltrosSidebar({ filters }: FiltrosSidebarProps) {
         <div className="pt-5 border-t border-gray-100 space-y-2">
           <Switch label="Solo destacados" checked={filters.soloDestacados} onChange={filters.setSoloDestacados} />
           <Switch label="Solo disponibles" checked={filters.soloDisponibles} onChange={filters.setSoloDisponibles} />
+          <Switch label="Solo ofertas" checked={filters.soloOfertas} onChange={filters.setSoloOfertas} />
         </div>
       </div>
     </aside>

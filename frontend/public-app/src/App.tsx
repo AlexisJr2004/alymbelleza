@@ -8,6 +8,8 @@ import AuthLayout from './components/layout/AuthLayout';
 // adelante WebLLM en el chatbot) se descarguen en cada visita sin importar
 // qué página se abra primero.
 const HomePage = lazy(() => import('./pages/HomePage'));
+const ContactoPage = lazy(() => import('./components/home/ContactSection'));
+const NosotrosPage = lazy(() => import('./pages/NosotrosPage'));
 const ProductosPage = lazy(() => import('./pages/ProductosPage'));
 const CarritoPage = lazy(() => import('./pages/CarritoPage'));
 const PagosPage = lazy(() => import('./pages/PagosPage'));
@@ -42,6 +44,8 @@ function App() {
       <Routes>
         <Route element={<PublicLayout />}>
           <Route index element={<HomePage />} />
+          <Route path="contacto" element={<ContactoPage />} />
+          <Route path="nosotros" element={<NosotrosPage />} />
           <Route path="productos" element={<ProductosPage />} />
           <Route path="carrito" element={<CarritoPage />} />
           <Route path="pagos" element={<PagosPage />} />

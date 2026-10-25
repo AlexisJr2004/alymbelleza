@@ -6,14 +6,15 @@ import { useSwitchFilter } from './useSwitchFilter';
 // como estado derivado en vez de reconstrucción manual del DOM. Categoría y
 // tipo usan useSwitchFilter (Set-based, OR inclusivo); un producto sin `type`
 // cuenta como "otro", igual que el original.
-export function useProductFilters(products: Product[]) {
-  const [search, setSearch] = useState('');
-  const categoria = useSwitchFilter();
+export function useProductFilters(products: Product[], initial: { search?: string; category?: string; offers?: boolean } = {}) {
+  const [search, setSearch] = useState(initial.search ?? '');
+  const categoria = useSwitchFilter(initial.category ? [initial.category] : []);
   const tipo = useSwitchFilter();
   const [precioMin, setPrecioMin] = useState('');
   const [precioMax, setPrecioMax] = useState('');
   const [soloDestacados, setSoloDestacados] = useState(false);
   const [soloDisponibles, setSoloDisponibles] = useState(false);
+  const [soloOfertas, setSoloOfertas] = useState(initial.offers ?? false);
 
   const filtrados = useMemo(() => {
     const texto = search.trim().toLowerCase();
@@ -31,6 +32,9 @@ export function useProductFilters(products: Product[]) {
     if (soloDisponibles) {
       lista = lista.filter((p) => p.availability);
     }
+    if (soloOfertas) {
+      lista = lista.filter((p) => p.originalPrice != null && p.originalPrice > p.price);
+    }
 
     const min = precioMin === '' ? null : Number(precioMin);
     const max = precioMax === '' ? null : Number(precioMax);
@@ -42,7 +46,7 @@ export function useProductFilters(products: Product[]) {
     }
 
     return lista;
-  }, [products, search, categoria.selected, tipo.selected, soloDestacados, soloDisponibles, precioMin, precioMax]);
+  }, [products, search, categoria.selected, tipo.selected, soloDestacados, soloDisponibles, soloOfertas, precioMin, precioMax]);
 
   const clear = () => {
     setSearch('');
@@ -52,6 +56,7 @@ export function useProductFilters(products: Product[]) {
     setPrecioMax('');
     setSoloDestacados(false);
     setSoloDisponibles(false);
+    setSoloOfertas(false);
   };
 
   return {
@@ -67,6 +72,8 @@ export function useProductFilters(products: Product[]) {
     setSoloDestacados,
     soloDisponibles,
     setSoloDisponibles,
+    soloOfertas,
+    setSoloOfertas,
     filtrados,
     clear,
   };

@@ -4,8 +4,8 @@ import { useState } from 'react';
 // dos apps no comparten código). Mismo patrón de switches independientes:
 // ninguno marcado = sin filtro (se muestra todo), uno o más marcados = coincide
 // con cualquiera de los marcados (OR inclusivo).
-export function useSwitchFilter() {
-  const [selected, setSelected] = useState<Set<string>>(new Set());
+export function useSwitchFilter(initial: string[] = []) {
+  const [selected, setSelected] = useState<Set<string>>(() => new Set(initial));
 
   const toggle = (value: string, checked: boolean) => {
     setSelected((prev) => {
