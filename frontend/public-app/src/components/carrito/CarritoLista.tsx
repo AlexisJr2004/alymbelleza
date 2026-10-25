@@ -1,61 +1,42 @@
+import { useState } from 'react';
 import type { CartItem } from '../../types/models';
+import StoreIcon from '../home/StoreIcon';
+import { formatoMoneda } from '../../lib/format';
 
 interface CarritoListaProps {
   items: CartItem[];
+  busy?: boolean;
   onIncrement: (productId: string) => void;
   onDecrement: (productId: string) => void;
   onRemove: (productId: string) => void;
   onImageClick: (src: string, name: string) => void;
 }
 
-// Puerto de renderVistaCarrito() (carrito.html ~1338-1453): una tarjeta por
-// producto del carrito, con +/- de cantidad, eliminar y la miniatura clicable
-// que abre la vista previa ampliada (ver CartImagePreviewModal). El estado
-// (items, mutaciones) vive en CarritoPage — este componente es puramente de
-// presentación.
-export default function CarritoLista({ items, onIncrement, onDecrement, onRemove, onImageClick }: CarritoListaProps) {
-  if (items.length === 0) {
-    return <div className="text-center text-gray-500 py-8">Tu carrito está vacío.</div>;
-  }
+function CartThumbnail({ src, name, onClick }: { src?: string; name: string; onClick: () => void }) {
+  const [failed, setFailed] = useState(false);
+  return src && !failed
+    ? <button type="button" className="bb-cart-image" aria-label={`Ampliar imagen de ${name}`} onClick={onClick}><img src={src} alt={name} onError={() => setFailed(true)} /></button>
+    : <span className="bb-cart-image"><StoreIcon name="bag" /></span>;
+}
 
-  return (
-    <div className="space-y-6">
-      {items.map((item) => {
-        const prod = item.product;
-        const imageUrl = prod.image || './img/default.jpg';
-        return (
-          <div
-            key={prod._id}
-            className="rounded-xl border border-gray-200 bg-white p-4 flex flex-col md:flex-row items-center justify-between gap-4"
-          >
-            <img
-              className="h-20 w-20 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity"
-              src={imageUrl}
-              alt={prod.name}
-              onClick={() => onImageClick(imageUrl, prod.name)}
-            />
-            <div className="flex-1 min-w-0 w-full">
-              <h3 className="font-bold text-gray-900 mb-1">{prod.name}</h3>
-              <p className="text-gray-500 text-sm mb-2">{prod.description || ''}</p>
-              <div className="flex items-center gap-2">
-                <button type="button" onClick={() => onDecrement(prod._id)} className="px-2 py-1 bg-gray-200 rounded">
-                  -
-                </button>
-                <span className="mx-2">{item.cantidad}</span>
-                <button type="button" onClick={() => onIncrement(prod._id)} className="px-2 py-1 bg-gray-200 rounded">
-                  +
-                </button>
-              </div>
-            </div>
-            <div className="flex flex-col items-end gap-2">
-              <span className="text-lg font-bold text-purple-700">${(prod.price * item.cantidad).toFixed(2)}</span>
-              <button type="button" onClick={() => onRemove(prod._id)} className="text-red-600 text-sm flex items-center gap-1">
-                <i className="fas fa-trash" /> Eliminar
-              </button>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
+export default function CarritoLista({ items, busy, onIncrement, onDecrement, onRemove, onImageClick }: CarritoListaProps) {
+  return <div className="bb-cart-list" aria-busy={busy}>
+    {items.map(({ product, cantidad }) => <article key={product._id} className="bb-cart-row">
+      <CartThumbnail src={product.image} name={product.name} onClick={() => onImageClick(product.image!, product.name)} />
+      <div className="bb-cart-detail">
+        <h3>{product.name}</h3>
+        <p>{product.description}</p>
+        <small>{formatoMoneda(product.price)} / unidad</small>
+      </div>
+      <div className="bb-cart-quantity">
+        <button type="button" disabled={busy || cantidad <= 1} onClick={() => onDecrement(product._id)} aria-label={`Reducir cantidad de ${product.name}`}>−</button>
+        <output aria-label={`Cantidad de ${product.name}`}>{cantidad}</output>
+        <button type="button" disabled={busy} onClick={() => onIncrement(product._id)} aria-label={`Aumentar cantidad de ${product.name}`}>+</button>
+      </div>
+      <div className="bb-cart-total">
+        <strong>{formatoMoneda(product.price * cantidad)}</strong>
+        <button type="button" className="bb-cart-remove" disabled={busy} onClick={() => onRemove(product._id)} aria-label={`Eliminar ${product.name}`}><StoreIcon name="trash" />Eliminar</button>
+      </div>
+    </article>)}
+  </div>;
 }

@@ -13,7 +13,7 @@ import '../../styles/storefront.css';
 export default function PublicLayout() {
   const { pathname } = useLocation();
   const isHome = pathname === '/';
-  const isStorePage = pathname === '/perfil' || pathname === '/productos';
+  const isStorePage = ['/perfil', '/productos', '/carrito', '/citas', '/pagos'].includes(pathname);
   return (
     <div className={`bg-white font-body ${isHome || isStorePage ? 'bb-home-layout' : ''} ${isStorePage ? 'bb-storefront' : ''}`}>
       {isStorePage ? <StoreHeader /> : !isHome && <Header />}

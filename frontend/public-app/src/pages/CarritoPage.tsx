@@ -1,4 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import StorePageHeading from '../components/home/StorePageHeading';
+import StoreIcon from '../components/home/StoreIcon';
 import { useCartQuery, useRemoveFromCart, useUpdateCartQuantity } from '../hooks/useCart';
 import { useValidateCoupon } from '../hooks/useCoupons';
 import { isLoggedIn } from '../lib/auth';
@@ -18,7 +21,7 @@ import CartImagePreviewModal from '../components/carrito/CartImagePreviewModal';
 // onMutate/setQueryData, pero más simple de seguir.
 export default function CarritoPage() {
   const loggedIn = isLoggedIn();
-  const { data: cart } = useCartQuery();
+  const { data: cart, isLoading, isError, refetch } = useCartQuery();
   const [items, setItems] = useState<CartItem[] | null>(null);
   const [cupon, setCupon] = useState<AppliedCoupon | null>(null);
   const [preview, setPreview] = useState<{ src: string; name: string } | null>(null);
@@ -65,7 +68,7 @@ export default function CarritoPage() {
     setItems((prev) => prev?.map((item) => (item.product._id === productId ? { ...item, cantidad } : item)) ?? prev);
     updateQuantity.mutate(
       { productId, cantidad },
-      { onError: (err) => notifyError('Error', err instanceof Error ? err.message : 'No se pudo actualizar la cantidad') }
+      { onError: (err) => { setItems(items); notifyError('Error', err instanceof Error ? err.message : 'No se pudo actualizar la cantidad'); } }
     );
   }
 
@@ -76,14 +79,14 @@ export default function CarritoPage() {
     setItems((prev) => prev?.map((item) => (item.product._id === productId ? { ...item, cantidad } : item)) ?? prev);
     updateQuantity.mutate(
       { productId, cantidad },
-      { onError: (err) => notifyError('Error', err instanceof Error ? err.message : 'No se pudo actualizar la cantidad') }
+      { onError: (err) => { setItems(items); notifyError('Error', err instanceof Error ? err.message : 'No se pudo actualizar la cantidad'); } }
     );
   }
 
   function handleRemove(productId: string) {
     setItems((prev) => prev?.filter((item) => item.product._id !== productId) ?? prev);
     removeFromCart.mutate(productId, {
-      onError: (err) => notifyError('Error', err instanceof Error ? err.message : 'No se pudo eliminar el producto'),
+      onError: (err) => { setItems(items); notifyError('Error', err instanceof Error ? err.message : 'No se pudo eliminar el producto'); },
     });
   }
 
@@ -128,46 +131,29 @@ export default function CarritoPage() {
     }
   }
 
-  return (
-    <>
-      <div className="flex flex-col items-center justify-center text-center mb-16 animate-fade-in">
-        <br />
-        <h2 className="font-display text-4xl md:text-5xl mb-6 leading-tight text-gray-900">Tu Carrito de Compras ✨</h2>
-        <div className="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mt-4" />
-      </div>
 
-      <section className="bg-white pb-16">
-        <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
-          <div className="md:gap-6 lg:flex lg:items-start xl:gap-8">
-            <div className="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
-              {loggedIn ? (
-                <CarritoLista
-                  items={items ?? []}
-                  onIncrement={handleIncrement}
-                  onDecrement={handleDecrement}
-                  onRemove={handleRemove}
-                  onImageClick={handleImageClick}
-                />
-              ) : (
-                <div className="text-center text-gray-500 py-8">Debes iniciar sesión para ver tu carrito.</div>
-              )}
-            </div>
-
-            <ResumenPedido
-              subtotal={subtotal}
-              descuento={descuento}
-              total={total}
-              cupon={cupon}
-              isApplyingCoupon={validateCoupon.isPending}
-              onApplyCoupon={handleApplyCoupon}
-              onRemoveCoupon={handleRemoveCoupon}
-              onContinue={handleContinue}
-            />
+  const busy = updateQuantity.isPending || removeFromCart.isPending;
+  const count = (items ?? []).reduce((sum, item) => sum + item.cantidad, 0);
+  return <>
+    <main className="bb-commerce" id="contenido">
+      <div className="bb-container">
+        <StorePageHeading page="Carrito" eyebrow="TU SELECCIÓN DE BELLEZA" title={<>Tu bolsa, <em>tus favoritos</em></>} description="Todo lo que elegiste para ti, en un solo lugar. Revisa tu selección y dale el toque final." icon="bag" />
+        <div className="bb-commerce-grid">
+          <div>
+            <section className="bb-commerce-panel" aria-labelledby="cart-title">
+              <header className="bb-panel-heading"><h2 id="cart-title">Mi carrito</h2><span>{count} {count === 1 ? 'artículo' : 'artículos'}</span></header>
+              {!loggedIn ? <div className="bb-commerce-empty"><StoreIcon name="user" /><h3>Tu selección te espera</h3><p>Inicia sesión para ver los productos de tu carrito.</p><Link className="bb-button" to="/login">Iniciar sesión<StoreIcon name="arrow" /></Link></div>
+                : isLoading ? <div className="bb-commerce-empty" role="status"><p>Cargando tu carrito...</p></div>
+                : isError ? <div className="bb-commerce-empty" role="alert"><p>No pudimos cargar tu carrito.</p><button className="bb-button bb-button-outline" type="button" onClick={() => refetch()}>Reintentar</button></div>
+                : !items?.length ? <div className="bb-commerce-empty"><StoreIcon name="bag" /><h3>Un espacio para tus favoritos</h3><p>Tu carrito está vacío. Descubre productos para acompañar tu rutina de belleza.</p><Link className="bb-button" to="/productos">Explorar productos<StoreIcon name="arrow" /></Link></div>
+                : <CarritoLista items={items} busy={busy} onIncrement={handleIncrement} onDecrement={handleDecrement} onRemove={handleRemove} onImageClick={handleImageClick} />}
+            </section>
+            <Link to="/productos" className="bb-commerce-back"><StoreIcon name="arrow" />Seguir comprando</Link>
           </div>
+          <ResumenPedido subtotal={subtotal} descuento={descuento} total={total} cupon={cupon} canContinue={loggedIn && !!items?.length && !busy && !isError && !isLoading} isApplyingCoupon={validateCoupon.isPending} onApplyCoupon={handleApplyCoupon} onRemoveCoupon={handleRemoveCoupon} onContinue={handleContinue} />
         </div>
-      </section>
-
-      <CartImagePreviewModal image={preview} onClose={() => setPreview(null)} />
-    </>
-  );
+      </div>
+    </main>
+    <CartImagePreviewModal image={preview} onClose={() => setPreview(null)} />
+  </>;
 }

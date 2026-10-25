@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import StorePageHeading from '../components/home/StorePageHeading';
 import { useAppointmentsQuery, useCreateAppointment, useDeleteAppointment, useUpdateAppointmentStatus } from '../hooks/useAppointments';
 import { isLoggedIn } from '../lib/auth';
 import { confirmAction, notifyError, notifyInfo, notifySuccess } from '../lib/sweetalert';
@@ -23,7 +24,7 @@ export default function CitasPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
-  const { data: appointments, isLoading } = useAppointmentsQuery();
+  const { data: appointments, isLoading, isError, refetch } = useAppointmentsQuery();
   const createAppointment = useCreateAppointment();
   const updateStatus = useUpdateAppointmentStatus();
   const deleteAppointment = useDeleteAppointment();
@@ -90,36 +91,19 @@ export default function CitasPage() {
     });
   }
 
-  return (
-    <>
-      <div className="flex flex-col items-center justify-center text-center mb-16 animate-fade-in">
-        <br />
-        <h2 className="font-display text-4xl md:text-5xl mb-6 leading-tight text-gray-900">
-          Escoge un día, para agendar una cita conmigo ✨
-        </h2>
-        <div className="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mt-4" />
-      </div>
 
-      <div className="container mx-auto px-5 pb-20">
-        <div className="flex flex-col lg:flex-row items-start gap-8">
-          <Calendario
-            currentDate={currentDate}
-            selectedDate={selectedDate}
-            onDateClick={handleDateClick}
-            onPrevMonth={() => setCurrentDate((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))}
-            onNextMonth={() => setCurrentDate((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))}
-            onToday={() => setCurrentDate(new Date())}
-          />
-
-          <TusCitasPanel
-            appointments={appointments}
-            isLoading={isLoading}
-            onMarkRealizada={handleMarkRealizada}
-            onCancelar={handleCancelar}
-            onEliminar={handleEliminar}
-          />
-        </div>
+  return <main className="bb-commerce" id="contenido">
+    <div className="bb-container">
+      <StorePageHeading page="Citas" eyebrow="UN MOMENTO PARA TI" title={<>Tu próxima <em>cita de belleza</em></>} description="Elige el día de tu visita y coordinemos los detalles. Un espacio para cuidarte, a tu ritmo." icon="calendar" />
+      <div className="bb-appointments-grid">
+        <Calendario currentDate={currentDate} selectedDate={selectedDate} busy={createAppointment.isPending} onDateClick={handleDateClick}
+          onPrevMonth={() => setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))}
+          onNextMonth={() => setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))}
+          onToday={() => setCurrentDate(new Date())} />
+        <TusCitasPanel appointments={appointments} isLoading={isLoading} isError={isError} loggedIn={isLoggedIn()}
+          busy={updateStatus.isPending || deleteAppointment.isPending} onRetry={() => refetch()}
+          onMarkRealizada={handleMarkRealizada} onCancelar={handleCancelar} onEliminar={handleEliminar} />
       </div>
-    </>
-  );
+    </div>
+  </main>;
 }

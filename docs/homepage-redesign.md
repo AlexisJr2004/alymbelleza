@@ -48,9 +48,18 @@ Montserrat se sirve localmente desde `frontend/public-app/public/fonts`, con su 
 
 ## Cuenta, testimonios y catálogo
 
-- Inicio, Productos y Perfil comparten cabecera y pie de página. El calendario de la cabecera enlaza a `/citas`.
+- Inicio, Productos, Perfil, Carrito, Citas y Pagos comparten cabecera y pie de página. El calendario de la cabecera enlaza a `/citas`.
 - El icono de cuenta abre sus opciones con el cursor, un toque o el teclado. Los visitantes ven acceso y registro; las cuentas autenticadas ven Perfil y Cerrar sesión. El enlace `/admin` aparece únicamente con el rol `admin`.
 - El cierre de sesión elimina la sesión y limpia la caché de consultas. El nombre del menú se actualiza al guardar el perfil.
 - El carrusel muestra los testimonios recibidos de la API, con reproducción automática, avance y pausa. Se detiene al interactuar o editar y respeta la preferencia de movimiento reducido. Editar y eliminar solo aparecen para su autor; eliminar requiere confirmación y conserva la validación de permisos del servidor.
 - Productos conserva los filtros de categoría, tipo, precio, disponibilidad y ofertas. Añade orden por nombre o precio y comparte los favoritos del navegador con el inicio y la cabecera.
 - Perfil conserva los campos y la subida de fotografía, con colores rosa, títulos serif y tarjetas coordinadas con el inicio. Una imagen local sustituye las fotografías que no se puedan cargar.
+
+## Carrito, citas y pagos
+
+- Productos reduce el encabezado, márgenes, filtros e imágenes. La cuadrícula muestra cuatro productos por fila en escritorio, tres en tamaños intermedios y dos en móvil.
+- `StorePageHeading` y `commerce.css` unifican los encabezados compactos, tarjetas blancas, bordes suaves y acentos rosados de Carrito, Citas y Pagos.
+- El carrito conserva cantidades, eliminación, vista previa y cupones. Sus controles esperan las operaciones pendientes y restauran las cantidades si falla una actualización; continuar requiere productos cargados y sesión activa.
+- Las citas mantienen la navegación mensual, los avisos de WhatsApp y las acciones de realizada, cancelación y eliminación. Las fechas son botones accesibles por teclado.
+- Pagos conserva los datos bancarios recibidos de la API, las marcas de los bancos y la generación de factura PDF. Al crear el pedido se actualiza también el contador del carrito de la cabecera.
+- Las tres páginas distinguen estados de carga, error y contenido vacío; Carrito y Citas ofrecen acceso a iniciar sesión cuando corresponde.

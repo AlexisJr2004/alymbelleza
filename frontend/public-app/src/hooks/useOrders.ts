@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiFetch } from '../lib/apiClient';
 import type { Order } from '../types/models';
 
@@ -7,11 +7,13 @@ import type { Order } from '../types/models';
 // vacía como efecto colateral — ver backend/.../orderController.js createOrder
 // y pagos.html líneas ~1367-1381.
 export function useCreateOrder() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (couponCode?: string) =>
       apiFetch<{ success: boolean; data: Order }>('/api/orders', {
         method: 'POST',
         body: JSON.stringify({ couponCode }),
       }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cart'] }),
   });
 }
