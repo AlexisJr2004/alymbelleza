@@ -42,7 +42,7 @@ export default function PerfilPage() {
   }
 
   return (
-    <main className="profile-page">
+    <main className="profile-page" id="contenido">
       <div className="profile-container">
         <nav aria-label="Ruta de navegación" className="profile-breadcrumb">
           <Link to="/">Inicio</Link><span aria-hidden="true">/</span><span aria-current="page">Mi cuenta</span>

@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiFetch } from '../lib/apiClient';
-import { isLoggedIn } from '../lib/auth';
+import { isLoggedIn, updateStoredUser } from '../lib/auth';
 import type { ProfileUser } from '../types/models';
 
 // Perfil del usuario logueado — alimenta tanto la tarjeta de solo lectura como
@@ -36,6 +36,7 @@ export function useUpdateProfile() {
         body: formData,
       }),
     onSuccess: (res) => {
+      updateStoredUser(res.user);
       queryClient.setQueryData(['profile-me'], res.user);
     },
   });

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { ProductFilters } from '../../hooks/useProductFilters';
 import Switch from '../ui/Switch';
+import StoreIcon from '../home/StoreIcon';
 
 const CATEGORIAS = [
   { value: 'capilar', label: 'Capilar' },
@@ -29,20 +30,21 @@ export default function FiltrosSidebar({ filters }: FiltrosSidebarProps) {
   const [open, setOpen] = useState(false);
 
   return (
-    <aside className="lg:w-72 shrink-0">
+    <aside className="bb-catalog-filters">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-controls="catalog-filter-options"
         className="lg:hidden w-full flex items-center justify-between px-4 py-2.5 mb-4 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700"
       >
         <span>
-          <i className="fas fa-sliders-h mr-2 text-purple-500" />
           Filtros
         </span>
-        <i className={`fas fa-chevron-down text-xs transition-transform ${open ? 'rotate-180' : ''}`} />
+        <StoreIcon name="down" />
       </button>
 
-      <div className={`${open ? 'block' : 'hidden'} lg:block space-y-6 border border-gray-200 rounded-xl p-5 lg:sticky lg:top-24`}>
+      <div id="catalog-filter-options" className={`${open ? 'block' : 'hidden'} lg:block space-y-6 border border-gray-200 rounded-xl p-5 lg:sticky lg:top-24`}>
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Filtros</h3>
           <button type="button" onClick={filters.clear} className="text-xs font-medium text-purple-600 hover:text-purple-800">
@@ -88,6 +90,7 @@ export default function FiltrosSidebar({ filters }: FiltrosSidebarProps) {
               type="number"
               min={0}
               placeholder="Mín"
+              aria-label="Precio mínimo"
               value={filters.precioMin}
               onChange={(e) => filters.setPrecioMin(e.target.value)}
               className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"
@@ -97,6 +100,7 @@ export default function FiltrosSidebar({ filters }: FiltrosSidebarProps) {
               type="number"
               min={0}
               placeholder="Máx"
+              aria-label="Precio máximo"
               value={filters.precioMax}
               onChange={(e) => filters.setPrecioMax(e.target.value)}
               className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-400 focus:outline-none"

@@ -30,6 +30,7 @@ function decodeUserId(token: string): string | undefined {
 export function saveSession(token: string, user: LoginResponseUser): StoredUser {
   const stored: StoredUser = { ...user, token, _id: decodeUserId(token) };
   localStorage.setItem('user', JSON.stringify(stored));
+  window.dispatchEvent(new Event('bella-session-changed'));
   return stored;
 }
 
@@ -55,4 +56,12 @@ export function isAdmin(user: StoredUser | null): boolean {
 
 export function logout(): void {
   localStorage.removeItem('user');
+  window.dispatchEvent(new Event('bella-session-changed'));
+}
+
+export function updateStoredUser(user: LoginResponseUser): void {
+  const stored = getStoredUser();
+  if (!stored) return;
+  localStorage.setItem('user', JSON.stringify({ ...stored, name: user.name, email: user.email, role: user.role, profileImage: user.profileImage }));
+  window.dispatchEvent(new Event('bella-session-changed'));
 }

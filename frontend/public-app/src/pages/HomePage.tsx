@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useProductsQuery } from '../hooks/useProducts';
+import { useFavorites } from '../hooks/useFavorites';
 import { ProductQuickViewProvider } from '../components/ui/ProductQuickViewProvider';
 import StoreHeader from '../components/home/StoreHeader';
 import StoreFooter from '../components/home/StoreFooter';
@@ -11,7 +12,6 @@ import CookieConsent from '../components/home/CookieConsent';
 import '../styles/storefront.css';
 
 const ChatWidget = lazy(() => import('../components/chatbot/ChatWidget'));
-const FAVORITES_KEY = 'bella-beauty-favorites';
 const categories = [
   { title: 'Maquillaje', subtitle: 'Realza tu belleza', query: 'q=maquillaje', image: 'makeup' },
   { title: 'Skincare', subtitle: 'Piel saludable', query: 'categoria=facial', image: 'skincare' },
@@ -25,16 +25,9 @@ const benefits: { icon: StoreIconName; title: string; subtitle: string }[] = [
   { icon: 'headset', title: 'Atención Personalizada', subtitle: 'Estamos para ayudarte' },
 ];
 
-function readFavorites(): string[] {
-  try {
-    const saved: unknown = JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
-    return Array.isArray(saved) ? saved.filter((id): id is string => typeof id === 'string') : [];
-  } catch { return []; }
-}
-
 export default function HomePage() {
   const { data: products = [], isLoading, isError, refetch } = useProductsQuery();
-  const [favorites, setFavorites] = useState(readFavorites);
+  const { favorites, toggleFavorite } = useFavorites();
   const [favoritesOnly, setFavoritesOnly] = useState(false);
   const navigate = useNavigate();
   const { hash } = useLocation();
@@ -45,23 +38,12 @@ export default function HomePage() {
     else if (hash === '#servicios') navigate('/nosotros#servicios', { replace: true });
     else if (hash) document.getElementById(hash.slice(1))?.scrollIntoView();
   }, [hash, navigate]);
-  useEffect(() => {
-    const sync = (event: StorageEvent) => { if (event.key === FAVORITES_KEY) setFavorites(readFavorites()); };
-    window.addEventListener('storage', sync);
-    return () => window.removeEventListener('storage', sync);
-  }, []);
-
-  function toggleFavorite(id: string) {
-    const next = favorites.includes(id) ? favorites.filter(value => value !== id) : [...favorites, id];
-    setFavorites(next);
-    try { localStorage.setItem(FAVORITES_KEY, JSON.stringify(next)); } catch { /* Available for this visit when storage is disabled. */ }
-  }
   const featured = [...products].sort((a, b) => Number(b.featured) - Number(a.featured)).slice(0, 6);
   const shownProducts = favoritesOnly ? products.filter(product => favorites.includes(product._id)) : featured;
   const maxDiscount = products.reduce((max, product) => product.availability && (product.stock == null || product.stock > 0) && product.originalPrice && product.originalPrice > product.price ? Math.max(max, Math.floor((1 - product.price / product.originalPrice) * 100)) : max, 0);
 
   return <div className="bb-storefront">
-    <StoreHeader favoriteCount={favorites.length} favoritesActive={favoritesOnly} onFavorites={() => { setFavoritesOnly(value => !value); document.getElementById('productos')?.scrollIntoView({ behavior: 'smooth' }); }} />
+    <StoreHeader favoritesActive={favoritesOnly} onFavorites={() => { setFavoritesOnly(value => !value); document.getElementById('productos')?.scrollIntoView({ behavior: 'smooth' }); }} />
     <main id="contenido">
       <section className="bb-hero" aria-labelledby="hero-title">
         <img className="bb-hero-image" src="/img/storefront/beauty-hero.jpg" alt="" fetchPriority="high" />

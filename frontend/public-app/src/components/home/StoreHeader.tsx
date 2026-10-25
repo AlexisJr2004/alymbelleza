@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCartQuery } from '../../hooks/useCart';
-import { isLoggedIn } from '../../lib/auth';
+import { useFavorites } from '../../hooks/useFavorites';
+import StoreAccountMenu from './StoreAccountMenu';
 import { FacebookIcon, TiktokIcon } from '../icons';
 import StoreIcon, { BeautyBrand } from './StoreIcon';
 
@@ -12,7 +13,10 @@ export function StoreSocials() {
   </span>;
 }
 
-export default function StoreHeader({ favoriteCount, onFavorites, favoritesActive }: { favoriteCount: number; onFavorites: () => void; favoritesActive: boolean }) {
+export default function StoreHeader({ onFavorites, favoritesActive }: { onFavorites?: () => void; favoritesActive?: boolean }) {
+  const { favorites } = useFavorites();
+  const favoriteCount = favorites.length;
+  const { pathname, search: query } = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [search, setSearch] = useState('');
   const { data: cart } = useCartQuery();
@@ -32,8 +36,8 @@ export default function StoreHeader({ favoriteCount, onFavorites, favoritesActiv
     <div className="bb-header-container bb-header-main">
       <Link to="/" aria-label="Bella Beauty, inicio"><BeautyBrand /></Link>
       <nav id="store-navigation" className={`bb-nav ${menuOpen ? 'is-open' : ''}`} aria-label="Navegación principal" onClick={() => setMenuOpen(false)}>
-        <Link to="/" aria-current="page">Inicio</Link><Link to="/productos">Tienda</Link>
-        <a href="#categorias">Categorías <StoreIcon name="down" /></a>
+        <Link to="/" aria-current={pathname === '/' ? 'page' : undefined}>Inicio</Link><Link to="/productos" aria-current={pathname === '/productos' ? 'page' : undefined}>Tienda</Link>
+        <Link to="/#categorias">Categorías <StoreIcon name="down" /></Link>
         <Link className="bb-offers-link" to="/productos?ofertas=1">Ofertas</Link>
         <Link to="/nosotros">Nosotros</Link><Link to="/contacto">Contacto</Link>
       </nav>
@@ -42,8 +46,9 @@ export default function StoreHeader({ favoriteCount, onFavorites, favoritesActiv
         <button type="submit" aria-label="Buscar"><StoreIcon name="search" /></button>
       </form>
       <div className="bb-header-actions">
-        <Link className="bb-icon-button" to={isLoggedIn() ? '/perfil' : '/login'} aria-label={isLoggedIn() ? 'Mi perfil' : 'Iniciar sesión'}><StoreIcon name="user" /></Link>
-        <button className="bb-icon-button" type="button" onClick={onFavorites} aria-label={`Mis favoritos (${favoriteCount})`} aria-pressed={favoritesActive}><StoreIcon name="heart" />{favoriteCount > 0 && <span className="bb-count">{favoriteCount}</span>}</button>
+        <StoreAccountMenu />
+        <Link className="bb-icon-button" to="/citas" aria-label="Agendar una cita" title="Agendar una cita"><StoreIcon name="calendar" /></Link>
+        <button className="bb-icon-button" type="button" onClick={onFavorites ?? (() => navigate('/productos?favoritos=1'))} aria-label={`Mis favoritos (${favoriteCount})`} aria-pressed={favoritesActive ?? new URLSearchParams(query).get('favoritos') === '1'}><StoreIcon name="heart" />{favoriteCount > 0 && <span className="bb-count">{favoriteCount}</span>}</button>
         <Link className="bb-icon-button" to="/carrito" aria-label={`Mi carrito (${cartCount})`}><StoreIcon name="bag" />{cartCount > 0 && <span className="bb-count">{cartCount}</span>}</Link>
         <button type="button" className="bb-icon-button bb-menu-toggle" aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'} aria-expanded={menuOpen} aria-controls="store-navigation" onClick={() => setMenuOpen(value => !value)} onKeyDown={event => { if (event.key === 'Escape') setMenuOpen(false); }}><StoreIcon name={menuOpen ? 'close' : 'menu'} /></button>
       </div>

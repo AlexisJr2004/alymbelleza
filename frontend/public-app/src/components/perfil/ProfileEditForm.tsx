@@ -74,7 +74,7 @@ export default function ProfileEditForm({ user, isEditing, isSaving, previewUrl,
 
       <fieldset disabled={isSaving} className="profile-form-fields">
         {isEditing && <div className="profile-photo-editor">
-          <img src={previewUrl || resolveProfileImage(user)} alt="Foto de perfil actual" className="h-14 w-14 rounded-full object-cover" />
+          <img src={previewUrl || resolveProfileImage(user)} alt="Foto de perfil actual" className="h-14 w-14 rounded-full object-cover" onError={event => { const fallback = `${window.location.origin}/img/profile-placeholder.svg`; if (event.currentTarget.src !== fallback) event.currentTarget.src = fallback; }} />
           <div><strong>Tu foto de perfil</strong><p>{selectedPhoto ? 'Foto seleccionada. Guarda para aplicarla.' : 'Elige una imagen que te represente.'}</p></div>
           <button type="button" onClick={() => setPhotoModalOpen(true)} className="profile-button profile-button-secondary">
             <ProfileIcon name="camera" className="h-4 w-4" /> Cambiar foto

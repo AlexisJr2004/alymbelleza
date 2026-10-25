@@ -2,7 +2,7 @@
 @font-face { font-family: 'Bella Montserrat'; font-style: normal; font-weight: 500 700; font-display: swap; src: url('/fonts/montserrat-semibold.ttf') format('truetype'); }
 .bb-storefront { --bb-rose: #c33060; --bb-pink: #ed4782; --bb-muted: #66646d; color: #17191e; background: #fff; font-family: 'Bella Montserrat', sans-serif; font-size: 12px; }
 .bb-storefront *, .bb-storefront *::before, .bb-storefront *::after { box-sizing: border-box; }
-.bb-storefront h1, .bb-storefront h2, .bb-storefront h3, .bb-storefront p, .bb-storefront figure { margin: 0; }
+.bb-storefront :where(h1, h2, h3, p, figure) { margin: 0; }
 .bb-storefront h1, .bb-storefront h2, .bb-storefront h3 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; }
 .bb-storefront button, .bb-storefront a, .bb-storefront input { -webkit-tap-highlight-color: transparent; }
 .bb-storefront a, .bb-storefront button { transition: color .18s, background .18s, box-shadow .18s, transform .18s; }
@@ -42,6 +42,45 @@
 .bb-icon-button:hover, .bb-icon-button[aria-pressed=true] { color: var(--bb-rose); background: #fff1f5; }
 .bb-count { position: absolute; top: 1px; right: 0; min-width: 14px; height: 14px; padding-inline: 3px; font-size: 8px; color: #fff; background: var(--bb-rose); border-radius: 10px; display: grid; place-items: center; }
 .bb-menu-toggle { display: none; }
+.bb-account { position: relative; }
+.bb-account-popover { position: absolute; top: 100%; right: -8px; width: 282px; padding-top: 10px; z-index: 60; }
+.bb-account-panel { border: 1px solid #efdbe2; border-radius: 16px; background: #fff; box-shadow: 0 14px 40px #71284020; padding: 8px; }
+.bb-account-intro { display: flex; align-items: center; gap: 12px; padding: 12px 10px 16px; border-bottom: 1px solid #f5e8ed; margin-bottom: 6px; }
+.bb-account-avatar { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: #fbe7ee; color: #b22c58; font: 22px Georgia,serif; flex-shrink: 0; }
+.bb-account-intro > div { min-width: 0; }
+.bb-account-intro strong { display: block; font-size: 12px; overflow-wrap: anywhere; }
+.bb-account-intro small { display: block; color: #80717a; font-size: 10px; margin-top: 4px; }
+.bb-account-panel nav > * { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 12px 10px; border-radius: 9px; font-size: 12px; }
+.bb-account-panel nav > *:hover { background: #fff2f6; color: #b72c59; }
+.bb-account-panel nav svg { width: 17px; height: 17px; flex-shrink: 0; color: #bc4a6e; }
+.bb-account-panel nav a svg:last-child { margin-left: auto; width: 12px; }
+.bb-account-panel .bb-sign-out { color: #b32c4d; border-top: 1px solid #f6e9ec; margin-top: 4px; border-radius: 0 0 9px 9px; }
+.bb-review-carousel { min-width: 0; }
+.bb-review-carousel .swiper { width: 100%; padding-bottom: 3px; }
+.bb-review-carousel .swiper-slide { height: auto; }
+.bb-review-carousel .bb-review { height: 100%; min-height: 160px; }
+.bb-review-carousel .bb-review-body { display: flex; flex-direction: column; flex: 1; }
+.bb-review-carousel blockquote { max-height: 9em; }
+.bb-review-carousel figcaption { margin-top: 10px; }
+.bb-review-actions { display: flex; align-items: center; gap: 14px; padding-top: 12px; margin-top: auto; }
+.bb-review-actions button { display: inline-flex; align-items: center; gap: 4px; font-size: 9px; color: #ac355b; min-height: 28px; }
+.bb-review-actions button:hover { text-decoration: underline; }
+.bb-review-actions svg { width: 12px; height: 12px; }
+.bb-carousel-controls { display: flex; gap: 7px; margin-top: 16px; }
+.bb-carousel-controls button { display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid #efd3dd; border-radius: 50%; color: #b52f59; background: #fff; }
+.bb-carousel-controls button:hover { background: #fcecf1; }
+.bb-carousel-controls button:disabled { opacity: .4; cursor: default; }
+.bb-carousel-controls svg { width: 13px; height: 13px; }
+.bb-rotate { transform: rotate(180deg); }
+.bb-review-editor { padding: 28px; border-radius: inherit; }
+.bb-editor-heading { display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+.bb-editor-heading h2 { font-size: 28px; }
+.bb-editor-heading button { padding: 8px; color: #a94463; }
+.bb-review-editor > p { color: #77656f; font-size: 12px; line-height: 1.7; margin: 12px 0 20px; }
+.bb-review-editor label { display: block; font-size: 12px; margin-bottom: 8px; }
+.bb-review-editor textarea { width: 100%; border: 1px solid #eacbd5; border-radius: 10px; padding: 12px; font: inherit; line-height: 1.7; resize: vertical; }
+.bb-editor-buttons { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.bb-review-editor button:disabled { opacity: .5; cursor: default; }
 .bb-skip { position: absolute; top: -100px; left: 20px; background: white; color: var(--bb-rose); padding: 12px; z-index: 50; }
 .bb-skip:focus { top: 10px; }
 .bb-hero { position: relative; background: #fae8e3; min-height: 276px; overflow: hidden; isolation: isolate; }
@@ -216,6 +255,9 @@
   .bb-footer-advice { border: 0; padding: 0; }
 }
 @media (max-width: 640px) {
+  .bb-account-popover { right: -110px; width: min(282px,calc(100vw - 32px)); }
+  .bb-review-carousel .bb-review { min-height: 155px; }
+  .bb-review-actions button { font-size: 11px; min-height: 34px; }
   .bb-container, .bb-header-container { width: calc(100% - 32px); }
   .bb-topbar > div { justify-content: center; min-height: 26px; }
   .bb-topbar .bb-promises > :not(:first-child), .bb-community { display: none; }

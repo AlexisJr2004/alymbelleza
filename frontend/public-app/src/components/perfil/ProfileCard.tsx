@@ -11,7 +11,7 @@ interface ProfileCardProps {
 }
 
 function handleImgError(e: SyntheticEvent<HTMLImageElement>) {
-  const fallback = 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
+  const fallback = `${window.location.origin}/img/profile-placeholder.svg`;
   if (e.currentTarget.src !== fallback) e.currentTarget.src = fallback;
 }
 

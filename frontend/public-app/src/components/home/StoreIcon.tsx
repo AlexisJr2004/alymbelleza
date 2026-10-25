@@ -1,6 +1,13 @@
 import type { SVGProps } from 'react';
 
 const paths = {
+  calendar: 'M4 5h16v17H4V5Zm3-3v6m10-6v6M4 11h16M8 15h2m4 0h2m-8 4h2',
+  logout: 'M9 3H3v18h6m5-15 6 6-6 6m-8-6h13',
+  settings: 'M3 3h7v7H3V3Zm11 0h7v7h-7V3ZM3 14h7v7H3v-7Zm11 0h7v7h-7v-7Z',
+  edit: 'm15 4 5 5M3 21l5-1L21 7l-5-5L3 15v6Z',
+  trash: 'M3 6h18M9 6V3h6v3M5 6l1 16h12l1-16M10 10v8m4-8v8',
+  pause: 'M8 5v14M16 5v14',
+  play: 'm7 3 14 9-14 9V3Z',
   arrow: 'M4 12h16m-6-6 6 6-6 6',
   chevron: 'm9 5 7 7-7 7',
   down: 'm6 9 6 6 6-6',

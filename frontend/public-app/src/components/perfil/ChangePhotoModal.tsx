@@ -81,7 +81,7 @@ export default function ChangePhotoModal({ open, onClose, onConfirm }: ChangePho
             id="newProfilePhoto"
             accept="image/*"
             onChange={handleFileChange}
-            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-purple-400 focus:border-purple-400 text-sm transition file:mr-3 file:py-1.5 file:px-3 file:border-0 file:bg-purple-100 file:text-purple-700 file:font-medium file:rounded-md hover:file:bg-purple-200"
+            className="w-full px-3 py-2 bg-rose-50/30 border border-rose-200 rounded-lg focus:ring-1 focus:ring-rose-400 focus:border-rose-400 text-sm transition file:mr-3 file:py-1.5 file:px-3 file:border-0 file:bg-rose-100 file:text-rose-700 file:font-medium file:rounded-md hover:file:bg-rose-200"
           />
           <p className="text-xs text-gray-500 mt-1.5">Formatos: JPG, PNG (máx. 2MB)</p>
         </div>
