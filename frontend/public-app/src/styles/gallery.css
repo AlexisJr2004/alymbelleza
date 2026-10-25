@@ -1,0 +1,57 @@
+.bb-gallery-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.bb-gallery-toolbar h2 { font-size: 25px; }
+.bb-gallery-toolbar p { color: #826d78; font-size: 11px; margin-top: 4px; }
+.bb-gallery-filters { display: flex; flex-wrap: wrap; gap: 8px; padding: 16px 0 12px; }
+.bb-gallery-filters button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 36px; border: 1px solid #e9d8e0; border-radius: 24px; padding: 8px 15px; color: #79606d; background: #fff; font-size: 11px; }
+.bb-gallery-filters button:hover, .bb-gallery-filters button[aria-pressed=true] { color: #aa2c56; border-color: #dfa0b8; background: #fcebf1; }
+.bb-gallery-filters .bb-gallery-clear { border-color: transparent; color: #b13b65; background: transparent; }
+.bb-gallery-clear svg { width: 13px; height: 13px; }
+.bb-gallery-count { font-size: 10px; color: #927a86; padding-bottom: 12px; }
+.bb-gallery-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; }
+.bb-gallery-grid > div { min-width: 0; }
+.bb-gallery-card { position: relative; border: 1px solid #efdee5; border-radius: 12px; background: white; }
+.bb-gallery-open { display: block; width: 100%; text-align: left; border-radius: 12px; }
+.bb-gallery-media { display: block; position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 11px 11px 0 0; background: #f9edf2; }
+.bb-gallery-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
+.bb-gallery-open:hover img { transform: scale(1.04); }
+.bb-gallery-caption { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 13px; }
+.bb-gallery-caption strong { display: block; font-size: 11px; font-weight: 600; color: #4a303d; }
+.bb-gallery-caption time { display: block; font-size: 9px; color: #8e7380; margin-top: 5px; }
+.bb-gallery-caption > svg { width: 16px; height: 16px; color: #bd547b; flex-shrink: 0; }
+.bb-gallery-type { position: absolute; top: 10px; left: 10px; display: flex; align-items: center; gap: 5px; padding: 4px 8px; border-radius: 20px; font-size: 9px; color: #784558; background: #fffef5ed; }
+.bb-gallery-type svg { width: 12px; height: 12px; }
+.bb-gallery-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 44px; height: 44px; border: 1px solid #ffffffa3; border-radius: 50%; display: grid; place-items: center; background: #74324d88; color: white; }
+.bb-gallery-play svg { width: 18px; height: 18px; margin-left: 2px; }
+.bb-gallery-duration { position: absolute; bottom: 10px; right: 10px; background: #452534bf; border-radius: 5px; padding: 3px 6px; font-size: 10px; color: white; }
+.bb-gallery-delete { position: absolute; top: 7px; right: 7px; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #fff6f9; color: #b2325c; border: 1px solid #f0d1dd; box-shadow: 0 2px 9px #59233418; }
+.bb-gallery-delete:hover { background: #f9d6e3; }
+.bb-gallery-delete svg { width: 15px; height: 15px; }
+.bb-gallery-empty { border: 1px dashed #e7c9d6; border-radius: 14px; background: #fff9fb; min-height: 220px; }
+.bb-gallery-unavailable { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 28px 12px; color: #a67c8f; font-size: 10px; text-align: center; }
+.bb-gallery-unavailable svg { width: 30px; height: 30px; }
+.bb-gallery-skeleton { aspect-ratio: 1; border-radius: 12px; background: linear-gradient(120deg,#f7e9ef,#fff8fa,#f7e9ef); animation: bb-gallery-pulse 1.5s ease-in-out infinite alternate; }
+@keyframes bb-gallery-pulse { to { opacity: .5; } }
+.bb-gallery-invitation { display: flex; align-items: center; justify-content: space-between; gap: 18px; border: 1px solid #efdbe3; border-radius: 12px; background: #fff5f8; padding: 18px 22px; margin-top: 24px; }
+.bb-gallery-invitation > div { display: flex; align-items: center; gap: 14px; }
+.bb-gallery-invitation > div > svg { color: #b7426d; flex-shrink: 0; }
+.bb-gallery-invitation strong { display: block; font: 21px Georgia,serif; color: #51303f; }
+.bb-gallery-invitation small { display: block; color: #876b78; font-size: 10px; margin-top: 5px; }
+.bb-gallery-dialog { font-family: 'Bella Montserrat',sans-serif; }
+.bb-gallery-dialog h3 { font: 25px Georgia,serif; color: #51303f; }
+@media (max-width: 1023px) { .bb-gallery-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; } }
+@media (max-width: 640px) {
+  .bb-gallery-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+  .bb-gallery-toolbar { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .bb-gallery-filters { gap: 6px; padding-top: 12px; }
+  .bb-gallery-filters button { font-size: 10px; padding: 7px 11px; }
+  .bb-gallery-caption { padding: 10px; }
+  .bb-gallery-caption strong { font-size: 10px; }
+  .bb-gallery-caption > svg { display: none; }
+  .bb-gallery-media { aspect-ratio: 1; }
+  .bb-gallery-type { top: 8px; left: 7px; padding: 3px 6px; }
+  .bb-gallery-invitation { align-items: flex-start; flex-direction: column; padding: 16px; }
+  .bb-gallery-invitation strong { font-size: 19px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bb-gallery-grid, .bb-gallery-grid > div, .bb-gallery-media img { animation: none !important; transition: none !important; }
+}

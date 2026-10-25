@@ -30,7 +30,7 @@ export default function StoreHeader({ onFavorites, favoritesActive }: { onFavori
   return <header className="bb-header">
     <a className="bb-skip" href="#contenido">Ir al contenido</a>
     <div className="bb-topbar"><div className="bb-header-container">
-      <div className="bb-promises"><span><StoreIcon name="truck" />Envíos de tus productos favoritos</span><span><StoreIcon name="shield" />Belleza y cuidado personal</span><Link to="/contacto"><StoreIcon name="headset" />Asesoría personalizada</Link></div>
+      <div className="bb-promises"><span><StoreIcon name="truck" />Envíos de tus productos favoritos</span><span><StoreIcon name="shield" />Belleza y cuidado personal</span><Link to="/#contacto"><StoreIcon name="headset" />Asesoría personalizada</Link></div>
       <div className="bb-community">Únete a nuestra comunidad <StoreSocials /></div>
     </div></div>
     <div className="bb-header-container bb-header-main">
@@ -39,7 +39,7 @@ export default function StoreHeader({ onFavorites, favoritesActive }: { onFavori
         <Link to="/" aria-current={pathname === '/' ? 'page' : undefined}>Inicio</Link><Link to="/productos" aria-current={pathname === '/productos' ? 'page' : undefined}>Tienda</Link>
         <Link to="/#categorias">Categorías <StoreIcon name="down" /></Link>
         <Link className="bb-offers-link" to="/productos?ofertas=1">Ofertas</Link>
-        <Link to="/nosotros">Nosotros</Link><Link to="/contacto">Contacto</Link>
+        <Link to="/galeria" aria-current={pathname === '/galeria' ? 'page' : undefined}>Galería</Link><Link to="/#contacto">Contacto</Link>
       </nav>
       <form role="search" className="bb-search" onSubmit={handleSearch}>
         <StoreIcon name="search" /><input type="search" aria-label="Buscar productos" placeholder="Buscar productos…" value={search} onChange={event => setSearch(event.target.value)} />

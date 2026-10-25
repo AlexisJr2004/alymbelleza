@@ -139,7 +139,7 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
   }
 
   return (
-    <Sheet open={open} onClose={handleClose} desktopMaxWidthClassName="md:max-w-md" labelledBy="upload-modal-title">
+    <Sheet open={open} onClose={handleClose} desktopMaxWidthClassName="md:max-w-md" labelledBy="upload-modal-title" panelClassName="bb-gallery-dialog bg-white rounded-t-3xl md:rounded-2xl">
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 sticky top-0 bg-white z-10">
         <h3 id="upload-modal-title" className="text-lg font-semibold text-gray-900">
           Subir Contenido a Galería
@@ -159,7 +159,7 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
             name="category"
             required
             defaultValue=""
-            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-purple-400 focus:border-purple-400 text-sm transition"
+            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-rose-400 focus:border-rose-400 text-sm transition"
           >
             {CATEGORY_OPTIONS.map((o) => (
               <option key={o.value} value={o.value}>
@@ -180,7 +180,7 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
             accept="image/*,video/*"
             required
             onChange={handleFileChange}
-            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-purple-400 focus:border-purple-400 text-sm transition file:mr-3 file:py-1.5 file:px-3 file:border-0 file:bg-purple-100 file:text-purple-700 file:font-medium file:rounded-md hover:file:bg-purple-200"
+            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-rose-400 focus:border-rose-400 text-sm transition file:mr-3 file:py-1.5 file:px-3 file:border-0 file:bg-rose-100 file:text-rose-700 file:font-medium file:rounded-md hover:file:bg-rose-200"
           />
           <p className="text-xs text-gray-500 mt-1.5">
             Imágenes: JPG, PNG, GIF, WEBP (máx. 10MB)
@@ -212,7 +212,7 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
                     <span className="text-xs font-medium text-gray-500">Portada en la galería</span>
-                    <span className="text-xs font-semibold text-purple-600">{formatDuration(posterSeconds)}</span>
+                    <span className="text-xs font-semibold text-rose-600">{formatDuration(posterSeconds)}</span>
                   </div>
                   <p className="text-xs text-gray-500 mb-2">
                     Mueve el video arriba hasta el fotograma que quieras usar como portada y confírmalo.
@@ -221,13 +221,13 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
                     <button
                       type="button"
                       onClick={capturePosterFrame}
-                      className="shrink-0 text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 px-3 py-1.5 rounded-full transition-colors"
+                      className="shrink-0 text-xs font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-full transition-colors"
                     >
                       <i className="fas fa-camera mr-1.5" />
                       Usar este momento
                     </button>
                     {posterFrame && (
-                      <img src={posterFrame} alt="Portada seleccionada" className="w-16 h-11 object-cover rounded border border-purple-200" />
+                      <img src={posterFrame} alt="Portada seleccionada" className="w-16 h-11 object-cover rounded border border-rose-200" />
                     )}
                   </div>
                 </div>
@@ -244,7 +244,7 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
                           setTrimEnd(videoDuration);
                         }
                       }}
-                      className="rounded border-gray-300 text-purple-600 focus:ring-purple-400"
+                      className="rounded border-gray-300 text-rose-600 focus:ring-rose-400"
                     />
                     Recortar el video
                   </label>
@@ -257,7 +257,7 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
                         step={0.1}
                         value={Number(trimStart.toFixed(1))}
                         onChange={(e) => handleTrimStartChange(Number(e.target.value))}
-                        className="w-20 px-2 py-1 border border-gray-200 rounded text-sm focus:ring-1 focus:ring-purple-400 focus:outline-none"
+                        className="w-20 px-2 py-1 border border-gray-200 rounded text-sm focus:ring-1 focus:ring-rose-400 focus:outline-none"
                       />
                       <span className="text-gray-400 text-sm">a</span>
                       <input
@@ -267,7 +267,7 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
                         step={0.1}
                         value={Number(trimEnd.toFixed(1))}
                         onChange={(e) => handleTrimEndChange(Number(e.target.value))}
-                        className="w-20 px-2 py-1 border border-gray-200 rounded text-sm focus:ring-1 focus:ring-purple-400 focus:outline-none"
+                        className="w-20 px-2 py-1 border border-gray-200 rounded text-sm focus:ring-1 focus:ring-rose-400 focus:outline-none"
                       />
                       <span className="text-xs text-gray-400">segundos (de {formatDuration(videoDuration)})</span>
                     </div>
@@ -298,7 +298,7 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-5 py-2 text-sm font-semibold text-white rounded-full bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 shadow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-5 py-2 text-sm font-semibold text-white rounded-full bg-gradient-to-r from-rose-600 to-pink-500 hover:from-rose-700 hover:to-pink-600 shadow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? (
               <span>

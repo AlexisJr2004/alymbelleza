@@ -101,7 +101,7 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
       // Blanco sólido en móvil (mismo fondo que UploadModal y el resto de
       // hojas); en escritorio sigue transparente sobre el fondo oscuro, como
       // un visor de imagen normal.
-      panelClassName="bg-white md:bg-transparent rounded-t-3xl md:rounded-none"
+      panelClassName="bb-gallery-dialog bg-white md:bg-transparent rounded-t-3xl md:rounded-none"
       backdropClassName="bg-black/40"
       labelledBy="lightbox-title"
     >
@@ -111,7 +111,7 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
             type="button"
             onClick={() => onNavigate((rendered.index - 1 + total) % total)}
             aria-label="Elemento anterior"
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center backdrop-blur-sm transition-colors"
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-black/50 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-sm transition-colors"
           >
             <i className="fas fa-chevron-left" />
           </button>
@@ -121,7 +121,7 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
             type="button"
             onClick={() => onNavigate((rendered.index + 1) % total)}
             aria-label="Elemento siguiente"
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center backdrop-blur-sm transition-colors"
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-black/50 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-sm transition-colors"
           >
             <i className="fas fa-chevron-right" />
           </button>
@@ -163,7 +163,7 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
                   onClick={() => onNavigate(i)}
                   aria-label={`Ver elemento ${i + 1} de ${total}`}
                   className={`shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                    i === rendered.index ? 'border-purple-500 md:border-white opacity-100' : 'border-transparent opacity-50 hover:opacity-90'
+                    i === rendered.index ? 'border-rose-500 md:border-white opacity-100' : 'border-transparent opacity-50 hover:opacity-90'
                   }`}
                 >
                   {it.type === 'video' ? (

@@ -1,6 +1,11 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import StorePageHeading from '../components/home/StorePageHeading';
+import StoreIcon from '../components/home/StoreIcon';
+import '../styles/gallery.css';
 import { useDeleteGalleryItem, useGalleryQuery, useUploadGalleryItem } from '../hooks/useGallery';
-import { getStoredUser, isAdmin as checkIsAdmin } from '../lib/auth';
+import { isAdmin as checkIsAdmin } from '../lib/auth';
+import { useSessionUser } from '../hooks/useSessionUser';
 import { confirmAction, notifyError, notifySuccess } from '../lib/sweetalert';
 import { useSwitchFilter } from '../hooks/useSwitchFilter';
 import CategoryFilters from '../components/galeria/CategoryFilters';
@@ -19,7 +24,7 @@ interface LightboxState {
 // para admin (mismo gate que authorize('admin') en
 // backend/.../galleryRoutes.js para POST/DELETE); GET /api/gallery es pública.
 export default function GaleriaPage() {
-  const { data: items, isLoading, isError } = useGalleryQuery();
+  const { data: items, isLoading, isError, refetch } = useGalleryQuery();
   const uploadItem = useUploadGalleryItem();
   const deleteItem = useDeleteGalleryItem();
 
@@ -27,7 +32,7 @@ export default function GaleriaPage() {
   const [uploadOpen, setUploadOpen] = useState(false);
   const [lightbox, setLightbox] = useState<LightboxState | null>(null);
 
-  const user = getStoredUser();
+  const user = useSessionUser();
   const admin = checkIsAdmin(user);
 
   const allItems = items ?? [];
@@ -89,54 +94,20 @@ export default function GaleriaPage() {
         onClose={() => setLightbox(null)}
       />
 
-      <section className="bg-white">
-        <div id="galeria" className="container mx-auto w-full px-5 pb-16 md:px-10 md:pb-24">
-          <div className="flex flex-col items-center justify-center text-center mb-16 animate-fade-in">
-            <br />
-            <h2 className="font-display text-4xl md:text-5xl mb-6 leading-tight text-gray-900">Galería de Fotos ✨</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mt-4" />
+      <main className="bb-commerce bb-gallery" id="contenido">
+        <div className="bb-container">
+          <StorePageHeading page="Galería" eyebrow="EL UNIVERSO BELLA BEAUTY" title={<>Belleza que <em>se vive</em></>} description="Conoce nuestro espacio, descubre nuestros cuidados y encuentra inspiración en cada detalle." icon="image" />
+          <div className="bb-gallery-toolbar">
+            <div><h2>Nuestra galería</h2><p>Fotos y videos de los momentos que compartimos.</p></div>
+            {admin && <button type="button" onClick={() => setUploadOpen(true)} className="bb-button"><StoreIcon name="image" />Subir contenido</button>}
           </div>
-
-          {admin && (
-            <div id="admin-upload-section" className="flex justify-center mb-6">
-              <button
-                id="upload-btn"
-                type="button"
-                onClick={() => setUploadOpen(true)}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-2"
-              >
-                <i className="fas fa-plus" />
-                <i className="fas fa-image" />
-                Subir Contenido
-              </button>
-            </div>
-          )}
-
-          <div className="flex flex-col lg:flex-row gap-8">
-            <CategoryFilters filter={categoryFilter} />
-
-            <div className="flex-1 min-w-0">
-              {isLoading && (
-                <div className="w-full text-center py-12">
-                  <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-200 border-t-purple-500 mx-auto" />
-                </div>
-              )}
-
-              {!isLoading && isError && <div className="text-center text-red-500">Error al cargar la galería.</div>}
-
-              {!isLoading && !isError && (
-                <GalleryGrid
-                  items={filteredItems}
-                  isAdmin={admin}
-                  hasActiveFilter={categoryFilter.selected.size > 0}
-                  onItemClick={openLightbox}
-                  onDelete={handleDelete}
-                />
-              )}
-            </div>
-          </div>
+          <CategoryFilters filter={categoryFilter} />
+          {isLoading ? <div className="bb-gallery-grid" role="status" aria-label="Cargando galería">{Array.from({ length: 8 }, (_, index) => <div className="bb-gallery-skeleton" key={index} />)}</div>
+            : isError ? <div className="bb-commerce-empty bb-gallery-empty" role="alert"><StoreIcon name="image" /><h2>No pudimos cargar la galería</h2><p>Inténtalo de nuevo en un momento.</p><button type="button" className="bb-button bb-button-outline" onClick={() => refetch()}>Reintentar</button></div>
+            : <GalleryGrid items={filteredItems} isAdmin={admin} hasActiveFilter={categoryFilter.selected.size > 0} onItemClick={openLightbox} onDelete={handleDelete} />}
+          <aside className="bb-gallery-invitation"><div><StoreIcon name="calendar" /><span><strong>Tu próximo momento de belleza</strong><small>Nos encantará recibirte y cuidar de ti.</small></span></div><Link to="/citas" className="bb-button">Reservar una cita<StoreIcon name="arrow" /></Link></aside>
         </div>
-      </section>
+      </main>
     </>
   );
 }

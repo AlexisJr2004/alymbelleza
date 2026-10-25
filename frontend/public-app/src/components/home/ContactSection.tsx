@@ -1,131 +1,58 @@
 import { useState, type FormEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { notifyError, notifySuccess } from '../../lib/sweetalert';
 import { useSendContact } from '../../hooks/useContact';
+import StoreIcon from './StoreIcon';
+import { StoreSocials } from './StoreHeader';
+import '../../styles/contact.css';
 
-// Puerto de setupContactForm() en js/main.js. El sitio viejo mostraba el
-// resultado con su propio sistema de notificación flotante (showNotification);
-// acá se usa notifySuccess/notifyError (SweetAlert2), igual que en el resto de
-// esta migración, en vez de reintroducir ese sistema aparte.
 export default function ContactSection() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const sendContact = useSendContact();
 
-  const handleSubmit = (e: FormEvent) => {
+  function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    sendContact.mutate(
-      { name, email, message },
-      {
-        onSuccess: () => {
-          notifySuccess('¡Mensaje enviado!', 'Gracias por contactarnos. Te responderemos pronto.');
-          setName('');
-          setEmail('');
-          setMessage('');
-        },
-        onError: (err) => notifyError('Error', err instanceof Error ? err.message : 'No se pudo conectar con el servidor. Intenta más tarde.'),
-      }
-    );
-  };
+    if (sendContact.isPending) return;
+    if (!name.trim() || !email.trim() || !message.trim()) {
+      notifyError('Revisa tu mensaje', 'Completa tu nombre, correo y mensaje antes de enviar.');
+      return;
+    }
+    sendContact.mutate({ name: name.trim(), email: email.trim(), message: message.trim() }, {
+      onSuccess: () => {
+        notifySuccess('¡Mensaje enviado!', 'Gracias por contactarnos. Te responderemos pronto.');
+        setName(''); setEmail(''); setMessage('');
+      },
+      onError: err => notifyError('No pudimos enviar tu mensaje', err instanceof Error ? err.message : 'Intenta de nuevo en un momento.'),
+    });
+  }
 
-  return (
-    <section className="py-16">
-      <div id="contacto" className="container mx-auto px-6">
-        <div className="text-center mb-12">
-          <h2 className="font-display text-4xl md:text-5xl mb-6 leading-tight">Contáctanos</h2>
-          <p className="text-lg text-gray-600">Estamos aquí para ayudarte. No dudes en contactarnos para cualquier consulta.</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-white p-8 rounded-lg">
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                  Nombre
-                </label>
-                <input
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600"
-                  type="text"
-                  id="name"
-                  name="name"
-                  placeholder="Tu nombre"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                  Email
-                </label>
-                <input
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600"
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="Tu email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="message">
-                  Mensaje
-                </label>
-                <textarea
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600"
-                  id="message"
-                  name="message"
-                  rows={5}
-                  placeholder="Tu mensaje"
-                  required
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={sendContact.isPending}
-                className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 disabled:opacity-60 inline-flex items-center"
-              >
-                {sendContact.isPending ? (
-                  <span className="inline-flex items-center">
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth={4} />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      />
-                    </svg>
-                    Enviando...
-                  </span>
-                ) : (
-                  'Enviar Mensaje'
-                )}
-              </button>
-            </form>
+  return <section className="bb-contact" id="contacto" aria-labelledby="contact-title">
+    <div className="bb-container">
+      <div className="bb-section-heading"><div><h2 id="contact-title">Conversemos de belleza</h2><p>Cuéntanos qué necesitas. Nos encantará acompañarte.</p></div><span className="bb-contact-heading-note"><StoreIcon name="heart" />Atención para ti</span></div>
+      <div className="bb-contact-layout">
+        <aside className="bb-contact-intro">
+          <span className="bb-contact-symbol"><StoreIcon name="mail" /></span>
+          <p className="bb-eyebrow">ESTAMOS CERCA DE TI</p>
+          <h3>Tu belleza merece<br /><em>atención personal</em></h3>
+          <p>¿Buscas un producto, tienes dudas sobre tu pedido o quieres conocer nuestros cuidados? Escríbenos.</p>
+          <div className="bb-contact-options">
+            <a href="https://wa.me/593981229675" target="_blank" rel="noopener noreferrer"><StoreIcon name="headset" /><span><strong>Hablemos por WhatsApp</strong><small>+593 98 122 9675</small></span><StoreIcon name="arrow" /></a>
+            <Link to="/citas"><StoreIcon name="calendar" /><span><strong>Reserva un momento para ti</strong><small>Elige el día de tu próxima cita</small></span><StoreIcon name="arrow" /></Link>
           </div>
-          <div className="bg-white p-8 rounded-lg">
-            <h3 className="text-xl font-semibold mb-4">Información de Contacto</h3>
-            <p className="text-gray-600 mb-4">Estamos disponibles para atenderte en los siguientes horarios:</p>
-            <ul className="text-gray-600 mb-4">
-              <li>Lun - Vie: 9:00 AM - 8:00 PM</li>
-              <li>Sáb: 10:00 AM - 6:00 PM</li>
-              <li>Dom: Cerrado</li>
-            </ul>
-            <p className="text-gray-600 mb-4">
-              <strong>Teléfono:</strong> +1 234 567 890
-            </p>
-            <p className="text-gray-600 mb-4">
-              <strong>Email:</strong> info@bellabeauty.com
-            </p>
-            <p className="text-gray-600">
-              <strong>Dirección:</strong> Av. Principal 123, Ciudad
-            </p>
+          <div className="bb-contact-social"><span>También nos encuentras en</span><StoreSocials /></div>
+        </aside>
+        <form className="bb-contact-form" onSubmit={handleSubmit} aria-busy={sendContact.isPending}>
+          <div className="bb-contact-form-heading"><h3>Envíanos un mensaje</h3><p>Te responderemos al correo que nos indiques.</p></div>
+          <div className="bb-contact-fields">
+            <div><label htmlFor="contact-name">Tu nombre</label><input id="contact-name" name="name" autoComplete="name" placeholder="¿Cómo te llamas?" required value={name} onChange={e => setName(e.target.value)} disabled={sendContact.isPending} /></div>
+            <div><label htmlFor="contact-email">Correo electrónico</label><input id="contact-email" name="email" type="email" autoComplete="email" placeholder="tu@correo.com" required value={email} onChange={e => setEmail(e.target.value)} disabled={sendContact.isPending} /></div>
           </div>
-        </div>
+          <div><label htmlFor="contact-message">¿En qué podemos ayudarte?</label><textarea id="contact-message" name="message" rows={4} placeholder="Cuéntanos un poco más..." required value={message} onChange={e => setMessage(e.target.value)} disabled={sendContact.isPending} /></div>
+          <div className="bb-contact-submit"><span><StoreIcon name="mail" />Una conversación que empieza contigo.</span><button type="submit" className="bb-button" disabled={sendContact.isPending}>{sendContact.isPending ? 'Enviando...' : 'Enviar mensaje'}<StoreIcon name="arrow" /></button></div>
+        </form>
       </div>
-    </section>
-  );
+    </div>
+  </section>;
 }

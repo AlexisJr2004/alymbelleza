@@ -7,6 +7,7 @@ import StoreHeader from '../components/home/StoreHeader';
 import StoreFooter from '../components/home/StoreFooter';
 import StoreProductCard from '../components/home/StoreProductCard';
 import StoreTestimonials from '../components/home/StoreTestimonials';
+import ContactSection from '../components/home/ContactSection';
 import StoreIcon, { type StoreIconName } from '../components/home/StoreIcon';
 import CookieConsent from '../components/home/CookieConsent';
 import '../styles/storefront.css';
@@ -30,14 +31,13 @@ export default function HomePage() {
   const { favorites, toggleFavorite } = useFavorites();
   const [favoritesOnly, setFavoritesOnly] = useState(false);
   const navigate = useNavigate();
-  const { hash } = useLocation();
+  const { hash, key } = useLocation();
 
   // Keep bookmarks and links to the former homepage sections working.
   useEffect(() => {
-    if (hash === '#contacto') navigate('/contacto', { replace: true });
-    else if (hash === '#servicios') navigate('/nosotros#servicios', { replace: true });
+    if (hash === '#servicios') navigate('/nosotros#servicios', { replace: true });
     else if (hash) document.getElementById(hash.slice(1))?.scrollIntoView();
-  }, [hash, navigate]);
+  }, [hash, key, navigate]);
   const featured = [...products].sort((a, b) => Number(b.featured) - Number(a.featured)).slice(0, 6);
   const shownProducts = favoritesOnly ? products.filter(product => favorites.includes(product._id)) : featured;
   const maxDiscount = products.reduce((max, product) => product.availability && (product.stock == null || product.stock > 0) && product.originalPrice && product.originalPrice > product.price ? Math.max(max, Math.floor((1 - product.price / product.originalPrice) * 100)) : max, 0);
@@ -73,6 +73,7 @@ export default function HomePage() {
       </section>
       <section className="bb-benefits" aria-label="La experiencia Bella Beauty"><div className="bb-container">{benefits.map(benefit => <div className="bb-benefit" key={benefit.title}><span className="bb-benefit-icon"><StoreIcon name={benefit.icon} /></span><div><h3>{benefit.title}</h3><p>{benefit.subtitle}</p></div></div>)}</div></section>
       <StoreTestimonials />
+      <ContactSection />
     </main>
     <StoreFooter />
     <CookieConsent />

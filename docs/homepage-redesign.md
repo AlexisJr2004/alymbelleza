@@ -1,12 +1,12 @@
 # Inicio de Bella Beauty
 
-La portada de `frontend/public-app` reproduce la composición de la referencia proporcionada: franja informativa, cabecera compacta, fotografía rosa, categorías, productos con promoción lateral, beneficios, testimonios y pie de página.
+La portada de `frontend/public-app` reproduce la composición de la referencia proporcionada: franja informativa, cabecera compacta, fotografía rosa, categorías, productos con promoción lateral, beneficios, testimonios, contacto y pie de página.
 
 Los productos, precios, existencias, valoraciones y testimonios vienen de las API existentes. El sello de descuento calcula el mayor descuento de los productos disponibles; no se muestra cuando no hay ofertas. No se añaden reseñas, calificaciones ni compras verificadas ficticias. Los favoritos se guardan en el navegador del visitante.
 
 La búsqueda enlaza a `/productos?q=...`; las categorías disponibles usan `categoria=facial` y `categoria=capilar`, y las ofertas usan `ofertas=1`. Maquillaje y perfumes buscan esos términos en el catálogo. Su disponibilidad depende de los productos registrados en administración.
 
-El formulario de contacto existente está en `/contacto`; servicios y preguntas frecuentes están en `/nosotros`. Los enlaces antiguos `/#contacto` y `/#servicios` redirigen a estas páginas.
+El formulario de contacto está en el inicio, debajo de los testimonios, en `/#contacto`. La antigua ruta `/contacto` redirige a esa sección. Servicios y preguntas frecuentes siguen disponibles en `/nosotros`, también mediante `/#servicios`.
 
 ## Imágenes
 
@@ -48,7 +48,7 @@ Montserrat se sirve localmente desde `frontend/public-app/public/fonts`, con su 
 
 ## Cuenta, testimonios y catálogo
 
-- Inicio, Productos, Perfil, Carrito, Citas y Pagos comparten cabecera y pie de página. El calendario de la cabecera enlaza a `/citas`.
+- Inicio, Productos, Perfil, Carrito, Citas, Pagos y Galería comparten cabecera y pie de página. El calendario de la cabecera enlaza a `/citas`.
 - El icono de cuenta abre sus opciones con el cursor, un toque o el teclado. Los visitantes ven acceso y registro; las cuentas autenticadas ven Perfil y Cerrar sesión. El enlace `/admin` aparece únicamente con el rol `admin`.
 - El cierre de sesión elimina la sesión y limpia la caché de consultas. El nombre del menú se actualiza al guardar el perfil.
 - El carrusel muestra los testimonios recibidos de la API, con reproducción automática, avance y pausa. Se detiene al interactuar o editar y respeta la preferencia de movimiento reducido. Editar y eliminar solo aparecen para su autor; eliminar requiere confirmación y conserva la validación de permisos del servidor.
@@ -63,3 +63,10 @@ Montserrat se sirve localmente desde `frontend/public-app/public/fonts`, con su 
 - Las citas mantienen la navegación mensual, los avisos de WhatsApp y las acciones de realizada, cancelación y eliminación. Las fechas son botones accesibles por teclado.
 - Pagos conserva los datos bancarios recibidos de la API, las marcas de los bancos y la generación de factura PDF. Al crear el pedido se actualiza también el contador del carrito de la cabecera.
 - Las tres páginas distinguen estados de carga, error y contenido vacío; Carrito y Citas ofrecen acceso a iniciar sesión cuando corresponde.
+
+## Galería y contacto integrado
+
+- Galería reemplaza a Nosotros en la navegación superior. La página conserva fotos, videos, filtros combinables, visor, descarga y las opciones de subir/eliminar para administradores.
+- Los filtros se presentan como botones compactos y las tarjetas muestran categoría y fecha. Se adaptan a cuatro, tres o dos columnas según el ancho disponible; las animaciones respetan movimiento reducido.
+- Contacto utiliza el mismo diseño blanco y rosa, con formulario de nombre, correo y mensaje. Conserva el envío a `/api/contact`, bloqueo durante el envío, confirmación y errores sin perder el mensaje.
+- Los enlaces de contacto apuntan a `/#contacto`. Se utiliza el WhatsApp de citas ya configurado y los enlaces sociales existentes; se retiran los datos de ejemplo de dirección, teléfono y correo del formulario anterior.
