@@ -73,8 +73,8 @@ Montserrat se sirve localmente desde `frontend/public-app/public/fonts`, con su 
 
 ## Navegación móvil y accesibilidad
 
-- En pantallas menores de 768 px, Perfil, Citas, Favoritos y Carrito se presentan en una barra inferior con espacio para el área segura del dispositivo. El menú de cuenta se abre hacia arriba.
-- El botón de cuatro cuadros abre un menú lateral con el estilo del sitio. Conserva el foco dentro del panel, bloquea el desplazamiento del fondo y se cierra al navegar, pulsar Escape, tocar fuera o cambiar a escritorio.
+- En pantallas menores de 768 px, Perfil, Citas, Favoritos y Carrito se presentan en una isla inferior flotante, separada de los bordes, con forma de cápsula, acabado translúcido y espacio para el área segura del dispositivo. El menú de cuenta se abre hacia arriba.
+- El botón de cuatro cuadros abre la versión anterior de `MobileMenu`: bloque de usuario y rol, Perfil y administración, búsqueda, Servicios desplegables, Productos, Contacto, Galería, redes sociales y reserva. Mantiene sus estilos originales y las mejoras de foco, bloqueo del fondo y cierre al navegar, pulsar Escape, tocar fuera o cambiar a escritorio. La búsqueda enlaza al catálogo y se utilizan los datos de contacto reales en lugar de los textos de ejemplo.
 - Cerrar sesión requiere confirmación; cancelar conserva la cuenta y confirmar limpia la sesión y la caché.
 - Productos conserva sus interruptores y filtros con controles, separaciones y ancho más compactos. En móvil las filas mantienen una superficie de toque mayor.
 - Productos, Perfil, Citas, Carrito y Galería comparten el estilo de ruta de navegación de 10 px.

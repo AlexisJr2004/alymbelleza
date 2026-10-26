@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCartQuery } from '../../hooks/useCart';
 import { useFavorites } from '../../hooks/useFavorites';
 import StoreAccountMenu from './StoreAccountMenu';
-import StoreMobileMenu from './StoreMobileMenu';
+import MobileMenu from '../layout/MobileMenu';
 import '../../styles/navigation.css';
 import { FacebookIcon, TiktokIcon } from '../icons';
 import StoreIcon, { BeautyBrand } from './StoreIcon';
@@ -58,6 +58,6 @@ export default function StoreHeader({ onFavorites, favoritesActive }: { onFavori
       </div>
       <button ref={menuTrigger} type="button" className="bb-icon-button bb-menu-toggle" aria-label="Abrir menú" aria-expanded={menuOpen} aria-controls="store-mobile-menu" onClick={() => setMenuOpen(true)}><StoreIcon name="settings" /></button>
     </div>
-    <StoreMobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} onReturnFocus={() => menuTrigger.current?.focus()} />
+    <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} onReturnFocus={() => menuTrigger.current?.focus()} />
   </header>;
 }

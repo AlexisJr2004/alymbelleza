@@ -1,18 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useSessionUser } from '../../hooks/useSessionUser';
 import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
-import { getStoredUser, isAdmin, logout } from '../../lib/auth';
+import { isAdmin, logout } from '../../lib/auth';
 import { resolveProfileImage } from '../../lib/format';
 import { confirmAction, notifySuccess } from '../../lib/sweetalert';
 import {
   ChevronDownIcon,
-  ClockIcon,
   CogIcon,
   EnvelopeIcon,
   FacebookIcon,
   HomeIcon,
   LogoutIcon,
-  MapPinIcon,
   PhotoIcon,
   SearchIcon,
   ShoppingBagIcon,
@@ -21,7 +21,7 @@ import {
   UserCircleIcon,
 } from '../icons';
 
-const FALLBACK_AVATAR = 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
+const FALLBACK_AVATAR = '/img/profile-placeholder.svg';
 
 // Entrada escalonada de cada sección al abrir el menú (fade + slide-up con
 // delay creciente). Al cerrar, el delay se anula para que todo desaparezca
@@ -38,12 +38,42 @@ function cx(...classes: string[]) {
   return classes.join(' ');
 }
 
-export default function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const user = getStoredUser();
+export default function MobileMenu({ open, onClose, onReturnFocus }: { open: boolean; onClose: () => void; onReturnFocus?: () => void }) {
+  const user = useSessionUser();
+  const panelRef = useRef<HTMLElement>(null);
+  const callbacks = useRef({ onClose, onReturnFocus });
+  callbacks.current = { onClose, onReturnFocus };
+  const queryClient = useQueryClient();
+  const [search, setSearch] = useState('');
+  useEffect(() => {
+    if (!open) return;
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    panelRef.current?.querySelector<HTMLButtonElement>('button')?.focus();
+    const media = window.matchMedia('(min-width: 768px)');
+    const resize = () => { if (media.matches) callbacks.current.onClose(); };
+    media.addEventListener('change', resize);
+    function keydown(event: KeyboardEvent) {
+      if (event.key === 'Escape') callbacks.current.onClose();
+      if (event.key !== 'Tab') return;
+      const targets = Array.from(panelRef.current?.querySelectorAll<HTMLElement>('a[href],button:not(:disabled),input') ?? []).filter(el => el.getClientRects().length && !el.closest('[inert]'));
+      const first = targets[0], last = targets[targets.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    }
+    document.addEventListener('keydown', keydown);
+    return () => {
+      document.body.style.overflow = overflow;
+      media.removeEventListener('change', resize);
+      document.removeEventListener('keydown', keydown);
+      callbacks.current.onReturnFocus?.();
+    };
+  }, [open]);
   const navigate = useNavigate();
   const [servicesOpen, setServicesOpen] = useState(false);
 
   const handleLogout = async () => {
+    onClose();
     const confirmed = await confirmAction({
       title: '¿Cerrar sesión?',
       text: '¿Estás seguro de que deseas salir de tu cuenta?',
@@ -51,7 +81,9 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
       icon: 'question',
     });
     if (!confirmed) return;
+    await queryClient.cancelQueries();
     logout();
+    queryClient.clear();
     notifySuccess('Sesión cerrada', 'Has cerrado sesión correctamente');
     onClose();
     navigate('/');
@@ -74,11 +106,20 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
       />
 
       <aside
+        ref={panelRef}
+        id="store-mobile-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menú de navegación"
+        aria-hidden={!open}
+        inert={!open}
+        style={{ width: 'min(320px, 90vw)', height: '100dvh' }}
         className={`fixed left-0 top-0 z-[1002] h-screen w-80 bg-white/95 backdrop-blur-md rounded-r-3xl border-r border-purple-100 shadow-lg overflow-y-auto transition-transform duration-300 ease-out ${
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div style={reveal(open, 0).style} className={cx('p-4 mb-6 border-b border-purple-100', reveal(open, 0).className)}>
+          <button type="button" aria-label="Cerrar menú" onClick={onClose} className="float-right w-8 h-8 rounded-full text-gray-500 hover:bg-purple-50">✕</button>
           <h2 className="text-xl font-display bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Bella Beauty</h2>
           <p className="text-sm text-purple-600">Tu belleza, nuestra pasión</p>
         </div>
@@ -108,6 +149,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
                   <button
                     type="button"
                     onClick={handleLogout}
+                    aria-label="Cerrar sesión"
                     className="shrink-0 w-10 h-10 rounded-full bg-white/60 border border-gray-200 flex items-center justify-center text-red-500 hover:text-red-700 hover:bg-white/90 transition-colors"
                   >
                     <LogoutIcon className="h-5 w-5" />
@@ -161,36 +203,25 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
           </div>
         )}
 
-        <div style={reveal(open, 2).style} className={cx('px-4 mb-6 space-y-4 border-b border-purple-100 pb-4', reveal(open, 2).className)}>
-          <div className="flex items-center space-x-3">
-            <MapPinIcon className="w-4 h-4 shrink-0 text-gray-500" />
-            <a href="#" className="text-sm text-gray-700 hover:text-purple-700 transition duration-300">
-              Av. Principal 123, Ciudad
-            </a>
-          </div>
-          <div className="flex items-center space-x-3">
-            <EnvelopeIcon className="w-4 h-4 shrink-0 text-gray-500" />
-            <a href="mailto:info@bellabeauty.com" className="text-sm text-gray-700 hover:text-purple-700 transition duration-300">
-              info@bellabeauty.com
-            </a>
-          </div>
-          <div className="flex items-center space-x-3">
-            <ClockIcon className="w-4 h-4 shrink-0 text-gray-500" />
-            <span className="text-sm text-gray-700">Lun - Dom: 9:00 - 20:00</span>
-          </div>
+        <div style={reveal(open, 2).style} className={cx('px-4 mb-5 space-y-3 border-b border-purple-100 pb-4', reveal(open, 2).className)}>
+          <a href="https://wa.me/593981229675" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-sm text-gray-700"><EnvelopeIcon className="w-4 h-4 text-gray-500" />WhatsApp: +593 98 122 9675</a>
+          <Link to="/#contacto" onClick={onClose} className="block text-sm text-purple-700">Contacta con Bella Beauty</Link>
         </div>
 
         <div style={reveal(open, 3).style} className={cx('px-4 mb-6', reveal(open, 3).className)}>
-          <div className="relative">
+          <form className="relative" onSubmit={event => { event.preventDefault(); navigate(`/productos${search.trim() ? `?q=${encodeURIComponent(search.trim())}` : ''}`); onClose(); }}>
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <SearchIcon className="w-4 h-4 text-gray-400" />
             </div>
             <input
               type="search"
-              placeholder="Buscar en el sitio..."
+              placeholder="Buscar productos..."
+              aria-label="Buscar productos en el menú"
+              value={search}
+              onChange={event => setSearch(event.target.value)}
               className="w-full pl-10 pr-4 py-2 text-sm text-gray-900 border-none bg-purple-50 rounded-full focus:ring-2 focus:ring-purple-500 focus:outline-none transition duration-300"
             />
-          </div>
+          </form>
         </div>
 
         <div style={reveal(open, 4).style} className={cx('mb-6 px-2', reveal(open, 4).className)}>
@@ -209,6 +240,8 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
               <button
                 type="button"
                 onClick={() => setServicesOpen((v) => !v)}
+                aria-expanded={servicesOpen}
+                aria-controls="mobile-menu-services"
                 className="flex items-center justify-between w-full px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 hover:bg-purple-50 transition-colors duration-200"
               >
                 <div className="flex items-center">
@@ -219,7 +252,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
                   className={`w-4 h-4 shrink-0 transition-transform duration-300 ${servicesOpen ? 'rotate-180' : ''}`}
                 />
               </button>
-              <div className={`grid transition-all duration-300 ease-in-out ${servicesOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+              <div id="mobile-menu-services" inert={!servicesOpen} aria-hidden={!servicesOpen} className={`grid transition-all duration-300 ease-in-out ${servicesOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                 <ul className="overflow-hidden pl-12 py-0.5 space-y-1">
                   <li>
                     <a
@@ -278,7 +311,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
                 className="flex items-center px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 hover:bg-purple-50 transition-colors duration-200"
               >
                 <PhotoIcon className="w-5 h-5 shrink-0 text-gray-500 mr-3" />
-                Galeria
+                Galería
               </Link>
             </li>
           </ul>
@@ -288,6 +321,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
           <div className="flex items-center justify-center space-x-4">
             <a
               href="https://www.tiktok.com/@merly_macias?lang=es"
+              aria-label="Bella Beauty en TikTok"
               target="_blank"
               rel="noreferrer"
               className="shrink-0 w-10 h-10 rounded-full bg-white/60 border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 hover:bg-white/90 transition-colors"
@@ -296,6 +330,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
             </a>
             <a
               href="https://www.facebook.com/HairdresserandSpa?mibextid=LQQJ4d"
+              aria-label="Bella Beauty en Facebook"
               target="_blank"
               rel="noreferrer"
               className="shrink-0 w-10 h-10 rounded-full bg-white/60 border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 hover:bg-white/90 transition-colors"
