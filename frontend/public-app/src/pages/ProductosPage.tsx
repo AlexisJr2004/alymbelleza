@@ -27,7 +27,7 @@ function ProductCatalog({ params }: { params: URLSearchParams }) {
 
   return <main className="bb-catalog" id="contenido">
     <div className="bb-container">
-      <nav className="bb-breadcrumb" aria-label="Ruta de navegación"><Link to="/">Inicio</Link><StoreIcon name="chevron" /><span aria-current="page">{favoritesOnly ? 'Mis favoritos' : 'Tienda'}</span></nav>
+      <nav className="bb-commerce-breadcrumb" aria-label="Ruta de navegación"><Link to="/">Inicio</Link><StoreIcon name="chevron" /><span aria-current="page">{favoritesOnly ? 'Mis favoritos' : 'Tienda'}</span></nav>
       <header className="bb-catalog-hero">
         <div><p className="bb-eyebrow">TU RITUAL DE BELLEZA</p><h1>{favoritesOnly ? <>Todo lo que <em>te encanta</em></> : <>Belleza para <em>cada día</em></>}</h1><p>{favoritesOnly ? 'Tu selección de favoritos, guardada para cuando quieras volver.' : 'Encuentra el cuidado perfecto para tu piel y tu cabello. Un pequeño momento para ti, todos los días.'}</p><span><StoreIcon name={favoritesOnly ? 'heart' : 'leaf'} />{favoritesOnly ? 'Elegidos por ti' : 'Descubre tu próxima rutina favorita'}</span></div>
       </header>

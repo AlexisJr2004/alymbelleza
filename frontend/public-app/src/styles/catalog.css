@@ -1,7 +1,4 @@
 .bb-catalog { background: linear-gradient(#fffbfc,#fff 580px); padding: 16px 0 32px; }
-.bb-breadcrumb { display: flex; align-items: center; gap: 10px; font-size: 11px; color: #86717b; margin-bottom: 12px; }
-.bb-breadcrumb svg { width: 11px; height: 11px; }
-.bb-breadcrumb [aria-current] { color: #a93158; }
 .bb-catalog-hero { background: linear-gradient(90deg,#fbecef 30%,#fbecefcc 54%,#fbecef00 75%),url('/img/storefront/beauty-collection.jpg') right 44% / cover; border: 1px solid #f4e1e6; border-radius: 18px; padding: 20px 26px; min-height: 156px; }
 .bb-catalog-hero > div { max-width: 570px; }
 .bb-catalog-hero h1 { font-size: clamp(28px,3vw,36px); line-height: 1.15; letter-spacing: -1.5px; margin: 5px 0 8px; }
@@ -13,14 +10,14 @@
 .bb-catalog-categories a { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 8px 14px; border: 1px solid #eddee3; border-radius: 24px; font-size: 11px; color: #75606a; background: #fff; }
 .bb-catalog-categories a:hover, .bb-catalog-categories a.is-active { color: #aa2c54; background: #fcebf1; border-color: #e9aabd; }
 .bb-catalog-categories svg { width: 14px; height: 14px; }
-.bb-catalog-layout { display: grid; grid-template-columns: 215px minmax(0,1fr); gap: 18px; align-items: start; }
+.bb-catalog-layout { display: grid; grid-template-columns: 195px minmax(0,1fr); gap: 18px; align-items: start; }
 .bb-catalog-filters { min-width: 0; }
 .bb-catalog-filters #catalog-filter-options { border-color: #efdee5; border-radius: 15px; background: #fff; position: static; }
 .bb-catalog-filters h3, .bb-catalog-filters h4 { font-family: 'Bella Montserrat',sans-serif; font-weight: 600; }
-.bb-catalog-filters h4 { font-size: 12px; }
-.bb-catalog-filters label { font-size: 11px; color: #74616c; }
+.bb-catalog-filters h4 { font-size: 11px; }
+.bb-catalog-filters label { font-size: 10px; color: #74616c; min-height: 20px; gap: 7px; }
 .bb-catalog-filters button { color: #b6315b; }
-.bb-catalog-filters input[type=number] { border-color: #ebd7df; font-size: 12px; }
+.bb-catalog-filters input[type=number] { border-color: #ebd7df; font-size: 11px; padding: 5px 8px; min-width: 0; }
 .bb-catalog-filters input[type=number]:focus { outline: 2px solid #edb4c6; box-shadow: none; }
 .bb-catalog-filters .peer:checked ~ .switch-track { background: #d84072; }
 .bb-catalog-filters .peer:focus-visible ~ .switch-track { outline: 2px solid #b6315b; outline-offset: 3px; }
@@ -64,7 +61,6 @@
 }
 @media (max-width: 640px) {
   .bb-catalog { padding-top: 18px; padding-bottom: 30px; }
-  .bb-breadcrumb { margin-bottom: 14px; font-size: 10px; }
   .bb-catalog-hero { padding: 18px; min-height: 170px; background: linear-gradient(90deg,#fbecefef,#fbecefb0),url('/img/storefront/beauty-collection.jpg') center / cover; }
   .bb-catalog-hero h1 { font-size: 28px; letter-spacing: -1px; }
   .bb-catalog-hero h1 em { display: block; }
@@ -86,3 +82,8 @@
   .bb-catalog-assistance { align-items: flex-start; flex-direction: column; padding: 16px; gap: 12px; }
   .bb-catalog-assistance strong { font-size: 18px; }
 }
+
+.bb-catalog-filters .switch-track { width: 28px; height: 16px; }
+.bb-catalog-filters .switch-track::after { width: 12px; height: 12px; top: 2px; left: 2px; }
+.bb-catalog-filters .peer:checked ~ .switch-track::after { transform: translateX(12px); }
+@media (max-width: 767px) and (pointer: coarse) { .bb-catalog-filters label { min-height: 32px; } }

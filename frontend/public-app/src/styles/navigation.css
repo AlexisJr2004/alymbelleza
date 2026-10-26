@@ -1,0 +1,38 @@
+.bb-mobile-label { display: none; }
+.bb-mobile-drawer { position: fixed; inset: 0 auto 0 0; margin: 0; padding: 20px; width: min(330px,88vw); max-width: none; height: 100dvh; max-height: 100dvh; border: 0; border-radius: 0 22px 22px 0; box-shadow: 12px 0 50px #50203626; overflow-y: auto; }
+.bb-mobile-drawer::backdrop { background: #35212b70; backdrop-filter: blur(3px); }
+.bb-mobile-drawer[open] { display: flex; flex-direction: column; animation: bb-drawer-in .22s ease-out; }
+@keyframes bb-drawer-in { from { transform: translateX(-100%); } }
+.bb-mobile-drawer > header { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding-bottom: 20px; border-bottom: 1px solid #efdce4; }
+.bb-mobile-drawer .bb-brand-name { font-size: 24px; }
+.bb-mobile-drawer .bb-brand > svg { width: 34px; }
+.bb-mobile-drawer .bb-brand-tagline { font-size: 5px; }
+.bb-drawer-intro { padding: 24px 0 18px; }
+.bb-drawer-intro .bb-eyebrow { font-size: 8px; }
+.bb-drawer-intro h2 { font-size: 25px; margin-bottom: 8px; }
+.bb-drawer-intro > p:last-child { color: #8a6c7a; font-size: 11px; }
+.bb-mobile-drawer nav { display: grid; gap: 5px; }
+.bb-mobile-drawer nav a { display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 12px; border-radius: 10px; color: #62404f; font-size: 12px; }
+.bb-mobile-drawer nav a:hover, .bb-mobile-drawer nav [aria-current] { background: #fceaf1; color: #b53060; }
+.bb-mobile-drawer nav a > svg:first-child { width: 18px; height: 18px; color: #bb587d; }
+.bb-mobile-drawer nav a > svg:last-child { margin-left: auto; width: 12px; height: 12px; }
+.bb-drawer-bottom { margin-top: auto; padding: 24px 0 max(8px,env(safe-area-inset-bottom)); display: grid; justify-items: center; gap: 12px; color: #b35075; font-size: 10px; }
+.bb-drawer-bottom .bb-button { width: 100%; }
+@media (max-width: 767px) {
+  .bb-header .bb-nav { display: none; }
+  .bb-header .bb-header-main { flex-wrap: wrap; padding-block: 10px; gap: 10px; }
+  .bb-header .bb-menu-toggle { display: inline-flex; margin-left: auto; width: 40px; height: 40px; order: 2; background: #fff1f6; color: #ac345f; border: 1px solid #f1d5e0; border-radius: 12px; }
+  .bb-header .bb-search { order: 3; width: 100%; }
+  .bb-header .bb-header-actions { position: fixed; inset: auto 0 0; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 0; margin: 0; padding: 6px 10px calc(6px + env(safe-area-inset-bottom)); min-height: 64px; background: #fffafdf5; border-top: 1px solid #edd4df; box-shadow: 0 -4px 20px #69213d0b; backdrop-filter: blur(14px); z-index: 60; }
+  .bb-header-actions > .bb-icon-button, .bb-header-actions .bb-account > .bb-icon-button { width: 100%; height: 50px; display: flex; flex-direction: column; justify-content: center; gap: 4px; border-radius: 12px; }
+  .bb-header-actions .bb-icon-button svg { width: 21px; height: 21px; }
+  .bb-header-actions .bb-mobile-label { display: block; font-size: 9px; font-weight: 500; }
+  .bb-header-actions .bb-count { top: 1px; right: calc(50% - 21px); }
+  .bb-header-actions [aria-current=page], .bb-header-actions [aria-pressed=true], .bb-header-actions [aria-expanded=true] { color: #ad305b; background: #fce8f0; }
+  .bb-header-actions .bb-account-popover { top: auto; bottom: 100%; left: 0; right: auto; padding: 0 0 10px; width: min(282px,calc(100vw - 20px)); }
+  .bb-home-layout { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+  .bb-home-layout .bb-footer-bottom { padding-bottom: 18px; }
+  .bb-home-layout #chatbot-container { bottom: calc(78px + env(safe-area-inset-bottom)); left: 12px; }
+  .bb-home-layout .bb-go-top { bottom: calc(80px + env(safe-area-inset-bottom)); }
+}
+@media (prefers-reduced-motion: reduce) { .bb-mobile-drawer[open] { animation: none; } }

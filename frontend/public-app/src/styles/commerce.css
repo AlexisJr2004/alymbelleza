@@ -1,7 +1,4 @@
 .bb-commerce { background: linear-gradient(#fffbfc, #fff 420px); padding: 16px 0 32px; }
-.bb-commerce-breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: #806c76; font-size: 10px; }
-.bb-commerce-breadcrumb svg { width: 10px; height: 10px; }
-.bb-commerce-breadcrumb [aria-current] { color: #a93158; }
 .bb-commerce-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 26px; margin-bottom: 20px; border: 1px solid #f1dde4; border-radius: 14px; background: linear-gradient(115deg,#fceef2,#fff8f9 65%,#f8e1e8); }
 .bb-commerce-heading h1 { font-size: clamp(28px,3vw,36px); line-height: 1.15; letter-spacing: -1px; margin: 5px 0 8px; }
 .bb-commerce-heading h1 em { color: #b8345e; font-style: normal; }

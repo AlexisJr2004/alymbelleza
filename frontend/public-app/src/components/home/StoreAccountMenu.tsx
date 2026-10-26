@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useSessionUser } from '../../hooks/useSessionUser';
 import { isAdmin, logout } from '../../lib/auth';
 import StoreIcon from './StoreIcon';
+import { confirmAction } from '../../lib/sweetalert';
 
 export default function StoreAccountMenu() {
   const user = useSessionUser();
@@ -27,6 +28,9 @@ export default function StoreAccountMenu() {
     return () => document.removeEventListener('pointerdown', outside);
   }, []);
   async function signOut() {
+    setOpen(false);
+    const confirmed = await confirmAction({ title: '¿Cerrar sesión?', text: '¿Estás seguro de que deseas salir de tu cuenta?', confirmText: 'Sí, cerrar sesión', icon: 'question' });
+    if (!confirmed) { trigger.current?.focus(); return; }
     await queryClient.cancelQueries();
     logout();
     queryClient.clear();
@@ -34,7 +38,7 @@ export default function StoreAccountMenu() {
     navigate('/');
   }
   return <div ref={root} className="bb-account" onPointerEnter={event => { if (event.pointerType === 'mouse') setOpen(true); }} onPointerLeave={event => { if (event.pointerType === 'mouse' && !root.current?.contains(document.activeElement)) setOpen(false); }} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }} onKeyDown={event => { if (event.key === 'Escape') { setOpen(false); trigger.current?.focus(); } }}>
-    <button ref={trigger} type="button" className="bb-icon-button" aria-label="Menú de mi cuenta" aria-expanded={open} aria-controls="store-account-panel" onClick={() => setOpen(value => !value)} onKeyDown={event => { if (event.key === 'ArrowDown') { event.preventDefault(); if (open) root.current?.querySelector<HTMLAnchorElement>('.bb-account-panel a')?.focus(); else { focusFirst.current = true; setOpen(true); } } }}><StoreIcon name="user" /></button>
+    <button ref={trigger} type="button" className="bb-icon-button" aria-label="Menú de mi cuenta" aria-current={location.pathname === '/perfil' ? 'page' : undefined} aria-expanded={open} aria-controls="store-account-panel" onClick={() => setOpen(value => !value)} onKeyDown={event => { if (event.key === 'ArrowDown') { event.preventDefault(); if (open) root.current?.querySelector<HTMLAnchorElement>('.bb-account-panel a')?.focus(); else { focusFirst.current = true; setOpen(true); } } }}><StoreIcon name="user" /><span className="bb-mobile-label">Perfil</span></button>
     {open && <div className="bb-account-popover" id="store-account-panel"><div className="bb-account-panel">
       <div className="bb-account-intro"><span className="bb-account-avatar">{user?.name?.charAt(0).toUpperCase() || <StoreIcon name="user" />}</span><div><strong>{user?.name || 'Bienvenida a Bella Beauty'}</strong><small>{user ? 'Tu espacio de belleza' : 'Un espacio pensado para ti'}</small></div></div>
       <nav aria-label="Opciones de mi cuenta">

@@ -36,7 +36,7 @@ export default function FiltrosSidebar({ filters }: FiltrosSidebarProps) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-controls="catalog-filter-options"
-        className="lg:hidden w-full flex items-center justify-between px-4 py-2.5 mb-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700"
+        className="lg:hidden w-full flex items-center justify-between px-4 py-2.5 mb-1 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700"
       >
         <span>
           Filtros
@@ -44,18 +44,18 @@ export default function FiltrosSidebar({ filters }: FiltrosSidebarProps) {
         <StoreIcon name="down" />
       </button>
 
-      <div id="catalog-filter-options" className={`${open ? 'block' : 'hidden'} lg:block space-y-4 border border-gray-200 rounded-xl p-4 lg:sticky lg:top-24`}>
+      <div id="catalog-filter-options" className={`${open ? 'block' : 'hidden'} lg:block space-y-1 border border-gray-200 rounded-xl p-3 lg:sticky lg:top-24`}>
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Filtros</h3>
-          <button type="button" onClick={filters.clear} className="text-xs font-medium text-purple-600 hover:text-purple-800">
+          <h3 className="text-xs font-semibold text-gray-900 uppercase tracking-wide">Filtros</h3>
+          <button type="button" onClick={filters.clear} className="text-[10px] font-medium text-purple-600 hover:text-purple-800">
             Limpiar
           </button>
         </div>
 
         {/* Categoría */}
         <div>
-          <h4 className="text-sm font-medium text-gray-700 mb-2">Categoría</h4>
-          <div className="space-y-2">
+          <h4 className="text-sm font-medium text-gray-700 mb-1">Categoría</h4>
+          <div className="space-y-1">
             {CATEGORIAS.map((c) => (
               <Switch
                 key={c.value}
@@ -68,9 +68,9 @@ export default function FiltrosSidebar({ filters }: FiltrosSidebarProps) {
         </div>
 
         {/* Tipo de producto */}
-        <div className="pt-3 border-t border-gray-100">
-          <h4 className="text-sm font-medium text-gray-700 mb-2">Tipo de producto</h4>
-          <div className="space-y-2">
+        <div className="pt-2 border-t border-gray-100">
+          <h4 className="text-sm font-medium text-gray-700 mb-1">Tipo de producto</h4>
+          <div className="space-y-1">
             {TIPOS.map((t) => (
               <Switch
                 key={t.value}
@@ -83,8 +83,8 @@ export default function FiltrosSidebar({ filters }: FiltrosSidebarProps) {
         </div>
 
         {/* Rango de precio */}
-        <div className="pt-3 border-t border-gray-100">
-          <h4 className="text-sm font-medium text-gray-700 mb-2">Rango de precio</h4>
+        <div className="pt-2 border-t border-gray-100">
+          <h4 className="text-sm font-medium text-gray-700 mb-1">Rango de precio</h4>
           <div className="flex items-center gap-2">
             <input
               type="number"
@@ -109,7 +109,7 @@ export default function FiltrosSidebar({ filters }: FiltrosSidebarProps) {
         </div>
 
         {/* Otros */}
-        <div className="pt-3 border-t border-gray-100 space-y-2">
+        <div className="pt-2 border-t border-gray-100 space-y-1">
           <Switch label="Solo destacados" checked={filters.soloDestacados} onChange={filters.setSoloDestacados} />
           <Switch label="Solo disponibles" checked={filters.soloDisponibles} onChange={filters.setSoloDisponibles} />
           <Switch label="Solo ofertas" checked={filters.soloOfertas} onChange={filters.setSoloOfertas} />

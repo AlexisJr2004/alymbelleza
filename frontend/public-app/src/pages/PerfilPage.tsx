@@ -8,6 +8,7 @@ import { ShoppingBagIcon, ExclamationTriangleIcon } from '../components/icons';
 import ProfileCard from '../components/perfil/ProfileCard';
 import ProfileEditForm from '../components/perfil/ProfileEditForm';
 import ProfileIcon from '../components/perfil/ProfileIcons';
+import StoreIcon from '../components/home/StoreIcon';
 import './PerfilPage.css';
 
 export default function PerfilPage() {
@@ -44,8 +45,8 @@ export default function PerfilPage() {
   return (
     <main className="profile-page" id="contenido">
       <div className="profile-container">
-        <nav aria-label="Ruta de navegación" className="profile-breadcrumb">
-          <Link to="/">Inicio</Link><span aria-hidden="true">/</span><span aria-current="page">Mi cuenta</span>
+        <nav aria-label="Ruta de navegación" className="bb-commerce-breadcrumb">
+          <Link to="/">Inicio</Link><StoreIcon name="chevron" /><span aria-current="page">Mi cuenta</span>
         </nav>
 
         <header className="profile-heading">

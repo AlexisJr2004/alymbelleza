@@ -356,3 +356,8 @@
 @media (prefers-reduced-motion: reduce) {
   .bb-storefront *, .bb-storefront *::before, .bb-storefront *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+.bb-commerce-breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: #806c76; font: 10px/1.5 'Bella Montserrat',sans-serif; }
+.bb-commerce-breadcrumb svg { width: 10px; height: 10px; }
+.bb-commerce-breadcrumb [aria-current] { color: #a93158; }
+.bb-commerce-breadcrumb a:hover { color: #a93158; }

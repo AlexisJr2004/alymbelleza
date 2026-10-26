@@ -9,9 +9,6 @@
   padding: 30px 24px 80px;
 }
 .profile-container { max-width: 1288px; margin: 0 auto; }
-.profile-breadcrumb { display: flex; gap: 12px; align-items: center; color: var(--profile-muted); font-size: 13px; }
-.profile-breadcrumb a:hover { color: var(--profile-accent); }
-.profile-breadcrumb > span:last-child { color: var(--profile-ink); }
 .profile-heading { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 36px 0 38px; }
 .profile-eyebrow { font-size: 10px; font-weight: 500; letter-spacing: .17em; color: var(--profile-muted); }
 .profile-heading .profile-eyebrow { display: flex; align-items: center; gap: 10px; color: var(--profile-accent); }

@@ -1,0 +1,25 @@
+.bb-accessibility { font: 11px/1.5 'Bella Montserrat',sans-serif; color: #644450; }
+.bb-accessibility-trigger { position: fixed; z-index: 70; bottom: 140px; left: 18px; width: 40px; height: 40px; display: grid; place-items: center; background: #fff9fc; border: 1px solid #ebc4d3; border-radius: 50%; color: #b73563; box-shadow: 0 3px 14px #79344c15; }
+.bb-accessibility-trigger:hover { background: #fce8f0; }
+.bb-accessibility-panel { position: fixed; z-index: 70; bottom: 188px; left: 18px; width: min(252px,calc(100vw - 36px)); max-height: calc(100dvh - 210px); overflow-y: auto; padding: 14px; background: #fff; border: 1px solid #ead2dd; border-radius: 14px; box-shadow: 0 10px 35px #66253e20; }
+.bb-accessibility-panel header { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid #f0e2e8; margin-bottom: 12px; }
+.bb-accessibility-panel h2 { font: 21px Georgia,serif; color: #51303f; margin: 0; }
+.bb-accessibility-panel header button { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #fff1f6; color: #b64b73; }
+.bb-accessibility-panel header svg { width: 14px; height: 14px; }
+.bb-accessibility-group { margin-bottom: 12px; }
+.bb-accessibility-group p { display: flex; justify-content: space-between; font-size: 10px; margin: 0 0 6px; }
+.bb-accessibility-group output { color: #b53f6a; font-size: 9px; }
+.bb-accessibility-group > div { display: grid; grid-template-columns: 36px 1fr 36px; gap: 5px; }
+.bb-accessibility-group button, .bb-accessibility-reader { min-height: 32px; border-radius: 7px; background: #fff2f7; color: #aa315e; border: 1px solid #f0dbe4; font-size: 10px; }
+.bb-accessibility-group button:first-child, .bb-accessibility-group button:last-child { font-size: 12px; }
+.bb-accessibility-font { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 10px; }
+.bb-accessibility-font select { max-width: 145px; width: 100%; min-width: 0; border: 1px solid #ead2de; border-radius: 6px; padding: 7px; font-size: 11px; background: #fff; color: #744459; }
+.bb-accessibility-reader { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; margin-top: 12px; }
+.bb-accessibility-reader svg { width: 15px; height: 15px; }
+.bb-accessibility :disabled { opacity: .45; cursor: not-allowed; }
+.bb-accessibility :focus-visible { outline: 2px solid #b73d69; outline-offset: 2px; }
+body[data-accessibility-font] :is(h1,h2,h3,h4,p,a,button,label,input,textarea,select,span,small,strong,em,li,dt,dd,output) { font-family: var(--bb-accessible-font),sans-serif !important; }
+@media (max-width: 767px) {
+  .bb-accessibility-trigger { bottom: calc(138px + env(safe-area-inset-bottom)); left: 12px; width: 38px; height: 38px; }
+  .bb-accessibility-panel { bottom: calc(184px + env(safe-area-inset-bottom)); left: 12px; max-height: calc(100dvh - 204px - env(safe-area-inset-bottom)); }
+}

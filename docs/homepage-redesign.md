@@ -70,3 +70,12 @@ Montserrat se sirve localmente desde `frontend/public-app/public/fonts`, con su 
 - Los filtros se presentan como botones compactos y las tarjetas muestran categoría y fecha. Se adaptan a cuatro, tres o dos columnas según el ancho disponible; las animaciones respetan movimiento reducido.
 - Contacto utiliza el mismo diseño blanco y rosa, con formulario de nombre, correo y mensaje. Conserva el envío a `/api/contact`, bloqueo durante el envío, confirmación y errores sin perder el mensaje.
 - Los enlaces de contacto apuntan a `/#contacto`. Se utiliza el WhatsApp de citas ya configurado y los enlaces sociales existentes; se retiran los datos de ejemplo de dirección, teléfono y correo del formulario anterior.
+
+## Navegación móvil y accesibilidad
+
+- En pantallas menores de 768 px, Perfil, Citas, Favoritos y Carrito se presentan en una barra inferior con espacio para el área segura del dispositivo. El menú de cuenta se abre hacia arriba.
+- El botón de cuatro cuadros abre un menú lateral con el estilo del sitio. Conserva el foco dentro del panel, bloquea el desplazamiento del fondo y se cierra al navegar, pulsar Escape, tocar fuera o cambiar a escritorio.
+- Cerrar sesión requiere confirmación; cancelar conserva la cuenta y confirmar limpia la sesión y la caché.
+- Productos conserva sus interruptores y filtros con controles, separaciones y ancho más compactos. En móvil las filas mantienen una superficie de toque mayor.
+- Productos, Perfil, Citas, Carrito y Galería comparten el estilo de ruta de navegación de 10 px.
+- Accesibilidad utiliza un panel compacto blanco y rosa con zoom, tamaño de texto, selector de tipografía y lectura de página. Se conservan la tipografía elegida y los controles para restablecer; el aumento de texto se aplica también al contenido que se monta al navegar.
