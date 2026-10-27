@@ -15,6 +15,7 @@ interface ProfilePhotoLightboxProps {
 export default function ProfilePhotoLightbox({ open, src, onClose }: ProfilePhotoLightboxProps) {
   return (
     <Sheet
+      variant="media"
       open={open}
       onClose={onClose}
       desktopMaxWidthClassName="md:max-w-lg"

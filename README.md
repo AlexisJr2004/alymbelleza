@@ -86,7 +86,7 @@ Bella Beauty es una plataforma web para la gestión integral de un centro de bel
 | Base de datos | MongoDB Atlas vía Mongoose. |
 | Almacenamiento de archivos | Cloudinary (perfil, productos y galería). |
 | Pruebas | Jest + Supertest. |
-| Integraciones externas | Nodemailer (Gmail), WhatsApp, OpenAI (chatbot, opcional). |
+| Integraciones externas | Correo transaccional y WhatsApp. |
 
 ---
 

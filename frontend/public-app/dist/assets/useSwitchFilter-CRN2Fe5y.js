@@ -1,0 +1,1 @@
+import{f as e,m as t}from"./chunk-BV7QT456-D3Egtrny.js";var n=t(e(),1);function r(e=[]){let[t,r]=(0,n.useState)(()=>new Set(e));return{selected:t,toggle:(e,t)=>{r(n=>{let r=new Set(n);return t?r.add(e):r.delete(e),r})},isChecked:e=>t.has(e),clear:()=>r(new Set)}}export{r as t};

@@ -50,7 +50,9 @@ export default function StoreHeader({ onFavorites, favoritesActive }: { onFavori
         <button type="submit" aria-label="Buscar"><StoreIcon name="search" /></button>
       </form>
       <div className="bb-header-actions" role="navigation" aria-label="Accesos rápidos">
-        <StoreAccountMenu />
+        <span className="bb-desktop-account"><StoreAccountMenu /></span>
+        <Link className="bb-icon-button bb-mobile-access" to="/" aria-label="Inicio" aria-current={pathname === '/' ? 'page' : undefined}><StoreIcon name="home" /><span className="bb-mobile-label">Inicio</span></Link>
+        <Link className="bb-icon-button bb-mobile-access" to="/galeria" aria-label="Galería" aria-current={pathname === '/galeria' ? 'page' : undefined}><StoreIcon name="image" /><span className="bb-mobile-label">Galería</span></Link>
         <Link className="bb-icon-button" to="/citas" aria-label="Agendar una cita" title="Agendar una cita" aria-current={pathname === '/citas' ? 'page' : undefined}><StoreIcon name="calendar" /><span className="bb-mobile-label">Citas</span></Link>
         <button className="bb-icon-button" type="button" onClick={onFavorites ?? (() => navigate('/productos?favoritos=1'))} aria-label={`Mis favoritos (${favoriteCount})`} aria-pressed={favoritesActive ?? new URLSearchParams(query).get('favoritos') === '1'}><StoreIcon name="heart" /><span className="bb-mobile-label">Favoritos</span>{favoriteCount > 0 && <span className="bb-count">{favoriteCount}</span>}</button>
         <Link className="bb-icon-button" to="/carrito" aria-current={pathname === '/carrito' ? 'page' : undefined} aria-label={`Mi carrito (${cartCount})`}><StoreIcon name="bag" /><span className="bb-mobile-label">Carrito</span>{cartCount > 0 && <span className="bb-count">{cartCount}</span>}</Link>

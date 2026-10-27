@@ -17,31 +17,24 @@ export default function CartImagePreviewModal({ image, onClose }: CartImagePrevi
     if (image) setRendered(image);
   }, [image]);
 
-  useEffect(() => {
-    if (!image) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [image, onClose]);
-
   if (!rendered) return null;
 
   return (
     <Sheet
+      variant="media"
       open={!!image}
       onClose={onClose}
       onFullyClosed={() => setRendered(null)}
       desktopMaxWidthClassName="md:max-w-lg"
       panelClassName="bg-transparent rounded-t-3xl md:rounded-none"
-      handleClassName="bg-white/50"
+      handleClassName="bg-rose-200"
       backdropClassName="bg-black/40 backdrop-blur-sm"
       labelledBy="cart-image-preview-title"
     >
       <div className="px-4 pb-6 pt-1 md:p-0">
-        <img src={rendered.src} alt={rendered.name} className="w-full max-h-[70vh] object-contain rounded-2xl shadow-2xl bg-white" />
-        <p id="cart-image-preview-title" className="mt-4 text-center text-white text-lg font-semibold">
+        <div className="flex justify-end mb-2"><button type="button" onClick={onClose} aria-label="Cerrar imagen" className="w-8 h-8 rounded-full">✕</button></div>
+        <img src={rendered.src} alt={rendered.name} className="w-full max-h-[48vh] object-contain rounded-2xl shadow-2xl bg-white" />
+        <p id="cart-image-preview-title" className="mt-4 text-center text-rose-900 text-sm font-semibold">
           {rendered.name}
         </p>
       </div>

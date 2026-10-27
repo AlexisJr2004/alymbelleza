@@ -3,10 +3,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import PublicLayout from './components/layout/PublicLayout';
 import AuthLayout from './components/layout/AuthLayout';
 
-// Cada página se carga en su propio chunk: evita que dependencias pesadas de
-// una sola ruta (swiper en Home, html2pdf/jsPDF/html2canvas en Pagos, y más
-// adelante WebLLM en el chatbot) se descarguen en cada visita sin importar
-// qué página se abra primero.
+// Cada página carga sus propias dependencias: carrusel en Inicio y PDF en Pagos.
 const HomePage = lazy(() => import('./pages/HomePage'));
 const NosotrosPage = lazy(() => import('./pages/NosotrosPage'));
 const ProductosPage = lazy(() => import('./pages/ProductosPage'));

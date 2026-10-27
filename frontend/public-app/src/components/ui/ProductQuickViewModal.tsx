@@ -57,7 +57,7 @@ export default function ProductQuickViewModal({ product, onClose }: ProductQuick
       open={!!product}
       onClose={onClose}
       onFullyClosed={() => setRendered(null)}
-      desktopMaxWidthClassName="md:max-w-2xl lg:max-w-5xl"
+      desktopMaxWidthClassName="md:max-w-2xl lg:max-w-3xl"
       labelledBy="quick-view-title"
     >
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 sticky top-0 bg-white z-10">
@@ -68,11 +68,11 @@ export default function ProductQuickViewModal({ product, onClose }: ProductQuick
           <XIcon className="w-5 h-5" />
         </button>
       </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-[1fr_1fr_320px] gap-6 p-6">
+      <div className="bb-quick-layout">
         <img
           src={rendered.image || './img/default.jpg'}
           alt={rendered.name}
-          className="w-full h-64 md:h-full object-cover rounded-xl"
+          className="bb-quick-image"
         />
         <div className="flex flex-col">
           <span
@@ -80,7 +80,7 @@ export default function ProductQuickViewModal({ product, onClose }: ProductQuick
           >
             {categoriaTag}
           </span>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">{rendered.name}</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-2">{rendered.name}</h2>
           <div className="flex items-center mb-4">
             <StarRating rating={rendered.rating} className="w-4 h-4" />
             <span className="text-gray-400 text-xs ml-1.5">{rendered.rating ? Number(rendered.rating).toFixed(1) : 'N/A'}</span>
@@ -88,8 +88,8 @@ export default function ProductQuickViewModal({ product, onClose }: ProductQuick
               {available ? 'Disponible' : 'Agotado'}
             </span>
           </div>
-          <p className="text-gray-600 text-sm leading-relaxed mb-6">{rendered.description}</p>
-          <div className="mt-auto flex items-center justify-between pt-4 border-t border-gray-100">
+          <p className="text-gray-600 text-sm leading-relaxed mb-3">{rendered.description}</p>
+          <div className="bb-quick-actions">
             <div>
               <span className="text-gray-900 font-bold text-2xl">${rendered.price}</span>
               {rendered.originalPrice ? (
@@ -102,7 +102,7 @@ export default function ProductQuickViewModal({ product, onClose }: ProductQuick
                 type="button"
                 onClick={handleAddToCart}
                 disabled={addToCart.isPending}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center disabled:opacity-60"
+                className="bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center disabled:opacity-60"
               >
                 <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -118,12 +118,7 @@ export default function ProductQuickViewModal({ product, onClose }: ProductQuick
           </div>
         </div>
 
-        {/* En md (tablet) ocupa el ancho completo debajo de imagen+info
-            (col-span-2); recién en lg (escritorio) pasa a ser la tercera
-            columna "a la derecha" que pidió el usuario. Su propio scroll
-            interno (ver ProductReviews.tsx) queda acotado a 65vh en escritorio
-            para no competir con el scroll general de la hoja (max-h-[85vh]). */}
-        <div className="md:col-span-2 lg:col-span-1 lg:border-l lg:border-gray-100 lg:pl-6 pt-6 border-t border-gray-100 md:pt-6 lg:pt-0 lg:border-t-0 lg:max-h-[65vh]">
+        <div className="bb-quick-reviews">
           <ProductReviews productId={rendered._id} />
         </div>
       </div>

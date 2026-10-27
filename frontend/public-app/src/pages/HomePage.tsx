@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useProductsQuery } from '../hooks/useProducts';
 import { useFavorites } from '../hooks/useFavorites';
@@ -9,10 +9,8 @@ import StoreProductCard from '../components/home/StoreProductCard';
 import StoreTestimonials from '../components/home/StoreTestimonials';
 import ContactSection from '../components/home/ContactSection';
 import StoreIcon, { type StoreIconName } from '../components/home/StoreIcon';
-import CookieConsent from '../components/home/CookieConsent';
 import '../styles/storefront.css';
 
-const ChatWidget = lazy(() => import('../components/chatbot/ChatWidget'));
 const categories = [
   { title: 'Maquillaje', subtitle: 'Realza tu belleza', query: 'q=maquillaje', image: 'makeup' },
   { title: 'Skincare', subtitle: 'Piel saludable', query: 'categoria=facial', image: 'skincare' },
@@ -76,7 +74,5 @@ export default function HomePage() {
       <ContactSection />
     </main>
     <StoreFooter />
-    <CookieConsent />
-    <Suspense fallback={null}><ChatWidget /></Suspense>
   </div>;
 }

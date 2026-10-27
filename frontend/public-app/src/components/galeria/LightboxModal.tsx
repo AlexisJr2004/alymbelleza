@@ -60,9 +60,10 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
   useEffect(() => {
     if (!open || total === 0) return undefined;
     function handleKeyDown(e: KeyboardEvent) {
+      if (!document.getElementById('lightbox-title')?.closest('[role="dialog"]')?.contains(document.activeElement)) return;
       if (e.key === 'ArrowLeft') onNavigate((index - 1 + total) % total);
       if (e.key === 'ArrowRight') onNavigate((index + 1) % total);
-      if (e.key === 'Escape') onClose();
+
     }
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
@@ -94,24 +95,23 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
 
   return (
     <Sheet
+      variant="media"
       open={open}
       onClose={onClose}
       onFullyClosed={() => setRendered(null)}
-      desktopMaxWidthClassName="md:max-w-3xl"
-      // Blanco sólido en móvil (mismo fondo que UploadModal y el resto de
-      // hojas); en escritorio sigue transparente sobre el fondo oscuro, como
-      // un visor de imagen normal.
+      desktopMaxWidthClassName="md:max-w-[640px]"
       panelClassName="bb-gallery-dialog bg-white md:bg-transparent rounded-t-3xl md:rounded-none"
       backdropClassName="bg-black/40"
       labelledBy="lightbox-title"
     >
       <div className="relative w-full flex flex-col items-center px-4 pb-6 pt-1 md:p-0">
+        <button type="button" onClick={onClose} aria-label="Cerrar visor" className="absolute top-0 left-2 z-10 w-9 h-9 rounded-full">✕</button>
         {multiple && (
           <button
             type="button"
             onClick={() => onNavigate((rendered.index - 1 + total) % total)}
             aria-label="Elemento anterior"
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-black/50 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-sm transition-colors"
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/50 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-sm transition-colors"
           >
             <i className="fas fa-chevron-left" />
           </button>
@@ -121,7 +121,7 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
             type="button"
             onClick={() => onNavigate((rendered.index + 1) % total)}
             aria-label="Elemento siguiente"
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-black/50 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-sm transition-colors"
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/50 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-sm transition-colors"
           >
             <i className="fas fa-chevron-right" />
           </button>
@@ -132,7 +132,7 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
           onClick={handleDownload}
           disabled={downloading}
           aria-label="Descargar"
-          className="absolute top-0 right-2 md:top-2 z-10 w-11 h-11 rounded-full bg-black/10 md:bg-white/10 hover:bg-black/20 md:hover:bg-white/20 text-gray-700 md:text-white flex items-center justify-center backdrop-blur-sm transition-colors disabled:opacity-60"
+          className="absolute top-0 right-2 md:top-2 z-10 w-9 h-9 rounded-full bg-black/10 md:bg-white/10 hover:bg-black/20 md:hover:bg-white/20 text-gray-700 md:text-white flex items-center justify-center backdrop-blur-sm transition-colors disabled:opacity-60"
         >
           <i className={`fas ${downloading ? 'fa-spinner fa-spin' : 'fa-download'}`} />
         </button>
@@ -144,9 +144,9 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
             // original), para que autoPlay realmente dispare en cada cambio
             // en vez de que React solo actualice el atributo src de un mismo
             // nodo ya reproducido.
-            <video key={item._id} src={videoUrl} controls autoPlay className="max-h-[60vh] max-w-full rounded-lg shadow-lg" />
+            <video key={item._id} src={videoUrl} controls autoPlay className="max-h-[48vh] max-w-full rounded-lg shadow-lg" />
           ) : (
-            <img key={item._id} src={url} alt={item.category} className="max-h-[60vh] max-w-full rounded-lg shadow-lg" />
+            <img key={item._id} src={url} alt={item.category} className="max-h-[48vh] max-w-full rounded-lg shadow-lg" />
           )}
         </div>
         <div id="lightbox-title" className="mt-4 text-gray-700 md:text-white text-sm">

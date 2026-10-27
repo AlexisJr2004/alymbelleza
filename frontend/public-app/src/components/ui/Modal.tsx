@@ -18,7 +18,7 @@ function iconFor(modal: ActiveModal): { Icon: typeof CheckCircleIcon; bg: string
   if (modal.kind === 'error') return { Icon: XCircleIcon, bg: 'bg-rose-100', fg: 'text-rose-600' };
   if (modal.kind === 'info') return { Icon: InformationCircleIcon, bg: 'bg-blue-100', fg: 'text-blue-600' };
   // kind === 'confirm'
-  if (modal.tone === 'brand') return { Icon: QuestionMarkCircleIcon, bg: 'bg-purple-100', fg: 'text-purple-600' };
+  if (modal.tone === 'brand') return { Icon: QuestionMarkCircleIcon, bg: 'bg-rose-100', fg: 'text-rose-600' };
   return { Icon: ExclamationTriangleIcon, bg: 'bg-rose-100', fg: 'text-rose-600' };
 }
 
@@ -49,15 +49,15 @@ function ModalCard({ modal }: { modal: ActiveModal }) {
       labelledBy={titleId}
     >
       <div className="px-6 pb-6 pt-3 text-center">
-        <span className={`mx-auto flex items-center justify-center w-14 h-14 rounded-full ${bg}`}>
-          <Icon className={`w-7 h-7 ${fg}`} />
+        <span className={`mx-auto flex items-center justify-center w-11 h-11 rounded-full ${bg}`}>
+          <Icon className={`w-6 h-6 ${fg}`} />
         </span>
-        <h3 id={titleId} className="mt-4 text-lg font-semibold text-gray-900">
+        <h3 id={titleId} className="mt-3 text-lg font-semibold text-gray-900">
           {modal.title}
         </h3>
         {modal.text && <p className="mt-1.5 text-sm text-gray-500">{modal.text}</p>}
         {modal.kind !== 'success' && (
-          <div className="mt-5 flex gap-3">
+          <div className="mt-4 flex gap-2">
             {modal.kind === 'confirm' && (
               <button
                 type="button"
@@ -73,7 +73,7 @@ function ModalCard({ modal }: { modal: ActiveModal }) {
               className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-colors ${
                 modal.tone === 'danger'
                   ? 'bg-rose-600 hover:bg-rose-700'
-                  : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
+                  : 'bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700'
               }`}
             >
               {modal.confirmText ?? 'Entendido'}

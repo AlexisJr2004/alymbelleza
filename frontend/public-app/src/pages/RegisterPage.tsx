@@ -6,7 +6,7 @@ import AuthCardShell from '../components/auth/AuthCardShell';
 import AuthShowcasePanel from '../components/auth/AuthShowcasePanel';
 
 const FIELD_CLASS =
-  'h-[43px] w-full rounded-full border-0 bg-[#FBFAFC] px-[18px] text-[12.5px] text-gray-800 outline-none ring-1 ring-transparent transition placeholder:text-gray-400 focus:bg-white focus:ring-purple-400';
+  'h-[43px] w-full rounded-full border-0 bg-[#FBFAFC] px-[18px] text-[12.5px] text-gray-800 outline-none ring-1 ring-transparent transition placeholder:text-gray-400 focus:bg-white focus:ring-rose-400';
 const LABEL_CLASS = 'mb-2 block pl-[18px] text-[11.5px] text-gray-500';
 
 // Mismo estilo que LoginPage (login-crextio.html adaptado a los colores de
@@ -73,14 +73,14 @@ export default function RegisterPage() {
                   solo la grilla de campos de abajo. */}
               <div className="mt-4 flex justify-center">
                 <label htmlFor="register-photo" className="group relative cursor-pointer">
-                  <span className="grid h-24 w-24 place-items-center overflow-hidden rounded-full bg-white ring-1 ring-purple-100 transition group-hover:ring-2 group-hover:ring-purple-300">
+                  <span className="grid h-24 w-24 place-items-center overflow-hidden rounded-full bg-white ring-1 ring-rose-100 transition group-hover:ring-2 group-hover:ring-rose-300">
                     {preview ? (
                       <img src={preview} alt="" className="h-full w-full object-cover" />
                     ) : (
                       <i className="fas fa-user text-2xl text-gray-300" />
                     )}
                   </span>
-                  <span className="absolute bottom-0 right-0 grid h-7 w-7 place-items-center rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md ring-2 ring-white transition group-hover:scale-110">
+                  <span className="absolute bottom-0 right-0 grid h-7 w-7 place-items-center rounded-full bg-gradient-to-r from-rose-600 to-pink-600 text-white shadow-md ring-2 ring-white transition group-hover:scale-110">
                     <i className="fas fa-camera text-[10px]" />
                   </span>
                 </label>
@@ -201,7 +201,7 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 disabled={register.isPending}
-                className="mt-5 h-[48px] w-full rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-[13.5px] font-medium text-white transition hover:from-purple-700 hover:to-pink-700 active:scale-[.99] disabled:opacity-60"
+                className="mt-5 h-[48px] w-full rounded-full bg-gradient-to-r from-rose-600 to-pink-600 text-[13.5px] font-medium text-white transition hover:from-rose-700 hover:to-pink-700 active:scale-[.99] disabled:opacity-60"
               >
                 {register.isPending ? (
                   <span>

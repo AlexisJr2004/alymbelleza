@@ -194,14 +194,14 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
             <span className="block text-xs font-medium text-gray-500 mb-1">Vista previa</span>
             <div className="border border-gray-200 rounded-lg p-3 bg-gray-50">
               {preview.type === 'image' ? (
-                <img src={preview.src} alt="Vista previa del archivo seleccionado" className="max-w-full h-48 object-cover rounded-lg mx-auto" />
+                <img src={preview.src} alt="Vista previa del archivo seleccionado" className="max-w-full h-36 object-cover rounded-lg mx-auto" />
               ) : (
                 <video
                   ref={videoRef}
                   src={preview.src}
                   controls
                   onLoadedMetadata={handleVideoLoadedMetadata}
-                  className="max-w-full h-48 rounded-lg mx-auto bg-black"
+                  className="max-w-full h-36 rounded-lg mx-auto bg-black"
                 />
               )}
               <div className="text-sm text-gray-600 mt-2">{fileInfo}</div>
@@ -249,7 +249,7 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
                     Recortar el video
                   </label>
                   {trimEnabled && (
-                    <div className="flex items-center gap-2 mt-2">
+                    <div className="flex flex-wrap items-center gap-2 mt-2">
                       <input
                         type="number"
                         min={0}

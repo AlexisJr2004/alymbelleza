@@ -73,7 +73,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
         />
         <div className="flex-1">
           <textarea
-            className="w-full text-sm border border-gray-200 rounded-lg p-2 focus:outline-none focus:ring-1 focus:ring-purple-400 resize-none"
+            className="w-full text-sm border border-gray-200 rounded-lg p-2 focus:outline-none focus:ring-1 focus:ring-rose-400 resize-none"
             rows={2}
             placeholder="Escribe un comentario sobre este producto..."
             value={newComment}
@@ -85,7 +85,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
               type="button"
               onClick={handleSubmit}
               disabled={createComment.isPending || !newComment.trim()}
-              className="text-xs font-semibold text-white bg-purple-600 hover:bg-purple-700 rounded-full px-4 py-1.5 disabled:opacity-60 transition-colors"
+              className="text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-full px-4 py-1.5 disabled:opacity-60 transition-colors"
             >
               Comentar
             </button>

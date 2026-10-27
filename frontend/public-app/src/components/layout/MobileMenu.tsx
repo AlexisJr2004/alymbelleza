@@ -114,22 +114,22 @@ export default function MobileMenu({ open, onClose, onReturnFocus }: { open: boo
         aria-hidden={!open}
         inert={!open}
         style={{ width: 'min(320px, 90vw)', height: '100dvh' }}
-        className={`fixed left-0 top-0 z-[1002] h-screen w-80 bg-white/95 backdrop-blur-md rounded-r-3xl border-r border-purple-100 shadow-lg overflow-y-auto transition-transform duration-300 ease-out ${
+        className={`fixed left-0 top-0 z-[1002] h-screen w-80 bb-legacy-menu bg-white/95 backdrop-blur-md rounded-r-3xl border-r border-rose-100 shadow-lg overflow-y-auto transition-transform duration-300 ease-out ${
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div style={reveal(open, 0).style} className={cx('p-4 mb-6 border-b border-purple-100', reveal(open, 0).className)}>
-          <button type="button" aria-label="Cerrar menú" onClick={onClose} className="float-right w-8 h-8 rounded-full text-gray-500 hover:bg-purple-50">✕</button>
-          <h2 className="text-xl font-display bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Bella Beauty</h2>
-          <p className="text-sm text-purple-600">Tu belleza, nuestra pasión</p>
+        <div style={reveal(open, 0).style} className={cx('p-4 mb-6 border-b border-rose-100', reveal(open, 0).className)}>
+          <button type="button" aria-label="Cerrar menú" onClick={onClose} className="float-right w-8 h-8 rounded-full text-gray-500 hover:bg-rose-50">✕</button>
+          <h2 className="text-2xl font-display text-rose-700">Bella Beauty</h2>
+          <p className="text-sm text-rose-600">Tu belleza, nuestra pasión</p>
         </div>
 
         {user ? (
-          <div style={reveal(open, 1).style} className={cx('px-4 py-4 mb-4 border-b border-purple-100', reveal(open, 1).className)}>
+          <div style={reveal(open, 1).style} className={cx('px-4 py-4 mb-4 border-b border-rose-100', reveal(open, 1).className)}>
             <div className="flex items-center space-x-4">
               <div className="relative">
                 <img
-                  className="w-14 h-14 rounded-full border-2 border-purple-100 object-cover shadow-sm"
+                  className="w-14 h-14 rounded-full border-2 border-rose-100 object-cover shadow-sm"
                   src={resolveProfileImage(user)}
                   alt="Foto de perfil"
                   onError={(e) => {
@@ -139,7 +139,7 @@ export default function MobileMenu({ open, onClose, onReturnFocus }: { open: boo
                 />
                 <span
                   className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
-                    isAdmin(user) ? 'bg-purple-500' : 'bg-green-500'
+                    isAdmin(user) ? 'bg-rose-500' : 'bg-green-500'
                   }`}
                 />
               </div>
@@ -156,7 +156,7 @@ export default function MobileMenu({ open, onClose, onReturnFocus }: { open: boo
                   </button>
                 </div>
                 <span className="block text-sm text-gray-600 truncate max-w-[160px]">{user.email || ''}</span>
-                <span className="inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
+                <span className="inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-rose-100 text-rose-800">
                   {isAdmin(user) ? 'Administrador' : 'Cliente'}
                 </span>
               </div>
@@ -166,7 +166,7 @@ export default function MobileMenu({ open, onClose, onReturnFocus }: { open: boo
               {isAdmin(user) && (
                 <a
                   href="/admin"
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-purple-700 hover:bg-purple-50 transition-colors duration-200"
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-rose-700 hover:bg-rose-50 transition-colors duration-200"
                 >
                   <CogIcon className="w-5 h-5 shrink-0 text-gray-500" />
                   Panel Administrador
@@ -175,7 +175,7 @@ export default function MobileMenu({ open, onClose, onReturnFocus }: { open: boo
               <Link
                 to="/perfil"
                 onClick={onClose}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-purple-700 hover:bg-purple-50 transition-colors duration-200"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-rose-700 hover:bg-rose-50 transition-colors duration-200"
               >
                 <UserCircleIcon className="w-5 h-5 shrink-0 text-gray-500" />
                 Perfil
@@ -183,19 +183,19 @@ export default function MobileMenu({ open, onClose, onReturnFocus }: { open: boo
             </div>
           </div>
         ) : (
-          <div style={reveal(open, 1).style} className={cx('px-4 py-4 mb-4 border-b border-purple-100', reveal(open, 1).className)}>
+          <div style={reveal(open, 1).style} className={cx('px-4 py-4 mb-4 border-b border-rose-100', reveal(open, 1).className)}>
             <div className="space-y-3">
               <Link
                 to="/login"
                 onClick={onClose}
-                className="block w-full text-center py-2.5 text-sm font-medium text-purple-700 border border-purple-300 rounded-lg hover:bg-purple-50 transition-colors duration-200"
+                className="block w-full text-center py-2.5 text-sm font-medium text-rose-700 border border-rose-300 rounded-lg hover:bg-rose-50 transition-colors duration-200"
               >
                 Iniciar sesión
               </Link>
               <Link
                 to="/register"
                 onClick={onClose}
-                className="block w-full text-center py-2.5 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-sm"
+                className="block w-full text-center py-2.5 text-sm font-medium text-white bg-gradient-to-r from-rose-600 to-pink-600 rounded-lg hover:from-rose-700 hover:to-pink-700 transition-all duration-300 shadow-sm"
               >
                 Registrarse
               </Link>
@@ -203,13 +203,13 @@ export default function MobileMenu({ open, onClose, onReturnFocus }: { open: boo
           </div>
         )}
 
-        <div style={reveal(open, 2).style} className={cx('px-4 mb-5 space-y-3 border-b border-purple-100 pb-4', reveal(open, 2).className)}>
+        <div style={reveal(open, 2).style} className={cx('px-4 mb-5 space-y-3 border-b border-rose-100 pb-4', reveal(open, 2).className)}>
           <a href="https://wa.me/593981229675" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-sm text-gray-700"><EnvelopeIcon className="w-4 h-4 text-gray-500" />WhatsApp: +593 98 122 9675</a>
-          <Link to="/#contacto" onClick={onClose} className="block text-sm text-purple-700">Contacta con Bella Beauty</Link>
+          <Link to="/#contacto" onClick={onClose} className="block text-sm text-rose-700">Contacta con Bella Beauty</Link>
         </div>
 
         <div style={reveal(open, 3).style} className={cx('px-4 mb-6', reveal(open, 3).className)}>
-          <form className="relative" onSubmit={event => { event.preventDefault(); navigate(`/productos${search.trim() ? `?q=${encodeURIComponent(search.trim())}` : ''}`); onClose(); }}>
+          <form className="relative bb-drawer-search" onSubmit={event => { event.preventDefault(); navigate(`/productos${search.trim() ? `?q=${encodeURIComponent(search.trim())}` : ''}`); onClose(); }}>
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <SearchIcon className="w-4 h-4 text-gray-400" />
             </div>
@@ -219,7 +219,7 @@ export default function MobileMenu({ open, onClose, onReturnFocus }: { open: boo
               aria-label="Buscar productos en el menú"
               value={search}
               onChange={event => setSearch(event.target.value)}
-              className="w-full pl-10 pr-4 py-2 text-sm text-gray-900 border-none bg-purple-50 rounded-full focus:ring-2 focus:ring-purple-500 focus:outline-none transition duration-300"
+              className="w-full pl-10 pr-4 py-2 text-sm text-gray-900 border-none bg-rose-50 rounded-full focus:ring-2 focus:ring-rose-500 focus:outline-none transition duration-300"
             />
           </form>
         </div>
@@ -230,7 +230,7 @@ export default function MobileMenu({ open, onClose, onReturnFocus }: { open: boo
               <Link
                 to="/"
                 onClick={onClose}
-                className="flex items-center px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 hover:bg-purple-50 transition-colors duration-200"
+                className="flex items-center px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 hover:bg-rose-50 transition-colors duration-200"
               >
                 <HomeIcon className="w-5 h-5 shrink-0 text-gray-500 mr-3" />
                 Inicio
@@ -242,7 +242,7 @@ export default function MobileMenu({ open, onClose, onReturnFocus }: { open: boo
                 onClick={() => setServicesOpen((v) => !v)}
                 aria-expanded={servicesOpen}
                 aria-controls="mobile-menu-services"
-                className="flex items-center justify-between w-full px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 hover:bg-purple-50 transition-colors duration-200"
+                className="flex items-center justify-between w-full px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 hover:bg-rose-50 transition-colors duration-200"
               >
                 <div className="flex items-center">
                   <SparklesIcon className="w-5 h-5 shrink-0 text-gray-500 mr-3" />
@@ -258,7 +258,7 @@ export default function MobileMenu({ open, onClose, onReturnFocus }: { open: boo
                     <a
                       href="/#servicios"
                       onClick={onClose}
-                      className="block py-2 text-sm text-gray-700 hover:text-purple-700 transition-colors duration-200"
+                      className="block py-2 text-sm text-gray-700 hover:text-rose-700 transition-colors duration-200"
                     >
                       Tratamientos Faciales
                     </a>
@@ -267,7 +267,7 @@ export default function MobileMenu({ open, onClose, onReturnFocus }: { open: boo
                     <a
                       href="/#servicios"
                       onClick={onClose}
-                      className="block py-2 text-sm text-gray-700 hover:text-purple-700 transition-colors duration-200"
+                      className="block py-2 text-sm text-gray-700 hover:text-rose-700 transition-colors duration-200"
                     >
                       Manicure &amp; Pedicure
                     </a>
@@ -276,7 +276,7 @@ export default function MobileMenu({ open, onClose, onReturnFocus }: { open: boo
                     <a
                       href="/#servicios"
                       onClick={onClose}
-                      className="block py-2 text-sm text-gray-700 hover:text-purple-700 transition-colors duration-200"
+                      className="block py-2 text-sm text-gray-700 hover:text-rose-700 transition-colors duration-200"
                     >
                       Masajes
                     </a>
@@ -288,7 +288,7 @@ export default function MobileMenu({ open, onClose, onReturnFocus }: { open: boo
               <Link
                 to="/productos"
                 onClick={onClose}
-                className="flex items-center px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 hover:bg-purple-50 transition-colors duration-200"
+                className="flex items-center px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 hover:bg-rose-50 transition-colors duration-200"
               >
                 <ShoppingBagIcon className="w-5 h-5 shrink-0 text-gray-500 mr-3" />
                 Productos
@@ -298,7 +298,7 @@ export default function MobileMenu({ open, onClose, onReturnFocus }: { open: boo
               <a
                 href="/#contacto"
                 onClick={onClose}
-                className="flex items-center px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 hover:bg-purple-50 transition-colors duration-200"
+                className="flex items-center px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 hover:bg-rose-50 transition-colors duration-200"
               >
                 <EnvelopeIcon className="w-5 h-5 shrink-0 text-gray-500 mr-3" />
                 Contacto
@@ -308,7 +308,7 @@ export default function MobileMenu({ open, onClose, onReturnFocus }: { open: boo
               <Link
                 to="/galeria"
                 onClick={onClose}
-                className="flex items-center px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 hover:bg-purple-50 transition-colors duration-200"
+                className="flex items-center px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 hover:bg-rose-50 transition-colors duration-200"
               >
                 <PhotoIcon className="w-5 h-5 shrink-0 text-gray-500 mr-3" />
                 Galería
@@ -341,7 +341,7 @@ export default function MobileMenu({ open, onClose, onReturnFocus }: { open: boo
           <Link
             to={user ? '/citas' : '/login'}
             onClick={onClose}
-            className={`block w-full text-center py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-full transition duration-300 shadow-md hover:shadow-lg ${
+            className={`block w-full text-center py-3 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white rounded-full transition duration-300 shadow-md hover:shadow-lg ${
               user ? '' : 'opacity-50 pointer-events-none cursor-not-allowed'
             }`}
           >

@@ -49,7 +49,7 @@ export default function AuthShowcasePanel({ onClose, cornerColor = '#FBE2EE' }: 
               <span className="absolute right-[13px] top-[13px] h-[7px] w-[7px] rounded-full bg-pink-300" />
               <p className="absolute bottom-[11px] left-[28px] text-[10px] text-white/70">3:00 PM</p>
             </div>
-            <div className="absolute left-0 top-0 h-[50px] w-[176px] rounded-[10px] bg-gradient-to-r from-purple-600 to-pink-600 px-[13px] py-[9px] shadow-[0_8px_20px_-8px_rgba(0,0,0,.35)]">
+            <div className="absolute left-0 top-0 h-[50px] w-[176px] rounded-[10px] bg-gradient-to-r from-rose-600 to-pink-600 px-[13px] py-[9px] shadow-[0_8px_20px_-8px_rgba(0,0,0,.35)]">
               <p className="text-[11px] font-medium leading-tight text-white">Cita confirmada</p>
               <p className="mt-[3px] text-[9.5px] text-white/80">Corte y Color</p>
               <span className="absolute right-[13px] top-[13px] h-[6px] w-[6px] rounded-full bg-white" />
@@ -95,7 +95,7 @@ export default function AuthShowcasePanel({ onClose, cornerColor = '#FBE2EE' }: 
             <div className="absolute left-0 top-[74px] h-[96px] w-[190px] rounded-[12px] bg-white px-[13px] pt-[14px] shadow-[0_12px_30px_-10px_rgba(0,0,0,.35)]">
               <p className="text-[11.5px] font-medium text-gray-900">Próxima cita</p>
               <p className="mt-[2px] text-[9.5px] text-gray-500">Corte y Color · 3:00 PM</p>
-              <span className="absolute right-[13px] top-[13px] h-[7px] w-[7px] rounded-full bg-gradient-to-r from-purple-600 to-pink-600" />
+              <span className="absolute right-[13px] top-[13px] h-[7px] w-[7px] rounded-full bg-gradient-to-r from-rose-600 to-pink-600" />
               <div className="absolute bottom-[13px] left-[13px] flex -space-x-[5px]">
                 {TEAM_AVATARS.map((src) => (
                   <img key={src} src={src} alt="" className="h-[19px] w-[19px] rounded-full border border-white object-cover" />

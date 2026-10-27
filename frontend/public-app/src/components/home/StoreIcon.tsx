@@ -1,6 +1,7 @@
 import type { SVGProps } from 'react';
 
 const paths = {
+  home: 'm2 11 10-9 10 9M5 9v13h5v-8h4v8h5V9',
   image: 'M3 3h18v18H3V3Zm0 13 6-6 5 5 3-3 4 4M16 7h.01',
   calendar: 'M4 5h16v17H4V5Zm3-3v6m10-6v6M4 11h16M8 15h2m4 0h2m-8 4h2',
   logout: 'M9 3H3v18h6m5-15 6 6-6 6m-8-6h13',

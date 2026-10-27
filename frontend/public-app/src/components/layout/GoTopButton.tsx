@@ -17,10 +17,11 @@ export default function GoTopButton() {
       <button
         type="button"
         title="Ir arriba"
+        aria-label="Ir arriba"
         aria-hidden={!visible}
         tabIndex={visible ? 0 : -1}
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className={`bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all duration-500 ease-in-out text-white px-4 py-2 rounded-full shadow-md transform ${
+        className={`bb-go-top-button transition-all duration-200 rounded-full transform ${
           visible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'
         }`}
       >

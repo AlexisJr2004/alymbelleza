@@ -59,14 +59,14 @@ export default function ForgotPasswordPage() {
                   autoComplete="email"
                   required
                   placeholder="tucorreo@ejemplo.com"
-                  className="h-[43px] w-full rounded-full border-0 bg-[#FBFAFC] px-[18px] text-[12.5px] text-gray-800 outline-none ring-1 ring-transparent transition placeholder:text-gray-400 focus:bg-white focus:ring-purple-400"
+                  className="h-[43px] w-full rounded-full border-0 bg-[#FBFAFC] px-[18px] text-[12.5px] text-gray-800 outline-none ring-1 ring-transparent transition placeholder:text-gray-400 focus:bg-white focus:ring-rose-400"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={forgotPassword.isPending}
-                className="mt-[22px] h-[48px] w-full rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-[13.5px] font-medium text-white transition hover:from-purple-700 hover:to-pink-700 active:scale-[.99] disabled:opacity-60"
+                className="mt-[22px] h-[48px] w-full rounded-full bg-gradient-to-r from-rose-600 to-pink-600 text-[13.5px] font-medium text-white transition hover:from-rose-700 hover:to-pink-700 active:scale-[.99] disabled:opacity-60"
               >
                 {forgotPassword.isPending ? (
                   <span>
@@ -79,9 +79,9 @@ export default function ForgotPasswordPage() {
 
               <Link
                 to="/login"
-                className="mt-3 flex h-[43px] w-full items-center justify-center gap-2 rounded-full border border-purple-200 bg-white/30 text-[11.5px] text-purple-700 transition hover:bg-white/70"
+                className="mt-3 flex h-[43px] w-full items-center justify-center gap-2 rounded-full border border-rose-200 bg-white/30 text-[11.5px] text-rose-700 transition hover:bg-white/70"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                 </svg>
                 Volver al inicio de sesión

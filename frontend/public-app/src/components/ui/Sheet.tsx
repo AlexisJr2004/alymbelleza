@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import '../../styles/dialogs.css';
+
+const activeSheets: HTMLElement[] = [];
+let previousOverflow = '';
 
 // Cascarón reutilizable para TODOS los modales del sitio (reemplazo de
 // SweetAlert2 en Modal.tsx, y los modales propios: vista rápida de producto,
@@ -24,6 +28,7 @@ export const SHEET_EXIT_MS = 260;
 
 interface SheetProps {
   open: boolean;
+  variant?: 'standard' | 'media' | 'auth';
   onClose: () => void;
   children: React.ReactNode;
   labelledBy?: string;
@@ -49,6 +54,7 @@ interface SheetProps {
 
 export default function Sheet({
   open,
+  variant = 'standard',
   onClose,
   children,
   labelledBy,
@@ -67,6 +73,8 @@ export default function Sheet({
   const draggingRef = useRef(false);
   const startYRef = useRef(0);
   const sheetRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
   const onFullyClosedRef = useRef(onFullyClosed);
   onFullyClosedRef.current = onFullyClosed;
   // Distingue "todavía no se abrió nunca" de "se acaba de cerrar", para no
@@ -105,6 +113,38 @@ export default function Sheet({
     }, SHEET_EXIT_MS);
     return () => window.clearTimeout(t);
   }, [open]);
+
+  useEffect(() => {
+    if (!open || !mounted || !sheetRef.current) return;
+    const panel = sheetRef.current;
+    const previousFocus = document.activeElement as HTMLElement | null;
+    if (!activeSheets.length) { previousOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden'; }
+    activeSheets.push(panel);
+    panel.focus({ preventScroll: true });
+    function keydown(event: KeyboardEvent) {
+      if (activeSheets.at(-1) !== panel) return;
+      if (event.key === 'Escape') { event.preventDefault(); closeRef.current(); }
+      if (event.key !== 'Tab') return;
+      const targets = Array.from(panel.querySelectorAll<HTMLElement>('button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex="0"]')).filter(element => element.getClientRects().length > 0 && !element.closest('[inert]'));
+      const first = targets[0], last = targets.at(-1);
+      if (!first) { event.preventDefault(); panel.focus(); }
+      else if (event.shiftKey && (document.activeElement === first || document.activeElement === panel)) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    }
+    document.addEventListener('keydown', keydown);
+    return () => {
+      document.removeEventListener('keydown', keydown);
+      const wasTop = activeSheets.at(-1) === panel;
+      const index = activeSheets.indexOf(panel);
+      if (index >= 0) activeSheets.splice(index, 1);
+      if (!activeSheets.length) document.body.style.overflow = previousOverflow;
+      if (wasTop) {
+        const currentPanel = activeSheets.at(-1);
+        const target = previousFocus?.isConnected && !previousFocus.matches(':disabled') && (!currentPanel || currentPanel.contains(previousFocus)) ? previousFocus : currentPanel;
+        target?.focus({ preventScroll: true });
+      }
+    };
+  }, [open, mounted]);
 
   // Arrastre estilo iOS: solo la manija dispara el gesto (no toda la tarjeta,
   // para no interferir con taps en el contenido). Deslizar hacia abajo pasado
@@ -164,20 +204,21 @@ export default function Sheet({
       <div
         ref={sheetRef}
         role="dialog"
+        tabIndex={-1}
         aria-modal="true"
         aria-labelledby={labelledBy}
-        className={`fixed z-[2001] inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto md:inset-auto md:left-1/2 md:top-1/2 md:bottom-auto md:w-full md:max-h-[90vh] ${desktopMaxWidthClassName} ${panelClassName}`}
+        className={`bb-sheet bb-sheet-${variant} fixed z-[2001] inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto md:inset-auto md:left-1/2 md:top-1/2 md:bottom-auto md:w-full md:max-h-[90vh] ${desktopMaxWidthClassName} ${panelClassName}`}
         style={panelStyle ? { ...style, ...panelStyle } : style}
       >
         {isMobile && (
           <div
-            className="pt-2.5 pb-1.5 flex justify-center cursor-grab active:cursor-grabbing touch-none sticky top-0"
+            className="bb-sheet-handle pt-2 pb-1.5 flex justify-center cursor-grab active:cursor-grabbing touch-none sticky top-0"
             onPointerDown={onHandlePointerDown}
             onPointerMove={onHandlePointerMove}
             onPointerUp={endDrag}
             onPointerCancel={endDrag}
           >
-            <span className={`w-10 h-1.5 rounded-full ${handleClassName}`} />
+            <span className={`w-8 h-1 rounded-full ${handleClassName}`} />
           </div>
         )}
         {children}

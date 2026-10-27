@@ -361,3 +361,18 @@
 .bb-commerce-breadcrumb svg { width: 10px; height: 10px; }
 .bb-commerce-breadcrumb [aria-current] { color: #a93158; }
 .bb-commerce-breadcrumb a:hover { color: #a93158; }
+
+/* Focus follows the rounded search container instead of the inner input. */
+.bb-storefront :is(.bb-search,.bb-catalog-search) input:focus-visible { outline: none; box-shadow: none; }
+.bb-storefront :is(.bb-search,.bb-catalog-search):focus-within { outline: 2px solid #c75b82; outline-offset: 2px; }
+.bb-legacy-menu { font: 12px/1.5 'Bella Montserrat',sans-serif; color: #513d47; }
+.bb-legacy-menu h2 { font-family: Georgia,serif; }
+.bb-legacy-menu .text-sm { font-size: 12px; }
+.bb-legacy-menu :is(.text-rose-600,.text-rose-700) { color: #ac345f; }
+.bb-legacy-menu .bg-gradient-to-r { background: linear-gradient(120deg,#e9568b,#d93771); }
+.bb-legacy-menu .bb-drawer-search { border-radius: 24px; }
+.bb-legacy-menu .bb-drawer-search:focus-within { outline: 2px solid #c75b82; outline-offset: 2px; }
+.bb-legacy-menu .bb-drawer-search input:focus { outline: none; box-shadow: none; }
+.bb-go-top-button { width: 40px; height: 40px; padding: 0; display: grid; place-items: center; background: #fff9fc; border: 1px solid #ebc4d3; color: #b73563; box-shadow: 0 3px 14px #79344c15; }
+.bb-go-top-button:hover { background: #fce8f0; }
+@media (max-width: 767px) { .bb-go-top-button { width: 38px; height: 38px; } }

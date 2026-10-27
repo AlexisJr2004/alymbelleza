@@ -1,19 +1,19 @@
-.bb-mobile-label { display: none; }
+.bb-mobile-label, .bb-header-actions .bb-mobile-access { display: none; }
 @media (max-width: 767px) {
+  .bb-header-actions .bb-desktop-account { display: none; }
+  .bb-header-actions .bb-mobile-access { display: flex; }
   .bb-header .bb-nav { display: none; }
   .bb-header .bb-header-main { flex-wrap: wrap; padding-block: 10px; gap: 10px; }
   .bb-header .bb-menu-toggle { display: inline-flex; margin-left: auto; width: 40px; height: 40px; order: 2; background: #fff1f6; color: #ac345f; border: 1px solid #f1d5e0; border-radius: 12px; }
   .bb-header .bb-search { order: 3; width: 100%; }
-  .bb-header .bb-header-actions { position: fixed; inset: auto 0 max(12px,env(safe-area-inset-bottom)); width: min(360px,calc(100% - 32px)); display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 3px; margin: 0 auto; padding: 6px; min-height: 64px; border-radius: 34px; background: linear-gradient(145deg,#fffffff0,#fff5f9bf); border: 1px solid #fffffff2; box-shadow: 0 8px 30px #54223826, 0 2px 7px #54223812, inset 0 1px 0 #fff, inset 0 -1px 0 #efcfdd80; backdrop-filter: blur(24px) saturate(1.6); -webkit-backdrop-filter: blur(24px) saturate(1.6); z-index: 60; }
-  .bb-header-actions > .bb-icon-button, .bb-header-actions .bb-account > .bb-icon-button { width: 100%; height: 50px; display: flex; flex-direction: column; justify-content: center; gap: 4px; border-radius: 26px; }
+  .bb-header .bb-header-actions { position: fixed; inset: auto 0 max(12px,env(safe-area-inset-bottom)); width: min(400px,calc(100% - 32px)); display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 3px; margin: 0 auto; padding: 6px; min-height: 64px; border-radius: 34px; background: linear-gradient(145deg,#fffffff0,#fff5f9bf); border: 1px solid #fffffff2; box-shadow: 0 8px 30px #54223826, 0 2px 7px #54223812, inset 0 1px 0 #fff, inset 0 -1px 0 #efcfdd80; backdrop-filter: blur(24px) saturate(1.6); -webkit-backdrop-filter: blur(24px) saturate(1.6); z-index: 60; }
+  .bb-header-actions > .bb-icon-button { width: 100%; height: 50px; display: flex; flex-direction: column; justify-content: center; gap: 4px; border-radius: 26px; }
   .bb-header-actions .bb-icon-button svg { width: 21px; height: 21px; }
   .bb-header-actions .bb-mobile-label { display: block; font-size: 9px; font-weight: 500; }
   .bb-header-actions .bb-count { top: 1px; right: calc(50% - 21px); }
   .bb-header-actions [aria-current=page], .bb-header-actions [aria-pressed=true], .bb-header-actions [aria-expanded=true] { color: #ad305b; background: linear-gradient(140deg,#fce3eef2,#f7d6e5ba); box-shadow: inset 0 1px 0 #fff9, 0 2px 6px #a3366010; }
-  .bb-header-actions .bb-account-popover { top: auto; bottom: 100%; left: 0; right: auto; padding: 0 0 10px; width: min(282px,calc(100vw - 48px)); }
   .bb-home-layout { padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
   .bb-home-layout .bb-footer-bottom { padding-bottom: 18px; }
-  .bb-home-layout #chatbot-container { bottom: calc(94px + env(safe-area-inset-bottom)); left: 12px; }
   .bb-home-layout .bb-go-top { bottom: calc(96px + env(safe-area-inset-bottom)); }
 }
 @media (prefers-reduced-motion: reduce) { #store-mobile-menu, #store-mobile-menu * { transition: none !important; } }

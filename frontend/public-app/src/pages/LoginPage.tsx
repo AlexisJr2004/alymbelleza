@@ -5,14 +5,7 @@ import { ApiError } from '../lib/apiClient';
 import AuthCardShell from '../components/auth/AuthCardShell';
 import AuthShowcasePanel from '../components/auth/AuthShowcasePanel';
 
-// Puerto fiel de login-crextio.html (estructura, gradiente de fondo,
-// recorte/"fillet" de la esquina del botón de cerrar, tarjeta apilada,
-// racimo de avatares, calendario con textura rayada) con los colores del
-// sistema de Bella Beauty (morado→rosa) en vez de la paleta gris/crema/
-// amarilla original — así lo pidió el usuario esta vez. Tipografía Outfit
-// (.font-outfit en index.css), igual que la referencia, sin tocar la
-// fuente del resto del sitio. El cascarón (AuthCardShell) y el panel de
-// la foto (AuthShowcasePanel) se comparten con RegisterPage.
+// Formulario de acceso con la tarjeta compacta y los colores de Bella Beauty.
 export default function LoginPage() {
   const navigate = useNavigate();
   const login = useLogin();
@@ -68,7 +61,7 @@ export default function LoginPage() {
                     autoComplete="email"
                     required
                     placeholder="tucorreo@ejemplo.com"
-                    className="h-[43px] w-full rounded-full border-0 bg-[#FBFAFC] px-[18px] text-[12.5px] text-gray-800 outline-none ring-1 ring-transparent transition placeholder:text-gray-400 focus:bg-white focus:ring-purple-400"
+                    className="h-[43px] w-full rounded-full border-0 bg-[#FBFAFC] px-[18px] text-[12.5px] text-gray-800 outline-none ring-1 ring-transparent transition placeholder:text-gray-400 focus:bg-white focus:ring-rose-400"
                   />
                 </div>
 
@@ -84,7 +77,7 @@ export default function LoginPage() {
                       autoComplete="current-password"
                       required
                       placeholder="••••••••••••"
-                      className="h-[43px] w-full rounded-full border-0 bg-[#FBFAFC] px-[18px] pr-12 text-[12.5px] text-gray-800 outline-none ring-1 ring-transparent transition placeholder:text-gray-400 focus:bg-white focus:ring-purple-400"
+                      className="h-[43px] w-full rounded-full border-0 bg-[#FBFAFC] px-[18px] pr-12 text-[12.5px] text-gray-800 outline-none ring-1 ring-transparent transition placeholder:text-gray-400 focus:bg-white focus:ring-rose-400"
                     />
                     <button
                       type="button"
@@ -107,7 +100,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={login.isPending}
-                className="mt-[22px] h-[48px] w-full rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-[13.5px] font-medium text-white transition hover:from-purple-700 hover:to-pink-700 active:scale-[.99] disabled:opacity-60"
+                className="mt-[22px] h-[48px] w-full rounded-full bg-gradient-to-r from-rose-600 to-pink-600 text-[13.5px] font-medium text-white transition hover:from-rose-700 hover:to-pink-700 active:scale-[.99] disabled:opacity-60"
               >
                 {login.isPending ? (
                   <span>
@@ -120,7 +113,7 @@ export default function LoginPage() {
 
               <Link
                 to="/"
-                className="mt-3 flex h-[43px] w-full items-center justify-center gap-2 rounded-full border border-purple-200 bg-white/30 text-[11.5px] text-purple-700 transition hover:bg-white/70"
+                className="mt-3 flex h-[43px] w-full items-center justify-center gap-2 rounded-full border border-rose-200 bg-white/30 text-[11.5px] text-rose-700 transition hover:bg-white/70"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-[15px] w-[15px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />

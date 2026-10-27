@@ -135,7 +135,7 @@ export default function ProductCommentItem({
             {isEditing ? (
               <div className="mt-1">
                 <textarea
-                  className="w-full text-sm text-gray-700 border border-gray-200 rounded-lg p-2 focus:outline-none focus:ring-1 focus:ring-purple-400"
+                  className="w-full text-sm text-gray-700 border border-gray-200 rounded-lg p-2 focus:outline-none focus:ring-1 focus:ring-rose-400"
                   rows={2}
                   value={editValue}
                   onChange={(e) => setEditValue(e.target.value)}
@@ -156,7 +156,7 @@ export default function ProductCommentItem({
                     type="button"
                     onClick={handleSaveEdit}
                     disabled={updateComment.isPending}
-                    className="text-xs font-semibold text-white bg-purple-600 hover:bg-purple-700 rounded-full px-3 py-1 disabled:opacity-60"
+                    className="text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-full px-3 py-1 disabled:opacity-60"
                   >
                     Guardar
                   </button>
@@ -200,7 +200,7 @@ export default function ProductCommentItem({
               <button
                 type="button"
                 onClick={() => (isReplyingHere ? onCancelReply() : onStartReply(comment._id))}
-                className="flex items-center gap-1 text-xs text-gray-400 hover:text-purple-600 transition-colors"
+                className="flex items-center gap-1 text-xs text-gray-400 hover:text-rose-600 transition-colors"
               >
                 <i className="fas fa-reply" />
                 Responder
@@ -211,7 +211,7 @@ export default function ProductCommentItem({
           {isReplyingHere && (
             <div className="mt-2 flex items-start gap-2">
               <textarea
-                className="flex-1 text-sm border border-gray-200 rounded-lg p-2 focus:outline-none focus:ring-1 focus:ring-purple-400"
+                className="flex-1 text-sm border border-gray-200 rounded-lg p-2 focus:outline-none focus:ring-1 focus:ring-rose-400"
                 rows={2}
                 placeholder={`Responder a ${comment.name}...`}
                 value={replyValue}
@@ -224,7 +224,7 @@ export default function ProductCommentItem({
                   type="button"
                   onClick={handleSubmitReply}
                   disabled={createReply.isPending || !replyValue.trim()}
-                  className="text-xs font-semibold text-white bg-purple-600 hover:bg-purple-700 rounded-full px-3 py-1.5 disabled:opacity-60"
+                  className="text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-full px-3 py-1.5 disabled:opacity-60"
                 >
                   Enviar
                 </button>
