@@ -66,15 +66,15 @@
 @media (prefers-reduced-motion: reduce) { .bb-sheet { transition-duration: 0ms !important; } }
 .bb-sheet .bb-dialog-close { width: auto; height: auto; min-height: 30px; padding: 4px 10px; flex-shrink: 0; border-radius: 20px; border: 1px solid #ecd7e0; color: #a73862; background: #fff8fb; font: 500 11px/1.4 'Bella Montserrat',sans-serif; }
 .bb-sheet .bb-dialog-close:hover { background: #fceaf2; }
+.bb-gallery-dialog .bb-gallery-control { background: linear-gradient(145deg,#ffffff40,#fff5f91a) !important; color: #873452 !important; border: 1px solid #ffffff70; box-shadow: 0 3px 12px #40212b20, inset 0 1px 0 #ffffff80; backdrop-filter: blur(14px) saturate(1.6); -webkit-backdrop-filter: blur(14px) saturate(1.6); }
+.bb-gallery-dialog .bb-gallery-control:hover:not(:disabled) { background: linear-gradient(145deg,#ffffff60,#fff5f930) !important; }
 @media (min-width: 768px) {
   .bb-sheet-standard:not(.bb-product-dialog) { width: min(380px,calc(100vw - 32px)); }
   .bb-sheet-media:not(.bb-gallery-dialog) { width: min(400px,calc(100vw - 32px)); }
   .bb-sheet-media.bb-gallery-dialog { background: transparent !important; border: 0; box-shadow: none; border-radius: 0; padding: 0; }
   .bb-gallery-dialog [id=lightbox-title] { color: white; font-size: 11px; }
-  .bb-gallery-dialog .bb-gallery-control { background: #0008 !important; color: white !important; border: 0; }
-  .bb-gallery-dialog .bb-gallery-control:hover { background: #000b !important; }
+  .bb-gallery-dialog .bb-gallery-control { color: white !important; text-shadow: 0 1px 3px #0008; }
   .bb-gallery-dialog .bb-gallery-thumbnail { background: transparent !important; border-color: transparent; }
   .bb-gallery-dialog .bb-gallery-thumbnail[aria-current=true] { border: 2px solid white; }
-  .bb-gallery-dialog .bb-dialog-close { color: white !important; background: #ffffff1a !important; border-color: #ffffff40; }
 }
 .bb-sheet-media:not(.bb-gallery-dialog) img { max-height: min(36dvh,240px); }

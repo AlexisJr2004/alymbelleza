@@ -85,6 +85,6 @@ Montserrat se sirve localmente desde `frontend/public-app/public/fonts`, con su 
 ## Ajuste de proporciones de los diálogos
 
 - El detalle de producto vuelve a mostrar imagen, información y reseñas en tres columnas a partir de 768 px. En móvil se apilan; las reseñas tienen desplazamiento propio en escritorio para mantener una altura compacta.
-- El visor de galería recupera en escritorio el fondo transparente sobre la superposición oscura, controles oscuros y miniaturas con selección blanca. En móvil conserva la tarjeta blanca.
-- Los cierres de los modales usan el texto «Cerrar» en lugar de la X. Se mantienen Escape, toque fuera del panel y el gesto de arrastre en móvil.
+- El visor de galería recupera en escritorio el fondo transparente sobre la superposición oscura y miniaturas con selección blanca. Las flechas y la descarga usan cristal translúcido con desenfoque y borde luminoso. En móvil conserva la tarjeta blanca.
+- Los cierres de los modales usan el texto «Cerrar» en lugar de la X, excepto el visor de galería, que no muestra botón de cierre. Se mantienen Escape, toque fuera del panel y el gesto de arrastre en móvil.
 - Formularios, confirmaciones y vistas de fotos reducen anchuras, espacios y tamaños de títulos; los campos móviles conservan texto de 16 px.
