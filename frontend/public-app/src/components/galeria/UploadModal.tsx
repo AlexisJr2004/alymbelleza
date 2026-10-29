@@ -144,8 +144,8 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
         <h3 id="upload-modal-title" className="text-lg font-semibold text-gray-900">
           Subir Contenido a Galería
         </h3>
-        <button type="button" onClick={handleClose} aria-label="Cerrar" className="text-gray-400 hover:text-gray-700 transition-colors">
-          <i className="fas fa-times text-xl" />
+        <button type="button" onClick={handleClose} aria-label="Cerrar" className="bb-dialog-close">
+          Cerrar
         </button>
       </div>
 

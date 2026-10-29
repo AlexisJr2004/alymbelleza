@@ -32,7 +32,7 @@ export default function CartImagePreviewModal({ image, onClose }: CartImagePrevi
       labelledBy="cart-image-preview-title"
     >
       <div className="px-4 pb-6 pt-1 md:p-0">
-        <div className="flex justify-end mb-2"><button type="button" onClick={onClose} aria-label="Cerrar imagen" className="w-8 h-8 rounded-full">✕</button></div>
+        <div className="flex justify-end mb-2"><button type="button" onClick={onClose} aria-label="Cerrar imagen" className="bb-dialog-close">Cerrar</button></div>
         <img src={rendered.src} alt={rendered.name} className="w-full max-h-[48vh] object-contain rounded-2xl shadow-2xl bg-white" />
         <p id="cart-image-preview-title" className="mt-4 text-center text-rose-900 text-sm font-semibold">
           {rendered.name}

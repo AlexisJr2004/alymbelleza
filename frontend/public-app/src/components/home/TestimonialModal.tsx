@@ -42,8 +42,8 @@ export default function TestimonialModal({ open, onClose }: TestimonialModalProp
         <h3 id="testimonial-modal-title" className="text-lg font-semibold text-gray-900">
           Nuevo Testimonio
         </h3>
-        <button type="button" onClick={onClose} aria-label="Cerrar" className="text-gray-400 hover:text-gray-700 transition-colors">
-          <i className="fas fa-times text-xl" />
+        <button type="button" onClick={onClose} aria-label="Cerrar" className="bb-dialog-close">
+          Cerrar
         </button>
       </div>
       <form onSubmit={handleSubmit} className="p-6 space-y-5">
@@ -74,7 +74,7 @@ export default function TestimonialModal({ open, onClose }: TestimonialModalProp
           <textarea
             id="comment"
             name="comment"
-            rows={4}
+            rows={3}
             required
             value={comment}
             onChange={(e) => setComment(e.target.value)}

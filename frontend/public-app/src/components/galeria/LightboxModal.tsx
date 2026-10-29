@@ -105,13 +105,13 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
       labelledBy="lightbox-title"
     >
       <div className="relative w-full flex flex-col items-center px-4 pb-6 pt-1 md:p-0">
-        <button type="button" onClick={onClose} aria-label="Cerrar visor" className="absolute top-0 left-2 z-10 w-9 h-9 rounded-full">✕</button>
+        <button type="button" onClick={onClose} className="bb-dialog-close absolute top-0 left-2 z-10" aria-label="Cerrar visor">Cerrar</button>
         {multiple && (
           <button
             type="button"
             onClick={() => onNavigate((rendered.index - 1 + total) % total)}
             aria-label="Elemento anterior"
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/50 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-sm transition-colors"
+            className="bb-gallery-control absolute left-2 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/50 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-sm transition-colors"
           >
             <i className="fas fa-chevron-left" />
           </button>
@@ -121,7 +121,7 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
             type="button"
             onClick={() => onNavigate((rendered.index + 1) % total)}
             aria-label="Elemento siguiente"
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/50 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-sm transition-colors"
+            className="bb-gallery-control absolute right-2 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/50 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-sm transition-colors"
           >
             <i className="fas fa-chevron-right" />
           </button>
@@ -132,7 +132,7 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
           onClick={handleDownload}
           disabled={downloading}
           aria-label="Descargar"
-          className="absolute top-0 right-2 md:top-2 z-10 w-9 h-9 rounded-full bg-black/10 md:bg-white/10 hover:bg-black/20 md:hover:bg-white/20 text-gray-700 md:text-white flex items-center justify-center backdrop-blur-sm transition-colors disabled:opacity-60"
+          className="bb-gallery-control absolute top-0 right-2 md:top-2 z-10 w-9 h-9 rounded-full bg-black/10 md:bg-white/10 hover:bg-black/20 md:hover:bg-white/20 text-gray-700 md:text-white flex items-center justify-center backdrop-blur-sm transition-colors disabled:opacity-60"
         >
           <i className={`fas ${downloading ? 'fa-spinner fa-spin' : 'fa-download'}`} />
         </button>
@@ -162,7 +162,8 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
                   type="button"
                   onClick={() => onNavigate(i)}
                   aria-label={`Ver elemento ${i + 1} de ${total}`}
-                  className={`shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                  aria-current={i === rendered.index ? true : undefined}
+                  className={`bb-gallery-thumbnail shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
                     i === rendered.index ? 'border-rose-500 md:border-white opacity-100' : 'border-transparent opacity-50 hover:opacity-90'
                   }`}
                 >

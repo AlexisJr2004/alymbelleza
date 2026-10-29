@@ -6,7 +6,6 @@ import { notifyError, notifySuccess } from '../../lib/sweetalert';
 import { useAddToCart } from '../../hooks/useCart';
 import Sheet from './Sheet';
 import StarRating from './StarRating';
-import { XIcon } from '../icons';
 import ProductReviews from './ProductReviews';
 
 // Puerto de buildProductQuickViewModal()/openProductQuickView() de js/main.js.
@@ -58,14 +57,15 @@ export default function ProductQuickViewModal({ product, onClose }: ProductQuick
       onClose={onClose}
       onFullyClosed={() => setRendered(null)}
       desktopMaxWidthClassName="md:max-w-2xl lg:max-w-3xl"
+      panelClassName="bb-product-dialog bg-white"
       labelledBy="quick-view-title"
     >
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 sticky top-0 bg-white z-10">
         <h3 id="quick-view-title" className="text-lg font-semibold text-gray-900">
           Detalle del producto
         </h3>
-        <button type="button" onClick={onClose} aria-label="Cerrar" className="text-gray-400 hover:text-gray-700 transition-colors">
-          <XIcon className="w-5 h-5" />
+        <button type="button" onClick={onClose} aria-label="Cerrar" className="bb-dialog-close">
+          Cerrar
         </button>
       </div>
       <div className="bb-quick-layout">

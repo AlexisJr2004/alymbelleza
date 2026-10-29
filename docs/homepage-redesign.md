@@ -81,3 +81,10 @@ Montserrat se sirve localmente desde `frontend/public-app/public/fonts`, con su 
 - Accesibilidad utiliza un panel compacto blanco y rosa con zoom, tamaño de texto, selector de tipografía y lectura de página. Se conservan la tipografía elegida y los controles para restablecer; el aumento de texto se aplica también al contenido que se monta al navegar.
 - Los diálogos usan una base compacta común, bordes rosados, títulos serif y tamaños limitados al área visible. En móvil mantienen márgenes y desplazamiento interno; incluyen cierre con Escape, bloqueo del fondo y manejo del foco por teclado.
 - El foco de las búsquedas sigue el contorno redondeado del campo. El botón de subir es circular y comparte las dimensiones del acceso de accesibilidad.
+
+## Ajuste de proporciones de los diálogos
+
+- El detalle de producto vuelve a mostrar imagen, información y reseñas en tres columnas a partir de 768 px. En móvil se apilan; las reseñas tienen desplazamiento propio en escritorio para mantener una altura compacta.
+- El visor de galería recupera en escritorio el fondo transparente sobre la superposición oscura, controles oscuros y miniaturas con selección blanca. En móvil conserva la tarjeta blanca.
+- Los cierres de los modales usan el texto «Cerrar» en lugar de la X. Se mantienen Escape, toque fuera del panel y el gesto de arrastre en móvil.
+- Formularios, confirmaciones y vistas de fotos reducen anchuras, espacios y tamaños de títulos; los campos móviles conservan texto de 16 px.

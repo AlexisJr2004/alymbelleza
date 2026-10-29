@@ -88,10 +88,10 @@ export default function StoreTestimonials() {
     <TestimonialModal open={open} onClose={() => setOpen(false)} />
     <Sheet open={!!editing} onClose={() => { if (!update.isPending) setEditing(null); }} labelledBy="edit-testimonial-title" desktopMaxWidthClassName="md:max-w-lg">
       <form className="bb-storefront bb-review-editor" onSubmit={save}>
-        <div className="bb-editor-heading"><h2 id="edit-testimonial-title">Tu experiencia</h2><button type="button" aria-label="Cerrar edición" disabled={update.isPending} onClick={() => setEditing(null)}><StoreIcon name="close" /></button></div>
+        <div className="bb-editor-heading"><h2 id="edit-testimonial-title">Tu experiencia</h2><button type="button" className="bb-dialog-close" aria-label="Cerrar edición" disabled={update.isPending} onClick={() => setEditing(null)}>Cerrar</button></div>
         <p>Actualiza tu testimonio y comparte lo que hace especial tu visita.</p>
         <label htmlFor="edit-testimonial-comment">Testimonio</label>
-        <textarea id="edit-testimonial-comment" required rows={5} value={comment} disabled={update.isPending} onChange={event => setComment(event.target.value)} />
+        <textarea id="edit-testimonial-comment" required rows={3} value={comment} disabled={update.isPending} onChange={event => setComment(event.target.value)} />
         <div className="bb-editor-buttons"><button type="button" className="bb-button bb-button-outline" disabled={update.isPending} onClick={() => setEditing(null)}>Cancelar</button><button type="submit" className="bb-button" disabled={update.isPending || !comment.trim()}>{update.isPending ? 'Guardando…' : 'Guardar cambios'}</button></div>
       </form>
     </Sheet>

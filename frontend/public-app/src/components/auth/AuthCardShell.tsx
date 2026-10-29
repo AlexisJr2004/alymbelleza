@@ -46,9 +46,9 @@ export default function AuthCardShell({
         type="button"
         onClick={onClose}
         aria-label="Cerrar y volver al inicio"
-        className="absolute right-4 top-4 z-20 grid h-10 w-10 place-items-center rounded-full bg-white/70 text-gray-700 shadow-md backdrop-blur-md transition hover:bg-white lg:hidden"
+        className="bb-dialog-close absolute right-4 top-4 z-20 lg:hidden"
       >
-        <i className="fas fa-times" />
+        Cerrar
       </button>
 
       {children}

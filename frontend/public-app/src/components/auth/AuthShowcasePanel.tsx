@@ -132,9 +132,9 @@ export default function AuthShowcasePanel({ onClose, cornerColor = '#FBE2EE' }: 
           type="button"
           onClick={onClose}
           aria-label="Cerrar y volver al inicio"
-          className="absolute -top-[3px] right-[20px] grid h-[43px] w-[43px] place-items-center rounded-full bg-[#FBF7FA] text-gray-800 shadow-sm transition hover:bg-white"
+          className="bb-dialog-close absolute -top-[3px] right-[16px]"
         >
-          <i className="fas fa-times" />
+          Cerrar
         </button>
       </div>
     </section>

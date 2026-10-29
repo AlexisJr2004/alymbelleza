@@ -1,12 +1,12 @@
 .bb-sheet { font: 12px/1.5 'Bella Montserrat',sans-serif; color: #513d47; background: #fff; border: 1px solid #eedbe3; border-radius: 18px; box-shadow: 0 18px 65px #4d24332b; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #e6b9ca transparent; }
-.bb-sheet:not(.bb-sheet-auth) :is(h2,h3) { font-family: Georgia,serif; font-weight: 400; font-size: 22px; line-height: 1.2; color: #51303f; }
+.bb-sheet:not(.bb-sheet-auth) :is(h2,h3) { font-family: Georgia,serif; font-weight: 400; font-size: 19px; line-height: 1.2; color: #51303f; }
 .bb-sheet:not(.bb-sheet-auth) .text-sm { font-size: 12px; }
 .bb-sheet:not(.bb-sheet-auth) .text-xs { font-size: 10px; }
-.bb-sheet:not(.bb-sheet-auth) :is(.p-6,.bb-review-editor) { padding: 18px; }
-.bb-sheet:not(.bb-sheet-auth) .px-6 { padding-left: 18px; padding-right: 18px; }
-.bb-sheet:not(.bb-sheet-auth) .py-4 { padding-top: 12px; padding-bottom: 12px; }
-.bb-sheet:not(.bb-sheet-auth) .pb-6 { padding-bottom: 18px; }
-.bb-sheet:not(.bb-sheet-auth) .space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top: 14px; }
+.bb-sheet:not(.bb-sheet-auth) :is(.p-6,.bb-review-editor) { padding: 14px; }
+.bb-sheet:not(.bb-sheet-auth) .px-6 { padding-left: 14px; padding-right: 14px; }
+.bb-sheet:not(.bb-sheet-auth) .py-4 { padding-top: 10px; padding-bottom: 10px; }
+.bb-sheet:not(.bb-sheet-auth) .pb-6 { padding-bottom: 14px; }
+.bb-sheet:not(.bb-sheet-auth) .space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top: 10px; }
 .bb-sheet:not(.bb-sheet-auth) :is(input,textarea,select) { border-color: #e9d3de; border-radius: 8px; background-color: #fffbfd; max-width: 100%; }
 .bb-sheet :focus-visible { outline: 2px solid #c2547c; outline-offset: 2px; }
 .bb-sheet:not(.bb-sheet-auth) button { min-height: 32px; }
@@ -21,35 +21,41 @@
 .bb-sheet-media [id$="title"] { font-size: 12px; color: #63424f; }
 .bb-sheet-media .w-20.h-20 { width: 52px; height: 52px; }
 .bb-sheet-media .mt-6 { margin-top: 12px; }
-.bb-quick-layout { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.2fr); gap: 18px; padding: 18px; }
-.bb-quick-image { width: 100%; height: 240px; object-fit: contain; border-radius: 12px; background: #fff7fa; }
-.bb-quick-reviews { grid-column: 1 / -1; border-top: 1px solid #eedee5; padding-top: 14px; min-width: 0; }
-.bb-quick-reviews > div { max-height: none; }
+.bb-quick-layout { display: grid; grid-template-columns: minmax(0,.75fr) minmax(0,1.1fr) minmax(0,1.15fr); gap: 14px; padding: 14px; align-items: start; }
+.bb-quick-image { width: 100%; height: 190px; object-fit: contain; border-radius: 12px; background: #fff7fa; }
+.bb-quick-reviews { border-left: 1px solid #eedee5; padding-left: 14px; min-width: 0; max-height: min(54dvh,400px); overflow-y: auto; overscroll-behavior: contain; }
+.bb-quick-reviews > div { height: auto; }
+.bb-quick-reviews :is(p,textarea) { overflow-wrap: anywhere; }
+.bb-sheet .bb-quick-reviews h3 { font: 600 11px/1.4 'Bella Montserrat',sans-serif; }
+.bb-quick-reviews .flex-1 { min-width: 0; }
+.bb-quick-actions #quickViewAddToCart { padding: 8px 12px; font-size: 11px; }
+.bb-quick-actions .text-2xl { font-size: 20px; }
 .bb-quick-reviews .py-8 { padding-block: 12px; }
 .bb-quick-layout > div { min-width: 0; }
-.bb-quick-actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding-top: 12px; border-top: 1px solid #f0dfe6; margin-top: auto; }
+.bb-quick-actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding-top: 10px; border-top: 1px solid #f0dfe6; margin-top: auto; }
 .bb-sheet-auth { height: auto !important; max-height: calc(100dvh - 32px) !important; overflow-y: auto !important; }
-.bb-sheet-auth > section:first-of-type { padding: 22px; flex-shrink: 0; }
+.bb-sheet-auth > section:first-of-type { padding: 18px; flex-shrink: 0; }
 .bb-sheet-auth > section:first-of-type > span { height: 32px; font: 20px Georgia,serif; color: #a5355c; border-color: #efd4e0; }
-.bb-sheet-auth > section:first-of-type > div { padding-block: 22px; }
-.bb-sheet-auth h1 { font: 26px/1.2 Georgia,serif; color: #51303f; }
-.bb-sheet-auth form { margin-top: 20px; }
-.bb-sheet-auth form :is(input,select) { min-width: 0; max-width: 100%; }
+.bb-sheet-auth > section:first-of-type > div { padding-block: 16px; }
+.bb-sheet-auth h1 { font: 23px/1.2 Georgia,serif; color: #51303f; }
+.bb-sheet-auth form { margin-top: 16px; }
+.bb-sheet-auth form :is(input,select) { min-width: 0; max-width: 100%; height: 38px; }
 .bb-sheet-auth form button[type=submit] { height: 40px; background: linear-gradient(120deg,#e9568b,#d93771); }
-.bb-sheet-auth label[for=register-photo] > span:first-child { width: 64px; height: 64px; }
-@media (min-width: 768px) { .bb-sheet-auth { max-width: min(960px,calc(100vw - 32px)); } }
+.bb-sheet-auth label[for=register-photo] > span:first-child { width: 52px; height: 52px; }
+@media (min-width: 768px) { .bb-sheet-auth { max-width: min(800px,calc(100vw - 32px)); } }
 @media (min-width: 1024px) { .bb-sheet-auth > section:first-of-type { width: 50%; } }
-@media (min-width: 768px) and (max-width: 1023px) { .bb-sheet-auth { max-width: 480px; } }
+@media (min-width: 768px) and (max-width: 1023px) { .bb-sheet-auth { max-width: 420px; } }
 @media (max-width: 767px) {
-  .bb-sheet { left: 12px !important; right: 12px !important; width: auto; max-width: 480px; margin-inline: auto; bottom: max(12px,env(safe-area-inset-bottom)) !important; max-height: min(78dvh,680px) !important; border-radius: 18px !important; }
+  .bb-sheet { left: 12px !important; right: 12px !important; width: auto; max-width: 420px; margin-inline: auto; bottom: max(12px,env(safe-area-inset-bottom)) !important; max-height: min(74dvh,600px) !important; border-radius: 18px !important; }
   .bb-sheet:not(.bb-sheet-auth) :is(.p-6,.bb-review-editor) { padding: 14px; }
   .bb-sheet:not(.bb-sheet-auth) .px-6 { padding-left: 14px; padding-right: 14px; }
-  .bb-sheet:not(.bb-sheet-auth) :is(h2,h3) { font-size: 20px; }
+  .bb-sheet:not(.bb-sheet-auth) :is(h2,h3) { font-size: 18px; }
   .bb-sheet:not(.bb-sheet-auth) :is(input:not([type=file]),textarea,select) { font-size: 16px; }
   .bb-sheet:not(.bb-sheet-auth) input[type=file] { font-size: 11px; }
   .bb-sheet-media img,.bb-sheet-media video { max-height: 42dvh; }
-  .bb-quick-layout { grid-template-columns: minmax(0,1fr); gap: 14px; padding: 14px; }
-  .bb-quick-image { height: 150px; }
+  .bb-quick-layout { grid-template-columns: minmax(0,1fr); gap: 12px; padding: 12px; }
+  .bb-quick-reviews { border-left: 0; padding-left: 0; border-top: 1px solid #eedee5; padding-top: 12px; max-height: none; overflow: visible; }
+  .bb-quick-image { height: 120px; }
   .bb-sheet-auth { max-height: calc(100dvh - 24px) !important; }
   .bb-sheet-auth > section:first-of-type { padding: 16px; }
   .bb-sheet-auth > section:first-of-type > div { padding-block: 18px; }
@@ -58,3 +64,17 @@
 @media (max-width: 359px) { .bb-sheet-auth form .grid-cols-2 { grid-template-columns: minmax(0,1fr); row-gap: 12px; } }
 @media (max-height: 500px) { .bb-sheet { max-height: calc(100dvh - 20px) !important; } }
 @media (prefers-reduced-motion: reduce) { .bb-sheet { transition-duration: 0ms !important; } }
+.bb-sheet .bb-dialog-close { width: auto; height: auto; min-height: 30px; padding: 4px 10px; flex-shrink: 0; border-radius: 20px; border: 1px solid #ecd7e0; color: #a73862; background: #fff8fb; font: 500 11px/1.4 'Bella Montserrat',sans-serif; }
+.bb-sheet .bb-dialog-close:hover { background: #fceaf2; }
+@media (min-width: 768px) {
+  .bb-sheet-standard:not(.bb-product-dialog) { width: min(380px,calc(100vw - 32px)); }
+  .bb-sheet-media:not(.bb-gallery-dialog) { width: min(400px,calc(100vw - 32px)); }
+  .bb-sheet-media.bb-gallery-dialog { background: transparent !important; border: 0; box-shadow: none; border-radius: 0; padding: 0; }
+  .bb-gallery-dialog [id=lightbox-title] { color: white; font-size: 11px; }
+  .bb-gallery-dialog .bb-gallery-control { background: #0008 !important; color: white !important; border: 0; }
+  .bb-gallery-dialog .bb-gallery-control:hover { background: #000b !important; }
+  .bb-gallery-dialog .bb-gallery-thumbnail { background: transparent !important; border-color: transparent; }
+  .bb-gallery-dialog .bb-gallery-thumbnail[aria-current=true] { border: 2px solid white; }
+  .bb-gallery-dialog .bb-dialog-close { color: white !important; background: #ffffff1a !important; border-color: #ffffff40; }
+}
+.bb-sheet-media:not(.bb-gallery-dialog) img { max-height: min(36dvh,240px); }

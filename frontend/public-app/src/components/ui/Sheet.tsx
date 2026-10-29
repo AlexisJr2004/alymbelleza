@@ -58,7 +58,7 @@ export default function Sheet({
   onClose,
   children,
   labelledBy,
-  desktopMaxWidthClassName = 'md:max-w-sm',
+  desktopMaxWidthClassName = 'md:max-w-[340px]',
   panelClassName = 'bg-white rounded-t-3xl md:rounded-2xl',
   panelStyle,
   handleClassName = 'bg-gray-300',
