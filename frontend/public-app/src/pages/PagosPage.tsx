@@ -52,6 +52,7 @@ export default function PagosPage() {
           image: { type: 'jpeg' as const, quality: 0.98 },
           html2canvas: { scale: 2, logging: false, dpi: 300, letterRendering: true, useCORS: true },
           jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as const },
+          pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', 'header', 'footer'] },
         };
         await html2pdf().set(opt).from(contenedor).save();
       }

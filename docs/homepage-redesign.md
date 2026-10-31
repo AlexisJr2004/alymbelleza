@@ -94,5 +94,6 @@ Montserrat se sirve localmente desde `frontend/public-app/public/fonts`, con su 
 - Todas las páginas públicas usan la cabecera y el pie de la tienda. Servicios y preguntas frecuentes siguen accesibles en `/nosotros`; `/contacto` conserva la redirección al inicio.
 - Se retiran los componentes de portada y navegación anteriores, los estilos sin consumidores, el centro de notificaciones y su API. Los comentarios, respuestas y la gestión de citas siguen activos.
 - Los accesos flotantes de accesibilidad e ir arriba comparten la altura y el espacio seguro inferior en móvil.
-- Las pantallas de acceso utilizan una imagen editorial local y ya no muestran tarjetas de citas ni avatares de ejemplo.
+- Las pantallas de acceso, registro y recuperación recuperan el panel visual anterior con fotografía, tarjetas flotantes, avatares y calendario decorativo en escritorio. Conservan el formulario adaptable y el cierre con X.
 - Las preguntas frecuentes ya no incluyen teléfonos, direcciones ni políticas de ejemplo. El PDF utiliza la fecha y el identificador del pedido, omite datos fiscales ficticios e indica que el pago está por verificar.
+- El PDF utiliza una cabecera editorial rosa, datos de cliente y pedido, filas alternadas y un total destacado. Se exporta en A4 con saltos que evitan dividir filas y sin depender de fuentes o imágenes externas.
