@@ -8,10 +8,10 @@ Resumen, Ranking, Productos, Cupones, Pedidos, Tarjetas, Usuarios y Citas. Todas
 
 ## Interfaz
 
-- Paneles blancos, tipografía de sistema y acentos rosa.
+- Identidad visual de la tienda: logotipo floral, Montserrat local, títulos Georgia, fondos blancos y acentos rosa.
 - Indicadores compactos, tablas con desplazamiento horizontal y paginación acotada.
 - Filtros plegables en móvil y visibles en escritorio.
-- Formularios adaptables y navegación inferior con área segura.
+- Formularios adaptables, botones degradados y navegación inferior translúcida con área segura.
 
 Los componentes compartidos están en `src/components/ui`; los estilos comunes, en `src/index.css`.
 

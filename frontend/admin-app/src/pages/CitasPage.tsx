@@ -50,7 +50,7 @@ export default function CitasPage() {
 
   const donut = computeConicGradient([
     { label: 'Pendientes', count: pendientes, color: '#e2766f' },
-    { label: 'Realizadas', count: realizadas, color: '#7e9ce3' },
+    { label: 'Realizadas', count: realizadas, color: '#c33060' },
     { label: 'Canceladas', count: canceladas, color: '#c3c8d4' },
   ]);
   const centerPct = donut.total > 0 ? Math.round((realizadas / donut.total) * 100) : 0;
@@ -213,7 +213,7 @@ export default function CitasPage() {
               ) : (
                 [
                   { label: 'Pendientes', count: pendientes, color: '#e2766f' },
-                  { label: 'Realizadas', count: realizadas, color: '#7e9ce3' },
+                  { label: 'Realizadas', count: realizadas, color: '#c33060' },
                   { label: 'Canceladas', count: canceladas, color: '#c3c8d4' },
                 ].map((g) => (
                   <div key={g.label} className="flex items-center gap-2 text-sm">

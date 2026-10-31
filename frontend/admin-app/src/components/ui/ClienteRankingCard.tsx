@@ -30,7 +30,7 @@ export default function ClienteRankingCard({ clientes, verTodosHref }: ClienteRa
 
       {clientes.length ? (
         <>
-          <div className="flex flex-col items-center rounded-2xl border border-white/80 bg-slate-50 p-3 text-center">
+          <div className="flex flex-col items-center rounded-2xl border border-white/80 bg-rose-50 p-3 text-center">
             <div className="relative">
               <img
                 src={clientes[0].profileImage || FALLBACK_AVATAR}
@@ -42,7 +42,7 @@ export default function ClienteRankingCard({ clientes, verTodosHref }: ClienteRa
                   e.currentTarget.src = FALLBACK_AVATAR;
                 }}
               />
-              <span className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full bg-ink text-xs font-bold text-white ring-2 ring-white">
+              <span className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full bg-coral text-xs font-bold text-white ring-2 ring-white">
                 1
               </span>
             </div>

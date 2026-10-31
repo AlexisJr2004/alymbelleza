@@ -8,20 +8,11 @@ interface StatCardMobileProps {
   highlighted?: boolean;
 }
 
-// Tarjeta de estadística con anillo de progreso para la vista móvil de las
-// páginas del admin-app — colores y proporciones copiados literalmente de
-// surveys-app.html (.stat-card/.icon-c/.ring/.stat-label/.stat-value), que el
-// usuario compartió como el archivo fuente real de la plantilla de
-// referencia (ver feedback-match-reference-design-literally). El anillo
-// representa, cuando existe, la fracción de esta métrica sobre el total de
-// su propia fila de KPIs — cuando la métrica ES el total (o es un valor
-// monetario sin una fracción natural dentro de esa misma fila), el llamador
-// pasa percent=100. `highlighted` replica la 2.ª tarjeta rellena de lilac de
-// la plantilla (las otras 3 quedan blancas).
+// Indicadores compactos con los acentos rosa de la tienda.
 export default function StatCardMobile({ icon, percent, label, value, highlighted }: StatCardMobileProps) {
   return (
     <div
-      className={`flex min-w-0 h-[118px] flex-col justify-between rounded-2xl p-3 border border-slate-200 ${
+      className={`flex min-w-0 h-[118px] flex-col justify-between rounded-2xl p-3 border border-rose-100 ${
         highlighted ? 'bg-lilac' : 'border border-black/5 bg-white'
       }`}
     >
@@ -34,8 +25,8 @@ export default function StatCardMobile({ icon, percent, label, value, highlighte
             percent={percent}
             size={40}
             strokeWidth={3}
-            color={highlighted ? '#1b1b1f' : '#8b78ee'}
-            trackColor={highlighted ? 'rgba(255,255,255,0.5)' : '#ececf2'}
+            color={highlighted ? '#a83a65' : '#c33060'}
+            trackColor={highlighted ? 'rgba(255,255,255,0.5)' : '#f5e3eb'}
           />
           <span className="absolute inset-0 grid place-items-center text-[10px] font-semibold text-ink">{percent}%</span>
         </div>

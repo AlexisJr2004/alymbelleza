@@ -355,7 +355,7 @@ export default function ResumenPage() {
           <div className="flex gap-2.5">
             <Link
               to="/pedidos"
-              className="flex-1 bg-ink text-white py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 hover:bg-ink/85 transition-colors"
+              className="flex-1 bg-coral text-white py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 hover:bg-ink/85 transition-colors"
             >
               <PedidosIcon className="w-4 h-4" />
               Ver pedidos
@@ -428,11 +428,11 @@ export default function ResumenPage() {
           <h3 className="text-base font-semibold text-ink mb-1">Ingresos de los últimos 6 meses</h3>
           <p className="text-sm text-muted mb-4">Total facturado por mes según los pedidos registrados.</p>
           <div className="h-36">
-            <TrendChart data={serieIngresos} formatValue={formatoMoneda} color="#7e9ce3" />
+            <TrendChart data={serieIngresos} formatValue={formatoMoneda} color="#c33060" />
           </div>
         </div>
 
-        <div className="rounded-[26px] bg-ink p-4 text-white relative overflow-hidden">
+        <div className="rounded-[26px] bg-coral p-4 text-white relative overflow-hidden">
           <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full pointer-events-none" />
           <div className="absolute -bottom-10 -left-6 w-28 h-28 bg-white/10 rounded-full pointer-events-none" />
           <p className="text-sm text-white/70 relative">Ingresos de este mes</p>

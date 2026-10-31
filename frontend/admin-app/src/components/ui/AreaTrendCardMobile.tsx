@@ -14,7 +14,7 @@ const H = 150;
 const PXL = 8;
 const PXR = 8;
 const PY = 18;
-const ACCENT = '#8b78ee';
+const ACCENT = '#c33060';
 
 // Curva suave entre puntos (control en el punto medio horizontal de cada
 // tramo) — técnica simple de suavizado, en vez de los segmentos rectos de

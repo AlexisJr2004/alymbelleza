@@ -102,7 +102,7 @@ export default function TarjetasPage() {
           <button
             type="button"
             onClick={abrirNueva}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-ink text-white rounded-full text-sm font-medium hover:bg-ink/85 transition-colors shrink-0"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-coral text-white rounded-full text-sm font-medium hover:bg-ink/85 transition-colors shrink-0"
           >
             <PlusIcon className="w-4 h-4" /> Tarjeta nueva
           </button>

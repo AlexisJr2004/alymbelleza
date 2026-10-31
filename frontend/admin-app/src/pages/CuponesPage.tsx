@@ -111,7 +111,7 @@ export default function CuponesPage() {
           <button
             type="button"
             onClick={abrirNuevo}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-ink text-white rounded-full text-sm font-medium hover:bg-ink/85 transition-colors shrink-0"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-coral text-white rounded-full text-sm font-medium hover:bg-ink/85 transition-colors shrink-0"
           >
             <PlusIcon className="w-4 h-4" /> Nuevo Cupón
           </button>
@@ -214,7 +214,7 @@ export default function CuponesPage() {
               title="Distribución"
               centerCaption="Activos"
               groups={[
-                { label: 'Activos', count: activos, color: '#7e9ce3' },
+                { label: 'Activos', count: activos, color: '#c33060' },
                 { label: 'Inactivos', count: inactivos, color: '#e2766f' },
               ]}
             />

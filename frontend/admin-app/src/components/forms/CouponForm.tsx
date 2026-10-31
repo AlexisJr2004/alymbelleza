@@ -12,9 +12,9 @@ interface CouponFormProps {
 }
 
 const inputClass =
-  'w-full pl-9 pr-3 py-2 text-sm border border-slate-200 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none transition-all';
+  'w-full pl-9 pr-3 py-2 text-sm border border-rose-100 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none transition-all';
 const plainInputClass =
-  'w-full px-3 py-2 text-sm border border-slate-200 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none';
+  'w-full px-3 py-2 text-sm border border-rose-100 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none';
 
 export default function CouponForm({ initialData, onSubmit, onCancel, submitting }: CouponFormProps) {
   const [code, setCode] = useState(initialData?.code ?? '');
@@ -118,19 +118,19 @@ export default function CouponForm({ initialData, onSubmit, onCancel, submitting
         </div>
       </div>
 
-      <div className="flex justify-end gap-2.5 pt-4 mt-4 border-t border-slate-200">
+      <div className="flex justify-end gap-2.5 pt-4 mt-4 border-t border-rose-100">
         <button
           type="button"
           onClick={onCancel}
           disabled={submitting}
-          className="px-4 py-2 text-sm border border-slate-200 bg-white/50 rounded-full text-[#3a3d45] hover:bg-white/90 transition-colors flex items-center disabled:opacity-60"
+          className="px-4 py-2 text-sm border border-rose-100 bg-white/50 rounded-full text-[#3a3d45] hover:bg-white/90 transition-colors flex items-center disabled:opacity-60"
         >
           <XIcon className="w-4 h-4 mr-1.5" /> Cancelar
         </button>
         <button
           type="submit"
           disabled={submitting}
-          className="px-5 py-2 text-sm bg-ink text-white rounded-full hover:bg-ink/85 transition-colors flex items-center justify-center disabled:opacity-60"
+          className="px-5 py-2 text-sm bg-coral text-white rounded-full hover:bg-ink/85 transition-colors flex items-center justify-center disabled:opacity-60"
         >
           <CheckIcon className="w-4 h-4 mr-1.5" /> {submitting ? 'Guardando...' : 'Guardar Cupón'}
         </button>

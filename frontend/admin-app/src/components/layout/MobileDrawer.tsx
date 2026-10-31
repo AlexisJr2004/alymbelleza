@@ -1,3 +1,4 @@
+import BeautyBrand from './BeautyBrand';
 import { NavLink } from 'react-router-dom';
 import {
   ResumenIcon,
@@ -60,16 +61,13 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-40 flex w-80 flex-col rounded-r-[30px] border-r border-white/70 bg-white/90 shadow-xl backdrop-blur-xl transition-transform duration-300 ease-out lg:hidden ${
+      className={`admin-drawer fixed inset-y-0 left-0 z-40 flex w-[min(320px,calc(100vw-24px))] flex-col rounded-r-[30px] border-r border-white/70 bg-white/90 shadow-xl backdrop-blur-xl transition-transform duration-300 ease-out lg:hidden ${
         open ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
       <div className="flex h-[70px] shrink-0 items-center justify-between border-b border-gray-100 px-5">
         <div className="flex items-center gap-2.5">
-          <span className="grid h-8 w-8 place-items-center rounded-full bg-ink text-[13px] font-bold text-white">
-            B
-          </span>
-          <span className="text-[19px] font-semibold text-ink">Bella Beauty</span>
+          <BeautyBrand />
         </div>
         <button type="button" onClick={onClose} className="circle-btn h-9 w-9" aria-label="Cerrar menú">
           <XIcon className="h-4 w-4" />
@@ -101,7 +99,7 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
             onClick={onClose}
             className={({ isActive }) =>
               `flex items-center gap-3 rounded-full px-4 py-2.5 text-[14px] font-medium transition ${
-                isActive ? 'bg-ink text-white' : 'text-[#2a2c33] hover:bg-white/70'
+                isActive ? 'bg-rose-100 text-coral' : 'text-ink hover:bg-rose-50'
               }`
             }
           >

@@ -1,3 +1,4 @@
+import BeautyBrand from './BeautyBrand';
 import { Link, NavLink } from 'react-router-dom';
 import { BellIcon, MenuGridIcon } from '../icons';
 import { getStoredUser } from '../../lib/auth';
@@ -26,22 +27,15 @@ export default function TopNav({ onOpenMenu }: { onOpenMenu: () => void }) {
   const fecha = rawDate.charAt(0).toUpperCase() + rawDate.slice(1);
 
   return (
-    <header className="admin-topnav sticky top-0 z-20 px-3 lg:px-5 border-b border-slate-200 bg-white">
-      {/* Header móvil — mismos íconos que surveys-app.html (menú en grilla,
-          campana, avatar), pero envueltos en las cápsulas glass propias del
-          admin-app en vez de los .round-btn blancos sueltos de la
-          referencia -- el usuario pidió explícitamente volver a esa
-          envoltura, y que el ícono de menú tenga la misma cápsula que el
-          de notificaciones (antes era un .circle-btn suelto). El botón de
-          menú es ahora el único disparador de MobileDrawer -- BottomMobileNav
-          ya no tiene un botón "Más", su último cupo es un acceso directo a
-          Productos. */}
+    <header className="admin-topnav sticky top-0 z-20 px-3 lg:px-5 border-b border-rose-100 bg-white">
+
       <div className="flex h-16 items-center justify-between lg:hidden">
         <div className="shrink-0 rounded-full border border-white/70 bg-white/30 p-1.5">
           <button type="button" onClick={onOpenMenu} aria-label="Menú" className="rail-btn">
             <MenuGridIcon className="h-[18px] w-[18px]" />
           </button>
         </div>
+        <Link to="/resumen" className="min-w-0"><BeautyBrand /></Link>
         <div className="flex shrink-0 items-center gap-2 rounded-full border border-white/70 bg-white/30 py-1.5 pl-1.5 pr-1.5">
           <Link to="/citas" title="Citas pendientes" aria-label="Citas pendientes" className="rail-btn relative">
             <BellIcon className="h-[18px] w-[18px]" />
@@ -62,16 +56,13 @@ export default function TopNav({ onOpenMenu }: { onOpenMenu: () => void }) {
         </div>
       </div>
 
-      {/* Header de escritorio — cápsulas glass sin cambios */}
+
       <div className="hidden h-16 items-center gap-2 lg:flex">
         <Link
           to="/resumen"
-          className="flex shrink-0 items-center gap-2.5 rounded-full border border-white/70 bg-white/30 py-1.5 pl-1.5 pr-4"
+          className="shrink-0 pr-3"
         >
-          <span className="grid h-9 w-9 place-items-center rounded-full bg-ink text-[14px] font-bold text-white">
-            B
-          </span>
-          <span className="text-base font-semibold tracking-[-0.01em] text-ink">Bella Beauty</span>
+          <BeautyBrand />
         </Link>
 
         <nav className="flex min-w-0 flex-1 justify-center" aria-label="Secciones">

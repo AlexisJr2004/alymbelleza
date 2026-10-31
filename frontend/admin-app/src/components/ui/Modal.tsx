@@ -73,7 +73,7 @@ function ModalCard({ modal }: { modal: ActiveModal }) {
               className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-colors ${
                 modal.tone === 'danger'
                   ? 'bg-rose-600 hover:bg-rose-700'
-                  : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
+                  : 'bg-gradient-to-r admin-primary'
               }`}
             >
               {modal.confirmText ?? 'Entendido'}

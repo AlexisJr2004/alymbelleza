@@ -100,9 +100,9 @@ Montserrat se sirve localmente desde `frontend/public-app/public/fonts`, con su 
 
 ## Panel de administración
 
-- Las ocho secciones comparten paneles blancos, indicadores compactos, tablas uniformes y una cabecera adaptable.
+- Las ocho secciones comparten el estilo de public-app: logotipo floral, Montserrat local, títulos Georgia, fondos blancos, cabeceras rosa suave y botones con degradado. Se mantienen los indicadores compactos y las tablas uniformes.
 - Los filtros se pliegan en móvil; la paginación muestra un número acotado de controles.
 - Resumen prioriza ingresos y pedidos recientes, con tendencias y actividad secundaria desplegables.
 - Los formularios incluyen etiquetas asociadas, cierre con Escape, manejo de foco y bloqueo de desplazamiento del fondo.
-- La navegación móvil respeta el área segura y muestra etiquetas. Los avatares de respaldo y el favicon son locales.
+- La navegación móvil utiliza la isla translúcida blanca y rosa de la tienda, respeta el área segura y muestra etiquetas. El menú lateral mantiene la misma identidad. Los avatares de respaldo y el favicon son locales.
 - Se retiran el recurso SVG de ejemplo, el icono de menú sin consumidores y los estilos antiguos sin uso. Las rutas activas se conservan.

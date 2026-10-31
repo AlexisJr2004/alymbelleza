@@ -14,8 +14,8 @@ export default function Sparkline({ data }: { data: { total: number }[] }) {
 
   return (
     <svg viewBox="0 0 120 40" className="w-28 h-12 shrink-0">
-      <polyline points={`2,38 ${puntos} 118,38`} fill="#7e9ce3" fillOpacity={0.15} stroke="none" />
-      <polyline points={puntos} fill="none" stroke="#7e9ce3" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+      <polyline points={`2,38 ${puntos} 118,38`} fill="#c33060" fillOpacity={0.15} stroke="none" />
+      <polyline points={puntos} fill="none" stroke="#c33060" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

@@ -1,39 +1,67 @@
+@font-face { font-family: 'Bella Montserrat'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/montserrat-regular.ttf') format('truetype'); }
+@font-face { font-family: 'Bella Montserrat'; font-style: normal; font-weight: 500 700; font-display: swap; src: url('/fonts/montserrat-semibold.ttf') format('truetype'); }
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root { color-scheme: light; }
-.app-bg { background: #f6f7f9; }
+.admin-brand { display: inline-flex; align-items: center; gap: 7px; color: #cf8c96; }
+.admin-brand-name { display: block; color: #17191e; white-space: nowrap; font: 25px/1 Georgia,serif; letter-spacing: -.8px; }
+.admin-brand-name em { color: #c33060; font-style: normal; }
+.admin-brand-tagline { display: block; margin-top: 5px; font-size: 6px; letter-spacing: 1.2px; color: #887780; }
+.admin-topnav { border-color: #f3e5eb; box-shadow: 0 3px 16px #79324d04; }
+.admin-topnav .nav-pill { font-size: 10px; padding-inline: 10px; height: 32px; }
+.admin-page-header { padding: 19px 22px; border: 1px solid #f2dfe7; border-radius: 18px; background: linear-gradient(115deg,#fff5f8,#fffafc 65%,#fbeaf1); }
+.admin-eyebrow { margin-bottom: 5px; font-size: 9px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; }
+.admin-content :is(h2,h3), .admin-sheet h3 { font-family: Georgia,serif; font-weight: 400; color: #51303f; }
+.admin-content h2 { font-size: 21px; }
+.admin-content h3 { font-size: 18px; }
+.admin-sheet h3 { font-size: 23px; }
+.admin-sheet { border: 1px solid #efdbe2; box-shadow: 0 20px 70px #71334d25; }
+.admin-shell :is(button,a).bg-coral, .admin-sheet button.bg-coral, .admin-primary { background: linear-gradient(115deg,#eb4b83,#e83d79); color: white; box-shadow: 0 4px 9px #c6335b13; }
+.admin-shell :is(button,a).bg-coral:hover, .admin-sheet button.bg-coral:hover, .admin-primary:hover { background: linear-gradient(115deg,#df3c75,#d62b66); }
+.admin-content input[type=text] { border-radius: 24px; }
+.admin-drawer { border-color: #efdbe2; background: linear-gradient(160deg,#ffffff,#fff7fa); }
+.admin-drawer > div { border-color: #f3e5eb; }
+.admin-mobile-nav > div { background: linear-gradient(145deg,#ffffffed,#fff2f8db); border-color: #ffffff; box-shadow: 0 8px 30px #71364e1c,inset 0 1px 0 #ffffff; backdrop-filter: blur(18px) saturate(1.5); }
+.admin-mobile-nav a[aria-current=page] { background: linear-gradient(140deg,#fce3ee,#f7d6e5); color: #ad305b; }
+.admin-content .bg-coral.relative { background: linear-gradient(125deg,#b5345b,#d95f88); }
+.admin-table thead th:first-child { border-radius: 12px 0 0 0; }
+.admin-table thead th:last-child { border-radius: 0 12px 0 0; }
+@media (max-width: 639px) { .admin-page-header { padding: 16px; } }
+@media (max-width: 359px) { .admin-topnav .admin-brand svg { display: none; } .admin-topnav .admin-brand-name { font-size: 22px; } }
+.app-bg { background: #ffffff; }
 .admin-content { font-size: 13px; }
 .admin-content .grid > *, .admin-content .flex-1 { min-width: 0; }
-.admin-page-header > button { font-size: 12px; padding: 9px 14px; border-radius: 10px; }
-.admin-content .admin-panel { box-shadow: 0 2px 6px #14223704; }
+.admin-page-header > button { font-size: 12px; padding: 9px 14px; border-radius: 24px; }
+.admin-content .admin-panel { box-shadow: 0 2px 6px #71334d06; }
 .admin-content .admin-panel h2 { letter-spacing: -.02em; }
 .admin-table { width: 100%; font-variant-numeric: tabular-nums; }
-.admin-table thead { background: #f8f9fb; }
-.admin-table th { padding: 10px 12px; font-size: 10px; font-weight: 600; letter-spacing: .04em; color: #64748b; white-space: nowrap; border-bottom: 1px solid #e2e8f0; }
-.admin-table td { padding: 10px 12px; font-size: 12px; border-bottom: 1px solid #edf0f4; }
+.admin-table thead { background: #fff6f9; }
+.admin-table th { padding: 10px 12px; font-size: 10px; font-weight: 600; letter-spacing: .04em; color: #77656f; white-space: nowrap; border-bottom: 1px solid #efdbe2; }
+.admin-table td { padding: 10px 12px; font-size: 12px; border-bottom: 1px solid #f6e9ee; }
 .admin-table tbody tr:last-child td { border-bottom: 0; }
 .admin-table tbody tr:hover { background: #faf7f9; }
 .admin-table td button { min-width: 32px; min-height: 32px; }
 .admin-filters .admin-panel { padding: 14px; border-radius: 14px; }
 .admin-filters .space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top: 14px; }
 .admin-filters h4 { font-size: 12px; }
-.admin-filter-toggle { display: flex; width: 100%; align-items: center; justify-content: space-between; padding: 11px 14px; border: 1px solid #e2e8f0; border-radius: 12px; background: white; font-size: 12px; font-weight: 600; margin-bottom: 8px; }
+.admin-filter-toggle { display: flex; width: 100%; align-items: center; justify-content: space-between; padding: 11px 14px; border: 1px solid #efdbe2; border-radius: 12px; background: white; font-size: 12px; font-weight: 600; margin-bottom: 8px; }
 .admin-content :is(input:not([type=checkbox]):not([type=radio]),select,textarea),
-.admin-form-dialog :is(input:not([type=checkbox]):not([type=radio]),select,textarea) { border-color: #dbe0e7; background: #fff; border-radius: 9px; font-size: 12px; min-height: 34px; }
-.admin-content :is(input,select,textarea):focus, .admin-form-dialog :is(input,select,textarea):focus { border-color: #b53b65; outline: 0; box-shadow: 0 0 0 3px #b53b6514; }
-.admin-shell :is(button,a):focus-visible, .admin-sheet :is(button,a):focus-visible { outline: 2px solid #b53b65; outline-offset: 3px; }
+.admin-form-dialog :is(input:not([type=checkbox]):not([type=radio]),select,textarea) { border-color: #e9d3de; background: #fff; border-radius: 12px; font-size: 12px; min-height: 34px; }
+.admin-content :is(input,select,textarea):focus, .admin-form-dialog :is(input,select,textarea):focus { border-color: #c33060; outline: 0; box-shadow: 0 0 0 3px #c3306014; }
+.admin-shell :is(button,a):focus-visible, .admin-sheet :is(button,a):focus-visible { outline: 2px solid #c33060; outline-offset: 3px; }
 .admin-sheet { border-radius: 16px; max-height: calc(100dvh - 32px); }
 .admin-sheet:focus { outline: none; }
 .admin-form-dialog form label { font-size: 12px; }
 .admin-form-dialog form .grid { gap: 12px; }
 .admin-form-dialog form textarea { min-height: 80px; }
-.admin-form-dialog form button { border-radius: 10px; font-size: 12px; }
+.admin-form-dialog form button { border-radius: 24px; font-size: 12px; }
 .admin-mobile-nav { bottom: calc(12px + env(safe-area-inset-bottom)); }
-.admin-analytics > summary { cursor: pointer; padding: 14px 16px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 13px; font-weight: 600; }
-.admin-analytics > summary span { margin-left: 12px; color: #64748b; font-size: 11px; font-weight: 400; }
-.admin-analytics > summary:focus-visible { outline: 2px solid #b53b65; outline-offset: 2px; }
+.admin-analytics > summary { cursor: pointer; padding: 14px 16px; background: white; border: 1px solid #efdbe2; border-radius: 12px; font-size: 13px; font-weight: 600; }
+.admin-analytics > summary span { margin-left: 12px; color: #77656f; font-size: 11px; font-weight: 400; }
+.admin-analytics > summary:focus-visible { outline: 2px solid #c33060; outline-offset: 2px; }
 @media (min-width: 1024px) { .admin-filter-toggle { display: none; } }
 @media (max-width: 767px) {
   .admin-sheet { bottom: max(8px,env(safe-area-inset-bottom)); max-width: calc(100vw - 24px); margin-inline: auto; }
@@ -45,19 +73,19 @@
 
 @layer components {
   .circle-btn {
-    @apply grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[#d1d5de] bg-white/45 text-[#2a2c33] transition hover:bg-white/85;
+    @apply grid h-9 w-9 shrink-0 place-items-center rounded-full border border-rose-100 bg-white/45 text-ink transition hover:bg-white/85;
   }
   .rail-btn {
-    @apply grid h-9 w-9 place-items-center rounded-full border border-white/80 bg-white/55 text-[#3a3d45] transition hover:bg-white;
+    @apply grid h-9 w-9 place-items-center rounded-full border border-white/80 bg-white/55 text-ink transition hover:bg-white;
   }
   .nav-pill {
     @apply inline-flex h-9 items-center rounded-full px-3 text-xs font-medium text-[#2a2c33] transition hover:bg-white/50;
   }
   .nav-pill.is-active {
-    @apply bg-ink text-white hover:bg-ink;
+    @apply bg-rose-100 text-coral hover:bg-rose-100;
   }
   .admin-panel {
-    @apply min-w-0 rounded-2xl border border-slate-200 bg-white shadow-sm;
+    @apply min-w-0 rounded-2xl border border-rose-100 bg-white shadow-sm;
   }
   .status {
     @apply inline-flex h-[22px] items-center rounded-full px-[11px] text-[11px] font-medium text-white;
@@ -93,7 +121,7 @@ select.appearance-none::picker-icon {
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 }
 .peer:checked~.switch-track {
-    background-color: #16181d;
+    background-color: #c33060;
 }
 .peer:checked~.switch-track::after {
     transform: translateX(1rem);
