@@ -16,7 +16,7 @@ import { getStoredUser, logout } from '../../lib/auth';
 import { resolveProfileImage } from '../../lib/format';
 import { confirmAction } from '../../lib/sweetalert';
 
-const FALLBACK_AVATAR = 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
+const FALLBACK_AVATAR = `${import.meta.env.BASE_URL}favicon.svg`;
 
 interface NavItem {
   to: string;
@@ -82,7 +82,8 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
           src={resolveProfileImage(user)}
           alt="Foto de perfil"
           onError={(e) => {
-            e.currentTarget.onerror = null;
+            if (e.currentTarget.dataset.fallback) return;
+                  e.currentTarget.dataset.fallback = 'true';
             e.currentTarget.src = FALLBACK_AVATAR;
           }}
         />

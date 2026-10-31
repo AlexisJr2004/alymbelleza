@@ -42,6 +42,8 @@ La interfaz pública utiliza fondos blancos, acentos rosados, tipografía editor
 
 **Accesibilidad:** controles de zoom, tamaño de texto, tipografía y lectura de página cuando el navegador la admite. Los diálogos gestionan el foco, permiten cierre con Escape y limitan su tamaño al espacio disponible.
 
+El panel administrativo utiliza tablas e indicadores compactos, filtros plegables en móvil y un resumen que prioriza ingresos y pedidos. Los análisis secundarios se pueden desplegar cuando se necesitan.
+
 ## Arquitectura
 
 | Componente | Ubicación | Función |

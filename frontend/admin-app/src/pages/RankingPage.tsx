@@ -11,7 +11,7 @@ import { calcularClientesActivos } from '../lib/ranking';
 import { formatoMoneda, numeroWhatsapp } from '../lib/format';
 
 const RANKING_POR_PAGINA = 10;
-const FALLBACK_AVATAR = 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
+const FALLBACK_AVATAR = `${import.meta.env.BASE_URL}favicon.svg`;
 
 export default function RankingPage() {
   const { data: orders = [] } = useOrdersQuery();
@@ -52,7 +52,7 @@ export default function RankingPage() {
         description="Todos los clientes con compras realizadas, ordenados por cantidad de pedidos."
       />
 
-      <div className="grid grid-cols-2 gap-3 mb-6 lg:hidden">
+      <div className="grid grid-cols-2 gap-3 mb-4 lg:hidden">
         <StatCardMobile
           icon={<UsuariosIcon className="w-5 h-5" />}
           percent={pctClientesConCompra}
@@ -121,15 +121,15 @@ export default function RankingPage() {
           izquierda, y a la derecha el listado completo con buscador y
           paginación. items-start porque ambos bloques tienen alturas muy
           distintas y no hace falta igualarlas acá. */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-start">
         <div className="lg:col-span-2">
           <ClienteRankingCard clientes={clientesActivos} />
         </div>
 
-        <div className="lg:col-span-3 glass p-6 md:p-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+        <div className="lg:col-span-3 admin-panel p-4">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
             <div>
-              <h2 className="text-2xl font-bold text-ink flex items-center">
+              <h2 className="text-lg font-bold text-ink flex items-center">
                 <TrophyIcon className="w-5 h-5 mr-2 text-coral" />
                 Ranking completo
               </h2>
@@ -153,7 +153,7 @@ export default function RankingPage() {
           </div>
 
           <div className="overflow-x-auto rounded-[22px] border border-white/70">
-            <table className="min-w-full divide-y divide-white/70">
+            <table className="admin-table min-w-full divide-y divide-white/70">
               <thead className="bg-white/40">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">#</th>
@@ -186,7 +186,8 @@ export default function RankingPage() {
                             alt={c.nombre}
                             className="w-9 h-9 rounded-full object-cover border border-white/80"
                             onError={(e) => {
-                              e.currentTarget.onerror = null;
+                              if (e.currentTarget.dataset.fallback) return;
+                  e.currentTarget.dataset.fallback = 'true';
                               e.currentTarget.src = FALLBACK_AVATAR;
                             }}
                           />

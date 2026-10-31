@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { formatoMoneda, numeroWhatsapp } from '../../lib/format';
 import type { ClienteRanking } from '../../lib/ranking';
 
-const FALLBACK_AVATAR = 'https://i.ibb.co/5WcsrDcY/mujer-con-pelo-largo.png';
+const FALLBACK_AVATAR = `${import.meta.env.BASE_URL}favicon.svg`;
 
 interface ClienteRankingCardProps {
   clientes: ClienteRanking[];
@@ -11,15 +11,15 @@ interface ClienteRankingCardProps {
 
 // Mismo contenedor en ResumenPage.tsx (con enlace "Ver todos" hacia
 // /ranking) y RankingPage.tsx (sin el enlace, ya está en esa página): un
-// solo .glass con el N.º 1 destacado (foto circular + datos de contacto) y,
+// solo .admin-panel con el N.º 1 destacado (foto circular + datos de contacto) y,
 // debajo, los N.º 2 y 3.
 export default function ClienteRankingCard({ clientes, verTodosHref }: ClienteRankingCardProps) {
   return (
-    <div className="glass p-5">
-      <div className="mb-4 flex items-center justify-between gap-3">
+    <div className="admin-panel p-4">
+      <div className="mb-3 flex items-center justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-wider text-coral font-semibold">Ranking</p>
-          <h3 className="text-base font-bold text-ink mt-1">Clientes con más compras</h3>
+          <h3 className="text-sm font-semibold text-ink mt-1">Clientes con más compras</h3>
         </div>
         {verTodosHref && (
           <Link to={verTodosHref} className="text-xs font-medium text-sky hover:text-sky/70 shrink-0">
@@ -30,14 +30,15 @@ export default function ClienteRankingCard({ clientes, verTodosHref }: ClienteRa
 
       {clientes.length ? (
         <>
-          <div className="flex flex-col items-center rounded-2xl border border-white/80 bg-white/40 p-6 text-center">
+          <div className="flex flex-col items-center rounded-2xl border border-white/80 bg-slate-50 p-3 text-center">
             <div className="relative">
               <img
                 src={clientes[0].profileImage || FALLBACK_AVATAR}
                 alt={clientes[0].nombre}
-                className="h-24 w-24 rounded-full object-cover ring-[3px] ring-white"
+                className="h-14 w-14 rounded-full object-cover ring-[3px] ring-white"
                 onError={(e) => {
-                  e.currentTarget.onerror = null;
+                  if (e.currentTarget.dataset.fallback) return;
+                  e.currentTarget.dataset.fallback = 'true';
                   e.currentTarget.src = FALLBACK_AVATAR;
                 }}
               />
@@ -45,21 +46,21 @@ export default function ClienteRankingCard({ clientes, verTodosHref }: ClienteRa
                 1
               </span>
             </div>
-            <h4 className="mt-3 text-lg font-bold text-ink">{clientes[0].nombre}</h4>
-            <p className="mt-1 text-sm text-muted">{clientes[0].email}</p>
+            <h4 className="mt-2 text-sm font-semibold text-ink">{clientes[0].nombre}</h4>
+            <p className="mt-1 text-xs text-muted">{clientes[0].email}</p>
             {clientes[0].phone ? (
               <a
                 href={`https://wa.me/${numeroWhatsapp(clientes[0].phone)}`}
                 target="_blank"
                 rel="noopener"
-                className="text-sm text-sky hover:text-sky/70 hover:underline"
+                className="text-xs text-sky hover:text-sky/70 hover:underline"
               >
                 {clientes[0].phone}
               </a>
             ) : (
-              <p className="text-sm text-muted">Sin teléfono</p>
+              <p className="text-xs text-muted">Sin teléfono</p>
             )}
-            <div className="mt-3 flex items-center gap-2 text-xs">
+            <div className="mt-2 flex flex-wrap justify-center items-center gap-2 text-xs">
               <span className="rounded-full border border-white/80 bg-white/60 px-3 py-1 font-medium text-[#3a3d45]">
                 {clientes[0].total} pedidos
               </span>
@@ -81,7 +82,8 @@ export default function ClienteRankingCard({ clientes, verTodosHref }: ClienteRa
                     alt={c.nombre}
                     className="h-9 w-9 rounded-full object-cover shrink-0"
                     onError={(e) => {
-                      e.currentTarget.onerror = null;
+                      if (e.currentTarget.dataset.fallback) return;
+                  e.currentTarget.dataset.fallback = 'true';
                       e.currentTarget.src = FALLBACK_AVATAR;
                     }}
                   />

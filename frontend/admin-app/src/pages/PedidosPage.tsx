@@ -1,3 +1,4 @@
+import FilterPanel from '../components/ui/FilterPanel';
 import { useMemo, useState } from 'react';
 import PageHeader from '../components/ui/PageHeader';
 import { KpiCard, KpiRow } from '../components/ui/KpiCard';
@@ -56,7 +57,7 @@ export default function PedidosPage() {
         description="Revisa los pedidos realizados por los clientes, filtra por fecha o cupón, y consulta ingresos y descuentos aplicados."
       />
 
-      <div className="grid grid-cols-2 gap-3 mb-6 lg:hidden">
+      <div className="grid grid-cols-2 gap-3 mb-4 lg:hidden">
         <StatCardMobile
           icon={<PedidosIcon className="w-5 h-5" />}
           percent={pctConCupon}
@@ -122,9 +123,9 @@ export default function PedidosPage() {
         />
       </KpiRow>
 
-      <div className="flex flex-col lg:flex-row items-start gap-6">
-        <aside className="w-full lg:w-64 shrink-0">
-          <div className="glass p-5 space-y-5">
+      <div className="flex flex-col lg:flex-row items-start gap-4">
+        <FilterPanel>
+          <div className="admin-panel p-4 space-y-5">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-ink uppercase tracking-wide">Filtros</h3>
               <button type="button" onClick={limpiarFiltros} className="text-xs font-medium text-coral hover:text-coral/80">
@@ -178,18 +179,18 @@ export default function PedidosPage() {
               ]}
             />
           </div>
-        </aside>
+        </FilterPanel>
 
         <div className="flex-1 min-w-0 w-full">
-          <div className="glass p-6 md:p-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-              <h2 className="text-2xl font-bold text-ink flex items-center">
+          <div className="admin-panel p-4">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+              <h2 className="text-lg font-bold text-ink flex items-center">
                 <PedidosIcon className="w-5 h-5 mr-2 text-coral" />
                 Pedidos
               </h2>
             </div>
             <div className="overflow-x-auto rounded-[22px] border border-white/70">
-              <table className="min-w-full divide-y divide-white/70">
+              <table className="admin-table min-w-full divide-y divide-white/70">
                 <thead className="bg-white/40">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Cliente</th>

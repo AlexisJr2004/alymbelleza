@@ -17,9 +17,9 @@ const TARJETA_NOMBRES_BANCO: Record<PaymentCard['plantilla'], string> = {
 };
 
 const inputClass =
-  'w-full pl-9 pr-3 py-2 text-sm border border-white/80 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none appearance-none';
+  'w-full pl-9 pr-3 py-2 text-sm border border-slate-200 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none appearance-none';
 const plainInputClass =
-  'w-full px-3 py-2 text-sm border border-white/80 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none';
+  'w-full px-3 py-2 text-sm border border-slate-200 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none';
 
 export default function PaymentCardForm({ initialData, onSubmit, onCancel, submitting }: PaymentCardFormProps) {
   const [plantilla, setPlantilla] = useState<PaymentCard['plantilla']>(initialData?.plantilla ?? 'pichincha');
@@ -46,10 +46,10 @@ export default function PaymentCardForm({ initialData, onSubmit, onCancel, submi
     <form onSubmit={handleSubmit}>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-[#3a3d45]">Banco</label>
+          <label htmlFor="PaymentCardForm-banco" className="block text-sm font-medium text-[#3a3d45]">Banco</label>
           <div className="relative">
             <BankIcon className="w-4 h-4 absolute left-3 top-2.5 text-muted" />
-            <select required value={plantilla} onChange={(e) => setPlantilla(e.target.value as PaymentCard['plantilla'])} className={inputClass}>
+            <select id="PaymentCardForm-banco" required value={plantilla} onChange={(e) => setPlantilla(e.target.value as PaymentCard['plantilla'])} className={inputClass}>
               <option value="pichincha">Banco Pichincha</option>
               <option value="guayaquil">Banco Guayaquil</option>
             </select>
@@ -58,8 +58,8 @@ export default function PaymentCardForm({ initialData, onSubmit, onCancel, submi
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-[#3a3d45]">Tipo de cuenta</label>
-          <input
+          <label htmlFor="PaymentCardForm-tipo-de-cuenta" className="block text-sm font-medium text-[#3a3d45]">Tipo de cuenta</label>
+          <input id="PaymentCardForm-tipo-de-cuenta"
             type="text"
             required
             value={tipoCuenta}
@@ -70,8 +70,8 @@ export default function PaymentCardForm({ initialData, onSubmit, onCancel, submi
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-[#3a3d45]">Número de cuenta</label>
-          <input
+          <label htmlFor="PaymentCardForm-numero-de-cuenta" className="block text-sm font-medium text-[#3a3d45]">Número de cuenta</label>
+          <input id="PaymentCardForm-numero-de-cuenta"
             type="text"
             required
             value={numeroCuenta}
@@ -82,8 +82,8 @@ export default function PaymentCardForm({ initialData, onSubmit, onCancel, submi
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-[#3a3d45]">Titular</label>
-          <input
+          <label htmlFor="PaymentCardForm-titular" className="block text-sm font-medium text-[#3a3d45]">Titular</label>
+          <input id="PaymentCardForm-titular"
             type="text"
             required
             value={titular}
@@ -94,10 +94,10 @@ export default function PaymentCardForm({ initialData, onSubmit, onCancel, submi
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-[#3a3d45]">Marca de tarjeta</label>
+          <label htmlFor="PaymentCardForm-marca-de-tarjeta" className="block text-sm font-medium text-[#3a3d45]">Marca de tarjeta</label>
           <div className="relative">
             <IdCardIcon className="w-4 h-4 absolute left-3 top-2.5 text-muted" />
-            <select required value={marca} onChange={(e) => setMarca(e.target.value as PaymentCard['marca'])} className={inputClass}>
+            <select id="PaymentCardForm-marca-de-tarjeta" required value={marca} onChange={(e) => setMarca(e.target.value as PaymentCard['marca'])} className={inputClass}>
               <option value="visa">Visa</option>
               <option value="mastercard">MasterCard</option>
             </select>
@@ -112,12 +112,12 @@ export default function PaymentCardForm({ initialData, onSubmit, onCancel, submi
         </div>
       </div>
 
-      <div className="flex justify-end gap-2.5 pt-4 mt-4 border-t border-white/70">
+      <div className="flex justify-end gap-2.5 pt-4 mt-4 border-t border-slate-200">
         <button
           type="button"
           onClick={onCancel}
           disabled={submitting}
-          className="px-4 py-2 text-sm border border-white/80 bg-white/50 rounded-full text-[#3a3d45] hover:bg-white/90 transition-colors flex items-center disabled:opacity-60"
+          className="px-4 py-2 text-sm border border-slate-200 bg-white/50 rounded-full text-[#3a3d45] hover:bg-white/90 transition-colors flex items-center disabled:opacity-60"
         >
           <XIcon className="w-4 h-4 mr-1.5" /> Cancelar
         </button>

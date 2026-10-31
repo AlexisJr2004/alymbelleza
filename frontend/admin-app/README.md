@@ -1,32 +1,29 @@
-# React + TypeScript + Vite
+# Bella Beauty · Administración
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Panel de gestión construido con React, TypeScript y Vite, publicado bajo `/admin`. Requiere una sesión con rol administrador; la API valida también los permisos.
 
-Currently, two official plugins are available:
+## Secciones
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Resumen, Ranking, Productos, Cupones, Pedidos, Tarjetas, Usuarios y Citas. Todas las rutas están enlazadas desde la navegación.
 
-## React Compiler
+## Interfaz
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Paneles blancos, tipografía de sistema y acentos rosa.
+- Indicadores compactos, tablas con desplazamiento horizontal y paginación acotada.
+- Filtros plegables en móvil y visibles en escritorio.
+- Formularios adaptables y navegación inferior con área segura.
 
-## Expanding the Oxlint configuration
+Los componentes compartidos están en `src/components/ui`; los estilos comunes, en `src/index.css`.
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## Desarrollo
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```sh
+npm ci
+npm run dev
+npm run build
+npm run lint
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Configura `VITE_API_URL` para apuntar al backend de desarrollo. Consulta la [documentación principal](../../README.md) para preparar el entorno.
+
+La carpeta `dist` está versionada y debe actualizarse con cada cambio, ya que Express la sirve directamente.

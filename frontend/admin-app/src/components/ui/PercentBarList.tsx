@@ -10,7 +10,7 @@ export interface PercentBarRow {
 // conteo + porcentaje por fila en vez de un anillo conic-gradient.
 export default function PercentBarList({ title, rows }: { title: string; rows: PercentBarRow[] }) {
   return (
-    <div className="glass p-5 mt-6">
+    <div className="admin-panel p-5 mt-6">
       <h3 className="text-sm font-semibold text-ink uppercase tracking-wide mb-4">{title}</h3>
       <div className="space-y-3">
         {rows.map((f) => (

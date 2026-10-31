@@ -30,15 +30,16 @@ export default function CrudModal({ open, title, onClose, children, maxWidth = '
       onClose={onClose}
       desktopMaxWidthClassName={maxWidth}
       labelledBy={titleId}
-      panelClassName="bg-white/60 backdrop-blur-2xl border border-white/70 rounded-t-3xl md:rounded-[26px]"
+      panelClassName="admin-form-dialog bg-white border border-slate-200 rounded-2xl"
     >
-      <div className="p-6">
+      <div className="p-4 sm:p-5">
         <div className="flex items-center justify-between mb-4">
           <h3 id={titleId} className="text-lg font-bold text-ink">
             {title}
           </h3>
           <button
             type="button"
+            aria-label="Cerrar formulario"
             onClick={onClose}
             className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/80 bg-white/60 text-muted transition hover:bg-white/90 hover:text-ink"
           >

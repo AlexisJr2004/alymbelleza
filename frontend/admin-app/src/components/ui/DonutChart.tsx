@@ -34,7 +34,7 @@ export default function DonutChart({ title, groups, centerCaption, emptyMessage 
   }
 
   return (
-    <div className="glass p-5">
+    <div className="admin-panel p-5">
       <h3 className="text-sm font-semibold text-ink uppercase tracking-wide mb-4">{title}</h3>
       <div className="flex justify-center">
         <div className="relative">

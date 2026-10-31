@@ -10,14 +10,14 @@ interface KpiCardProps {
 
 export function KpiCard({ label, value, note, valueClassName = 'text-ink', iconBg, iconColor, icon }: KpiCardProps) {
   return (
-    <div className="glass p-5">
+    <div className="admin-panel p-4">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-muted">{label}</p>
-          <p className={`mt-2 text-3xl font-bold ${valueClassName}`}>{value}</p>
+          <p className={`mt-1 text-2xl font-semibold tracking-tight tabular-nums ${valueClassName}`}>{value}</p>
           <p className="mt-1 text-xs text-muted">{note}</p>
         </div>
-        <div className={`w-11 h-11 rounded-full ${iconBg} ${iconColor} flex items-center justify-center shrink-0`}>
+        <div className={`w-9 h-9 rounded-xl ${iconBg} ${iconColor} flex items-center justify-center shrink-0`}>
           {icon}
         </div>
       </div>
@@ -29,5 +29,5 @@ export function KpiCard({ label, value, note, valueClassName = 'text-ink', iconB
 // lg:hidden de StatCardMobile (ícono + anillo de progreso) como reemplazo en
 // móvil, igual que se hizo primero en ResumenPage.tsx.
 export function KpiRow({ children }: { children: React.ReactNode }) {
-  return <div className="hidden lg:grid lg:grid-cols-4 gap-4 mb-6">{children}</div>;
+  return <div className="hidden lg:grid lg:grid-cols-4 gap-3 mb-4">{children}</div>;
 }

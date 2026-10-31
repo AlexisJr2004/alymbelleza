@@ -134,13 +134,6 @@ export function LogoutIcon(props: IconProps) {
   );
 }
 
-export function MenuIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-    </Icon>
-  );
-}
 
 // Botón "Menú" del header móvil (surveys-app.html .round-btn) — 4 puntos en
 // grilla, distinto del ícono de 3 líneas de MenuIcon.

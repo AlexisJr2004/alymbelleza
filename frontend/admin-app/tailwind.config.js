@@ -4,19 +4,19 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Urbanist', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
         ink: '#16181d',
-        muted: '#8a8f9a',
-        sky: '#7e9ce3',
-        coral: '#e2766f',
+        muted: '#64748b',
+        sky: '#3d68a0',
+        coral: '#b53b65',
         // Paleta literal de surveys-app.html — solo para los widgets tipo
         // dashboard de la vista móvil (StatCardMobile, BottomMobileNav,
         // ResumenQuickAction). Escritorio sigue en ink/muted/sky/coral.
         mist: '#f0eff4',
-        lilac: '#cbc2f6',
-        violet: '#8b78ee',
+        lilac: '#f8e5ed',
+        violet: '#a83a65',
         dim: '#6d6d75',
       },
     },

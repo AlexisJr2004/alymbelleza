@@ -12,9 +12,9 @@ interface CouponFormProps {
 }
 
 const inputClass =
-  'w-full pl-9 pr-3 py-2 text-sm border border-white/80 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none transition-all';
+  'w-full pl-9 pr-3 py-2 text-sm border border-slate-200 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none transition-all';
 const plainInputClass =
-  'w-full px-3 py-2 text-sm border border-white/80 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none';
+  'w-full px-3 py-2 text-sm border border-slate-200 bg-white/60 rounded-full focus:ring-2 focus:ring-sky/50 focus:border-transparent focus:outline-none';
 
 export default function CouponForm({ initialData, onSubmit, onCancel, submitting }: CouponFormProps) {
   const [code, setCode] = useState(initialData?.code ?? '');
@@ -40,10 +40,10 @@ export default function CouponForm({ initialData, onSubmit, onCancel, submitting
     <form onSubmit={handleSubmit}>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-1.5 sm:col-span-2">
-          <label className="block text-sm font-medium text-[#3a3d45]">Código</label>
+          <label htmlFor="CouponForm-codigo" className="block text-sm font-medium text-[#3a3d45]">Código</label>
           <div className="relative">
             <CuponesIcon className="w-4 h-4 absolute left-3 top-2.5 text-muted" />
-            <input
+            <input id="CouponForm-codigo"
               type="text"
               required
               value={code}
@@ -55,10 +55,10 @@ export default function CouponForm({ initialData, onSubmit, onCancel, submitting
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-[#3a3d45]">Tipo de descuento</label>
+          <label htmlFor="CouponForm-tipo-de-descuento" className="block text-sm font-medium text-[#3a3d45]">Tipo de descuento</label>
           <div className="relative">
             <PercentIcon className="w-4 h-4 absolute left-3 top-2.5 text-muted" />
-            <select
+            <select id="CouponForm-tipo-de-descuento"
               required
               value={type}
               onChange={(e) => setType(e.target.value as 'percentage' | 'fixed')}
@@ -72,10 +72,10 @@ export default function CouponForm({ initialData, onSubmit, onCancel, submitting
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-[#3a3d45]">Valor</label>
+          <label htmlFor="CouponForm-valor" className="block text-sm font-medium text-[#3a3d45]">Valor</label>
           <div className="relative">
             <DollarIcon className="w-4 h-4 absolute left-3 top-2.5 text-muted" />
-            <input
+            <input id="CouponForm-valor"
               type="number"
               required
               min={0}
@@ -89,8 +89,8 @@ export default function CouponForm({ initialData, onSubmit, onCancel, submitting
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-[#3a3d45]">Compra mínima (opcional)</label>
-          <input
+          <label htmlFor="CouponForm-compra-minima-opcional-" className="block text-sm font-medium text-[#3a3d45]">Compra mínima (opcional)</label>
+          <input id="CouponForm-compra-minima-opcional-"
             type="number"
             min={0}
             step={0.01}
@@ -102,8 +102,8 @@ export default function CouponForm({ initialData, onSubmit, onCancel, submitting
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-[#3a3d45]">Fecha de expiración (opcional)</label>
-          <input
+          <label htmlFor="CouponForm-fecha-de-expiracion-opcional-" className="block text-sm font-medium text-[#3a3d45]">Fecha de expiración (opcional)</label>
+          <input id="CouponForm-fecha-de-expiracion-opcional-"
             type="date"
             value={expiresAt}
             onChange={(e) => setExpiresAt(e.target.value)}
@@ -118,12 +118,12 @@ export default function CouponForm({ initialData, onSubmit, onCancel, submitting
         </div>
       </div>
 
-      <div className="flex justify-end gap-2.5 pt-4 mt-4 border-t border-white/70">
+      <div className="flex justify-end gap-2.5 pt-4 mt-4 border-t border-slate-200">
         <button
           type="button"
           onClick={onCancel}
           disabled={submitting}
-          className="px-4 py-2 text-sm border border-white/80 bg-white/50 rounded-full text-[#3a3d45] hover:bg-white/90 transition-colors flex items-center disabled:opacity-60"
+          className="px-4 py-2 text-sm border border-slate-200 bg-white/50 rounded-full text-[#3a3d45] hover:bg-white/90 transition-colors flex items-center disabled:opacity-60"
         >
           <XIcon className="w-4 h-4 mr-1.5" /> Cancelar
         </button>

@@ -57,7 +57,7 @@ function ResumenKpiCard({
   icon: React.ReactNode;
 }) {
   return (
-    <div className="glass p-4 flex flex-col justify-between">
+    <div className="admin-panel p-4 flex flex-col justify-between">
       <div className="flex items-center justify-between mb-2">
         <p className="text-xs text-muted">{etiqueta}</p>
         <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${iconBg} ${iconColor}`}>{icon}</div>
@@ -74,7 +74,7 @@ function ResumenKpiCard({
 // plantilla de referencia (reemplaza la fila de botones "Ver pedidos/Ver
 // citas/+" que sigue existiendo tal cual para escritorio). Proporciones y
 // colores copiados literalmente de surveys-app.html (.action/.action-ico) a
-// pedido explícito del usuario, no el estilo glass del resto del admin-app.
+// pedido explícito del usuario, no el estilo admin-panel del resto del admin-app.
 function ResumenQuickAction({
   to,
   icon,
@@ -187,7 +187,7 @@ export default function ResumenPage() {
   const tarjetaActual = tarjetasActivas.length ? tarjetasActivas[tarjetaEstiloIndice] : null;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       <PageHeader
         eyebrow="Panel de control"
         title="Resumen general"
@@ -279,7 +279,7 @@ export default function ResumenPage() {
           del mes + cambio %) y la mitad de gráfico de Fila 3 (Pedidos) y
           Fila 5 (Usuarios nuevos) — sus otras mitades (Estado de citas,
           Últimos usuarios) se quedan visibles en móvil sin cambios. */}
-      <div className="lg:hidden space-y-3">
+      <details className="lg:hidden admin-analytics"><summary>Tendencias del negocio <span>Últimos seis meses</span></summary><div className="mt-3 space-y-3">
         <AreaTrendCardMobile
           data={serieIngresos}
           formatValue={formatoMoneda}
@@ -301,7 +301,7 @@ export default function ResumenPage() {
           description="Registros nuevos en los últimos 6 meses."
           totalLabel="Usuarios nuevos este mes"
         />
-      </div>
+      </div></details>
 
       {/* Fila 1: ingresos totales (izquierda) + las 4 KPIs (centro) +
           ranking de clientes (derecha). Por defecto CSS Grid estira (stretch)
@@ -311,10 +311,10 @@ export default function ResumenPage() {
           justify-between internamente, y la grilla de KPIs usa auto-rows-fr
           para que las propias tarjetas se estiren. Solo visible desde lg: en
           móvil, el bloque de arriba la reemplaza. */}
-      <div className="hidden lg:grid lg:grid-cols-3 gap-5">
+      <div className="hidden lg:grid lg:grid-cols-3 gap-4">
         {/* Ingresos totales + acciones */}
         <div className="flex flex-col gap-3">
-          <div className="glass p-5 flex-1 flex flex-col justify-between">
+          <div className="admin-panel p-4 flex-1 flex flex-col justify-between">
             <div>
               <h3 className="font-semibold text-ink">Ingresos totales</h3>
               <p className="text-sm text-muted">Resumen de tus ingresos actuales</p>
@@ -423,8 +423,8 @@ export default function ResumenPage() {
       {/* Fila 2: gráfico de ingresos + ingresos de este mes, a la derecha.
           Solo desde lg: — en móvil, AreaTrendCardMobile de más arriba ya
           cubre esta información. */}
-      <div className="hidden lg:grid lg:grid-cols-3 gap-5">
-        <div className="lg:col-span-2 glass p-5">
+      <div className="hidden lg:grid lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2 admin-panel p-4">
           <h3 className="text-base font-semibold text-ink mb-1">Ingresos de los últimos 6 meses</h3>
           <p className="text-sm text-muted mb-4">Total facturado por mes según los pedidos registrados.</p>
           <div className="h-36">
@@ -432,7 +432,7 @@ export default function ResumenPage() {
           </div>
         </div>
 
-        <div className="rounded-[26px] bg-ink p-5 text-white relative overflow-hidden">
+        <div className="rounded-[26px] bg-ink p-4 text-white relative overflow-hidden">
           <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full pointer-events-none" />
           <div className="absolute -bottom-10 -left-6 w-28 h-28 bg-white/10 rounded-full pointer-events-none" />
           <p className="text-sm text-white/70 relative">Ingresos de este mes</p>
@@ -441,10 +441,73 @@ export default function ResumenPage() {
         </div>
       </div>
 
+      {/* Fila 4: pedidos recientes — tabla ancha, solo desde lg: en móvil ya
+          se ve la lista compacta del resumen móvil de más arriba */}
+      <div className="hidden lg:block admin-panel overflow-hidden">
+        <div className="px-5 py-3.5 border-b border-white/70 flex items-center justify-between">
+          <h3 className="text-base font-semibold text-ink">Pedidos recientes</h3>
+          <Link to="/pedidos" className="text-sm text-sky hover:text-sky/70 font-medium">
+            Ver todos
+          </Link>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="admin-table min-w-full divide-y divide-white/70">
+            <thead className="bg-white/40">
+              <tr>
+                <th className="px-5 py-2.5 text-left text-xs font-medium text-muted uppercase tracking-wider">Cliente</th>
+                <th className="px-5 py-2.5 text-left text-xs font-medium text-muted uppercase tracking-wider">Productos</th>
+                <th className="px-5 py-2.5 text-left text-xs font-medium text-muted uppercase tracking-wider">Cupón</th>
+                <th className="px-5 py-2.5 text-left text-xs font-medium text-muted uppercase tracking-wider">Fecha</th>
+                <th className="px-5 py-2.5 text-right text-xs font-medium text-muted uppercase tracking-wider">Total</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white/20 divide-y divide-white/60">
+              {pedidosTabla.length ? (
+                pedidosTabla.map((o) => {
+                  const productosPlano = (o.items || []).map((i) => `${i.cantidad}× ${i.name}`).join(', ');
+                  return (
+                    <tr key={o._id} className="hover:bg-white/40 transition-colors">
+                      <td className="px-5 py-3 text-sm text-[#3a3d45]">
+                        {o.user ? (
+                          <>
+                            {o.user.name || 'Cliente'}
+                            <br />
+                            <span className="text-xs text-muted">{o.user.email || ''}</span>
+                          </>
+                        ) : (
+                          'Cliente eliminado'
+                        )}
+                      </td>
+                      <td className="px-5 py-3 text-sm text-muted max-w-xs truncate" title={productosPlano}>
+                        {productosPlano}
+                      </td>
+                      <td className="px-5 py-3 text-sm">
+                        {o.couponCode ? <span className="status bg-coral">{o.couponCode}</span> : '—'}
+                      </td>
+                      <td className="px-5 py-3 text-sm text-muted">{formatoFechaCorta(o.createdAt)}</td>
+                      <td className="px-5 py-3 text-sm font-semibold text-ink text-right">{formatoMoneda(o.total)}</td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <tr>
+                  <td colSpan={5} className="px-5 py-8 text-center text-muted">
+                    Todavía no hay pedidos registrados.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <details className="admin-analytics">
+        <summary>Actividad, citas y clientes <span>Ver análisis detallado</span></summary>
+        <div className="mt-4 space-y-4">
       {/* Fila 3: distribución de citas + pedidos por mes, justo debajo de
           ingresos y en las mismas 2 columnas */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <div className="glass p-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="admin-panel p-4">
           <div className="flex items-start justify-between gap-3 mb-4">
             <div>
               <p className="text-xs uppercase tracking-wider text-coral font-semibold">Estado general</p>
@@ -454,7 +517,7 @@ export default function ResumenPage() {
               Total: <span className="font-semibold">{totalCitas}</span>
             </span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-5 items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-4 items-center">
             <AnnularDonut groups={conteosCitas} centerPct={pctRealizadas} centerCaption="Realizadas" />
             <div className="space-y-2">
               {conteosCitas.map((e) => (
@@ -467,7 +530,7 @@ export default function ResumenPage() {
             </div>
           </div>
         </div>
-        <div className="hidden lg:block glass p-5">
+        <div className="hidden lg:block admin-panel p-4">
           <h3 className="text-base font-semibold text-ink mb-1">Pedidos de los últimos 6 meses</h3>
           <p className="text-sm text-muted mb-4">Cantidad de pedidos registrados por mes.</p>
           <div className="h-32">
@@ -479,8 +542,8 @@ export default function ResumenPage() {
       {/* Fila 3b: últimos pedidos (solo desde lg: — el resumen móvil de más
           arriba ya tiene su propia lista de "Pedidos recientes") + tarjetas
           de pago (siempre visible, sin equivalente en el resumen móvil) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <div className="hidden lg:block glass overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="hidden lg:block admin-panel overflow-hidden">
           <div className="px-5 py-3 border-b border-white/70 flex items-center justify-between">
             <h3 className="text-sm font-semibold text-ink">Últimos pedidos</h3>
             <Link to="/pedidos" className="text-xs text-sky hover:text-sky/70 font-medium">
@@ -504,17 +567,17 @@ export default function ResumenPage() {
           </div>
         </div>
 
-        <div className="glass overflow-hidden">
+        <div className="admin-panel overflow-hidden">
           <div className="px-5 py-3 border-b border-white/70 flex items-center justify-between">
             <h3 className="text-sm font-semibold text-ink">Tarjetas de pago</h3>
             <Link to="/tarjetas" className="text-xs text-sky hover:text-sky/70 font-medium">
               Ver todas
             </Link>
           </div>
-          <div className="p-5">
+          <div className="p-4">
             {tarjetaActual ? (
               <div
-                className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${RESUMEN_TARJETA_ESTILOS[tarjetaEstiloIndice % RESUMEN_TARJETA_ESTILOS.length]} p-5 text-white`}
+                className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${RESUMEN_TARJETA_ESTILOS[tarjetaEstiloIndice % RESUMEN_TARJETA_ESTILOS.length]} p-4 text-white`}
               >
                 <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-white/10 pointer-events-none" />
                 <div className="absolute -bottom-10 -left-6 w-28 h-28 rounded-full bg-white/10 pointer-events-none" />
@@ -566,76 +629,16 @@ export default function ResumenPage() {
         </div>
       </div>
 
-      {/* Fila 4: pedidos recientes — tabla ancha, solo desde lg: en móvil ya
-          se ve la lista compacta del resumen móvil de más arriba */}
-      <div className="hidden lg:block glass overflow-hidden">
-        <div className="px-5 py-3.5 border-b border-white/70 flex items-center justify-between">
-          <h3 className="text-base font-semibold text-ink">Pedidos recientes</h3>
-          <Link to="/pedidos" className="text-sm text-sky hover:text-sky/70 font-medium">
-            Ver todos
-          </Link>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-white/70">
-            <thead className="bg-white/40">
-              <tr>
-                <th className="px-5 py-2.5 text-left text-xs font-medium text-muted uppercase tracking-wider">Cliente</th>
-                <th className="px-5 py-2.5 text-left text-xs font-medium text-muted uppercase tracking-wider">Productos</th>
-                <th className="px-5 py-2.5 text-left text-xs font-medium text-muted uppercase tracking-wider">Cupón</th>
-                <th className="px-5 py-2.5 text-left text-xs font-medium text-muted uppercase tracking-wider">Fecha</th>
-                <th className="px-5 py-2.5 text-right text-xs font-medium text-muted uppercase tracking-wider">Total</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white/20 divide-y divide-white/60">
-              {pedidosTabla.length ? (
-                pedidosTabla.map((o) => {
-                  const productosPlano = (o.items || []).map((i) => `${i.cantidad}× ${i.name}`).join(', ');
-                  return (
-                    <tr key={o._id} className="hover:bg-white/40 transition-colors">
-                      <td className="px-5 py-3 text-sm text-[#3a3d45]">
-                        {o.user ? (
-                          <>
-                            {o.user.name || 'Cliente'}
-                            <br />
-                            <span className="text-xs text-muted">{o.user.email || ''}</span>
-                          </>
-                        ) : (
-                          'Cliente eliminado'
-                        )}
-                      </td>
-                      <td className="px-5 py-3 text-sm text-muted max-w-xs truncate" title={productosPlano}>
-                        {productosPlano}
-                      </td>
-                      <td className="px-5 py-3 text-sm">
-                        {o.couponCode ? <span className="status bg-coral">{o.couponCode}</span> : '—'}
-                      </td>
-                      <td className="px-5 py-3 text-sm text-muted">{formatoFechaCorta(o.createdAt)}</td>
-                      <td className="px-5 py-3 text-sm font-semibold text-ink text-right">{formatoMoneda(o.total)}</td>
-                    </tr>
-                  );
-                })
-              ) : (
-                <tr>
-                  <td colSpan={5} className="px-5 py-8 text-center text-muted">
-                    Todavía no hay pedidos registrados.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
       {/* Fila 5: usuarios nuevos */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <div className="hidden lg:block glass p-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="hidden lg:block admin-panel p-4">
           <h3 className="text-base font-semibold text-ink mb-1">Usuarios nuevos por mes</h3>
           <p className="text-sm text-muted mb-4">Registros nuevos en los últimos 6 meses.</p>
           <div className="h-32">
             <TrendChart data={serieUsuariosNuevos} formatValue={(v) => String(v)} color="#16181d" />
           </div>
         </div>
-        <div className="glass overflow-hidden">
+        <div className="admin-panel overflow-hidden">
           <div className="px-5 py-3.5 border-b border-white/70 flex items-center justify-between">
             <h3 className="text-base font-semibold text-ink">Últimos usuarios registrados</h3>
             <Link to="/usuarios" className="text-sm text-sky hover:text-sky/70 font-medium">
@@ -662,8 +665,8 @@ export default function ResumenPage() {
 
       {/* Fila 6: clientes más activos + en riesgo de abandono, lado a lado
           (antes eran dos tarjetas de ancho completo apiladas) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <div className="glass p-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="admin-panel p-4">
           <div className="flex items-center justify-between mb-3 gap-3">
             <div>
               <p className="text-xs uppercase tracking-wider text-coral font-semibold">Usuarios</p>
@@ -694,7 +697,7 @@ export default function ResumenPage() {
           )}
         </div>
 
-        <div className="glass p-5">
+        <div className="admin-panel p-4">
           <div className="flex items-center justify-between mb-3 gap-3">
             <div>
               <p className="text-xs uppercase tracking-wider text-coral font-semibold">Retención</p>
@@ -725,6 +728,8 @@ export default function ResumenPage() {
         </div>
       </div>
 
+        </div>
+      </details>
     </div>
   );
 }

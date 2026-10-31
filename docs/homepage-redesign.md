@@ -96,4 +96,13 @@ Montserrat se sirve localmente desde `frontend/public-app/public/fonts`, con su 
 - Los accesos flotantes de accesibilidad e ir arriba comparten la altura y el espacio seguro inferior en móvil.
 - Las pantallas de acceso, registro y recuperación recuperan el panel visual anterior con fotografía, tarjetas flotantes, avatares y calendario decorativo en escritorio. Conservan el formulario adaptable y el cierre con X.
 - Las preguntas frecuentes ya no incluyen teléfonos, direcciones ni políticas de ejemplo. El PDF utiliza la fecha y el identificador del pedido, omite datos fiscales ficticios e indica que el pago está por verificar.
-- El PDF utiliza una cabecera editorial rosa, datos de cliente y pedido, filas alternadas y un total destacado. Se exporta en A4 con saltos que evitan dividir filas y sin depender de fuentes o imágenes externas.
+- El PDF utiliza una cabecera oscura con acentos rosa, datos de cliente y pedido, filas alternadas y un total destacado. Se exporta en A4 con saltos que evitan dividir filas y sin depender de fuentes o imágenes externas.
+
+## Panel de administración
+
+- Las ocho secciones comparten paneles blancos, indicadores compactos, tablas uniformes y una cabecera adaptable.
+- Los filtros se pliegan en móvil; la paginación muestra un número acotado de controles.
+- Resumen prioriza ingresos y pedidos recientes, con tendencias y actividad secundaria desplegables.
+- Los formularios incluyen etiquetas asociadas, cierre con Escape, manejo de foco y bloqueo de desplazamiento del fondo.
+- La navegación móvil respeta el área segura y muestra etiquetas. Los avatares de respaldo y el favicon son locales.
+- Se retiran el recurso SVG de ejemplo, el icono de menú sin consumidores y los estilos antiguos sin uso. Las rutas activas se conservan.

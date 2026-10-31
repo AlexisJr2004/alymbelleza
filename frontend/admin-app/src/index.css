@@ -1,53 +1,67 @@
-/* Rediseño del admin (plantilla customer-journeys.html): Urbanist como fuente
-   base de toda la app — ver tailwind.config.js (theme.fontFamily.sans). */
-@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Igual que en admin-productos.html: estas clases no cargan la fuente de Google
-   Fonts (esa página nunca la vincula), así que caen al fallback serif/sans-serif
-   del sistema — se porta tal cual para no cambiar el aspecto actual. */
-.font-display {
-    font-family: 'Italiana', serif;
-}
-.font-body {
-    font-family: 'Montserrat', sans-serif;
+:root { color-scheme: light; }
+.app-bg { background: #f6f7f9; }
+.admin-content { font-size: 13px; }
+.admin-content .grid > *, .admin-content .flex-1 { min-width: 0; }
+.admin-page-header > button { font-size: 12px; padding: 9px 14px; border-radius: 10px; }
+.admin-content .admin-panel { box-shadow: 0 2px 6px #14223704; }
+.admin-content .admin-panel h2 { letter-spacing: -.02em; }
+.admin-table { width: 100%; font-variant-numeric: tabular-nums; }
+.admin-table thead { background: #f8f9fb; }
+.admin-table th { padding: 10px 12px; font-size: 10px; font-weight: 600; letter-spacing: .04em; color: #64748b; white-space: nowrap; border-bottom: 1px solid #e2e8f0; }
+.admin-table td { padding: 10px 12px; font-size: 12px; border-bottom: 1px solid #edf0f4; }
+.admin-table tbody tr:last-child td { border-bottom: 0; }
+.admin-table tbody tr:hover { background: #faf7f9; }
+.admin-table td button { min-width: 32px; min-height: 32px; }
+.admin-filters .admin-panel { padding: 14px; border-radius: 14px; }
+.admin-filters .space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top: 14px; }
+.admin-filters h4 { font-size: 12px; }
+.admin-filter-toggle { display: flex; width: 100%; align-items: center; justify-content: space-between; padding: 11px 14px; border: 1px solid #e2e8f0; border-radius: 12px; background: white; font-size: 12px; font-weight: 600; margin-bottom: 8px; }
+.admin-content :is(input:not([type=checkbox]):not([type=radio]),select,textarea),
+.admin-form-dialog :is(input:not([type=checkbox]):not([type=radio]),select,textarea) { border-color: #dbe0e7; background: #fff; border-radius: 9px; font-size: 12px; min-height: 34px; }
+.admin-content :is(input,select,textarea):focus, .admin-form-dialog :is(input,select,textarea):focus { border-color: #b53b65; outline: 0; box-shadow: 0 0 0 3px #b53b6514; }
+.admin-shell :is(button,a):focus-visible, .admin-sheet :is(button,a):focus-visible { outline: 2px solid #b53b65; outline-offset: 3px; }
+.admin-sheet { border-radius: 16px; max-height: calc(100dvh - 32px); }
+.admin-sheet:focus { outline: none; }
+.admin-form-dialog form label { font-size: 12px; }
+.admin-form-dialog form .grid { gap: 12px; }
+.admin-form-dialog form textarea { min-height: 80px; }
+.admin-form-dialog form button { border-radius: 10px; font-size: 12px; }
+.admin-mobile-nav { bottom: calc(12px + env(safe-area-inset-bottom)); }
+.admin-analytics > summary { cursor: pointer; padding: 14px 16px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 13px; font-weight: 600; }
+.admin-analytics > summary span { margin-left: 12px; color: #64748b; font-size: 11px; font-weight: 400; }
+.admin-analytics > summary:focus-visible { outline: 2px solid #b53b65; outline-offset: 2px; }
+@media (min-width: 1024px) { .admin-filter-toggle { display: none; } }
+@media (max-width: 767px) {
+  .admin-sheet { bottom: max(8px,env(safe-area-inset-bottom)); max-width: calc(100vw - 24px); margin-inline: auto; }
+  .admin-form-dialog :is(input:not([type=checkbox]):not([type=radio]),select,textarea) { font-size: 16px; min-height: 40px; }
+  .admin-content :is(input:not([type=checkbox]):not([type=radio]),select) { font-size: 16px; min-height: 40px; }
+  .admin-content .overflow-x-auto { overscroll-behavior-x: contain; }
+  .admin-table { min-width: 580px; }
 }
 
-/* ===== Lenguaje visual de customer-journeys.html, portado a clases reales
-   (la plantilla las define vía @layer components en un <style> inline) ===== */
 @layer components {
   .circle-btn {
-    @apply grid h-[44px] w-[44px] shrink-0 place-items-center rounded-full border border-[#d1d5de] bg-white/45 text-[#2a2c33] transition hover:bg-white/85;
+    @apply grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[#d1d5de] bg-white/45 text-[#2a2c33] transition hover:bg-white/85;
   }
   .rail-btn {
-    @apply grid h-[44px] w-[44px] place-items-center rounded-full border border-white/80 bg-white/55 text-[#3a3d45] transition hover:bg-white;
+    @apply grid h-9 w-9 place-items-center rounded-full border border-white/80 bg-white/55 text-[#3a3d45] transition hover:bg-white;
   }
   .nav-pill {
-    @apply inline-flex h-[42px] items-center rounded-full px-5 text-[13px] font-medium text-[#2a2c33] transition hover:bg-white/50;
+    @apply inline-flex h-9 items-center rounded-full px-3 text-xs font-medium text-[#2a2c33] transition hover:bg-white/50;
   }
   .nav-pill.is-active {
     @apply bg-ink text-white hover:bg-ink;
   }
-  .glass {
-    @apply rounded-[26px] border border-white/75 bg-white/35 backdrop-blur-md;
+  .admin-panel {
+    @apply min-w-0 rounded-2xl border border-slate-200 bg-white shadow-sm;
   }
   .status {
     @apply inline-flex h-[22px] items-center rounded-full px-[11px] text-[11px] font-medium text-white;
   }
-  .badge-dot {
-    @apply absolute -bottom-[7px] left-1/2 grid h-[16px] min-w-[16px] -translate-x-1/2 place-items-center rounded-full border-2 border-[#e4e6eb] px-[3px] text-[9px] font-semibold text-white;
-  }
-}
-
-/* Fondo general del admin — mismo degradé frío de .app-bg en la plantilla. */
-.app-bg {
-  background:
-    radial-gradient(60% 50% at 80% 100%, rgba(173, 190, 232, .35), rgba(173, 190, 232, 0) 70%),
-    radial-gradient(50% 40% at 10% 90%, rgba(190, 200, 235, .3), rgba(190, 200, 235, 0) 70%),
-    linear-gradient(180deg, #f1f2f4 0%, #eaecf1 45%, #e3e7ef 100%);
 }
 
 /* Chrome/Edge recientes dibujan una flecha nativa propia (::picker-icon) incluso con

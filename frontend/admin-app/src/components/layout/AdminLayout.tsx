@@ -17,7 +17,7 @@ export default function AdminLayout() {
 
   return (
     <RequireAdmin>
-      <div className="app-bg font-sans text-ink antialiased min-h-screen">
+      <div className="admin-shell app-bg font-sans text-ink antialiased min-h-screen">
         <TopNav onOpenMenu={() => setMobileOpen(true)} />
         <IconRail />
         <BottomMobileNav />
@@ -34,7 +34,7 @@ export default function AdminLayout() {
         />
         <MobileDrawer open={mobileOpen} onClose={() => setMobileOpen(false)} />
 
-        <main className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:pl-24 lg:pr-8 pt-6 pb-24 lg:pb-8">
+        <main className="admin-content max-w-[1600px] min-w-0 mx-auto px-3 sm:px-5 lg:pl-20 lg:pr-6 pt-5 pb-28 lg:pb-8">
           <Outlet />
         </main>
       </div>

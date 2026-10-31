@@ -30,5 +30,5 @@ export function resolveProfileImage(user: StoredUser | null): string {
   const img = user?.profileImage;
   if (img && img.startsWith('http')) return img;
   if (img && img.startsWith('/uploads/')) return `${API_URL}${img}`;
-  return `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'A')}&background=random&length=1`;
+  return `${import.meta.env.BASE_URL}favicon.svg`;
 }

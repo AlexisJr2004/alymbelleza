@@ -109,14 +109,14 @@ export default function TarjetasPage() {
         }
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
         {isLoading ? null : tarjetas.length === 0 ? (
           <p className="sm:col-span-2 xl:col-span-4 text-center text-muted py-6">No hay tarjetas de pago creadas todavía.</p>
         ) : (
           tarjetas.map((c, i) => (
             <div
               key={c._id}
-              className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${RESUMEN_TARJETA_ESTILOS[i % RESUMEN_TARJETA_ESTILOS.length]} p-5 text-white`}
+              className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${RESUMEN_TARJETA_ESTILOS[i % RESUMEN_TARJETA_ESTILOS.length]} p-4 text-white`}
             >
               <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-white/10 pointer-events-none" />
               <div className="absolute -bottom-10 -left-6 w-28 h-28 rounded-full bg-white/10 pointer-events-none" />
@@ -144,8 +144,8 @@ export default function TarjetasPage() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <div className="xl:col-span-2 glass p-6">
+      <div className="grid min-w-0 grid-cols-1 xl:grid-cols-3 gap-4">
+        <div className="xl:col-span-2 admin-panel p-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-1">
             <h3 className="text-lg font-bold text-ink">Lista de tarjetas</h3>
             <div className="relative">
@@ -218,7 +218,7 @@ export default function TarjetasPage() {
           </div>
         </div>
 
-        <div className="glass p-6">
+        <div className="admin-panel p-6">
           <h3 className="text-lg font-bold text-ink mb-1">Estadística de tarjetas</h3>
           <p className="text-sm text-muted mb-5">Distribución por banco.</p>
           <div className="flex justify-center">

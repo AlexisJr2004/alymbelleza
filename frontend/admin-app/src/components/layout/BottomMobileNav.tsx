@@ -22,20 +22,20 @@ const PRIMARY_ITEMS = [
 // y el resto), así que esa función no se pierde, solo deja de duplicarse acá.
 export default function BottomMobileNav() {
   return (
-    <nav aria-label="Navegación principal" className="fixed inset-x-0 bottom-[18px] z-20 flex justify-center lg:hidden">
-      <div className="flex items-center gap-2 rounded-full border border-white/70 bg-white/55 p-2 shadow-lg shadow-ink/10 backdrop-blur-md">
+    <nav aria-label="Navegación principal" className="admin-mobile-nav fixed inset-x-0 bottom-[18px] z-20 flex justify-center lg:hidden">
+      <div className="flex w-[min(360px,calc(100%-24px))] items-center justify-between gap-1 rounded-full border border-white/70 bg-white/55 p-2 shadow-lg shadow-ink/10 backdrop-blur-md">
         {PRIMARY_ITEMS.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
             aria-label={item.label}
             className={({ isActive }) =>
-              `grid h-14 w-14 place-items-center rounded-full transition ${
+              `flex h-12 min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-full transition ${
                 isActive ? 'bg-lilac text-ink' : 'text-muted hover:bg-white/70'
               }`
             }
           >
-            <item.icon className="h-[22px] w-[22px]" />
+            <item.icon className="h-5 w-5" /><span className="text-[9px] font-medium">{item.label}</span>
           </NavLink>
         ))}
       </div>
