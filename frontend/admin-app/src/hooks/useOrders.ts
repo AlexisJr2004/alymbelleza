@@ -6,12 +6,8 @@ export function useOrdersQuery() {
   return useQuery({
     queryKey: ['orders'],
     queryFn: async () => {
-      try {
-        const res = await apiFetch<{ data: Order[] }>('/api/orders');
-        return res.data;
-      } catch {
-        return [] as Order[];
-      }
+      const res = await apiFetch<{ data: Order[] }>('/api/orders');
+      return res.data;
     },
   });
 }

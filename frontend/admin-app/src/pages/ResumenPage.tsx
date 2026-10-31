@@ -1,735 +1,103 @@
-import { useMemo, useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import PageHeader from '../components/ui/PageHeader';
-import Sparkline from '../components/ui/Sparkline';
+import { ArrowRightIcon, DollarIcon, PedidosIcon, ProductosIcon, UsuariosIcon, CitasIcon, StarIcon, CheckIcon, EyeIcon } from '../components/icons';
 import TrendChart from '../components/ui/TrendChart';
-import AnnularDonut from '../components/ui/AnnularDonut';
-import ClienteRankingCard from '../components/ui/ClienteRankingCard';
-import StatCardMobile from '../components/ui/StatCardMobile';
-import AreaTrendCardMobile from '../components/ui/AreaTrendCardMobile';
-import {
-  PedidosIcon,
-  UsuariosIcon,
-  ProductosIcon,
-  CuponesIcon,
-  ArrowUpIcon,
-  ArrowDownIcon,
-  ArrowRightIcon,
-  ChevronDownIcon,
-  CitasIcon,
-  PlusIcon,
-  TrophyIcon,
-} from '../components/icons';
+import Sparkline from '../components/ui/Sparkline';
+import CrudModal from '../components/ui/CrudModal';
 import { useOrdersQuery } from '../hooks/useOrders';
 import { useUsersQuery } from '../hooks/useUsers';
 import { useProductsQuery } from '../hooks/useProducts';
 import { useCouponsQuery } from '../hooks/useCoupons';
-import { usePaymentCardsQuery } from '../hooks/usePaymentCards';
 import { useAppointmentsQuery } from '../hooks/useAppointments';
-import { construirSerieMensual } from '../lib/monthly';
-import { calcularClientesActivos } from '../lib/ranking';
-import { formatoMoneda, formatoFechaCorta } from '../lib/format';
+import { getStoredUser } from '../lib/auth';
+import { formatoFechaCorta, formatoMoneda } from '../lib/format';
+import { buildDashboard, percentageChange } from '../lib/dashboard';
 import type { Order } from '../types/models';
 
-// Mismo set de degradés que la cuadrícula de resumen de TarjetasPage.tsx —
-// se reutiliza acá para que "Tarjetas de pago" tenga el mismo diseño de
-// tarjeta en vez del estilo "banco real" (BankCardPreview) que tenía antes.
-const RESUMEN_TARJETA_ESTILOS = [
-  'from-emerald-500 to-emerald-600',
-  'from-indigo-500 to-purple-600',
-  'from-orange-400 to-orange-500',
-  'from-cyan-400 to-blue-500',
-];
-
-function ResumenKpiCard({
-  etiqueta,
-  valor,
-  sub,
-  iconBg,
-  iconColor,
-  icon,
-}: {
-  etiqueta: string;
-  valor: React.ReactNode;
-  sub: string;
-  iconBg: string;
-  iconColor: string;
-  icon: React.ReactNode;
-}) {
-  return (
-    <div className="admin-panel p-4 flex flex-col justify-between">
-      <div className="flex items-center justify-between mb-2">
-        <p className="text-xs text-muted">{etiqueta}</p>
-        <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${iconBg} ${iconColor}`}>{icon}</div>
-      </div>
-      <div>
-        <p className="text-xl font-bold text-ink leading-tight">{valor}</p>
-        <p className="text-xs text-muted mt-1.5">{sub}</p>
-      </div>
-    </div>
-  );
+function Metric({ label, value, icon, series, note, warm = false }: { label: string; value: ReactNode; icon: ReactNode; series?: { total: number }[]; note?: string; warm?: boolean }) {
+  const change = series ? percentageChange(series[5].total, series[4].total) : null;
+  return <article className={`dashboard-metric ${warm ? 'is-warm' : ''}`}>
+    <span className="dashboard-metric-icon">{icon}</span>
+    <div><p>{label}</p><strong>{value}</strong><small>{note || (change === null ? 'Sin base del mes anterior' : <><span className={change < 0 ? 'negative' : 'positive'}>{change > 0 ? '↑' : change < 0 ? '↓' : ''} {Math.abs(change)}%</span> vs. mes anterior</>)}</small></div>
+    {series && <Sparkline data={series} />}
+  </article>;
 }
 
-// Acceso rápido del resumen móvil — las 4 en una sola fila, como en la
-// plantilla de referencia (reemplaza la fila de botones "Ver pedidos/Ver
-// citas/+" que sigue existiendo tal cual para escritorio). Proporciones y
-// colores copiados literalmente de surveys-app.html (.action/.action-ico) a
-// pedido explícito del usuario, no el estilo admin-panel del resto del admin-app.
-function ResumenQuickAction({
-  to,
-  icon,
-  label,
-  active,
-}: {
-  to: string;
-  icon: React.ReactNode;
-  label: string;
-  active?: boolean;
-}) {
-  return (
-    <Link
-      to={to}
-      className={`flex h-[83px] flex-col items-center rounded-[19px] pt-[10px] text-center text-[11.5px] text-ink shadow-sm transition ${
-        active ? 'bg-lilac hover:bg-lilac/80' : 'border border-black/5 bg-white hover:bg-black/[0.03]'
-      }`}
-    >
-      <span className={`mb-2 grid h-8 w-8 shrink-0 place-items-center rounded-full ${active ? 'bg-white/50' : 'bg-mist'}`}>{icon}</span>
-      <span className="w-full truncate px-1 font-medium">{label}</span>
-    </Link>
-  );
-}
-
-function calcularClientesInactivos(orders: Order[], users: { name?: string; email?: string; role: string; createdAt: string }[]) {
-  const ultimoPorEmail: Record<string, string> = {};
-  orders.forEach((o) => {
-    const email = o.user?.email;
-    if (!email) return;
-    if (!ultimoPorEmail[email] || new Date(o.createdAt) > new Date(ultimoPorEmail[email])) {
-      ultimoPorEmail[email] = o.createdAt;
-    }
-  });
-  const ahora = new Date();
-  return users
-    .filter((u) => u.role !== 'admin')
-    .map((u) => {
-      const ultimo = (u.email && ultimoPorEmail[u.email]) || null;
-      const dias = ultimo ? Math.floor((ahora.getTime() - new Date(ultimo).getTime()) / 86400000) : null;
-      return { ...u, ultimoPedido: ultimo, dias };
-    })
-    .filter((u) => u.dias == null || u.dias >= 30)
-    .sort((a, b) => {
-      if (a.dias == null && b.dias == null) return 0;
-      if (a.dias == null) return -1;
-      if (b.dias == null) return 1;
-      return b.dias - a.dias;
-    })
-    .slice(0, 8);
+function CardHeading({ title, to, children }: { title: string; to?: string; children?: ReactNode }) {
+  return <header className="dashboard-card-heading"><div><h2>{title}</h2>{children}</div>{to && <Link to={to}>Ver todos <ArrowRightIcon className="h-3 w-3" /></Link>}</header>;
 }
 
 export default function ResumenPage() {
-  const { data: orders = [] } = useOrdersQuery();
-  const { data: users = [] } = useUsersQuery();
-  const { data: products = [] } = useProductsQuery();
+  const orderQuery = useOrdersQuery(), userQuery = useUsersQuery(), productQuery = useProductsQuery();
   const { data: coupons = [] } = useCouponsQuery();
-  const { data: paymentCards = [] } = usePaymentCardsQuery();
-  const { data: citas = [] } = useAppointmentsQuery();
-
-  const [tarjetaIndex, setTarjetaIndex] = useState(0);
-
-  const ingresos = orders.reduce((sum, o) => sum + (o.total || 0), 0);
-  const descuentos = orders.reduce((sum, o) => sum + (o.discount || 0), 0);
-  const productosAgotados = products.filter((p) => !p.availability).length;
-  const cuponesActivos = coupons.filter((c) => c.active).length;
-
-  const hoy = new Date();
-  const usuariosEsteMes = users.filter((u) => {
-    const f = new Date(u.createdAt);
-    return f.getMonth() === hoy.getMonth() && f.getFullYear() === hoy.getFullYear();
-  }).length;
-
-  // Porcentajes para los anillos de progreso de las tarjetas de estadística
-  // en el resumen móvil — cada uno deriva de datos que ya se calculan acá
-  // arriba, sin inventar métricas nuevas.
-  const productosDisponibles = products.length - productosAgotados;
-  const pctPedidosConCupon = orders.length ? Math.round((orders.filter((o) => o.couponCode).length / orders.length) * 100) : 0;
-  const pctUsuariosNuevos = users.length ? Math.round((usuariosEsteMes / users.length) * 100) : 0;
-  const pctProductosDisponibles = products.length ? Math.round((productosDisponibles / products.length) * 100) : 0;
-  const pctCuponesActivos = coupons.length ? Math.round((cuponesActivos / coupons.length) * 100) : 0;
-
-  const serieIngresos = useMemo(() => construirSerieMensual(orders, (o) => o.createdAt, (o) => o.total || 0), [orders]);
-  const seriePedidos = useMemo(() => construirSerieMensual(orders, (o) => o.createdAt, () => 1), [orders]);
-  const serieUsuariosNuevos = useMemo(() => construirSerieMensual(users, (u) => u.createdAt, () => 1), [users]);
-
-  const mesActualTotal = serieIngresos[5].total;
-  const mesAnteriorTotal = serieIngresos[4].total;
-  const cambioPct = mesAnteriorTotal > 0 ? Math.round(((mesActualTotal - mesAnteriorTotal) / mesAnteriorTotal) * 100) : null;
-  const mesSub = `${serieIngresos[5].label} de ${hoy.getFullYear()}`.replace(/^\w/, (c) => c.toUpperCase());
-
-  const estadosCitas = [
-    { key: 'pendiente' as const, label: 'Pendientes', color: '#f59e0b' },
-    { key: 'realizada' as const, label: 'Realizadas', color: '#10b981' },
-    { key: 'cancelada' as const, label: 'Canceladas', color: '#f43f5e' },
-  ];
-  const conteosCitas = estadosCitas.map((e) => ({ ...e, count: citas.filter((c) => (c.status || 'pendiente') === e.key).length }));
-  const totalCitas = citas.length;
-  const realizadasCount = conteosCitas.find((e) => e.key === 'realizada')?.count || 0;
-  const pctRealizadas = totalCitas ? Math.round((realizadasCount / totalCitas) * 100) : 0;
-
-  const ultimosPedidos = orders.slice(0, 5);
-  const pedidosTabla = orders.slice(0, 6);
-  const ultimosUsuarios = users.slice(0, 5);
-
-  const clientesActivos = useMemo(() => calcularClientesActivos(orders, users), [orders, users]);
-  const clientesInactivos = useMemo(() => calcularClientesInactivos(orders, users), [orders, users]);
-
-  const tarjetasActivas = paymentCards.filter((c) => c.activa);
-  const tarjetaEstiloIndice = tarjetasActivas.length ? tarjetaIndex % tarjetasActivas.length : 0;
-  const tarjetaActual = tarjetasActivas.length ? tarjetasActivas[tarjetaEstiloIndice] : null;
-
-  return (
-    <div className="space-y-4">
-      <PageHeader
-        eyebrow="Panel de control"
-        title="Resumen general"
-        description="Los pedidos, citas y usuarios de Bella Beauty se consolidan aquí para ver el estado del negocio de un vistazo."
-      />
-
-      {/* Resumen móvil — reemplaza, solo por debajo de lg, el contenido de
-          Fila 1 + "Últimos pedidos"/"Pedidos recientes" de más abajo (esos
-          quedan ocultos en móvil, ver sus propios comentarios) por una vista
-          curada: tarjetas de estadística con anillo de progreso, accesos
-          rápidos y pedidos recientes, inspirada en la plantilla de
-          referencia que compartió el usuario. */}
-      <div className="lg:hidden space-y-5">
-        <div className="grid grid-cols-2 gap-3">
-          <StatCardMobile
-            icon={<PedidosIcon className="w-5 h-5" />}
-            percent={pctPedidosConCupon}
-            label="Pedidos"
-            value={orders.length}
-          />
-          <StatCardMobile
-            icon={<UsuariosIcon className="w-5 h-5" />}
-            percent={pctUsuariosNuevos}
-            label="Usuarios"
-            value={users.length}
-            highlighted
-          />
-          <StatCardMobile
-            icon={<ProductosIcon className="w-5 h-5" />}
-            percent={pctProductosDisponibles}
-            label="Productos"
-            value={products.length}
-          />
-          <StatCardMobile
-            icon={<CuponesIcon className="w-5 h-5" />}
-            percent={pctCuponesActivos}
-            label="Cupones activos"
-            value={`${cuponesActivos}/${coupons.length}`}
-          />
-        </div>
-
-        <div>
-          <h3 className="text-sm font-semibold text-ink mb-3">Accesos rápidos</h3>
-          <div className="grid grid-cols-4 gap-2">
-            <ResumenQuickAction to="/pedidos" icon={<PedidosIcon className="w-5 h-5" />} label="Pedidos" active />
-            <ResumenQuickAction to="/citas" icon={<CitasIcon className="w-5 h-5" />} label="Citas" />
-            <ResumenQuickAction to="/ranking" icon={<TrophyIcon className="w-5 h-5" />} label="Ranking" />
-            <ResumenQuickAction to="/productos" icon={<ProductosIcon className="w-5 h-5" />} label="Productos" />
-          </div>
-        </div>
-
-        <div>
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-ink">Pedidos recientes</h3>
-            <Link to="/pedidos" className="text-xs text-ink hover:opacity-60">
-              Ver todos
-            </Link>
-          </div>
-          <div className="mt-3 space-y-2.5">
-            {ultimosPedidos.length ? (
-              ultimosPedidos.map((o) => (
-                <Link
-                  key={o._id}
-                  to="/pedidos"
-                  className="flex h-[72px] items-center rounded-[22px] border border-black/5 bg-white pl-[15px] pr-[18px] shadow-sm transition hover:bg-black/[0.02]"
-                >
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-mist">
-                    <PedidosIcon className="w-[19px] h-[19px] text-ink" />
-                  </span>
-                  <p className="ml-3.5 min-w-0 flex-1 truncate text-[13.5px] font-medium text-ink">{o.user?.name || 'Cliente'}</p>
-                  <div className="shrink-0 text-right leading-tight">
-                    <p className="text-base font-semibold text-ink">{formatoMoneda(o.total)}</p>
-                    <p className="mt-1 text-[11px] text-dim">{formatoFechaCorta(o.createdAt)}</p>
-                  </div>
-                </Link>
-              ))
-            ) : (
-              <p className="rounded-[22px] border border-black/5 bg-white py-5 text-center text-sm text-dim shadow-sm">
-                Todavía no hay pedidos.
-              </p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Gráficos de tendencia del resumen móvil — reemplazan, solo bajo lg:,
-          el gráfico de Ingresos (Fila 2, con su tarjeta oscura "Ingresos de
-          este mes" — redundante ahora que esta tarjeta ya muestra el total
-          del mes + cambio %) y la mitad de gráfico de Fila 3 (Pedidos) y
-          Fila 5 (Usuarios nuevos) — sus otras mitades (Estado de citas,
-          Últimos usuarios) se quedan visibles en móvil sin cambios. */}
-      <details className="lg:hidden admin-analytics"><summary>Tendencias del negocio <span>Últimos seis meses</span></summary><div className="mt-3 space-y-3">
-        <AreaTrendCardMobile
-          data={serieIngresos}
-          formatValue={formatoMoneda}
-          title="Ingresos de los últimos 6 meses"
-          description="Total facturado por mes según los pedidos registrados."
-          totalLabel="Ingresos de este mes"
-        />
-        <AreaTrendCardMobile
-          data={seriePedidos}
-          formatValue={(v) => String(v)}
-          title="Pedidos de los últimos 6 meses"
-          description="Cantidad de pedidos registrados por mes."
-          totalLabel="Pedidos este mes"
-        />
-        <AreaTrendCardMobile
-          data={serieUsuariosNuevos}
-          formatValue={(v) => String(v)}
-          title="Usuarios nuevos por mes"
-          description="Registros nuevos en los últimos 6 meses."
-          totalLabel="Usuarios nuevos este mes"
-        />
-      </div></details>
-
-      {/* Fila 1: ingresos totales (izquierda) + las 4 KPIs (centro) +
-          ranking de clientes (derecha). Por defecto CSS Grid estira (stretch)
-          las 3 columnas a la misma altura — la del ranking es la más alta, así
-          que Ingresos totales y las KPI crecen (no solo se centran con aire)
-          para ocupar ese espacio extra: la card de Ingresos usa flex-1 +
-          justify-between internamente, y la grilla de KPIs usa auto-rows-fr
-          para que las propias tarjetas se estiren. Solo visible desde lg: en
-          móvil, el bloque de arriba la reemplaza. */}
-      <div className="hidden lg:grid lg:grid-cols-3 gap-4">
-        {/* Ingresos totales + acciones */}
-        <div className="flex flex-col gap-3">
-          <div className="admin-panel p-4 flex-1 flex flex-col justify-between">
-            <div>
-              <h3 className="font-semibold text-ink">Ingresos totales</h3>
-              <p className="text-sm text-muted">Resumen de tus ingresos actuales</p>
-
-              <div className="flex items-end justify-between gap-4 mt-4">
-                <div>
-                  <p className="text-2xl font-bold text-ink">{formatoMoneda(ingresos)}</p>
-                  {cambioPct === null ? (
-                    <p className="text-sm font-medium mt-1 text-muted">Sin datos del mes anterior</p>
-                  ) : (
-                    <p className={`text-sm font-medium mt-1 ${cambioPct >= 0 ? 'text-sky' : 'text-coral'}`}>
-                      <span className="inline-flex items-center gap-1">
-                        {cambioPct >= 0 ? <ArrowUpIcon className="w-3.5 h-3.5" /> : <ArrowDownIcon className="w-3.5 h-3.5" />}
-                        {Math.abs(cambioPct)}% que el mes anterior
-                      </span>
-                    </p>
-                  )}
-                </div>
-                <Sparkline data={serieIngresos} />
-              </div>
-            </div>
-
-            <div>
-              <div className="border-t border-dashed border-white/80 my-4" />
-
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-muted">
-                  <span className="font-semibold text-ink">{orders.length}</span> pedidos registrados
-                </p>
-                <Link to="/pedidos" className="text-sm font-medium text-sky hover:text-sky/70 flex items-center gap-1">
-                  Ver todos
-                  <ArrowRightIcon className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex gap-2.5">
-            <Link
-              to="/pedidos"
-              className="flex-1 bg-coral text-white py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 hover:bg-ink/85 transition-colors"
-            >
-              <PedidosIcon className="w-4 h-4" />
-              Ver pedidos
-            </Link>
-            <Link
-              to="/citas"
-              className="flex-1 bg-white/50 border border-white/80 text-[#3a3d45] py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 hover:bg-white/90 transition-colors"
-            >
-              <CitasIcon className="w-4 h-4" />
-              Ver citas
-            </Link>
-            <Link
-              to="/productos"
-              title="Agregar producto"
-              className="w-11 h-11 shrink-0 bg-white/50 border border-white/80 text-[#3a3d45] rounded-full flex items-center justify-center hover:bg-white/90 transition-colors"
-            >
-              <PlusIcon className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
-
-        {/* Las 4 KPIs — auto-rows-fr para que ambas filas (2x2) se repartan
-            toda la altura estirada por la fila superior, en vez de quedar a
-            tamaño natural con aire alrededor. */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 auto-rows-fr">
-          <ResumenKpiCard
-            etiqueta="Pedidos"
-            valor={orders.length}
-            sub={`${formatoMoneda(descuentos)} en descuentos`}
-            iconBg="bg-ink/5"
-            iconColor="text-ink"
-            icon={<PedidosIcon className="w-4 h-4" />}
-          />
-          <ResumenKpiCard
-            etiqueta="Usuarios"
-            valor={users.length}
-            sub={`${usuariosEsteMes} nuevos este mes`}
-            iconBg="bg-sky/15"
-            iconColor="text-sky"
-            icon={<UsuariosIcon className="w-4 h-4" />}
-          />
-          <ResumenKpiCard
-            etiqueta="Productos"
-            valor={products.length}
-            sub={`${productosAgotados} agotados`}
-            iconBg="bg-coral/15"
-            iconColor="text-coral"
-            icon={<ProductosIcon className="w-4 h-4" />}
-          />
-          <ResumenKpiCard
-            etiqueta="Cupones activos"
-            valor={`${cuponesActivos}/${coupons.length}`}
-            sub={`${coupons.length} en total`}
-            iconBg="bg-[#eef0f4]"
-            iconColor="text-muted"
-            icon={<CuponesIcon className="w-4 h-4" />}
-          />
-        </div>
-
-        {/* Ranking de clientes — contenedor compartido con RankingPage.tsx
-            (ver ClienteRankingCard.tsx), acá con enlace "Ver todos" a /ranking. */}
-        <ClienteRankingCard clientes={clientesActivos} verTodosHref="/ranking" />
-      </div>
-
-      {/* Fila 2: gráfico de ingresos + ingresos de este mes, a la derecha.
-          Solo desde lg: — en móvil, AreaTrendCardMobile de más arriba ya
-          cubre esta información. */}
-      <div className="hidden lg:grid lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2 admin-panel p-4">
-          <h3 className="text-base font-semibold text-ink mb-1">Ingresos de los últimos 6 meses</h3>
-          <p className="text-sm text-muted mb-4">Total facturado por mes según los pedidos registrados.</p>
-          <div className="h-36">
-            <TrendChart data={serieIngresos} formatValue={formatoMoneda} color="#c33060" />
-          </div>
-        </div>
-
-        <div className="rounded-[26px] bg-coral p-4 text-white relative overflow-hidden">
-          <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full pointer-events-none" />
-          <div className="absolute -bottom-10 -left-6 w-28 h-28 bg-white/10 rounded-full pointer-events-none" />
-          <p className="text-sm text-white/70 relative">Ingresos de este mes</p>
-          <p className="text-2xl font-bold mt-1 relative">{formatoMoneda(mesActualTotal)}</p>
-          <p className="text-sm text-white/70 mt-3 relative">{mesSub}</p>
-        </div>
-      </div>
-
-      {/* Fila 4: pedidos recientes — tabla ancha, solo desde lg: en móvil ya
-          se ve la lista compacta del resumen móvil de más arriba */}
-      <div className="hidden lg:block admin-panel overflow-hidden">
-        <div className="px-5 py-3.5 border-b border-white/70 flex items-center justify-between">
-          <h3 className="text-base font-semibold text-ink">Pedidos recientes</h3>
-          <Link to="/pedidos" className="text-sm text-sky hover:text-sky/70 font-medium">
-            Ver todos
-          </Link>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="admin-table min-w-full divide-y divide-white/70">
-            <thead className="bg-white/40">
-              <tr>
-                <th className="px-5 py-2.5 text-left text-xs font-medium text-muted uppercase tracking-wider">Cliente</th>
-                <th className="px-5 py-2.5 text-left text-xs font-medium text-muted uppercase tracking-wider">Productos</th>
-                <th className="px-5 py-2.5 text-left text-xs font-medium text-muted uppercase tracking-wider">Cupón</th>
-                <th className="px-5 py-2.5 text-left text-xs font-medium text-muted uppercase tracking-wider">Fecha</th>
-                <th className="px-5 py-2.5 text-right text-xs font-medium text-muted uppercase tracking-wider">Total</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white/20 divide-y divide-white/60">
-              {pedidosTabla.length ? (
-                pedidosTabla.map((o) => {
-                  const productosPlano = (o.items || []).map((i) => `${i.cantidad}× ${i.name}`).join(', ');
-                  return (
-                    <tr key={o._id} className="hover:bg-white/40 transition-colors">
-                      <td className="px-5 py-3 text-sm text-[#3a3d45]">
-                        {o.user ? (
-                          <>
-                            {o.user.name || 'Cliente'}
-                            <br />
-                            <span className="text-xs text-muted">{o.user.email || ''}</span>
-                          </>
-                        ) : (
-                          'Cliente eliminado'
-                        )}
-                      </td>
-                      <td className="px-5 py-3 text-sm text-muted max-w-xs truncate" title={productosPlano}>
-                        {productosPlano}
-                      </td>
-                      <td className="px-5 py-3 text-sm">
-                        {o.couponCode ? <span className="status bg-coral">{o.couponCode}</span> : '—'}
-                      </td>
-                      <td className="px-5 py-3 text-sm text-muted">{formatoFechaCorta(o.createdAt)}</td>
-                      <td className="px-5 py-3 text-sm font-semibold text-ink text-right">{formatoMoneda(o.total)}</td>
-                    </tr>
-                  );
-                })
-              ) : (
-                <tr>
-                  <td colSpan={5} className="px-5 py-8 text-center text-muted">
-                    Todavía no hay pedidos registrados.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <details className="admin-analytics">
-        <summary>Actividad, citas y clientes <span>Ver análisis detallado</span></summary>
-        <div className="mt-4 space-y-4">
-      {/* Fila 3: distribución de citas + pedidos por mes, justo debajo de
-          ingresos y en las mismas 2 columnas */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="admin-panel p-4">
-          <div className="flex items-start justify-between gap-3 mb-4">
-            <div>
-              <p className="text-xs uppercase tracking-wider text-coral font-semibold">Estado general</p>
-              <h3 className="text-base font-semibold text-ink mt-1">Estado de las citas</h3>
-            </div>
-            <span className="text-xs px-2 py-1 bg-white/50 text-[#3a3d45] rounded-full border border-white/80 shrink-0">
-              Total: <span className="font-semibold">{totalCitas}</span>
-            </span>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-4 items-center">
-            <AnnularDonut groups={conteosCitas} centerPct={pctRealizadas} centerCaption="Realizadas" />
-            <div className="space-y-2">
-              {conteosCitas.map((e) => (
-                <div key={e.key} className="flex items-center gap-2 text-sm text-[#3a3d45]">
-                  <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: e.color }} />
-                  <span>{e.label}</span>
-                  <span className="ml-auto font-medium text-ink">{e.count}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="hidden lg:block admin-panel p-4">
-          <h3 className="text-base font-semibold text-ink mb-1">Pedidos de los últimos 6 meses</h3>
-          <p className="text-sm text-muted mb-4">Cantidad de pedidos registrados por mes.</p>
-          <div className="h-32">
-            <TrendChart data={seriePedidos} formatValue={(v) => String(v)} color="#e2766f" />
-          </div>
-        </div>
-      </div>
-
-      {/* Fila 3b: últimos pedidos (solo desde lg: — el resumen móvil de más
-          arriba ya tiene su propia lista de "Pedidos recientes") + tarjetas
-          de pago (siempre visible, sin equivalente en el resumen móvil) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="hidden lg:block admin-panel overflow-hidden">
-          <div className="px-5 py-3 border-b border-white/70 flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-ink">Últimos pedidos</h3>
-            <Link to="/pedidos" className="text-xs text-sky hover:text-sky/70 font-medium">
-              Ver todos
-            </Link>
-          </div>
-          <div className="divide-y divide-white/60">
-            {ultimosPedidos.length ? (
-              ultimosPedidos.map((o) => (
-                <div key={o._id} className="flex items-center justify-between px-5 py-2.5">
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-ink truncate">{o.user?.name || 'Cliente'}</p>
-                    <p className="text-xs text-muted">{formatoFechaCorta(o.createdAt)}</p>
-                  </div>
-                  <span className="text-sm font-semibold text-sky">{formatoMoneda(o.total)}</span>
-                </div>
-              ))
-            ) : (
-              <p className="text-sm text-muted px-5 py-5 text-center">Todavía no hay pedidos.</p>
-            )}
-          </div>
-        </div>
-
-        <div className="admin-panel overflow-hidden">
-          <div className="px-5 py-3 border-b border-white/70 flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-ink">Tarjetas de pago</h3>
-            <Link to="/tarjetas" className="text-xs text-sky hover:text-sky/70 font-medium">
-              Ver todas
-            </Link>
-          </div>
-          <div className="p-4">
-            {tarjetaActual ? (
-              <div
-                className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${RESUMEN_TARJETA_ESTILOS[tarjetaEstiloIndice % RESUMEN_TARJETA_ESTILOS.length]} p-4 text-white`}
-              >
-                <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-white/10 pointer-events-none" />
-                <div className="absolute -bottom-10 -left-6 w-28 h-28 rounded-full bg-white/10 pointer-events-none" />
-                <div className="relative z-10">
-                  <p className="text-sm font-medium text-white/80">{tarjetaActual.banco}</p>
-                  <p className="text-xl font-bold mt-1 tracking-wide">{tarjetaActual.numeroCuenta}</p>
-                  <div className="flex items-center gap-1.5 mt-4">
-                    <span className="w-6 h-6 rounded-full bg-white/50" />
-                    <span className="w-6 h-6 rounded-full bg-white/25 -ml-3" />
-                    <span className="text-xs font-semibold ml-2 uppercase tracking-wide">{tarjetaActual.marca}</span>
-                  </div>
-                  <div className="flex items-center justify-between mt-5 pt-3 border-t border-white/20">
-                    <div className="min-w-0">
-                      <p className="text-[10px] text-white/70 uppercase tracking-wide">Tipo de cuenta</p>
-                      <p className="text-sm font-semibold mt-0.5 truncate">{tarjetaActual.tipoCuenta}</p>
-                    </div>
-                    <div className="text-right min-w-0">
-                      <p className="text-[10px] text-white/70 uppercase tracking-wide">Titular</p>
-                      <p className="text-sm font-semibold mt-0.5 truncate">{tarjetaActual.titular}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <p className="text-sm text-muted text-center py-8">Todavía no hay tarjetas visibles.</p>
-            )}
-            <div className="flex items-center justify-between mt-3">
-              <button
-                type="button"
-                disabled={!tarjetasActivas.length}
-                onClick={() => setTarjetaIndex((i) => (i - 1 + tarjetasActivas.length) % tarjetasActivas.length)}
-                className="w-8 h-8 rounded-full border border-white/80 bg-white/50 flex items-center justify-center text-[#3a3d45] hover:bg-white/90 transition disabled:opacity-40"
-              >
-                <ChevronDownIcon className="w-3.5 h-3.5 rotate-90" />
-              </button>
-              <span className="text-xs text-muted">
-                {tarjetasActivas.length ? `${(tarjetaIndex % tarjetasActivas.length) + 1} / ${tarjetasActivas.length}` : '0 / 0'}
-              </span>
-              <button
-                type="button"
-                disabled={!tarjetasActivas.length}
-                onClick={() => setTarjetaIndex((i) => (i + 1) % tarjetasActivas.length)}
-                className="w-8 h-8 rounded-full border border-white/80 bg-white/50 flex items-center justify-center text-[#3a3d45] hover:bg-white/90 transition disabled:opacity-40"
-              >
-                <ChevronDownIcon className="w-3.5 h-3.5 -rotate-90" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Fila 5: usuarios nuevos */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="hidden lg:block admin-panel p-4">
-          <h3 className="text-base font-semibold text-ink mb-1">Usuarios nuevos por mes</h3>
-          <p className="text-sm text-muted mb-4">Registros nuevos en los últimos 6 meses.</p>
-          <div className="h-32">
-            <TrendChart data={serieUsuariosNuevos} formatValue={(v) => String(v)} color="#16181d" />
-          </div>
-        </div>
-        <div className="admin-panel overflow-hidden">
-          <div className="px-5 py-3.5 border-b border-white/70 flex items-center justify-between">
-            <h3 className="text-base font-semibold text-ink">Últimos usuarios registrados</h3>
-            <Link to="/usuarios" className="text-sm text-sky hover:text-sky/70 font-medium">
-              Ver todos
-            </Link>
-          </div>
-          <div className="divide-y divide-white/60">
-            {ultimosUsuarios.length ? (
-              ultimosUsuarios.map((u) => (
-                <div key={u._id} className="flex items-center justify-between px-5 py-2.5">
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-ink truncate">{u.name || 'Usuario'}</p>
-                    <p className="text-xs text-muted truncate">{u.email || ''}</p>
-                  </div>
-                  <span className="text-xs text-muted shrink-0 ml-2">{formatoFechaCorta(u.createdAt)}</span>
-                </div>
-              ))
-            ) : (
-              <p className="text-sm text-muted px-5 py-5 text-center">Todavía no hay usuarios.</p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Fila 6: clientes más activos + en riesgo de abandono, lado a lado
-          (antes eran dos tarjetas de ancho completo apiladas) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="admin-panel p-4">
-          <div className="flex items-center justify-between mb-3 gap-3">
-            <div>
-              <p className="text-xs uppercase tracking-wider text-coral font-semibold">Usuarios</p>
-              <h3 className="text-base font-bold text-ink mt-1">Clientes más activos</h3>
-            </div>
-            <span className="text-xs px-2 py-1 bg-white/50 text-[#3a3d45] rounded-full border border-white/80 shrink-0">
-              {clientesActivos.length} con pedidos
-            </span>
-          </div>
-          {clientesActivos.length ? (
-            <div className="grid grid-cols-2 gap-2.5">
-              {clientesActivos.slice(0, 4).map((u, i) => (
-                <div key={u.email} className="rounded-2xl border border-white/80 bg-white/40 p-2.5">
-                  <p className="text-[10px] uppercase tracking-wide text-muted">Cliente {i + 1}</p>
-                  <h4 className="mt-0.5 text-sm font-semibold text-ink truncate">{u.nombre}</h4>
-                  <div className="mt-2 flex items-end justify-between gap-2">
-                    <div>
-                      <p className="text-[9px] uppercase tracking-wide text-muted">Pedidos</p>
-                      <p className="text-lg font-bold text-ink leading-tight">{u.total}</p>
-                    </div>
-                    <p className="text-xs font-semibold text-sky">{formatoMoneda(u.gastado)}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-center text-muted py-5 text-sm">Todavía no hay pedidos de clientes.</p>
-          )}
-        </div>
-
-        <div className="admin-panel p-4">
-          <div className="flex items-center justify-between mb-3 gap-3">
-            <div>
-              <p className="text-xs uppercase tracking-wider text-coral font-semibold">Retención</p>
-              <h3 className="text-base font-bold text-ink mt-1">En riesgo de abandono</h3>
-            </div>
-            <span className="text-xs px-2 py-1 bg-coral/10 text-coral rounded-full border border-coral/25 shrink-0">
-              30+ días
-            </span>
-          </div>
-          {clientesInactivos.length ? (
-            <div className="grid grid-cols-2 gap-2.5">
-              {clientesInactivos.slice(0, 4).map((u) => (
-                <div key={u.email} className="rounded-2xl border border-coral/25 bg-coral/5 p-2.5">
-                  <h4 className="text-sm font-semibold text-ink truncate">{u.name || 'Cliente'}</h4>
-                  <p className="text-xs text-muted mt-0.5 truncate">{u.email || ''}</p>
-                  <div className="mt-2 flex items-center justify-between">
-                    <span className="text-[11px] text-muted">
-                      {u.ultimoPedido ? formatoFechaCorta(u.ultimoPedido) : 'Nunca compró'}
-                    </span>
-                    {u.dias != null && <span className="text-xs font-bold text-coral">{u.dias}d</span>}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-center text-muted py-5 text-sm">Todos los clientes activos tienen pedidos recientes.</p>
-          )}
-        </div>
-      </div>
-
-        </div>
-      </details>
+  const { data: appointments = [] } = useAppointmentsQuery();
+  const now = new Date();
+  const months = Array.from({ length: 12 }, (_, index) => {
+    const date = new Date(now.getFullYear(), now.getMonth() - index, 1);
+    return { value: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`, label: date.toLocaleDateString('es', { month: 'long', year: 'numeric' }) };
+  });
+  const [month, setMonth] = useState(months[0].value);
+  const [chartMonths, setChartMonths] = useState(6);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const products = productQuery.data || [];
+  const data = buildDashboard(orderQuery.data || [], userQuery.data || [], products, month);
+  const loading = orderQuery.isLoading || userQuery.isLoading || productQuery.isLoading;
+  const failed = orderQuery.isError || userQuery.isError || productQuery.isError;
+  const unavailable = products.filter(product => !product.availability).length;
+  const firstName = getStoredUser()?.name?.trim().split(' ')[0] || 'bienvenido';
+  const imageBase = import.meta.env.BASE_URL + 'img/';
+  const donut = data.categories.map((category, index) => {
+    const preceding = data.categories.slice(0, index).reduce((sum, item) => sum + item.count, 0);
+    const start = data.totalUnits ? preceding / data.totalUnits * 100 : 0;
+    const end = data.totalUnits ? (preceding + category.count) / data.totalUnits * 100 : 0;
+    return `${category.color} ${start}% ${end}%`;
+  }).join(', ');
+  return <div className="dashboard" aria-busy={loading}>
+    <div className="dashboard-heading">
+      <div><h1>Resumen general</h1><p>¡Hola, {firstName}! Aquí tienes un resumen del estado de tu negocio.</p></div>
+      <label className="dashboard-month"><CitasIcon className="h-4 w-4" /><span className="sr-only">Mes del resumen</span><select value={month} onChange={event => setMonth(event.target.value)}>{months.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label>
     </div>
-  );
+    {failed && <div role="alert" className="dashboard-error">No se pudieron cargar todos los datos. <button type="button" onClick={() => { void orderQuery.refetch(); void userQuery.refetch(); void productQuery.refetch(); }}>Reintentar</button></div>}
+    <section className="dashboard-hero">
+      <img src={imageBase + 'dashboard-skincare.jpg'} alt="" />
+      <div className="dashboard-hero-copy"><h2>Belleza que <em>inspira,</em><br />negocios que crecen</h2><p>Gestiona tus pedidos, clientes y productos desde un solo lugar y lleva tu marca al siguiente nivel.</p><Link to="/productos" className="dashboard-button">Ver productos <ArrowRightIcon className="h-3 w-3" /></Link></div>
+      <div className="dashboard-hero-benefits"><span><PedidosIcon />Tus ventas, a la vista</span><span><UsuariosIcon />Más cerca de tus clientes</span><span><StarIcon />Tu marca, en un solo lugar</span></div>
+    </section>
+    <div className="dashboard-metrics">
+      <Metric label="Ingresos totales" value={loading ? '…' : orderQuery.isError ? '—' : formatoMoneda(data.income)} icon={<DollarIcon />} series={orderQuery.isError || loading ? undefined : data.incomeSeries} note={orderQuery.isError ? 'Datos no disponibles' : loading ? 'Cargando…' : undefined} />
+      <Metric label="Pedidos" value={loading ? '…' : orderQuery.isError ? '—' : data.orders.length} icon={<PedidosIcon />} series={orderQuery.isError || loading ? undefined : data.orderSeries} note={orderQuery.isError ? 'Datos no disponibles' : loading ? 'Cargando…' : undefined} />
+      <Metric label="Productos" value={loading ? '…' : productQuery.isError ? '—' : products.length} icon={<ProductosIcon />} note={productQuery.isError ? 'Datos no disponibles' : loading ? 'Cargando…' : `${unavailable} agotados · catálogo actual`} warm />
+      <Metric label="Clientes" value={loading ? '…' : userQuery.isError ? '—' : data.clients.length} icon={<UsuariosIcon />} series={userQuery.isError || loading ? undefined : data.clientSeries} note={userQuery.isError ? 'Datos no disponibles' : loading ? 'Cargando…' : undefined} />
+    </div>
+    <p className="dashboard-period-note">Pedidos, ingresos y clientes acumulados hasta {months.find(item => item.value === month)?.label}. La variación compara ese mes con el anterior.</p>
+    <div className="dashboard-chart-grid">
+      <section className="dashboard-card dashboard-revenue">
+        <div className="dashboard-chart-heading"><div><h2>Ingresos de los últimos {chartMonths} meses</h2><p>Importe de los pedidos registrados.</p></div><label><span className="sr-only">Periodo del gráfico</span><select value={chartMonths} onChange={event => setChartMonths(Number(event.target.value))}><option value={6}>Últimos 6 meses</option><option value={3}>Últimos 3 meses</option></select></label></div>
+        <div className="dashboard-line-chart">{orderQuery.isError ? <p className="dashboard-empty">Datos no disponibles.</p> : loading ? <p className="dashboard-empty">Cargando ingresos…</p> : <TrendChart key={month + chartMonths} data={data.incomeSeries.slice(-chartMonths)} formatValue={formatoMoneda} color="#db5076" />}</div>
+      </section>
+      <section className="dashboard-card dashboard-distribution">
+        <CardHeading title="Ventas por categoría" />
+        {data.totalUnits ? <div className="dashboard-donut-layout"><div className="dashboard-donut" role="img" aria-label={data.categories.map(category => `${category.label}: ${category.count} unidades`).join(', ')} style={{ background: `conic-gradient(${donut})` }}><div><strong>{data.totalUnits}</strong><span>unidades</span></div></div><ul>{data.categories.map(category => <li key={category.label}><i style={{ background: category.color }} /><span>{category.label}</span><strong>{Math.round(category.count / data.totalUnits * 100)}%</strong></li>)}</ul></div> : <p className="dashboard-empty">{loading ? 'Cargando ventas…' : orderQuery.isError ? 'Datos no disponibles.' : 'Las ventas aparecerán con tus primeros pedidos.'}</p>}
+      </section>
+      <section className="dashboard-promo"><img src={imageBase + 'dashboard-perfume.jpg'} alt="" /><div><small>Tu escaparate digital</small><h2>Realza la belleza<br />de cada cliente</h2><p>Descubre cómo se presentan tus productos en la tienda.</p><a href="/productos" className="dashboard-button">Ver tienda <ArrowRightIcon className="h-3 w-3" /></a></div></section>
+    </div>
+    <div className="dashboard-bottom-grid">
+      <section className="dashboard-card dashboard-orders">
+        <CardHeading title="Pedidos recientes" to="/pedidos" />
+        <div className="dashboard-table-scroll" tabIndex={0} aria-label="Pedidos recientes"><table><thead><tr><th>Pedido</th><th>Cliente</th><th>Fecha</th><th>Registro</th><th>Total</th><th><span className="sr-only">Acciones</span></th></tr></thead><tbody>
+          {data.recentOrders.map(order => <tr key={order._id}><td title={order._id}>#{order._id.slice(-6)}</td><td><span className="dashboard-client-initial" aria-hidden="true">{order.user?.name?.[0] || 'C'}</span>{order.user?.name || 'Cliente eliminado'}</td><td>{formatoFechaCorta(order.createdAt)}</td><td><span className="dashboard-order-status"><CheckIcon className="h-3 w-3" />Registrado</span></td><td>{formatoMoneda(order.total)}</td><td><button type="button" onClick={() => setSelectedOrder(order)} aria-label={`Ver pedido ${order._id.slice(-6)}`}><EyeIcon className="h-4 w-4" /></button></td></tr>)}
+          {!data.recentOrders.length && <tr><td colSpan={6} className="dashboard-empty">{loading ? 'Cargando pedidos…' : orderQuery.isError ? 'Datos no disponibles.' : 'No hay pedidos en este periodo.'}</td></tr>}
+        </tbody></table></div>
+      </section>
+      <section className="dashboard-card dashboard-bestsellers">
+        <CardHeading title="Productos más vendidos" to="/productos" />
+        {data.bestSellers.slice(0, 4).map((item, index) => <div className="dashboard-product-row" key={item.id}><span className="dashboard-product-rank">{index + 1}</span>{item.image ? <img src={item.image} alt="" onError={event => { if (!event.currentTarget.dataset.fallback) { event.currentTarget.dataset.fallback = 'true'; event.currentTarget.src = import.meta.env.BASE_URL + 'favicon.svg'; } }} /> : <span className="dashboard-product-placeholder"><ProductosIcon className="h-5 w-5" /></span>}<div><strong>{item.name}</strong><small>{item.category}</small></div><div className="dashboard-product-numbers"><strong>{item.units}</strong><small>unidades</small></div><div className="dashboard-product-numbers"><strong>{formatoMoneda(item.amount)}</strong><small>en productos</small></div></div>)}
+        {!data.bestSellers.length && <p className="dashboard-empty">{loading ? 'Cargando productos…' : orderQuery.isError ? 'Datos no disponibles.' : 'Aún no hay productos vendidos en este periodo.'}</p>}
+      </section>
+    </div>
+    <details className="admin-analytics dashboard-extra"><summary>Más información del negocio <span>Citas y promociones actuales</span></summary><div className="dashboard-operations"><Link to="/citas"><CitasIcon /><strong>{appointments.filter(item => (item.status || 'pendiente') === 'pendiente').length}</strong><span>Citas pendientes</span><ArrowRightIcon /></Link><Link to="/cupones"><StarIcon /><strong>{coupons.filter(item => item.active && (!item.expiresAt || new Date(item.expiresAt) >= now)).length}</strong><span>Cupones activos</span><ArrowRightIcon /></Link><Link to="/ranking"><UsuariosIcon /><span>Explorar el ranking de clientes</span><ArrowRightIcon /></Link><Link to="/tarjetas"><DollarIcon /><span>Administrar cuentas de pago</span><ArrowRightIcon /></Link></div></details>
+    <CrudModal open={!!selectedOrder} title="Detalle del pedido" onClose={() => setSelectedOrder(null)}>
+      {selectedOrder && <div className="dashboard-order-detail"><p className="break-all">#{selectedOrder._id}</p><p>{selectedOrder.user?.name || 'Cliente eliminado'} · {formatoFechaCorta(selectedOrder.createdAt)}</p><p>{selectedOrder.user?.email}</p><ul>{selectedOrder.items.map((item, index) => <li key={index}><span>{item.cantidad} × {item.name}</span><strong>{formatoMoneda(item.cantidad * item.price)}</strong></li>)}</ul><dl><div><dt>Subtotal</dt><dd>{formatoMoneda(selectedOrder.subtotal)}</dd></div><div><dt>Descuento {selectedOrder.couponCode || ''}</dt><dd>−{formatoMoneda(selectedOrder.discount || 0)}</dd></div><div><dt>Total</dt><dd>{formatoMoneda(selectedOrder.total)}</dd></div></dl></div>}
+    </CrudModal>
+  </div>;
 }

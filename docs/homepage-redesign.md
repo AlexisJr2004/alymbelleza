@@ -102,7 +102,10 @@ Montserrat se sirve localmente desde `frontend/public-app/public/fonts`, con su 
 
 - Las ocho secciones comparten el estilo de public-app: logotipo floral, Montserrat local, títulos Georgia, fondos blancos, cabeceras rosa suave y botones con degradado. Se mantienen los indicadores compactos y las tablas uniformes.
 - Los filtros se pliegan en móvil; la paginación muestra un número acotado de controles.
-- Resumen prioriza ingresos y pedidos recientes, con tendencias y actividad secundaria desplegables.
+- El panel sigue la referencia de Bella Beauty: menú lateral fijo en escritorio, búsqueda superior y banner cosmético con fotografías locales de la tienda.
+- Resumen reúne indicadores, tendencia de ingresos, ventas por categoría, pedidos recientes con detalle y productos más vendidos. El selector de mes actualiza los datos históricos; las existencias pertenecen al catálogo actual.
+- La búsqueda superior encuentra productos, pedidos y usuarios, y abre cada sección con su filtro en la URL. Las páginas mantienen tablas y controles compactos.
+- Los importes proceden de pedidos reales; los productos vendidos muestran cantidades e importes antes de descuentos. No se inventan estados de envío o pago.
 - Los formularios incluyen etiquetas asociadas, cierre con Escape, manejo de foco y bloqueo de desplazamiento del fondo.
 - La navegación móvil utiliza la isla translúcida blanca y rosa de la tienda, respeta el área segura y muestra etiquetas. El menú lateral mantiene la misma identidad. Los avatares de respaldo y el favicon son locales.
 - Se retiran el recurso SVG de ejemplo, el icono de menú sin consumidores y los estilos antiguos sin uso. Las rutas activas se conservan.

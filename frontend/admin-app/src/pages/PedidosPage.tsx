@@ -1,3 +1,4 @@
+import { useSearchQuery } from '../hooks/useSearchQuery';
 import FilterPanel from '../components/ui/FilterPanel';
 import { useMemo, useState } from 'react';
 import PageHeader from '../components/ui/PageHeader';
@@ -16,16 +17,21 @@ const PEDIDOS_POR_PAGINA = 6;
 export default function PedidosPage() {
   const { data: orders = [], isLoading } = useOrdersQuery();
 
+  const [search, setSearch] = useSearchQuery();
   const [fechaDesde, setFechaDesde] = useState('');
   const [fechaHasta, setFechaHasta] = useState('');
   const [soloConCupon, setSoloConCupon] = useState(false);
-  const [pagina, setPagina] = useState(1);
+  const [pageState, setPageState] = useState({ query: search, page: 1 });
+  const pagina = pageState.query === search ? pageState.page : 1;
+  const setPagina = (page: number) => setPageState({ query: search, page });
 
   const filtrados = useMemo(() => {
     let lista = filtrarPorRangoDeFechas(orders, (o) => o.createdAt, fechaDesde, fechaHasta);
+    const query = search.trim().toLowerCase();
+    if (query) lista = lista.filter(order => [order._id, order.user?.name, order.user?.email].some(value => value?.toLowerCase().includes(query)));
     if (soloConCupon) lista = lista.filter((o) => !!o.couponCode);
     return lista;
-  }, [orders, fechaDesde, fechaHasta, soloConCupon]);
+  }, [orders, fechaDesde, fechaHasta, soloConCupon, search]);
 
   const ingresos = filtrados.reduce((sum, o) => sum + (o.total || 0), 0);
   const descuentos = filtrados.reduce((sum, o) => sum + (o.discount || 0), 0);
@@ -43,6 +49,7 @@ export default function PedidosPage() {
   const pedidosPagina = filtrados.slice(inicio, inicio + PEDIDOS_POR_PAGINA);
 
   const limpiarFiltros = () => {
+    setSearch('');
     setFechaDesde('');
     setFechaHasta('');
     setSoloConCupon(false);
@@ -125,6 +132,7 @@ export default function PedidosPage() {
 
       <div className="flex flex-col lg:flex-row items-start gap-4">
         <FilterPanel>
+          <label className="admin-order-search">Buscar pedido<input type="search" placeholder="ID, cliente o correo" value={search} onChange={event => { setSearch(event.target.value); setPagina(1); }} /></label>
           <div className="admin-panel p-4 space-y-5">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-ink uppercase tracking-wide">Filtros</h3>

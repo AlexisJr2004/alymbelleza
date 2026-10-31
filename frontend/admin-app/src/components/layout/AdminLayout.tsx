@@ -2,7 +2,8 @@ import { useLayoutEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import RequireAdmin from './RequireAdmin';
 import TopNav from './TopNav';
-import IconRail from './IconRail';
+import DesktopSidebar from './DesktopSidebar';
+import '../../styles/dashboard.css';
 import MobileDrawer from './MobileDrawer';
 import BottomMobileNav from './BottomMobileNav';
 
@@ -19,7 +20,7 @@ export default function AdminLayout() {
     <RequireAdmin>
       <div className="admin-shell app-bg font-sans text-ink antialiased min-h-screen">
         <TopNav onOpenMenu={() => setMobileOpen(true)} />
-        <IconRail />
+        <DesktopSidebar />
         <BottomMobileNav />
 
         {/* Siempre montado (no solo cuando mobileOpen) para poder animar su
@@ -34,7 +35,7 @@ export default function AdminLayout() {
         />
         <MobileDrawer open={mobileOpen} onClose={() => setMobileOpen(false)} />
 
-        <main className="admin-content max-w-[1600px] min-w-0 mx-auto px-3 sm:px-5 lg:pl-20 lg:pr-6 pt-5 pb-28 lg:pb-8">
+        <main className="admin-content admin-workspace-content">
           <Outlet />
         </main>
       </div>

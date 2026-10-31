@@ -16,7 +16,7 @@ const PY = 18;
 // Gráfico de línea en SVG con tooltip al pasar el mouse. Puerto directo de
 // renderizarGraficoBarras(), reemplazando los listeners de DOM a mano por
 // estado de React para el índice sobre el que está el mouse.
-export default function TrendChart({ data, formatValue, color = '#9333ea' }: TrendChartProps) {
+export default function TrendChart({ data, formatValue, color = '#db5076' }: TrendChartProps) {
   const gradId = useId();
   const [hover, setHover] = useState<number | null>(null);
 
@@ -87,6 +87,11 @@ export default function TrendChart({ data, formatValue, color = '#9333ea' }: Tre
           r={12}
           fill="transparent"
           style={{ cursor: 'pointer' }}
+          tabIndex={0}
+          role="img"
+          aria-label={`${p.label}: ${formatValue(p.valor)}`}
+          onFocus={() => setHover(i)}
+          onBlur={() => setHover(null)}
           onMouseEnter={() => setHover(i)}
           onMouseLeave={() => setHover(null)}
         />

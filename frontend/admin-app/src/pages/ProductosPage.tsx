@@ -1,3 +1,4 @@
+import { useSearchQuery } from '../hooks/useSearchQuery';
 import FilterPanel from '../components/ui/FilterPanel';
 import { useMemo, useState } from 'react';
 import PageHeader from '../components/ui/PageHeader';
@@ -33,12 +34,14 @@ export default function ProductosPage() {
   const updateProduct = useUpdateProduct();
   const deleteProduct = useDeleteProduct();
 
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useSearchQuery();
   const [categoriaFiltro, setCategoriaFiltro] = useState('');
   const [tipoFiltro, setTipoFiltro] = useState('');
   const estadoFiltro = useSwitchFilter();
   const [soloDestacados, setSoloDestacados] = useState(false);
-  const [pagina, setPagina] = useState(1);
+  const [pageState, setPageState] = useState({ query: search, page: 1 });
+  const pagina = pageState.query === search ? pageState.page : 1;
+  const setPagina = (page: number) => setPageState({ query: search, page });
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);

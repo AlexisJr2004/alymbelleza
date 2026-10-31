@@ -2,6 +2,10 @@ import type { SVGProps } from 'react';
 
 type IconProps = SVGProps<SVGSVGElement>;
 
+export function EyeIcon(props: IconProps) {
+  return <Icon {...props}><path strokeLinecap="round" strokeLinejoin="round" d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /></Icon>;
+}
+
 function Icon({ children, className = 'w-5 h-5', ...props }: IconProps & { children: React.ReactNode }) {
   return (
     <svg

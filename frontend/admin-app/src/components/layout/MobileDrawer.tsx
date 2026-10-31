@@ -1,51 +1,19 @@
 import BeautyBrand from './BeautyBrand';
 import { NavLink } from 'react-router-dom';
-import {
-  ResumenIcon,
-  TrophyIcon,
-  ProductosIcon,
-  CuponesIcon,
-  PedidosIcon,
-  TarjetasIcon,
-  UsuariosIcon,
-  CitasIcon,
-  BackArrowIcon,
-  LogoutIcon,
-  XIcon,
-} from '../icons';
+import { BackArrowIcon, LogoutIcon, XIcon } from '../icons';
+import { ADMIN_NAV_ITEMS } from './navigation';
 import { getStoredUser, logout } from '../../lib/auth';
 import { resolveProfileImage } from '../../lib/format';
 import { confirmAction } from '../../lib/sweetalert';
 
 const FALLBACK_AVATAR = `${import.meta.env.BASE_URL}favicon.svg`;
 
-interface NavItem {
-  to: string;
-  label: string;
-  icon: (props: { className?: string }) => React.ReactElement;
-}
-
-const NAV_ITEMS: NavItem[] = [
-  { to: '/resumen', label: 'Resumen', icon: ResumenIcon },
-  { to: '/ranking', label: 'Ranking', icon: TrophyIcon },
-  { to: '/productos', label: 'Productos', icon: ProductosIcon },
-  { to: '/cupones', label: 'Cupones', icon: CuponesIcon },
-  { to: '/pedidos', label: 'Pedidos', icon: PedidosIcon },
-  { to: '/tarjetas', label: 'Tarjetas', icon: TarjetasIcon },
-  { to: '/usuarios', label: 'Usuarios', icon: UsuariosIcon },
-  { to: '/citas', label: 'Citas', icon: CitasIcon },
-];
-
 interface MobileDrawerProps {
   open: boolean;
   onClose: () => void;
 }
 
-// Versión móvil de la navegación — en escritorio TopNav ya es la barra de
-// píldoras + IconRail de la plantilla; esa barra horizontal no entra en una
-// pantalla chica, así que acá se pliega a una lista vertical (mismas píldoras,
-// apiladas) dentro de un cajón deslizante, reusando la animación del Sidebar
-// original.
+// Comparte las secciones del menú de escritorio en un cajón móvil.
 export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
   const user = getStoredUser();
 
@@ -92,7 +60,7 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
       </div>
 
       <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-4">
-        {NAV_ITEMS.map((item) => (
+        {ADMIN_NAV_ITEMS.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}

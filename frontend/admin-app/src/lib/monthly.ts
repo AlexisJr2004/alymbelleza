@@ -5,14 +5,14 @@ export interface MonthlyBucket {
   total: number;
 }
 
-// Agrupa una lista en 6 cubetas mensuales (mes actual y los 5 anteriores).
-// Puerto directo de construirSerieMensual() del panel viejo.
+// Agrupa el mes de referencia y los cinco meses anteriores.
 export function construirSerieMensual<T>(
   items: T[],
   fechaGetter: (item: T) => string | Date | undefined,
-  valorGetter: (item: T) => number
+  valorGetter: (item: T) => number,
+  referenceDate: Date = new Date()
 ): MonthlyBucket[] {
-  const hoy = new Date();
+  const hoy = referenceDate;
   const meses: MonthlyBucket[] = [];
   for (let i = 5; i >= 0; i--) {
     const d = new Date(hoy.getFullYear(), hoy.getMonth() - i, 1);

@@ -1,3 +1,4 @@
+import { useSearchQuery } from '../hooks/useSearchQuery';
 import FilterPanel from '../components/ui/FilterPanel';
 import { useMemo, useState } from 'react';
 import PageHeader from '../components/ui/PageHeader';
@@ -24,12 +25,14 @@ export default function UsuariosPage() {
   const setRole = useSetUserRole();
   const currentUser = getStoredUser();
 
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useSearchQuery();
   const [fechaDesde, setFechaDesde] = useState('');
   const [fechaHasta, setFechaHasta] = useState('');
   const rolFiltro = useSwitchFilter();
   const estadoFiltro = useSwitchFilter();
-  const [pagina, setPagina] = useState(1);
+  const [pageState, setPageState] = useState({ query: search, page: 1 });
+  const pagina = pageState.query === search ? pageState.page : 1;
+  const setPagina = (page: number) => setPageState({ query: search, page });
 
   const total = usuarios.length;
   const activos = usuarios.filter((u) => u.isActive !== false).length;
