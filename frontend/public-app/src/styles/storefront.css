@@ -168,7 +168,6 @@
 .bb-testimonials h2 { font-size: 25px; line-height: 1.02; letter-spacing: -.6px; }
 .bb-testimonials-intro > p { font-size: 10px; color: var(--bb-muted); margin-top: 7px; }
 .bb-testimonials-intro > button { margin-top: 12px; }
-.bb-review-list { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; }
 .bb-review { display: flex; align-items: flex-start; gap: 14px; padding: 13px; border: 1px solid #f0edf0; border-radius: 9px; box-shadow: 0 3px 13px #35202c05; min-width: 0; }
 .bb-avatar { position: relative; width: 52px; height: 52px; border-radius: 50%; background: #f4e3e7; flex-shrink: 0; overflow: hidden; display: grid; place-items: center; color: #b4315e; font: 24px Georgia,serif; }
 .bb-avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -330,7 +329,6 @@
   .bb-benefit h3 { font-size: 11px; }
   .bb-benefit p { font-size: 8px; line-height: 1.5; margin-top: 2px; }
   .bb-testimonials { padding-block: 23px; }
-  .bb-review-list { grid-template-columns: 1fr; gap: 10px; }
   .bb-review { padding: 16px; gap: 14px; }
   .bb-avatar { width: 46px; height: 46px; }
   .bb-review blockquote { font-size: 11px; }

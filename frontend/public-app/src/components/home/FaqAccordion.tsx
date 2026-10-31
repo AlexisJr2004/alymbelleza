@@ -8,63 +8,22 @@ interface Faq {
 const FAQS: Faq[] = [
   {
     question: '¿Cómo puedo reservar una cita?',
-    lines: [
-      'Puedes reservar una cita de tres formas:',
-      '1. Directamente en nuestro sitio web con el botón "Reserva Online"',
-      '2. Llamando a nuestro número +1 234 567 890',
-      '3. Visitándonos en nuestro local en Av. Principal 123',
-      '',
-      'Las reservas online requieren un anticipo del 20% para confirmar.',
-    ],
+    lines: ['Inicia sesión y entra en la sección Citas. Elige el servicio, la fecha y el horario disponible para enviar tu reserva. Puedes consultar tus citas desde esa misma sección.'],
   },
   {
-    question: '¿Qué métodos de pago aceptan?',
-    lines: [
-      'Aceptamos todos los métodos de pago para tu comodidad:',
-      '- Efectivo',
-      '- Tarjetas de crédito/débito (Visa, MasterCard, American Express)',
-      '- Transferencias bancarias',
-      '- PayPal',
-      '- Mercado Pago',
-      '',
-      '¡También tenemos planes de pago para tratamientos especiales!',
-    ],
+    question: '¿Cómo puedo pagar mi pedido?',
+    lines: ['En la sección Pagos encontrarás las cuentas bancarias disponibles. Realiza la transferencia y comparte el comprobante por el WhatsApp indicado en esa página para coordinar tu compra.'],
   },
   {
-    question: '¿Tienen productos para todo tipo de piel/cabello?',
-    lines: [
-      'Sí, en Bella Beauty seleccionamos cuidadosamente productos para todo tipo de necesidades:',
-      '',
-      '- Líneas para pieles sensibles, grasas, mixtas y secas',
-      '- Productos para cabello rizado, liso, teñido o con tratamientos químicos',
-      '- Opciones veganas y cruelty-free',
-      '- Productos orgánicos y naturales',
-      '',
-      'Nuestros especialistas pueden recomendarte los mejores productos según tus características.',
-    ],
+    question: '¿Cómo elijo un producto?',
+    lines: ['Consulta la descripción, las reseñas y los comentarios de cada producto en la tienda. Si necesitas orientación, escríbenos desde la sección Contacto de la página de inicio.'],
   },
   {
-    question: '¿Cuál es su política de cancelación?',
-    lines: [
-      'Entendemos que pueden surgir imprevistos. Nuestra política es:',
-      '',
-      '✅ Cancelación con más de 24 horas: Reembolso completo del anticipo',
-      '⏱️ Entre 6-24 horas antes: Conservamos el anticipo pero puedes reagendar',
-      '❌ Menos de 6 horas o no presentación: Perdida del anticipo',
-      '',
-      'Para emergencias, contáctenos directamente y haremos excepciones cuando sea posible.',
-    ],
+    question: '¿Cómo consulto un cambio en mi cita?',
+    lines: ['Revisa tu reserva en la sección Citas. Para consultar un cambio de horario o una cancelación, comunícate con nuestro equipo desde Contacto.'],
   },
 ];
 
-// Puerto de setupAccordion() de js/main.js. Nota: la clase original
-// "transition-max-height" no es una utilidad real de Tailwind (ni el
-// tailwind.config.js viejo ni el de este proyecto la definen), pero la
-// animación sí ocurre igual: "duration-500" fija transition-duration:500ms, y
-// como transition-property es "all" por defecto en CSS (no hace falta una
-// clase que lo declare), el cambio de max-height termina animándose sobre
-// esos 500ms. Se conserva la misma clase (aunque su nombre no sea válido)
-// porque el efecto real que produce coincide con el del sitio viejo.
 export default function FaqAccordion() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -100,7 +59,7 @@ export default function FaqAccordion() {
               ref={(el) => {
                 contentRefs.current[index] = el;
               }}
-              className="accordion-content mt-4 text-gray-600 overflow-hidden max-h-0 transition-max-height duration-500"
+              className="accordion-content mt-4 text-gray-600 overflow-hidden max-h-0 transition-[max-height] duration-500"
             >
               {faq.lines.map((line, i) => (
                 <span key={i}>

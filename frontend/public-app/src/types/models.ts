@@ -69,15 +69,6 @@ export interface ProductComment {
   editedAt?: string;
 }
 
-export interface AppNotification {
-  _id: string;
-  type: 'comment_reply';
-  message: string;
-  productId?: string;
-  commentId?: string;
-  read: boolean;
-  createdAt: string;
-}
 
 export interface OrderItem {
   product?: string;

@@ -1,3 +1,4 @@
+import { XIcon } from '../icons';
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react';
 import { formatDuration } from '../../lib/format';
 import { notifyError } from '../../lib/sweetalert';
@@ -144,9 +145,7 @@ export default function UploadModal({ open, onClose, onSubmit, isSubmitting }: U
         <h3 id="upload-modal-title" className="text-lg font-semibold text-gray-900">
           Subir Contenido a Galería
         </h3>
-        <button type="button" onClick={handleClose} aria-label="Cerrar" className="bb-dialog-close">
-          Cerrar
-        </button>
+        <button type="button" onClick={handleClose} aria-label="Cerrar" className="bb-dialog-close"><XIcon className="h-4 w-4" /></button>
       </div>
 
       <form ref={formRef} onSubmit={handleSubmit} encType="multipart/form-data" className="p-6 space-y-5">

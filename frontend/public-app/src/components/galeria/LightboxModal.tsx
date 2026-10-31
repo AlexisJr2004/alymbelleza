@@ -1,3 +1,4 @@
+import { XIcon } from '../icons';
 import { useEffect, useState } from 'react';
 import { formatImageUrl, getGalleryVideoPlaybackUrl, getGalleryVideoPosterUrl } from '../../lib/format';
 import { notifyError } from '../../lib/sweetalert';
@@ -105,6 +106,7 @@ export default function LightboxModal({ open, items, index, onNavigate, onClose 
       labelledBy="lightbox-title"
     >
       <div className="relative w-full flex flex-col items-center px-4 pb-6 pt-1 md:p-0">
+        <button type="button" onClick={onClose} className="bb-dialog-close bb-gallery-control absolute top-0 left-2 z-10" aria-label="Cerrar visor"><XIcon className="h-4 w-4" /></button>
         {multiple && (
           <button
             type="button"

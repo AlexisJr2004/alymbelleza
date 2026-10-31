@@ -20,6 +20,6 @@
 .bb-accessibility :focus-visible { outline: 2px solid #b73d69; outline-offset: 2px; }
 body[data-accessibility-font] :is(h1,h2,h3,h4,p,a,button,label,input,textarea,select,span,small,strong,em,li,dt,dd,output) { font-family: var(--bb-accessible-font),sans-serif !important; }
 @media (max-width: 767px) {
-  .bb-accessibility-trigger { bottom: calc(138px + env(safe-area-inset-bottom)); left: 12px; width: 38px; height: 38px; }
-  .bb-accessibility-panel { bottom: calc(184px + env(safe-area-inset-bottom)); left: 12px; max-height: calc(100dvh - 204px - env(safe-area-inset-bottom)); }
+  .bb-accessibility-trigger { bottom: var(--bb-mobile-float-bottom); left: 12px; width: 38px; height: 38px; }
+  .bb-accessibility-panel { bottom: calc(var(--bb-mobile-float-bottom) + 46px); left: 12px; max-height: calc(100dvh - var(--bb-mobile-float-bottom) - 66px); }
 }

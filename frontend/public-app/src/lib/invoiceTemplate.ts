@@ -25,25 +25,18 @@ export function renderFacturaHTML(usuario: FacturaUsuario | null, order: Order):
   const descuento = order.discount || 0;
   const total = order.total;
 
-  // Fecha actual
-  const fecha = new Date();
+  const fecha = new Date(order.createdAt);
   const fechaStr = fecha.toLocaleDateString('es-EC');
-  const fechaAnulacion = new Date(fecha);
-  fechaAnulacion.setDate(fecha.getDate() + 3);
-  const fechaAnulacionStr = fechaAnulacion.toLocaleDateString('es-EC');
+  const numeroOrden = escapeHtml(order._id);
 
-  // Número de orden único
-  const numeroOrden = `BB${Date.now().toString().slice(-6)}`;
-  const transactionId = `TR${Math.floor(Math.random() * 1000000)}`;
-
-  // Diseño de la factura (idéntico al original)
+  // Resumen del pedido con los datos registrados por el servidor.
   return `
     <div id="invoice" style="max-width:800px;margin:auto;font-family:Arial,sans-serif;background:#fff;padding:0;">
 
         <!-- Cabecera -->
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid #e9ecef;">
             <div>
-                <h1 style="margin:0 0 5px 0;color:#7e22ce;font-size:24px;font-weight:bold;">FACTURA</h1>
+                <h1 style="margin:0 0 5px 0;color:#7e22ce;font-size:24px;font-weight:bold;">RESUMEN DEL PEDIDO</h1>
                 <p style="margin:0;font-size:14px;color:#666;">Fecha: ${fechaStr}</p>
             </div>
             <div style="text-align:right;">
@@ -62,10 +55,8 @@ export function renderFacturaHTML(usuario: FacturaUsuario | null, order: Order):
             <div style="flex:1;">
                 <h3 style="margin:0 0 8px 0;color:#7e22ce;font-size:16px;">Datos de la Empresa</h3>
                 <p style="margin:0;font-size:13px;color:#666;line-height:1.4;">
-                    <b>Dirección:</b> Av. Principal 123, Ciudad<br/>
-                    <b>Teléfono:</b> (02) 123-4567<br/>
-                    <b>Email:</b> contacto@bellabeauty.com<br/>
-                    <b>RUC:</b> 1234567890123
+                    Bella Beauty<br/>
+                    Consulta los datos de contacto en la sección Pagos del sitio.
                 </p>
             </div>
             <div style="flex:1;text-align:right;">
@@ -73,8 +64,7 @@ export function renderFacturaHTML(usuario: FacturaUsuario | null, order: Order):
                 <p style="margin:0;font-size:13px;color:#666;line-height:1.4;">
                     <b>Nombre:</b> ${escapeHtml(usuario?.name || 'N/A')}<br/>
                     <b>Email:</b> ${escapeHtml(usuario?.email || 'N/A')}<br/>
-                    <b>Factura No:</b> ${numeroOrden}<br/>
-                    <b>Válido hasta:</b> ${fechaAnulacionStr}
+                    <b>Pedido:</b> ${numeroOrden}
                 </p>
             </div>
         </div>
@@ -86,9 +76,9 @@ export function renderFacturaHTML(usuario: FacturaUsuario | null, order: Order):
         <div style="background:rgba(126, 34, 206, 0.05);border-radius:6px;margin-bottom:20px;padding:12px 15px;">
             <table style="width:100%;border-collapse:collapse;font-size:13px;">
                 <tr>
-                    <td style="padding:5px 0;"><b style="color:#7e22ce;">ID Transacción:</b> ${transactionId}</td>
+                    <td style="padding:5px 0;"><b style="color:#7e22ce;">Pedido registrado</b></td>
                     <td style="padding:5px 0;"><b style="color:#7e22ce;">Método de Pago:</b> Transferencia Bancaria</td>
-                    <td style="padding:5px 0;text-align:right;"><b style="color:#7e22ce;">Estado:</b> <span style="color:#10b981;">Pagado</span></td>
+                    <td style="padding:5px 0;text-align:right;"><b style="color:#7e22ce;">Estado:</b> <span style="color:#666;">Pago por verificar</span></td>
                 </tr>
             </table>
         </div>
@@ -147,9 +137,9 @@ export function renderFacturaHTML(usuario: FacturaUsuario | null, order: Order):
         <!-- Notas legales -->
         <div style="margin-top:15px;font-size:12px;color:#666;line-height:1.5;border-top:1px solid #f0f0f0;padding-top:15px;">
             <p style="margin:0 0 8px 0;"><b style="color:#7e22ce;">Notas:</b></p>
-            <p style="margin:0 0 8px 0;">• Esta factura es válida hasta el ${fechaAnulacionStr} para anulaciones.</p>
+            <p style="margin:0 0 8px 0;">• Este resumen registra tu pedido y no acredita la recepción del pago.</p>
             <p style="margin:0 0 8px 0;">• Conserve este documento para cualquier reclamo o garantía.</p>
-            <p style="margin:0;">• Para consultas: contacto@bellabeauty.com | (02) 123-4567</p>
+            <p style="margin:0;">• Para consultas, utiliza el contacto de WhatsApp indicado en la sección Pagos.</p>
         </div>
 
         <!-- Pie de página -->

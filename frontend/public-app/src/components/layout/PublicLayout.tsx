@@ -1,6 +1,4 @@
 import { Outlet, useLocation } from 'react-router-dom';
-import Header from './Header';
-import Footer from './Footer';
 import GoTopButton from './GoTopButton';
 import AccessibilityWidget from './AccessibilityWidget';
 import StoreHeader from '../home/StoreHeader';
@@ -13,12 +11,11 @@ import '../../styles/storefront.css';
 export default function PublicLayout() {
   const { pathname } = useLocation();
   const isHome = pathname === '/';
-  const isStorePage = ['/perfil', '/productos', '/carrito', '/citas', '/pagos', '/galeria'].includes(pathname);
   return (
-    <div className={`bg-white font-body ${isHome || isStorePage ? 'bb-home-layout' : ''} ${isStorePage ? 'bb-storefront' : ''}`}>
-      {isStorePage ? <StoreHeader /> : !isHome && <Header />}
+    <div className={`bg-white font-body bb-home-layout ${!isHome ? 'bb-storefront' : ''}`}>
+      {!isHome && <StoreHeader />}
       <Outlet />
-      {isStorePage ? <StoreFooter /> : !isHome && <Footer />}
+      {!isHome && <StoreFooter />}
       <GoTopButton />
       <AccessibilityWidget />
     </div>

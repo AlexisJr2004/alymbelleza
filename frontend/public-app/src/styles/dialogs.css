@@ -64,17 +64,21 @@
 @media (max-width: 359px) { .bb-sheet-auth form .grid-cols-2 { grid-template-columns: minmax(0,1fr); row-gap: 12px; } }
 @media (max-height: 500px) { .bb-sheet { max-height: calc(100dvh - 20px) !important; } }
 @media (prefers-reduced-motion: reduce) { .bb-sheet { transition-duration: 0ms !important; } }
-.bb-sheet .bb-dialog-close { width: auto; height: auto; min-height: 30px; padding: 4px 10px; flex-shrink: 0; border-radius: 20px; border: 1px solid #ecd7e0; color: #a73862; background: #fff8fb; font: 500 11px/1.4 'Bella Montserrat',sans-serif; }
+.bb-sheet .bb-dialog-close { width: 30px; height: 30px; min-height: 30px; padding: 0; display: inline-grid; place-items: center; flex-shrink: 0; border-radius: 20px; border: 1px solid #ecd7e0; color: #a73862; background: #fff8fb; font: 500 11px/1.4 'Bella Montserrat',sans-serif; }
 .bb-sheet .bb-dialog-close:hover { background: #fceaf2; }
-.bb-gallery-dialog .bb-gallery-control { background: linear-gradient(145deg,#ffffff40,#fff5f91a) !important; color: #873452 !important; border: 1px solid #ffffff70; box-shadow: 0 3px 12px #40212b20, inset 0 1px 0 #ffffff80; backdrop-filter: blur(14px) saturate(1.6); -webkit-backdrop-filter: blur(14px) saturate(1.6); }
+.bb-gallery-dialog .bb-gallery-control { background: linear-gradient(145deg,#ffffff40,#fff5f91a) !important; color: white !important; text-shadow: 0 1px 3px #0008; border: 1px solid #ffffff70; box-shadow: 0 3px 12px #40212b20, inset 0 1px 0 #ffffff80; backdrop-filter: blur(14px) saturate(1.6); -webkit-backdrop-filter: blur(14px) saturate(1.6); }
 .bb-gallery-dialog .bb-gallery-control:hover:not(:disabled) { background: linear-gradient(145deg,#ffffff60,#fff5f930) !important; }
 @media (min-width: 768px) {
   .bb-sheet-standard:not(.bb-product-dialog) { width: min(380px,calc(100vw - 32px)); }
   .bb-sheet-media:not(.bb-gallery-dialog) { width: min(400px,calc(100vw - 32px)); }
   .bb-sheet-media.bb-gallery-dialog { background: transparent !important; border: 0; box-shadow: none; border-radius: 0; padding: 0; }
   .bb-gallery-dialog [id=lightbox-title] { color: white; font-size: 11px; }
-  .bb-gallery-dialog .bb-gallery-control { color: white !important; text-shadow: 0 1px 3px #0008; }
   .bb-gallery-dialog .bb-gallery-thumbnail { background: transparent !important; border-color: transparent; }
   .bb-gallery-dialog .bb-gallery-thumbnail[aria-current=true] { border: 2px solid white; }
 }
 .bb-sheet-media:not(.bb-gallery-dialog) img { max-height: min(36dvh,240px); }
+@media (min-width: 768px) {
+  .bb-product-dialog .bb-quick-layout { min-height: 430px; padding: 20px; gap: 20px; }
+  .bb-product-dialog .bb-quick-image { height: 270px; }
+  .bb-product-dialog .bb-quick-reviews { max-height: min(62dvh,500px); }
+}

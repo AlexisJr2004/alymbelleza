@@ -9,10 +9,6 @@ export function formatoFechaLarga(fecha: Date): string {
   });
 }
 
-export function formatoFechaCorta(fecha: string | Date): string {
-  return new Date(fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
-}
-
 export function formatoMoneda(valor: number): string {
   return `$${(valor || 0).toFixed(2)}`;
 }

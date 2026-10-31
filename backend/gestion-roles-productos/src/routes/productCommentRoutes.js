@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const ProductComment = require("../models/productComment");
-const Notification = require("../models/notification");
 const { verifyToken } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
@@ -31,9 +30,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Crear comentario o respuesta (parentId presente = respuesta). Una
-// respuesta genera además una Notification para el dueño del comentario
-// respondido, salvo que se esté respondiendo a uno propio.
+// Crear comentario o respuesta (parentId presente = respuesta).
 router.post("/", verifyToken, async (req, res) => {
   try {
     const { productId, comment, parentId } = req.body;
@@ -63,16 +60,6 @@ router.post("/", verifyToken, async (req, res) => {
       comment: comment.trim(),
       parentId: parentComment ? parentComment._id : null,
     });
-
-    if (parentComment && parentComment.userId.toString() !== req.user._id.toString()) {
-      await Notification.create({
-        userId: parentComment.userId,
-        type: "comment_reply",
-        message: `${req.user.name} respondió a tu comentario`,
-        productId,
-        commentId: newComment._id,
-      });
-    }
 
     res.status(201).json({ success: true, message: "Comentario publicado", data: newComment });
   } catch (error) {

@@ -1,3 +1,4 @@
+import { XIcon } from '../icons';
 import Sheet from '../ui/Sheet';
 
 interface ProfilePhotoLightboxProps {
@@ -28,9 +29,7 @@ export default function ProfilePhotoLightbox({ open, src, onClose }: ProfilePhot
           onClick={onClose}
           aria-label="Cerrar"
           className="bb-dialog-close absolute top-0 right-2 z-10"
-        >
-          Cerrar
-        </button>
+        ><XIcon className="h-4 w-4" /></button>
 
         <div className="w-full flex items-center justify-center pt-8 md:pt-0">
           <img src={src} alt="Foto de perfil" className="w-48 h-48 max-w-full object-cover rounded-full shadow-lg border-4 border-white/80" />

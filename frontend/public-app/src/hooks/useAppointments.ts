@@ -3,9 +3,7 @@ import { apiFetch } from '../lib/apiClient';
 import { isLoggedIn } from '../lib/auth';
 import type { Appointment } from '../types/models';
 
-// Citas del usuario logueado — misma respuesta que alimenta tanto el panel
-// "Tus citas" de citas.html como la campana de notificaciones en el header
-// (son la misma llamada renderizada en dos sitios, no dos sistemas distintos).
+// Citas del usuario con sesión activa.
 export function useAppointmentsQuery() {
   return useQuery({
     queryKey: ['my-appointments'],

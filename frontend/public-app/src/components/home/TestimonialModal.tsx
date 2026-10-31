@@ -1,3 +1,4 @@
+import { XIcon } from '../icons';
 import { useState, type FormEvent } from 'react';
 import { getStoredUser } from '../../lib/auth';
 import { notifyError, notifySuccess } from '../../lib/sweetalert';
@@ -42,9 +43,7 @@ export default function TestimonialModal({ open, onClose }: TestimonialModalProp
         <h3 id="testimonial-modal-title" className="text-lg font-semibold text-gray-900">
           Nuevo Testimonio
         </h3>
-        <button type="button" onClick={onClose} aria-label="Cerrar" className="bb-dialog-close">
-          Cerrar
-        </button>
+        <button type="button" onClick={onClose} aria-label="Cerrar" className="bb-dialog-close"><XIcon className="h-4 w-4" /></button>
       </div>
       <form onSubmit={handleSubmit} className="p-6 space-y-5">
         <div>

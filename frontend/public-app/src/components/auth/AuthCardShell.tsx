@@ -1,3 +1,4 @@
+import { XIcon } from '../icons';
 import type { ReactNode } from 'react';
 import Sheet from '../ui/Sheet';
 
@@ -42,14 +43,14 @@ export default function AuthCardShell({
       panelStyle={{ background: cardBackground }}
       backdropClassName={pageBackgroundClassName}
     >
+      <div className="absolute right-4 top-4 z-20 lg:hidden">
       <button
         type="button"
         onClick={onClose}
         aria-label="Cerrar y volver al inicio"
-        className="bb-dialog-close absolute right-4 top-4 z-20 lg:hidden"
-      >
-        Cerrar
-      </button>
+        className="bb-dialog-close"
+      ><XIcon className="h-4 w-4" /></button>
+      </div>
 
       {children}
     </Sheet>

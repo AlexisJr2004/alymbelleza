@@ -84,7 +84,15 @@ Montserrat se sirve localmente desde `frontend/public-app/public/fonts`, con su 
 
 ## Ajuste de proporciones de los diálogos
 
-- El detalle de producto vuelve a mostrar imagen, información y reseñas en tres columnas a partir de 768 px. En móvil se apilan; las reseñas tienen desplazamiento propio en escritorio para mantener una altura compacta.
+- El detalle de producto muestra imagen, información y reseñas en tres columnas a partir de 768 px, con un ancho máximo de 1024 px y más altura en escritorio. En móvil se apilan y se permite desplazamiento interno.
 - El visor de galería recupera en escritorio el fondo transparente sobre la superposición oscura y miniaturas con selección blanca. Las flechas y la descarga usan cristal translúcido con desenfoque y borde luminoso. En móvil conserva la tarjeta blanca.
-- Los cierres de los modales usan el texto «Cerrar» en lugar de la X, excepto el visor de galería, que no muestra botón de cierre. Se mantienen Escape, toque fuera del panel y el gesto de arrastre en móvil.
+- Los modales, incluido el visor de galería, usan un botón circular con X y nombre accesible. Se mantienen Escape, toque fuera del panel y el gesto de arrastre en móvil. Los controles de galería comparten el acabado translúcido en móvil y escritorio.
 - Formularios, confirmaciones y vistas de fotos reducen anchuras, espacios y tamaños de títulos; los campos móviles conservan texto de 16 px.
+
+## Limpieza y componentes compartidos
+
+- Todas las páginas públicas usan la cabecera y el pie de la tienda. Servicios y preguntas frecuentes siguen accesibles en `/nosotros`; `/contacto` conserva la redirección al inicio.
+- Se retiran los componentes de portada y navegación anteriores, los estilos sin consumidores, el centro de notificaciones y su API. Los comentarios, respuestas y la gestión de citas siguen activos.
+- Los accesos flotantes de accesibilidad e ir arriba comparten la altura y el espacio seguro inferior en móvil.
+- Las pantallas de acceso utilizan una imagen editorial local y ya no muestran tarjetas de citas ni avatares de ejemplo.
+- Las preguntas frecuentes ya no incluyen teléfonos, direcciones ni políticas de ejemplo. El PDF utiliza la fecha y el identificador del pedido, omite datos fiscales ficticios e indica que el pago está por verificar.

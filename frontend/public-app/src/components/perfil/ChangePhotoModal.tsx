@@ -1,3 +1,4 @@
+import { XIcon } from '../icons';
 import { useEffect, useState, type ChangeEvent } from 'react';
 import { notifyError } from '../../lib/sweetalert';
 import Sheet from '../ui/Sheet';
@@ -65,9 +66,7 @@ export default function ChangePhotoModal({ open, onClose, onConfirm }: ChangePho
         <h3 id="change-photo-title" className="text-lg font-semibold text-gray-900">
           Cambiar foto de perfil
         </h3>
-        <button type="button" onClick={onClose} aria-label="Cerrar" className="bb-dialog-close">
-          Cerrar
-        </button>
+        <button type="button" onClick={onClose} aria-label="Cerrar" className="bb-dialog-close"><XIcon className="h-4 w-4" /></button>
       </div>
 
       <div className="profile-photo-dialog p-6 space-y-5">

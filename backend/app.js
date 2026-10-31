@@ -12,7 +12,6 @@ const productRoutes = require("./gestion-roles-productos/src/routes/productRoute
 const galleryRoutes = require("./gestion-roles-productos/src/routes/galleryRoutes");
 const testimonialRoutes = require("./gestion-roles-productos/src/routes/testimonialRoutes");
 const productCommentRoutes = require("./gestion-roles-productos/src/routes/productCommentRoutes");
-const notificationRoutes = require("./gestion-roles-productos/src/routes/notificationRoutes");
 const contactRoutes = require("./gestion-roles-productos/src/routes/contactRoutes");
 const cartRoutes = require("./gestion-roles-productos/src/routes/cartRoutes");
 const appointmentRoutes = require("./gestion-roles-productos/src/routes/appointmentRoutes");
@@ -94,7 +93,6 @@ app.use("/api/appointments", appointmentRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/product-comments", productCommentRoutes);
-app.use("/api/notifications", notificationRoutes);
 app.use("/api/coupons/validate", couponLimiter);
 app.use("/api/coupons", couponRoutes);
 app.use("/api/orders", orderRoutes);

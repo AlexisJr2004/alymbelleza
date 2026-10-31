@@ -6,6 +6,7 @@ import {
   InformationCircleIcon,
   QuestionMarkCircleIcon,
   XCircleIcon,
+  XIcon,
 } from '../icons';
 import Sheet from './Sheet';
 
@@ -48,7 +49,10 @@ function ModalCard({ modal }: { modal: ActiveModal }) {
       onFullyClosed={() => resolveModal(modal.id, resultRef.current)}
       labelledBy={titleId}
     >
-      <div className="px-6 pb-6 pt-3 text-center">
+      <div className="relative px-6 pb-6 pt-3 text-center">
+        <button type="button" onClick={() => requestClose(false)} aria-label="Cerrar" className="bb-dialog-close absolute right-3 top-3">
+          <XIcon className="h-4 w-4" />
+        </button>
         <span className={`mx-auto flex items-center justify-center w-11 h-11 rounded-full ${bg}`}>
           <Icon className={`w-6 h-6 ${fg}`} />
         </span>

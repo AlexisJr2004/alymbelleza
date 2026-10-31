@@ -1,3 +1,4 @@
+import { XIcon } from '../icons';
 import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -88,7 +89,7 @@ export default function StoreTestimonials() {
     <TestimonialModal open={open} onClose={() => setOpen(false)} />
     <Sheet open={!!editing} onClose={() => { if (!update.isPending) setEditing(null); }} labelledBy="edit-testimonial-title" desktopMaxWidthClassName="md:max-w-lg">
       <form className="bb-storefront bb-review-editor" onSubmit={save}>
-        <div className="bb-editor-heading"><h2 id="edit-testimonial-title">Tu experiencia</h2><button type="button" className="bb-dialog-close" aria-label="Cerrar edición" disabled={update.isPending} onClick={() => setEditing(null)}>Cerrar</button></div>
+        <div className="bb-editor-heading"><h2 id="edit-testimonial-title">Tu experiencia</h2><button type="button" className="bb-dialog-close" aria-label="Cerrar edición" disabled={update.isPending} onClick={() => setEditing(null)}><XIcon className="h-4 w-4" /></button></div>
         <p>Actualiza tu testimonio y comparte lo que hace especial tu visita.</p>
         <label htmlFor="edit-testimonial-comment">Testimonio</label>
         <textarea id="edit-testimonial-comment" required rows={3} value={comment} disabled={update.isPending} onChange={event => setComment(event.target.value)} />

@@ -14,12 +14,7 @@ function abrirWhatsapp(mensaje: string) {
   window.open(url, '_blank');
 }
 
-// Página "Citas" — puerto de frontend/citas.html: calendario mensual + panel
-// "Tus Citas" con las acciones de agendar / marcar realizada / cancelar /
-// eliminar. Las mutaciones (useCreateAppointment/useUpdateAppointmentStatus/
-// useDeleteAppointment) ya invalidan ['my-appointments'] en useAppointments.ts,
-// así que este panel y la campana de notificaciones del header quedan
-// sincronizados automáticamente sin nada extra acá.
+// Calendario, reservas y gestión de las citas del usuario.
 export default function CitasPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);

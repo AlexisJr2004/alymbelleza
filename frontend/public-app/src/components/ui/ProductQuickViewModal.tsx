@@ -1,3 +1,4 @@
+import { XIcon } from '../icons';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Product } from '../../types/models';
@@ -56,7 +57,7 @@ export default function ProductQuickViewModal({ product, onClose }: ProductQuick
       open={!!product}
       onClose={onClose}
       onFullyClosed={() => setRendered(null)}
-      desktopMaxWidthClassName="md:max-w-2xl lg:max-w-3xl"
+      desktopMaxWidthClassName="md:max-w-[calc(100vw-32px)] lg:max-w-5xl"
       panelClassName="bb-product-dialog bg-white"
       labelledBy="quick-view-title"
     >
@@ -64,9 +65,7 @@ export default function ProductQuickViewModal({ product, onClose }: ProductQuick
         <h3 id="quick-view-title" className="text-lg font-semibold text-gray-900">
           Detalle del producto
         </h3>
-        <button type="button" onClick={onClose} aria-label="Cerrar" className="bb-dialog-close">
-          Cerrar
-        </button>
+        <button type="button" onClick={onClose} aria-label="Cerrar" className="bb-dialog-close"><XIcon className="h-4 w-4" /></button>
       </div>
       <div className="bb-quick-layout">
         <img

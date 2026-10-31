@@ -1,266 +1,211 @@
-<p align="center">
-  <img src="https://res.cloudinary.com/dokmxt0ja/image/upload/v1752727246/logo_mybdvl.png" alt="Bella Beauty" width="140"/>
-</p>
+<div align="center">
 
-<h1 align="center">Bella Beauty</h1>
-<p align="center"><em>Plataforma web para la gestión integral de un centro de belleza</em></p>
+# Bella Beauty
 
-<p align="center">
-  <img alt="CI" src="https://github.com/AlexisJr2004/alymbelleza/actions/workflows/ci.yml/badge.svg">
-  <img alt="Node.js" src="https://img.shields.io/badge/Node.js-20.x-339933?style=flat-square&logo=nodedotjs&logoColor=white">
-  <img alt="Express" src="https://img.shields.io/badge/Express-4.x-000000?style=flat-square&logo=express&logoColor=white">
-  <img alt="MongoDB" src="https://img.shields.io/badge/MongoDB-Atlas-47A248?style=flat-square&logo=mongodb&logoColor=white">
-  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind_CSS-3.x-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white">
-  <img alt="Jest" src="https://img.shields.io/badge/Tests-Jest-C21325?style=flat-square&logo=jest&logoColor=white">
-  <img alt="Licencia" src="https://img.shields.io/badge/Licencia-Propietaria-6b7280?style=flat-square">
-</p>
+**Belleza, cuidado y una experiencia digital pensada para cada visita.**
 
----
+Tienda · Citas · Galería · Gestión del negocio
 
-## Tabla de contenidos
+[![CI](https://github.com/AlexisJr2004/alymbelleza/actions/workflows/ci.yml/badge.svg)](https://github.com/AlexisJr2004/alymbelleza/actions/workflows/ci.yml)
+![React](https://img.shields.io/badge/React-19-149ECA?style=flat-square&logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white)
+![Express](https://img.shields.io/badge/Express-4-222222?style=flat-square&logo=express)
+![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?style=flat-square&logo=mongodb&logoColor=white)
 
-- [Descripción general](#descripción-general)
-- [Características](#características)
-- [Pila tecnológica](#pila-tecnológica)
-- [Estructura del proyecto](#estructura-del-proyecto)
-- [Instalación y configuración](#instalación-y-configuración)
-- [Variables de entorno](#variables-de-entorno)
-- [Pruebas](#pruebas)
-- [Seguridad](#seguridad)
-- [Despliegue](#despliegue)
-- [Mantenimiento](#mantenimiento)
-- [Contacto](#contacto)
-- [Licencia](#licencia)
+[Visitar el sitio](https://aly-mbelleza-backend.onrender.com/) · [Diseño e interfaz](docs/homepage-redesign.md) · [Configuración](#configuración) · [Desarrollo](#desarrollo)
 
----
+<img src="frontend/public-app/public/img/storefront/beauty-hero.jpg" alt="Imagen editorial de Bella Beauty" width="960">
 
-## Descripción general
+</div>
 
-Bella Beauty es una plataforma web para la gestión integral de un centro de belleza. Permite a los clientes reservar citas, comprar productos, gestionar su perfil y dejar testimonios, mientras que el equipo administrativo gestiona el catálogo y la galería desde un panel protegido por rol. El sistema está construido como una aplicación Node.js/Express con un frontend estático, pensado para desplegarse como un único servicio en Render.
+## El proyecto
 
----
+Bella Beauty reúne una tienda de productos de belleza, reservas de citas y una galería de trabajos en una misma plataforma. El sitio público y el panel administrativo son aplicaciones independientes de React que comparten una API de Express y datos en MongoDB.
 
-## Características
+La interfaz pública utiliza fondos blancos, acentos rosados, tipografía editorial y espacios compactos. En móvil, una barra flotante permite acceder a Inicio, Galería, Citas, Favoritos y Carrito.
 
-| Módulo | Descripción |
-|---|---|
-| Reserva de citas | Los clientes agendan, consultan y cancelan sus citas desde su perfil. |
-| Catálogo de productos | Exploración de productos por categoría, con imágenes servidas desde Cloudinary. |
-| Carrito y pagos | Carrito de compras persistente por usuario y flujo de pago con comprobante descargable. |
-| Panel de administración | Alta, edición y baja de productos y galería, restringido al rol `admin`. |
-| Testimonios | Los clientes publican, editan y eliminan sus propios testimonios; visibles para todos. |
-| Gestión de perfil | Edición de datos personales y foto de perfil. |
-| Recuperación de contraseña | Flujo de restablecimiento por correo con token de un solo uso y expiración de una hora. |
-| Galería multimedia | Imágenes y videos de trabajos realizados, organizados por categoría. |
-| Accesibilidad | Control de zoom, tamaño de fuente y tipografía desde la interfaz. |
+## Experiencia y funciones
 
----
+| Para clientes | Para el equipo |
+| :--- | :--- |
+| Catálogo con búsqueda, categorías, precios, ofertas y favoritos. | Gestión de productos, disponibilidad y existencias. |
+| Detalle del producto con comentarios, respuestas y reacciones. | Panel de resumen y ranking. |
+| Carrito por usuario y aplicación de cupones. | Gestión de cupones y pedidos. |
+| Creación de pedidos, cuentas bancarias y resumen PDF. | Administración de las cuentas de pago. |
+| Calendario de citas y coordinación por WhatsApp. | Gestión de usuarios y citas. |
+| Galería de imágenes y videos con visor y descarga. | Publicación y eliminación de contenido de galería desde el sitio público. |
+| Perfil, foto personal y recuperación de contraseña por correo. | Acceso protegido por rol de administrador. |
+| Testimonios y contacto desde el inicio. | Recepción de consultas por correo. |
 
-## Pila tecnológica
+**Pagos:** el flujo muestra cuentas bancarias y genera el pedido y su resumen PDF con el identificador registrado en el servidor. No integra una pasarela de cobro con tarjeta ni confirma automáticamente una transferencia.
 
-<p>
-  <img alt="HTML5" src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white">
-  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white">
-  <img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black">
-  <img alt="Swiper" src="https://img.shields.io/badge/Swiper.js-6332F6?style=flat-square&logo=swiper&logoColor=white">
-  <img alt="Font Awesome" src="https://img.shields.io/badge/Font_Awesome-528DD7?style=flat-square&logo=fontawesome&logoColor=white">
-</p>
-<p>
-  <img alt="Node.js" src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=nodedotjs&logoColor=white">
-  <img alt="Express" src="https://img.shields.io/badge/Express-000000?style=flat-square&logo=express&logoColor=white">
-  <img alt="JWT" src="https://img.shields.io/badge/JWT-000000?style=flat-square&logo=jsonwebtokens&logoColor=white">
-  <img alt="Helmet" src="https://img.shields.io/badge/Helmet-security-49b02d?style=flat-square">
-  <img alt="Multer" src="https://img.shields.io/badge/Multer-file_uploads-orange?style=flat-square">
-</p>
-<p>
-  <img alt="MongoDB" src="https://img.shields.io/badge/MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white">
-  <img alt="Mongoose" src="https://img.shields.io/badge/Mongoose-ODM-880000?style=flat-square">
-  <img alt="Cloudinary" src="https://img.shields.io/badge/Cloudinary-3448C5?style=flat-square&logo=cloudinary&logoColor=white">
-  <img alt="Jest" src="https://img.shields.io/badge/Jest-C21325?style=flat-square&logo=jest&logoColor=white">
-</p>
+**Accesibilidad:** controles de zoom, tamaño de texto, tipografía y lectura de página cuando el navegador la admite. Los diálogos gestionan el foco, permiten cierre con Escape y limitan su tamaño al espacio disponible.
 
-| Capa | Detalle |
-|---|---|
-| Frontend | HTML5, Tailwind CSS (compilado con Tailwind CLI, sin CDN), JavaScript, Swiper.js, Font Awesome. |
-| Backend | Node.js, Express, JWT, Multer, Helmet, express-rate-limit, express-mongo-sanitize. |
-| Base de datos | MongoDB Atlas vía Mongoose. |
-| Almacenamiento de archivos | Cloudinary (perfil, productos y galería). |
-| Pruebas | Jest + Supertest. |
-| Integraciones externas | Correo transaccional y WhatsApp. |
+## Arquitectura
 
----
+| Componente | Ubicación | Función |
+| :--- | :--- | :--- |
+| Sitio público | `frontend/public-app` | React 19, TypeScript 6, Vite 8, Tailwind CSS 3, React Router y TanStack Query. |
+| Administración | `frontend/admin-app` | Aplicación React independiente, publicada bajo `/admin`. |
+| API | `backend` | Express 4, Mongoose 7, JWT, bcrypt, validación y autorización por rol. |
+| Archivos | Cloudinary | Imágenes de productos y perfiles; imágenes y videos de galería. |
+| Correo | Resend / SMTP | Contacto y recuperación de contraseña; Resend utiliza HTTPS. |
+| Verificación | Jest, Supertest y TypeScript | Pruebas del backend y compilación de las dos aplicaciones. |
 
-## Estructura del proyecto
-
-```plaintext
-/
+```text
+alymbelleza/
 ├── backend/
-│   ├── app.js               # Definición de la app Express (middlewares y rutas)
-│   ├── server.js            # Arranque: valida variables de entorno, conecta Mongo y levanta el servidor
-│   ├── package.json
-│   ├── .env.example         # Variables de entorno requeridas (copiar como .env)
-│   ├── tests/                # Pruebas con Jest + Supertest
-│   ├── scripts/               # Utilidades de mantenimiento (limpieza de Cloudinary)
-│   └── gestion-roles-productos/
-│       └── src/
-│           ├── controllers/
-│           ├── middlewares/
-│           ├── models/
-│           ├── routes/
-│           └── utils/
+│   ├── app.js                    # API, seguridad y publicación de ambas SPA
+│   ├── server.js                 # Arranque y conexión a MongoDB
+│   ├── gestion-roles-productos/src/
+│   │   ├── controllers/
+│   │   ├── middlewares/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   └── utils/
+│   ├── tests/
+│   └── .env.example
 ├── frontend/
-│   ├── index.html
-│   ├── productos.html
-│   ├── carrito.html
-│   ├── pagos.html
-│   ├── perfil.html
-│   ├── admin-productos.html
-│   ├── login.html
-│   ├── register.html
-│   ├── forgot-password.html
-│   ├── reset-password.html
-│   ├── package.json          # Build de Tailwind CSS
-│   ├── tailwind.config.js
-│   ├── css/
-│   │   ├── input.css         # Fuente de Tailwind (@tailwind base/components/utilities)
-│   │   ├── tailwind.css      # Generado por `npm run build:css`; se versiona porque Render no compila el frontend
-│   │   └── style.css         # Estilos propios del proyecto
-│   ├── js/
-│   └── img/
-├── .gitignore
-└── README.md
+│   ├── public-app/
+│   │   ├── src/                  # Páginas, componentes, hooks y estilos
+│   │   ├── public/               # Imágenes, fuentes y archivos para buscadores
+│   │   └── dist/                 # Compilación servida por Express
+│   ├── admin-app/
+│   │   ├── src/
+│   │   └── dist/
+│   └── img/                      # Recursos compartidos por el servidor
+├── docs/homepage-redesign.md
+└── .github/workflows/ci.yml
 ```
 
----
+Las dos carpetas `dist/` están versionadas porque el servidor las publica directamente. Deben regenerarse cuando se modifica una aplicación.
 
-## Instalación y configuración
+## Configuración
 
-**Requisitos:** Node.js 20.x, una cuenta de MongoDB Atlas y, opcionalmente, credenciales de Cloudinary y Gmail.
+Necesitas Node.js **20.19 o superior dentro de la rama 20.x**, npm y una base de datos MongoDB. El backend declara Node 20.x; Vite requiere al menos 20.19 dentro de esa rama.
 
-1. **Clonar el repositorio**
-
-   ```sh
-   git clone [URL_DEL_REPOSITORIO]
-   cd alymbelleza
-   ```
-
-2. **Backend**
-
-   ```sh
-   cd backend
-   npm install
-   cp .env.example .env    # completar con credenciales propias (ver sección Variables de entorno)
-   npm start                # o "npm run dev" para recarga automática con nodemon
-   ```
-
-   El servidor no arranca si faltan `MONGODB_URI` o `JWT_SECRET`: es una validación intencional para no depender nunca de credenciales por defecto en el código.
-
-3. **Frontend**
-
-   ```sh
-   cd frontend
-   npm install
-   npm run build:css        # genera css/tailwind.css a partir de las clases usadas en HTML y JS
-   # npm run watch:css      # opcional: regenera el CSS automáticamente mientras se edita
-   ```
-
-   Después, abrir `frontend/index.html` en el navegador o servir la carpeta con un servidor estático. Cualquier cambio de clases de Tailwind en el HTML o en `js/main.js` requiere volver a ejecutar `build:css` antes de hacer commit, ya que el archivo generado se versiona y Render no ejecuta ningún paso de build para el frontend.
-
----
-
-## Variables de entorno
-
-Definidas en `backend/.env.example`. En Render se configuran desde el panel del servicio (Environment), nunca en el repositorio.
-
-| Variable | Obligatoria | Descripción |
-|---|---|---|
-| `MONGODB_URI` | Sí | Cadena de conexión a MongoDB Atlas. |
-| `JWT_SECRET` | Sí | Clave para firmar y verificar los tokens de sesión. |
-| `PORT` | No | Puerto del servidor (por defecto 5000). |
-| `NODE_ENV` | No | `development` o `production`. |
-| `FRONTEND_URL` | Fuera de Render | URL raíz del sitio público, sin rutas ni parámetros. Se usa en recuperación de contraseña; si falta, usa `RENDER_EXTERNAL_URL`, proporcionada automáticamente por Render. |
-| `EMAIL_PROVIDER` | No | `resend` para correo por HTTPS o `smtp` para Gmail. Sin valor, selecciona Resend si existe `RESEND_API_KEY`; de lo contrario SMTP. |
-| `RESEND_API_KEY` | Para Resend | Clave de envío guardada solo en el backend. |
-| `EMAIL_FROM` | Para Resend | Remitente autorizado, por ejemplo `Bella Beauty <contacto@tu-dominio.com>`. |
-| `CONTACT_EMAIL` | Para contacto | Bandeja del negocio que recibe el formulario. Si se omite, usa `EMAIL_USER`. |
-| `EMAIL_USER` / `EMAIL_PASS` | Para SMTP | Cuenta de Gmail y contraseña de aplicación. No se necesitan con Resend si defines `CONTACT_EMAIL`. |
-| `CLOUDINARY_CLOUD_NAME` / `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET` | No | Credenciales de Cloudinary para imágenes de perfil, productos y galería. |
-
----
-
-## Activar los correos en Render
-
-El error `ETIMEDOUT` con `command: 'CONN'` indica que la conexión SMTP no llegó a establecerse. [Render Free bloquea los puertos SMTP 25, 465 y 587](https://render.com/docs/free); cambiar entre 465 y 587 no resuelve ese bloqueo. La aplicación admite [Resend por HTTPS](https://resend.com/docs/api-reference/emails/send-email), tanto para contacto como para recuperación de contraseña.
-
-1. Crea una cuenta en Resend, verifica un dominio que controles y genera una clave con permiso de envío para ese dominio.
-2. En Render → servicio del backend → **Environment**, añade `EMAIL_PROVIDER=resend`, `RESEND_API_KEY`, `EMAIL_FROM` y `CONTACT_EMAIL`. El remitente debe pertenecer al dominio verificado; el destino puede ser tu Gmail.
-3. Para los enlaces de recuperación, configura `FRONTEND_URL` con la URL raíz del sitio (en este despliegue, `https://aly-mbelleza-backend.onrender.com`). Si se omite, el backend usa la [URL pública que Render proporciona en `RENDER_EXTERNAL_URL`](https://render.com/docs/environment-variables). No uses `undefined`, `/admin` ni `/reset-password` como valor. Guarda las variables y despliega la versión del backend que incorpora esta integración. Las claves nunca se ponen en Git ni en variables `VITE_*`.
-4. Envía una consulta desde el formulario y comprueba la recepción en la bandeja y el estado en Resend. La respuesta exitosa del backend confirma que el proveedor aceptó el mensaje, no que el destinatario ya lo haya recibido.
-
-Para una prueba inicial sin dominio propio, puedes usar `EMAIL_FROM=onboarding@resend.dev` y como `CONTACT_EMAIL` **el mismo correo con el que registraste la cuenta de Resend**. [Ese remitente de prueba solo permite enviar a tu propia cuenta](https://resend.com/docs/knowledge-base/403-error-resend-dev-domain): no sirve para recuperar contraseñas de otros usuarios. Para uso completo, verifica tu dominio y cambia `EMAIL_FROM` a una dirección de ese dominio.
-
-El correo del visitante se envía como `reply_to`, nunca como remitente. Un fallo en Resend no provoca un reintento por Gmail para evitar duplicados y el mismo bloqueo SMTP. Los errores HTTP 401/403 indican que hay que revisar la clave o las restricciones del remitente/destinatario; 429 indica límites del proveedor. El servidor avisa al arrancar si faltan variables de correo, sin imprimir sus valores.
-
-## Pruebas
+Instala las dependencias desde la raíz:
 
 ```sh
-cd backend
-npm test
+npm --prefix backend ci
+npm --prefix frontend/public-app ci
+npm --prefix frontend/admin-app ci
 ```
 
-La suite usa Jest y Supertest sobre la app de Express (`app.js`) sin depender de una conexión real a MongoDB, cubriendo las validaciones de entrada de autenticación (formato de email, longitud de contraseña, rechazo de payloads no textuales) y el healthcheck.
+Copia `backend/.env.example` como `backend/.env` y completa la configuración. Para trabajar en local, utiliza una base de datos de desarrollo.
 
-Un workflow de GitHub Actions (`.github/workflows/ci.yml`) corre estas pruebas y el build de Tailwind en cada push a `master` y en cada pull request, como aviso temprano si algo se rompe. Render despliega por separado, de forma automática, en cuanto detecta el push — el Action no lo bloquea ni lo dispara, son dos cosas independientes.
+| Variable del backend | Uso |
+| :--- | :--- |
+| `MONGODB_URI` | Obligatoria. Conexión a MongoDB. |
+| `JWT_SECRET` | Obligatoria. Secreto de firma de sesión. |
+| `PORT` | Puerto del servidor; por defecto, `5000`. |
+| `NODE_ENV` | Entorno de ejecución. |
+| `FRONTEND_URL` | URL raíz del sitio para CORS y enlaces de recuperación. En Render puede obtenerse de `RENDER_EXTERNAL_URL` si no se define. |
+| `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` | Credenciales de subida y gestión de archivos. |
+| `EMAIL_PROVIDER` | `resend` o `smtp`. |
+| `RESEND_API_KEY`, `EMAIL_FROM` | Clave y remitente autorizado para Resend. |
+| `CONTACT_EMAIL` | Destino de las consultas; si falta, se usa `EMAIL_USER`. |
+| `EMAIL_USER`, `EMAIL_PASS` | Cuenta y contraseña de aplicación para la alternativa SMTP. |
 
----
+Los secretos pertenecen al backend. **Nunca deben guardarse en Git ni en variables `VITE_*`**, cuyos valores se incluyen en el navegador.
 
-## Seguridad
+## Desarrollo
 
-- Contraseñas con hash `bcrypt`; los tokens de sesión son JWT firmados con `JWT_SECRET`.
-- Cabeceras HTTP reforzadas con Helmet.
-- Límite de peticiones (`express-rate-limit`) en los endpoints de autenticación y contacto.
-- Sanitización de `body`/`query` contra operadores de MongoDB (`express-mongo-sanitize`).
-- Autorización por rol (`admin` / `cliente`) centralizada en un único middleware.
-- CORS restringido a una lista explícita de orígenes permitidos.
-- Errores de servidor registrados internamente; nunca se exponen detalles internos al cliente.
+### Ejecutar todo desde un mismo origen
 
-Para reportar una vulnerabilidad, usar los datos de contacto de esta misma página.
+1. En `backend/.env`, configura `FRONTEND_URL=http://localhost:5000`.
+2. Crea un archivo `.env.local` dentro de **cada aplicación frontend**, con:
 
----
+   ```dotenv
+   VITE_API_URL=http://localhost:5000
+   ```
+
+3. Compila ambas aplicaciones y arranca el servidor:
+
+   ```sh
+   npm --prefix frontend/public-app run build
+   npm --prefix frontend/admin-app run build
+   npm --prefix backend run dev
+   ```
+
+4. Abre [localhost:5000](http://localhost:5000) para el sitio público o [localhost:5000/admin](http://localhost:5000/admin) para administración.
+
+La administración requiere una cuenta con rol `admin`. No se incluyen credenciales predeterminadas.
+
+### Editar la interfaz pública con recarga automática
+
+Mantén el backend en `5000`, configura su `FRONTEND_URL=http://localhost:5173` y ejecuta:
+
+```sh
+npm --prefix frontend/public-app run dev -- --port 5173
+```
+
+Conserva `VITE_API_URL=http://localhost:5000` en `public-app/.env.local`. Si cambias de puerto u origen, ajusta también CORS. Los dos frontends usan la URL del backend publicado cuando `VITE_API_URL` no está definida; configura esta variable para trabajar contra tu servidor local.
+
+En PowerShell, si la política de ejecución bloquea `npm.ps1`, utiliza `npm.cmd` en los mismos comandos.
+
+## Rutas principales
+
+| Ruta | Contenido |
+| :--- | :--- |
+| `/` | Inicio, categorías, productos, testimonios y contacto. |
+| `/#contacto` | Formulario de contacto integrado. |
+| `/productos` | Catálogo y filtros. |
+| `/galeria` | Fotos y videos. |
+| `/citas` | Calendario y citas del usuario. |
+| `/carrito` · `/pagos` | Selección de productos y creación de pedidos. |
+| `/perfil` | Datos personales y foto. |
+| `/nosotros` | Servicios y preguntas frecuentes, aún enlazados desde el sitio. |
+| `/login` · `/register` | Acceso y registro. |
+| `/forgot-password` · `/reset-password` | Recuperación de acceso. |
+| `/admin` | Panel administrativo. |
+| `/api/*` · `/health` | API y estado del servidor. |
+
+`/contacto` redirige a `/#contacto` para conservar los enlaces existentes.
+
+## Verificación
+
+```sh
+npm --prefix backend test
+npm --prefix frontend/public-app run build
+npm --prefix frontend/admin-app run build
+```
+
+La suite del backend cubre autenticación, recuperación de contraseña, correo, contacto, productos, cupones, pedidos, tarjetas de pago y permisos administrativos. Utiliza mocks donde corresponde para evitar operaciones reales sobre servicios externos.
+
+GitHub Actions ejecuta las pruebas del backend y las compilaciones de ambas aplicaciones en pushes y pull requests a `master`.
 
 ## Despliegue
 
-La aplicación está pensada para desplegarse como un único servicio web en Render:
+El backend sirve `public-app/dist` en `/` y `admin-app/dist` en `/admin`. Las rutas `/api/*` se resuelven antes del fallback de las SPA.
 
-- Directorio raíz del servicio: `backend/` (el servidor Express sirve también los archivos estáticos de `frontend/`).
-- Comando de build: `npm install`; comando de arranque: `npm start`.
-- Variables de entorno configuradas en el panel de Render (ver [Variables de entorno](#variables-de-entorno)).
-- Endpoint `GET /health` disponible para el monitoreo del servicio.
+Para el servicio existente en Render:
 
----
+| Ajuste | Valor |
+| :--- | :--- |
+| Directorio raíz | `backend` |
+| Instalación | `npm ci` |
+| Arranque | `npm start` |
+| Comprobación de estado | `/health` |
 
-## Mantenimiento
+Antes de publicar, genera las compilaciones con la URL de API del entorno de destino. Un `.env.local` que apunte a localhost también afecta a `vite build`; revisa ese valor al preparar `dist/` para producción.
 
-Al crear o reemplazar una imagen (galería, producto o foto de perfil) se guarda su `public_id` de Cloudinary junto con la URL, para poder borrar el archivo real cuando se elimina o se reemplaza. Para revisar si quedaron archivos huérfanos en Cloudinary (por ejemplo, de antes de que existiera este control):
+Configura las variables del backend en el entorno del servicio. Para correo con Resend, completa `EMAIL_PROVIDER=resend`, `RESEND_API_KEY`, `EMAIL_FROM` y `CONTACT_EMAIL`. Usa la URL pública raíz en `FRONTEND_URL`, sin `/admin` ni `/reset-password`.
 
-```sh
-cd backend
-npm run cleanup:cloudinary            # modo de prueba: solo reporta lo que encontraría
-npm run cleanup:cloudinary -- --delete  # borra de verdad los huérfanos encontrados
-```
+## Mantenimiento y documentación
 
-Siempre correr primero sin `--delete` y revisar el reporte antes de borrar.
+- [Diseño del sitio público](docs/homepage-redesign.md): composición, navegación, componentes y comportamiento adaptable.
+- [Variables del backend](backend/.env.example): referencia de configuración sin credenciales.
+- [Sitio público](frontend/public-app/README.md): organización del frontend y comandos.
+- El script `npm --prefix backend run cleanup:cloudinary` permite revisar archivos huérfanos. Ejecuta primero el modo de revisión y comprueba el reporte antes de usar su opción de borrado.
 
----
-
-## Contacto
-
-- <img src="https://img.icons8.com/color/24/000000/new-post.png" width="18" alt="Correo"/> **Correo:** [info@bellabeauty.com](mailto:info@bellabeauty.com)
-- <img src="https://img.icons8.com/color/24/000000/marker.png" width="18" alt="Dirección"/> **Dirección:** Av. Principal 123, Ciudad
-- <img src="https://img.icons8.com/color/24/000000/phone.png" width="18" alt="Teléfono"/> **Teléfono:** +1 234 567 890
+Las imágenes editoriales se incluyen en `public-app/public/img/storefront`; las imágenes del catálogo y los perfiles proceden de los datos del negocio. La fuente Montserrat conserva su [licencia OFL](frontend/public-app/public/fonts/Montserrat-OFL.txt).
 
 ---
 
-## Licencia
-
-Software propietario. Todos los derechos reservados © 2024 Bella Beauty.
+<div align="center">
+<strong>Bella Beauty</strong><br>
+Tu belleza, nuestra pasión.<br><br>
+<sub>Repositorio: <a href="https://github.com/AlexisJr2004/alymbelleza">AlexisJr2004/alymbelleza</a></sub>
+</div>

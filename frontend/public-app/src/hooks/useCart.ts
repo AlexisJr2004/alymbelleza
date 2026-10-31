@@ -43,11 +43,3 @@ export function useRemoveFromCart() {
     onSuccess: invalidate,
   });
 }
-
-export function useClearCart() {
-  const { invalidate } = useCartMutation();
-  return useMutation({
-    mutationFn: () => apiFetch('/api/cart/clear', { method: 'POST' }),
-    onSuccess: invalidate,
-  });
-}
