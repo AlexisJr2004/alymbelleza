@@ -139,7 +139,7 @@ export default function ProductosPage() {
         }
       />
 
-      <div className="grid grid-cols-2 gap-3 mb-4 lg:hidden">
+      <div className="grid grid-cols-2 gap-3 mb-3 lg:hidden">
         <StatCardMobile
           icon={<ProductosIcon className="w-5 h-5" />}
           percent={100}
@@ -205,9 +205,9 @@ export default function ProductosPage() {
         />
       </KpiRow>
 
-      <div className="flex flex-col lg:flex-row items-start gap-4">
+      <div className="flex flex-col lg:flex-row items-start gap-3">
         <FilterPanel>
-          <div className="admin-panel p-4 space-y-5">
+          <div className="admin-panel p-3 space-y-5">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-ink uppercase tracking-wide">Filtros</h3>
               <button type="button" onClick={limpiarFiltros} className="text-xs font-medium text-coral hover:text-coral/80">
@@ -280,7 +280,7 @@ export default function ProductosPage() {
             </div>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-4">
             <DonutChart
               title="Disponibilidad"
               centerCaption="Disponibles"
@@ -293,8 +293,8 @@ export default function ProductosPage() {
         </FilterPanel>
 
         <div className="flex-1 min-w-0 w-full">
-          <div className="admin-panel p-4">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+          <div className="admin-panel p-3">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
               <h2 className="text-lg font-bold text-ink flex items-center">
                 <ProductosIcon className="w-5 h-5 mr-2 text-coral" />
                 Productos
@@ -348,7 +348,7 @@ export default function ProductosPage() {
                           )}
                         </td>
                         <td className="p-3">
-                          <img src={p.image || './img/default.jpg'} alt={p.name} className="w-16 h-16 object-cover rounded-xl" />
+                          <img src={p.image || './img/default.jpg'} alt={p.name} className="w-12 h-12 object-cover rounded-xl" />
                         </td>
                         <td className="p-3">
                           {p.availability ? <span className="status bg-sky">Sí</span> : <span className="status bg-muted">No</span>}

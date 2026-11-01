@@ -90,7 +90,7 @@ export default function UsuariosPage() {
         description="Administra los usuarios registrados en Bella Beauty. Puedes buscar, filtrar por rol o estado, habilitar/deshabilitar cuentas y cambiar el rol de administrador."
       />
 
-      <div className="grid grid-cols-2 gap-3 mb-4 lg:hidden">
+      <div className="grid grid-cols-2 gap-3 mb-3 lg:hidden">
         <StatCardMobile
           icon={<UsuariosIcon className="w-5 h-5" />}
           percent={100}
@@ -156,9 +156,9 @@ export default function UsuariosPage() {
         />
       </KpiRow>
 
-      <div className="flex flex-col lg:flex-row items-start gap-4">
+      <div className="flex flex-col lg:flex-row items-start gap-3">
         <FilterPanel>
-          <div className="admin-panel p-4 space-y-5">
+          <div className="admin-panel p-3 space-y-5">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-ink uppercase tracking-wide">Filtros</h3>
               <button type="button" onClick={limpiarFiltros} className="text-xs font-medium text-coral hover:text-coral/80">
@@ -213,8 +213,8 @@ export default function UsuariosPage() {
         </FilterPanel>
 
         <div className="flex-1 min-w-0 w-full">
-          <div className="admin-panel p-4">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+          <div className="admin-panel p-3">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
               <div>
                 <h2 className="text-lg font-bold text-ink flex items-center">
                   <UsuariosIcon className="w-5 h-5 mr-2 text-coral" />

@@ -12,7 +12,7 @@ export default function Pagination({ totalItems, porPagina, paginaActiva, onChan
     .filter(page => page >= 1 && page <= totalPaginas).sort((a, b) => a - b);
   const control = 'h-8 min-w-8 rounded-lg border border-rose-100 bg-white px-2 text-xs disabled:opacity-40 hover:bg-rose-50';
 
-  return <nav aria-label="Paginación" className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-rose-100 pt-3">
+  return <nav aria-label="Paginación" className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-rose-100 pt-3">
     <p className="text-xs text-muted">{totalItems} registros · Página {paginaActiva} de {totalPaginas}</p>
     <div className="flex items-center gap-1">
       <button type="button" className={control} aria-label="Página anterior" disabled={paginaActiva <= 1} onClick={() => onChange(paginaActiva - 1)}>‹</button>

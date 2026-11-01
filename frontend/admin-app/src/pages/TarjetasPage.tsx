@@ -109,7 +109,7 @@ export default function TarjetasPage() {
         }
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 mb-3">
         {isLoading ? null : tarjetas.length === 0 ? (
           <p className="sm:col-span-2 xl:col-span-4 text-center text-muted py-6">No hay tarjetas de pago creadas todavía.</p>
         ) : (
@@ -144,8 +144,8 @@ export default function TarjetasPage() {
         )}
       </div>
 
-      <div className="grid min-w-0 grid-cols-1 xl:grid-cols-3 gap-4">
-        <div className="xl:col-span-2 admin-panel p-6">
+      <div className="grid min-w-0 grid-cols-1 xl:grid-cols-3 gap-3">
+        <div className="xl:col-span-2 admin-panel p-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-1">
             <h3 className="text-lg font-bold text-ink">Lista de tarjetas</h3>
             <div className="relative">
@@ -159,7 +159,7 @@ export default function TarjetasPage() {
               />
             </div>
           </div>
-          <p className="text-sm text-muted mb-4">Todas las cuentas bancarias registradas.</p>
+          <p className="text-sm text-muted mb-3">Todas las cuentas bancarias registradas.</p>
           <div className="divide-y divide-white/60">
             {filtradas.length === 0 ? (
               <p className="text-center text-muted py-6">No se encontraron tarjetas de pago.</p>
@@ -168,7 +168,7 @@ export default function TarjetasPage() {
                 const indiceOriginal = tarjetas.indexOf(c);
                 const estilo = RESUMEN_TARJETA_ESTILOS[indiceOriginal % RESUMEN_TARJETA_ESTILOS.length];
                 return (
-                  <div key={c._id} className="flex flex-wrap items-center gap-4 py-3.5">
+                  <div key={c._id} className="flex flex-wrap items-center gap-3 py-3.5">
                     <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${estilo} shrink-0`} />
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 flex-1 min-w-[200px] text-sm">
                       <div className="min-w-0">
@@ -218,7 +218,7 @@ export default function TarjetasPage() {
           </div>
         </div>
 
-        <div className="admin-panel p-6">
+        <div className="admin-panel p-4">
           <h3 className="text-lg font-bold text-ink mb-1">Estadística de tarjetas</h3>
           <p className="text-sm text-muted mb-5">Distribución por banco.</p>
           <div className="flex justify-center">
@@ -226,7 +226,7 @@ export default function TarjetasPage() {
               <div className="absolute inset-[14px] bg-white rounded-full" />
             </div>
           </div>
-          <div className="mt-6 space-y-2.5">
+          <div className="mt-4 space-y-2.5">
             {donutGroups.length === 0 ? (
               <p className="text-sm text-muted text-center">Sin datos todavía.</p>
             ) : (

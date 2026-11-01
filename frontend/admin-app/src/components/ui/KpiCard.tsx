@@ -10,7 +10,7 @@ interface KpiCardProps {
 
 export function KpiCard({ label, value, note, valueClassName = 'text-ink', iconBg, iconColor, icon }: KpiCardProps) {
   return (
-    <div className="admin-panel p-4">
+    <div className="admin-panel p-3">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-muted">{label}</p>
@@ -29,5 +29,5 @@ export function KpiCard({ label, value, note, valueClassName = 'text-ink', iconB
 // lg:hidden de StatCardMobile (ícono + anillo de progreso) como reemplazo en
 // móvil, igual que se hizo primero en ResumenPage.tsx.
 export function KpiRow({ children }: { children: React.ReactNode }) {
-  return <div className="hidden lg:grid lg:grid-cols-4 gap-3 mb-4">{children}</div>;
+  return <div className="hidden lg:grid lg:grid-cols-4 gap-3 mb-3">{children}</div>;
 }

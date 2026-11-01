@@ -64,7 +64,7 @@ export default function PedidosPage() {
         description="Revisa los pedidos realizados por los clientes, filtra por fecha o cupón, y consulta ingresos y descuentos aplicados."
       />
 
-      <div className="grid grid-cols-2 gap-3 mb-4 lg:hidden">
+      <div className="grid grid-cols-2 gap-3 mb-3 lg:hidden">
         <StatCardMobile
           icon={<PedidosIcon className="w-5 h-5" />}
           percent={pctConCupon}
@@ -130,10 +130,10 @@ export default function PedidosPage() {
         />
       </KpiRow>
 
-      <div className="flex flex-col lg:flex-row items-start gap-4">
+      <div className="flex flex-col lg:flex-row items-start gap-3">
         <FilterPanel>
           <label className="admin-order-search">Buscar pedido<input type="search" placeholder="ID, cliente o correo" value={search} onChange={event => { setSearch(event.target.value); setPagina(1); }} /></label>
-          <div className="admin-panel p-4 space-y-5">
+          <div className="admin-panel p-3 space-y-5">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-ink uppercase tracking-wide">Filtros</h3>
               <button type="button" onClick={limpiarFiltros} className="text-xs font-medium text-coral hover:text-coral/80">
@@ -177,7 +177,7 @@ export default function PedidosPage() {
             </div>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-4">
             <DonutChart
               title="Uso de cupones"
               centerCaption="Con cupón"
@@ -190,8 +190,8 @@ export default function PedidosPage() {
         </FilterPanel>
 
         <div className="flex-1 min-w-0 w-full">
-          <div className="admin-panel p-4">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+          <div className="admin-panel p-3">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
               <h2 className="text-lg font-bold text-ink flex items-center">
                 <PedidosIcon className="w-5 h-5 mr-2 text-coral" />
                 Pedidos

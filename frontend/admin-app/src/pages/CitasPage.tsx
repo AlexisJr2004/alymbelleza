@@ -86,7 +86,7 @@ export default function CitasPage() {
         description="Revisa las citas agendadas por los clientes, filtra por fecha o estado, y marca cada una como realizada o cancelada."
       />
 
-      <div className="grid grid-cols-2 gap-3 mb-4 lg:hidden">
+      <div className="grid grid-cols-2 gap-3 mb-3 lg:hidden">
         <StatCardMobile
           icon={<CitasIcon className="w-5 h-5" />}
           percent={100}
@@ -152,9 +152,9 @@ export default function CitasPage() {
         />
       </KpiRow>
 
-      <div className="flex flex-col lg:flex-row items-start gap-4">
+      <div className="flex flex-col lg:flex-row items-start gap-3">
         <FilterPanel>
-          <div className="admin-panel p-4 space-y-5">
+          <div className="admin-panel p-3 space-y-5">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-ink uppercase tracking-wide">Filtros</h3>
               <button type="button" onClick={limpiarFiltros} className="text-xs font-medium text-coral hover:text-coral/80">
@@ -194,8 +194,8 @@ export default function CitasPage() {
             </div>
           </div>
 
-          <div className="admin-panel p-4 mt-6">
-            <h3 className="text-sm font-semibold text-ink uppercase tracking-wide mb-4">Distribución de citas</h3>
+          <div className="admin-panel p-3 mt-4">
+            <h3 className="text-sm font-semibold text-ink uppercase tracking-wide mb-3">Distribución de citas</h3>
             <div className="flex justify-center">
               <div className="relative">
                 <div className="relative w-32 h-32 rounded-full" style={{ background: donut.background }}>
@@ -228,8 +228,8 @@ export default function CitasPage() {
         </FilterPanel>
 
         <div className="flex-1 min-w-0 w-full">
-          <div className="admin-panel p-4">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+          <div className="admin-panel p-3">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
               <h2 className="text-lg font-bold text-ink flex items-center">
                 <CitasIcon className="w-5 h-5 mr-2 text-coral" />
                 Citas

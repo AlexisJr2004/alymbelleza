@@ -39,13 +39,13 @@
 .admin-content .admin-panel h2 { letter-spacing: -.02em; }
 .admin-table { width: 100%; font-variant-numeric: tabular-nums; }
 .admin-table thead { background: #fff6f9; }
-.admin-table th { padding: 10px 12px; font-size: 10px; font-weight: 600; letter-spacing: .04em; color: #77656f; white-space: nowrap; border-bottom: 1px solid #efdbe2; }
-.admin-table td { padding: 10px 12px; font-size: 12px; border-bottom: 1px solid #f6e9ee; }
+.admin-table th { padding: 8px 10px; font-size: 10px; font-weight: 600; letter-spacing: .04em; color: #77656f; white-space: nowrap; border-bottom: 1px solid #efdbe2; }
+.admin-table td { padding: 8px 10px; font-size: 12px; border-bottom: 1px solid #f6e9ee; }
 .admin-table tbody tr:last-child td { border-bottom: 0; }
 .admin-table tbody tr:hover { background: #faf7f9; }
 .admin-table td button { min-width: 32px; min-height: 32px; }
-.admin-filters .admin-panel { padding: 14px; border-radius: 14px; }
-.admin-filters .space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top: 14px; }
+.admin-filters .admin-panel { padding: 12px; border-radius: 14px; }
+.admin-filters .space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top: 12px; }
 .admin-filters h4 { font-size: 12px; }
 .admin-filter-toggle { display: flex; width: 100%; align-items: center; justify-content: space-between; padding: 11px 14px; border: 1px solid #efdbe2; border-radius: 12px; background: white; font-size: 12px; font-weight: 600; margin-bottom: 8px; }
 .admin-content :is(input:not([type=checkbox]):not([type=radio]),select,textarea),
@@ -59,7 +59,7 @@
 .admin-form-dialog form textarea { min-height: 80px; }
 .admin-form-dialog form button { border-radius: 24px; font-size: 12px; }
 .admin-mobile-nav { bottom: calc(12px + env(safe-area-inset-bottom)); }
-.admin-analytics > summary { cursor: pointer; padding: 14px 16px; background: white; border: 1px solid #efdbe2; border-radius: 12px; font-size: 13px; font-weight: 600; }
+.admin-analytics > summary { cursor: pointer; padding: 10px 12px; background: white; border: 1px solid #efdbe2; border-radius: 12px; font-size: 13px; font-weight: 600; }
 .admin-analytics > summary span { margin-left: 12px; color: #77656f; font-size: 11px; font-weight: 400; }
 .admin-analytics > summary:focus-visible { outline: 2px solid #c33060; outline-offset: 2px; }
 @media (min-width: 1024px) { .admin-filter-toggle { display: none; } }

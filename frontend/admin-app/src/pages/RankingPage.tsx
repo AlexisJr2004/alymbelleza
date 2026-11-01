@@ -52,7 +52,7 @@ export default function RankingPage() {
         description="Todos los clientes con compras realizadas, ordenados por cantidad de pedidos."
       />
 
-      <div className="grid grid-cols-2 gap-3 mb-4 lg:hidden">
+      <div className="grid grid-cols-2 gap-3 mb-3 lg:hidden">
         <StatCardMobile
           icon={<UsuariosIcon className="w-5 h-5" />}
           percent={pctClientesConCompra}
@@ -121,13 +121,13 @@ export default function RankingPage() {
           izquierda, y a la derecha el listado completo con buscador y
           paginación. items-start porque ambos bloques tienen alturas muy
           distintas y no hace falta igualarlas acá. */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 items-start">
         <div className="lg:col-span-2">
           <ClienteRankingCard clientes={clientesActivos} />
         </div>
 
-        <div className="lg:col-span-3 admin-panel p-4">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+        <div className="lg:col-span-3 admin-panel p-3">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
             <div>
               <h2 className="text-lg font-bold text-ink flex items-center">
                 <TrophyIcon className="w-5 h-5 mr-2 text-coral" />
