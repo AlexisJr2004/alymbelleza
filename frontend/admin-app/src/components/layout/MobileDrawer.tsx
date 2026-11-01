@@ -29,11 +29,11 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
 
   return (
     <aside
-      className={`admin-drawer fixed inset-y-0 left-0 z-40 flex w-[min(320px,calc(100vw-24px))] flex-col rounded-r-[30px] border-r border-white/70 bg-white/90 shadow-xl backdrop-blur-xl transition-transform duration-300 ease-out lg:hidden ${
+      className={`admin-drawer fixed inset-y-0 left-0 z-40 flex w-[min(288px,calc(100vw-24px))] flex-col rounded-r-[24px] border-r border-white/70 bg-white/90 shadow-xl backdrop-blur-xl transition-transform duration-300 ease-out lg:hidden ${
         open ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
-      <div className="flex h-[70px] shrink-0 items-center justify-between border-b border-gray-100 px-5">
+      <div className="flex h-[60px] shrink-0 items-center justify-between border-b border-gray-100 px-4">
         <div className="flex items-center gap-2.5">
           <BeautyBrand />
         </div>
@@ -42,9 +42,9 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
         </button>
       </div>
 
-      <div className="flex shrink-0 items-center gap-3 border-b border-gray-100 px-5 py-4">
+      <div className="flex shrink-0 items-center gap-3 border-b border-gray-100 px-4 py-3">
         <img
-          className="h-12 w-12 rounded-full object-cover ring-2 ring-white"
+          className="h-10 w-10 rounded-full object-cover ring-2 ring-white"
           src={resolveProfileImage(user)}
           alt="Foto de perfil"
           onError={(e) => {
@@ -54,33 +54,33 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
           }}
         />
         <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-semibold text-ink">{user?.name || 'Administrador'}</p>
-          <p className="truncate text-xs text-muted">{user?.email || ''}</p>
+          <p className="truncate text-xs font-semibold text-ink">{user?.name || 'Administrador'}</p>
+          <p className="truncate text-[11px] text-muted">{user?.email || ''}</p>
         </div>
       </div>
 
-      <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-4">
+      <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 py-3">
         {ADMIN_NAV_ITEMS.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
             onClick={onClose}
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-full px-4 py-2.5 text-[14px] font-medium transition ${
+              `flex items-center gap-2.5 rounded-full px-3 py-2.5 text-xs font-medium transition ${
                 isActive ? 'bg-rose-100 text-coral' : 'text-ink hover:bg-rose-50'
               }`
             }
           >
-            <item.icon className="h-5 w-5 shrink-0" />
+            <item.icon className="h-4 w-4 shrink-0" />
             {item.label}
           </NavLink>
         ))}
       </nav>
 
-      <div className="shrink-0 space-y-2 border-t border-gray-100 p-4">
+      <div className="shrink-0 space-y-2 border-t border-gray-100 p-3">
         <a
           href="/"
-          className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-[#2a2c33] transition hover:bg-gray-50"
+          className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2.5 text-xs font-medium text-[#2a2c33] transition hover:bg-gray-50"
         >
           <BackArrowIcon className="h-4 w-4" />
           Volver al sitio
@@ -88,7 +88,7 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
         <button
           type="button"
           onClick={handleLogout}
-          className="flex w-full items-center justify-center gap-2 rounded-full border border-coral/30 bg-coral/10 px-4 py-2.5 text-sm font-medium text-coral transition hover:bg-coral/20"
+          className="flex w-full items-center justify-center gap-2 rounded-full border border-coral/30 bg-coral/10 px-4 py-2.5 text-xs font-medium text-coral transition hover:bg-coral/20"
         >
           <LogoutIcon className="h-4 w-4" />
           Cerrar sesión

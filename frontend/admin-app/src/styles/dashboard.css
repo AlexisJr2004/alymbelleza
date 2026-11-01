@@ -1,16 +1,16 @@
-.admin-shell { --sidebar-width: 224px; color: #252438; background: #fdfcfc; }
+.admin-shell { --sidebar-width: 208px; color: #252438; background: #fdfcfc; }
 .admin-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 25; width: var(--sidebar-width); display: flex; flex-direction: column; overflow-y: auto; border-right: 1px solid #f0e9ec; background: linear-gradient(150deg,#fff,#fcf9f9); }
-.admin-sidebar-brand { display: flex; align-items: center; min-height: 72px; padding: 14px 18px; }
-.admin-sidebar .admin-brand-name { font-size: 25px; }
-.admin-sidebar nav { padding: 4px 14px 12px; }
-.admin-sidebar nav a,.admin-sidebar-secondary > * { display: flex; align-items: center; gap: 12px; min-height: 40px; padding: 9px 12px; margin-bottom: 2px; border-radius: 10px; font-size: 12px; color: #5e5a6b; text-align: left; width: 100%; }
+.admin-sidebar-brand { display: flex; align-items: center; min-height: 64px; padding: 12px 16px; }
+.admin-sidebar .admin-brand-name { font-size: 23px; }
+.admin-sidebar nav { padding: 4px 12px 10px; }
+.admin-sidebar nav a,.admin-sidebar-secondary > * { display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 8px 10px; margin-bottom: 2px; border-radius: 9px; font-size: 11px; color: #5e5a6b; text-align: left; width: 100%; }
 .admin-sidebar nav a:hover,.admin-sidebar-secondary > *:hover { background: #fcf2f4; color: #bd315c; }
 .admin-sidebar nav a.is-active { background: #fbedf0; color: #c33060; font-weight: 600; }
-.admin-sidebar nav a svg { flex-shrink: 0; }
-.admin-sidebar-secondary { border-top: 1px solid #eee5e9; margin: 0 18px; padding-top: 12px; }
-.admin-sidebar-promo { position: relative; margin: auto 18px 18px; padding: 16px 14px; border-radius: 12px; background: linear-gradient(100deg,#fff1edee,#fff1edb5),url('/img/dashboard-skincare.jpg') center/cover; }
-.admin-sidebar-promo h2 { font: 23px/1.1 Georgia,serif; color: #643d36; }
-.admin-sidebar-promo p { font-size: 11px; line-height: 1.6; color: #79707b; margin-top: 10px; }
+.admin-sidebar nav a svg,.admin-sidebar-secondary svg { width: 17px; height: 17px; flex-shrink: 0; }
+.admin-sidebar-secondary { border-top: 1px solid #eee5e9; margin: 0 16px; padding-top: 10px; }
+.admin-sidebar-promo { position: relative; margin: auto 16px 16px; padding: 12px; border-radius: 12px; background: linear-gradient(100deg,#fff1edee,#fff1edb5),url('/img/dashboard-skincare.jpg') center/cover; }
+.admin-sidebar-promo h2 { font: 20px/1.1 Georgia,serif; color: #643d36; }
+.admin-sidebar-promo p { font-size: 10px; line-height: 1.5; color: #79707b; margin-top: 8px; }
 .admin-sidebar-promo a { display: inline-flex; align-items: center; gap: 10px; margin-top: 12px; padding: 9px 14px; background: #be7774; border-radius: 24px; color: white; font-size: 10px; }
 .admin-workspace-header { position: sticky; top: 0; z-index: 20; height: 56px; margin-left: var(--sidebar-width); display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 20px; background: #ffffffed; backdrop-filter: blur(14px); border-bottom: 1px solid #f1e9ed; }
 .admin-menu-trigger { display: none; }
@@ -138,8 +138,8 @@
   .dashboard-metrics .dashboard-metric strong { grid-column: 1 / -1; font-size: clamp(17px,4.6vw,22px); }
   .dashboard-metrics .dashboard-metric small { grid-column: 1 / -1; margin-top: 0; }
 }
-@media (min-width: 1600px) { .admin-shell { --sidebar-width: 236px; } .dashboard-hero { min-height: 180px; } }
+@media (min-width: 1600px) { .admin-shell { --sidebar-width: 216px; } .dashboard-hero { min-height: 180px; } }
 @media (max-width: 1399px) { .dashboard-metric > svg { display: none; } .dashboard-product-rank { display: none; } .dashboard-chart-grid { grid-template-columns: minmax(0,1.7fr) minmax(0,1fr); } .dashboard-promo { display: none; } }
-@media (max-width: 1199px) { .admin-shell { --sidebar-width: 210px; } .admin-sidebar-brand { padding-inline: 14px; } .admin-sidebar .admin-brand-name { font-size: 24px; } .admin-workspace-content { padding-inline: 18px; } .dashboard-hero-benefits { display: none; } .dashboard-hero > img { right: 0; } .dashboard-hero::before { background: linear-gradient(90deg,#fcf2ed,#fcf2edf5 28%,#fcf2ed20 100%); } .dashboard-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); } .dashboard-metric > svg { display: block; } .dashboard-bottom-grid { grid-template-columns: 1fr; } }
+@media (max-width: 1199px) { .admin-shell { --sidebar-width: 200px; } .admin-sidebar-brand { padding-inline: 14px; } .admin-sidebar .admin-brand-name { font-size: 22px; } .admin-workspace-content { padding-inline: 18px; } .dashboard-hero-benefits { display: none; } .dashboard-hero > img { right: 0; } .dashboard-hero::before { background: linear-gradient(90deg,#fcf2ed,#fcf2edf5 28%,#fcf2ed20 100%); } .dashboard-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); } .dashboard-metric > svg { display: block; } .dashboard-bottom-grid { grid-template-columns: 1fr; } }
 @media (max-width: 1023px) { .admin-sidebar { display: none; } .admin-workspace-header,.admin-workspace-content { margin-left: 0; } .admin-workspace-content { padding: 14px 16px 110px; } .admin-menu-trigger { display: grid; } .admin-workspace-header { gap: 12px; padding-inline: 16px; } .admin-global-search { flex: 1; width: auto; } .admin-header-account > button > span { display: none; } .admin-header-tools { gap: 10px; } .admin-header-account { padding-left: 10px; } }
 @media (max-width: 639px) { .admin-workspace-header { height: 58px; padding-inline: 12px; gap: 8px; } .admin-header-tools { gap: 5px; } .admin-header-account { border-left: 0; padding-left: 0; } .admin-header-account > button > svg { display: none; } .admin-header-account img { width: 30px; height: 30px; } .admin-global-search input { font-size: 16px; } .admin-global-search form { padding-inline: 8px; } .admin-global-search input::placeholder { font-size: 10px; } .admin-search-results { position: fixed; top: 58px; left: 12px; right: 12px; } .admin-workspace-content { padding: 12px 12px 110px; } .dashboard-heading { align-items: flex-start; flex-direction: column; gap: 10px; } .dashboard-heading h1 { font-size: 27px; } .dashboard-heading p { font-size: 11px; line-height: 1.5; } .dashboard-month { align-self: flex-end; } .dashboard-hero { min-height: 190px; padding: 16px; } .dashboard .dashboard-hero h2 { font-size: 29px; } .dashboard-hero-copy { max-width: 260px; } .dashboard-hero-copy p { max-width: 240px; } .dashboard-hero > img { width: 80%; opacity: .45; } .dashboard-hero::before { background: linear-gradient(90deg,#fcf2ed,#fcf2edd0 60%,#fcf2ed50); } .dashboard-metrics { gap: 10px; } .dashboard-metric { padding: 12px; gap: 8px; } .dashboard-metric-icon { width: 28px; height: 28px; } .dashboard-metric-icon svg { width: 17px; height: 17px; } .dashboard-metric p { font-size: 10px; } .dashboard-metric strong { font-size: 22px; } .dashboard-metric small { font-size: 8px; line-height: 1.6; } .dashboard-metric > svg { display: none; } .dashboard-chart-grid { grid-template-columns: 1fr; } .dashboard-chart-heading { flex-wrap: wrap; } .dashboard .dashboard-card h2 { font-size: 19px; } .dashboard-card { padding: 12px; } .dashboard-line-chart { height: 150px; } .dashboard-donut-layout { justify-content: flex-start; } .dashboard-donut-layout ul { max-width: 220px; } .dashboard-orders table { min-width: 590px; } .dashboard-operations { grid-template-columns: 1fr; } .dashboard-product-row { gap: 7px; } .dashboard-product-numbers:last-child { display: none; } }
