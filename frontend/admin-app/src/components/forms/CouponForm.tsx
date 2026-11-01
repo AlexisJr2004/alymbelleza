@@ -118,7 +118,7 @@ export default function CouponForm({ initialData, onSubmit, onCancel, submitting
         </div>
       </div>
 
-      <div className="flex justify-end gap-2.5 pt-4 mt-4 border-t border-rose-100">
+      <div className="flex justify-end gap-2.5 pt-3 mt-3 border-t border-rose-100">
         <button
           type="button"
           onClick={onCancel}

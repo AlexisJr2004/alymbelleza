@@ -32,8 +32,8 @@ export default function CrudModal({ open, title, onClose, children, maxWidth = '
       labelledBy={titleId}
       panelClassName="admin-form-dialog bg-white border border-rose-100 rounded-2xl"
     >
-      <div className="p-4 sm:p-5">
-        <div className="flex items-center justify-between mb-4">
+      <div className="p-3 sm:p-4">
+        <div className="flex items-center justify-between mb-3">
           <h3 id={titleId} className="text-lg font-bold text-ink">
             {title}
           </h3>

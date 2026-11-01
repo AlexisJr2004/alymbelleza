@@ -14,7 +14,7 @@ export function KpiCard({ label, value, note, valueClassName = 'text-ink', iconB
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-muted">{label}</p>
-          <p className={`mt-1 text-[22px] font-semibold tracking-tight tabular-nums ${valueClassName}`}>{value}</p>
+          <p className={`mt-1 text-xl font-semibold tracking-tight tabular-nums ${valueClassName}`}>{value}</p>
           <p className="mt-1 text-xs text-muted">{note}</p>
         </div>
         <div className={`w-8 h-8 rounded-xl ${iconBg} ${iconColor} flex items-center justify-center shrink-0`}>
@@ -29,5 +29,5 @@ export function KpiCard({ label, value, note, valueClassName = 'text-ink', iconB
 // lg:hidden de StatCardMobile (ícono + anillo de progreso) como reemplazo en
 // móvil, igual que se hizo primero en ResumenPage.tsx.
 export function KpiRow({ children }: { children: React.ReactNode }) {
-  return <div className="hidden lg:grid lg:grid-cols-4 gap-3 mb-3">{children}</div>;
+  return <div className="hidden lg:grid lg:grid-cols-4 gap-2.5 mb-3">{children}</div>;
 }

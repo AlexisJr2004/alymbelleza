@@ -34,11 +34,11 @@ export default function DonutChart({ title, groups, centerCaption, emptyMessage 
   }
 
   return (
-    <div className="admin-panel p-5">
-      <h3 className="text-sm font-semibold text-ink uppercase tracking-wide mb-4">{title}</h3>
+    <div className="admin-panel p-3">
+      <h3 className="text-sm font-semibold text-ink uppercase tracking-wide mb-3">{title}</h3>
       <div className="flex justify-center">
         <div className="relative">
-          <div className="relative w-32 h-32 rounded-full" style={{ background }}>
+          <div className="relative w-28 h-28 rounded-full" style={{ background }}>
             <div className="absolute inset-[13px] bg-white rounded-full" />
           </div>
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
@@ -47,7 +47,7 @@ export default function DonutChart({ title, groups, centerCaption, emptyMessage 
           </div>
         </div>
       </div>
-      <div className="mt-4 space-y-2.5">
+      <div className="mt-3 space-y-2">
         {total === 0 ? (
           <p className="text-sm text-muted text-center">{emptyMessage}</p>
         ) : (

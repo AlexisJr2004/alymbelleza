@@ -12,7 +12,7 @@ interface StatCardMobileProps {
 export default function StatCardMobile({ icon, percent, label, value, highlighted }: StatCardMobileProps) {
   return (
     <div
-      className={`flex min-w-0 min-h-[106px] flex-col justify-between rounded-2xl p-3 border border-rose-100 ${
+      className={`flex min-w-0 min-h-[98px] flex-col justify-between rounded-2xl p-3 border border-rose-100 ${
         highlighted ? 'bg-lilac' : 'border border-black/5 bg-white'
       }`}
     >
@@ -33,7 +33,7 @@ export default function StatCardMobile({ icon, percent, label, value, highlighte
       </div>
       <div className="pl-[2px]">
         <p className={`text-xs ${highlighted ? 'text-[#3d3a4d]' : 'text-[#55555d]'}`}>{label}</p>
-        <p className="mt-1 truncate text-[20px] font-bold leading-7 tracking-[-0.01em] text-ink">{value}</p>
+        <p className="mt-1 truncate text-lg font-bold leading-6 tracking-[-0.01em] text-ink">{value}</p>
       </div>
     </div>
   );
