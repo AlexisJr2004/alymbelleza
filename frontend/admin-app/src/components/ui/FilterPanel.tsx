@@ -12,7 +12,7 @@ export default function FilterPanel({ children }: { children: ReactNode }) {
     return () => media.removeEventListener('change', update);
   }, []);
 
-  return <aside className="admin-filters w-full shrink-0 lg:w-[208px]">
+  return <aside className="admin-filters w-full shrink-0 lg:w-[192px]">
     <button type="button" className="admin-filter-toggle" aria-expanded={expanded} aria-controls={id} onClick={() => setExpanded(!expanded)}>
       Filtros y estadísticas
       <ChevronDownIcon className={`h-4 w-4 transition-transform ${expanded ? 'rotate-180' : ''}`} />

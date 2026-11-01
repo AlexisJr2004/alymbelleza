@@ -15,8 +15,8 @@
 .admin-page-header { padding: 19px 22px; border: 1px solid #f2dfe7; border-radius: 18px; background: linear-gradient(115deg,#fff5f8,#fffafc 65%,#fbeaf1); }
 .admin-eyebrow { margin-bottom: 5px; font-size: 9px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; }
 .admin-content :is(h2,h3), .admin-sheet h3 { font-family: Georgia,serif; font-weight: 400; color: #51303f; }
-.admin-content h2 { font-size: 21px; }
-.admin-content h3 { font-size: 18px; }
+.admin-content h2 { font-size: 19px; }
+.admin-content h3 { font-size: 16px; }
 .admin-sheet h3 { font-size: 23px; }
 .admin-sheet { border: 1px solid #efdbe2; box-shadow: 0 20px 70px #71334d25; }
 .admin-shell :is(button,a).bg-coral, .admin-sheet button.bg-coral, .admin-primary { background: linear-gradient(115deg,#eb4b83,#e83d79); color: white; box-shadow: 0 4px 9px #c6335b13; }
@@ -32,22 +32,38 @@
 @media (max-width: 639px) { .admin-page-header { padding: 16px; } }
 @media (max-width: 359px) { .admin-topnav .admin-brand svg { display: none; } .admin-topnav .admin-brand-name { font-size: 22px; } }
 .app-bg { background: #ffffff; }
-.admin-content { font-size: 13px; }
+.admin-content { font-size: 12px; }
 .admin-content .grid > *, .admin-content .flex-1 { min-width: 0; }
-.admin-page-header > button { font-size: 12px; padding: 9px 14px; border-radius: 24px; }
+.admin-page-header > button { font-size: 11px; padding: 8px 12px; border-radius: 24px; }
 .admin-content .admin-panel { box-shadow: 0 2px 6px #71334d06; }
 .admin-content .admin-panel h2 { letter-spacing: -.02em; }
 .admin-table { width: 100%; font-variant-numeric: tabular-nums; }
 .admin-table thead { background: #fff6f9; }
 .admin-table th { padding: 8px 10px; font-size: 10px; font-weight: 600; letter-spacing: .04em; color: #77656f; white-space: nowrap; border-bottom: 1px solid #efdbe2; }
-.admin-table td { padding: 8px 10px; font-size: 12px; border-bottom: 1px solid #f6e9ee; }
+.admin-table td { padding: 7px 10px; font-size: 11px; border-bottom: 1px solid #f6e9ee; }
 .admin-table tbody tr:last-child td { border-bottom: 0; }
 .admin-table tbody tr:hover { background: #faf7f9; }
 .admin-table td button { min-width: 32px; min-height: 32px; }
 .admin-filters .admin-panel { padding: 12px; border-radius: 14px; }
 .admin-filters .space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top: 12px; }
-.admin-filters h4 { font-size: 12px; }
-.admin-filter-toggle { display: flex; width: 100%; align-items: center; justify-content: space-between; padding: 11px 14px; border: 1px solid #efdbe2; border-radius: 12px; background: white; font-size: 12px; font-weight: 600; margin-bottom: 8px; }
+.admin-filters h3, .admin-filters h4 { font-family: 'Bella Montserrat',sans-serif; font-weight: 600; }
+.admin-filters h3 { font-size: 12px; }
+.admin-filters h4 { font-size: 11px; margin-bottom: 6px; }
+.admin-filters label { font-size: 10px; min-height: 20px; gap: 7px; }
+.admin-filters button { font-size: 10px; }
+.admin-filters .pt-4 { padding-top: 10px; }
+.admin-filters .switch-track { width: 28px; height: 16px; }
+.admin-filters .switch-track::after { width: 12px; height: 12px; top: 2px; left: 2px; }
+.admin-filters .peer:checked ~ .switch-track::after { transform: translateX(12px); }
+.admin-filters .peer:focus-visible ~ .switch-track { outline: 2px solid #b6315b; outline-offset: 3px; }
+.admin-content .text-sm { font-size: 12px; }
+.admin-content .text-xs { font-size: 11px; }
+.admin-content .admin-filters label { font-size: 10px; }
+.admin-content .admin-filters h4 { font-size: 11px; }
+.admin-content .admin-filters button { font-size: 10px; }
+@media (max-width: 767px) and (pointer: coarse) { .admin-filters label { min-height: 32px; } }
+
+.admin-filter-toggle { display: flex; width: 100%; align-items: center; justify-content: space-between; padding: 11px 14px; border: 1px solid #efdbe2; border-radius: 12px; background: white; font-size: 11px; font-weight: 600; margin-bottom: 8px; }
 .admin-content :is(input:not([type=checkbox]):not([type=radio]),select,textarea),
 .admin-form-dialog :is(input:not([type=checkbox]):not([type=radio]),select,textarea) { border-color: #e9d3de; background: #fff; border-radius: 12px; font-size: 12px; min-height: 34px; }
 .admin-content :is(input,select,textarea):focus, .admin-form-dialog :is(input,select,textarea):focus { border-color: #c33060; outline: 0; box-shadow: 0 0 0 3px #c3306014; }
@@ -63,6 +79,9 @@
 .admin-analytics > summary span { margin-left: 12px; color: #77656f; font-size: 11px; font-weight: 400; }
 .admin-analytics > summary:focus-visible { outline: 2px solid #c33060; outline-offset: 2px; }
 @media (min-width: 1024px) { .admin-filter-toggle { display: none; } }
+@media (min-width: 768px) {
+  .admin-content :is(input:not([type=checkbox]):not([type=radio]),select) { font-size: 11px; min-height: 30px; padding-block: 5px; }
+}
 @media (max-width: 767px) {
   .admin-sheet { bottom: max(8px,env(safe-area-inset-bottom)); max-width: calc(100vw - 24px); margin-inline: auto; }
   .admin-form-dialog :is(input:not([type=checkbox]):not([type=radio]),select,textarea) { font-size: 16px; min-height: 40px; }
