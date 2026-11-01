@@ -6,6 +6,7 @@ import html2pdf from 'html2pdf.js';
 import { usePaymentCardsQuery } from '../hooks/usePaymentCards';
 import { useCreateOrder } from '../hooks/useOrders';
 import { getStoredUser } from '../lib/auth';
+import { useProfileQuery } from '../hooks/useProfile';
 import { notifyError } from '../lib/sweetalert';
 import { renderFacturaHTML } from '../lib/invoiceTemplate';
 import TarjetasPagoGrid from '../components/pagos/TarjetasPagoGrid';
@@ -15,6 +16,7 @@ import TarjetasPagoGrid from '../components/pagos/TarjetasPagoGrid';
 export default function PagosPage() {
   const { data: cards, isLoading, isError, refetch } = usePaymentCardsQuery();
   const createOrder = useCreateOrder();
+  const { data: profile } = useProfileQuery();
   const facturaRef = useRef<HTMLDivElement>(null);
   const [facturaHtml, setFacturaHtml] = useState('');
   const [facturaVisible, setFacturaVisible] = useState(false);
@@ -36,7 +38,7 @@ export default function PagosPage() {
       // El backend arma la orden a partir del carrito actual del usuario (no
       // se manda el carrito en el body) y lo vacía como efecto colateral.
       const res = await createOrder.mutateAsync(cuponCode);
-      const html = renderFacturaHTML(usuario, res.data);
+      const html = renderFacturaHTML({ ...usuario, address: profile?.address }, res.data);
       setFacturaHtml(html);
       setFacturaVisible(true);
 
@@ -46,15 +48,18 @@ export default function PagosPage() {
 
       const contenedor = facturaRef.current;
       if (contenedor) {
+        await Promise.all(Array.from(contenedor.querySelectorAll('img')).map(img => img.decode()));
         const opt = {
           margin: [10, 10, 10, 10] as [number, number, number, number],
           filename: `factura_bellabeauty_${Date.now()}.pdf`,
           image: { type: 'jpeg' as const, quality: 0.98 },
-          html2canvas: { scale: 2, logging: false, dpi: 300, letterRendering: true, useCORS: true },
+          html2canvas: { scale: 2, logging: false, dpi: 300, letterRendering: true, useCORS: true, windowWidth: 1024, scrollY: 0 },
           jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as const },
           pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', 'header', 'footer'] },
         };
-        await html2pdf().set(opt).from(contenedor).save();
+        const documento = contenedor.querySelector<HTMLElement>('#invoice');
+        if (!documento) throw new Error('No se pudo preparar la factura.');
+        await html2pdf().set(opt).from(documento).save();
       }
 
       // La compra ya se registró y el carrito se vació en el backend.
@@ -101,6 +106,6 @@ export default function PagosPage() {
       </div>
     </main>
     {/* Documento estático escapado por renderFacturaHTML; html2pdf necesita este nodo para generar el PDF. */}
-    <div ref={facturaRef} style={{ display: facturaVisible ? 'block' : 'none' }} dangerouslySetInnerHTML={{ __html: facturaHtml }} />
+    <div ref={facturaRef} aria-hidden="true" style={{ display: facturaVisible ? 'block' : 'none', position: 'absolute', left: '-10000px', top: 0, width: '718px', pointerEvents: 'none' }} dangerouslySetInnerHTML={{ __html: facturaHtml }} />
   </>;
 }
