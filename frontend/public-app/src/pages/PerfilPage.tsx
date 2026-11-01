@@ -8,7 +8,7 @@ import { ShoppingBagIcon, ExclamationTriangleIcon } from '../components/icons';
 import ProfileCard from '../components/perfil/ProfileCard';
 import ProfileEditForm from '../components/perfil/ProfileEditForm';
 import ProfileIcon from '../components/perfil/ProfileIcons';
-import StoreIcon from '../components/home/StoreIcon';
+import StorePageHeading from '../components/home/StorePageHeading';
 import './PerfilPage.css';
 
 export default function PerfilPage() {
@@ -45,21 +45,13 @@ export default function PerfilPage() {
   return (
     <main className="profile-page" id="contenido">
       <div className="profile-container">
-        <nav aria-label="Ruta de navegación" className="bb-commerce-breadcrumb">
-          <Link to="/">Inicio</Link><StoreIcon name="chevron" /><span aria-current="page">Mi cuenta</span>
-        </nav>
-
-        <header className="profile-heading">
-          <div>
-            <p className="profile-eyebrow"><span aria-hidden="true" /> UN ESPACIO PARA TI</p>
-            <h1>Mi perfil<span aria-hidden="true">.</span></h1>
-            <p>Cuida de ti. Nosotros cuidamos de los detalles.</p>
-          </div>
-          <Link to="/citas" className="profile-button profile-button-secondary">
-            <ProfileIcon name="calendar" className="h-4 w-4" /> Mis citas
-            <ProfileIcon name="arrow" className="h-4 w-4" />
-          </Link>
-        </header>
+        <StorePageHeading
+          page="Perfil"
+          eyebrow="UN ESPACIO PARA TI"
+          title={<>Mi <em>perfil</em></>}
+          description="Cuida de ti. Nosotros cuidamos de los detalles."
+          icon="user"
+        />
 
         {error && !user ? (
           <section className="profile-panel profile-error" role="alert">
