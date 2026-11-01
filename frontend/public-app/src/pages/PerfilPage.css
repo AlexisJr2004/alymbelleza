@@ -4,7 +4,7 @@
   --profile-accent: #bc3863;
   --profile-border: #efdee5;
   color: var(--profile-ink);
-  background: #fff;
+  background: linear-gradient(#fffbfc, #fff 580px);
   font-family: 'Bella Montserrat', sans-serif;
   padding: 16px 24px 36px;
 }
